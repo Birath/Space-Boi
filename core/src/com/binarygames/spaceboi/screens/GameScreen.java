@@ -5,9 +5,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
@@ -25,12 +22,8 @@ public class GameScreen implements Screen {
 
     private Player player;
 
-    //TEMPSTUFF(har tillhörande imports ovan)
-    private Texture img;
 
     public GameScreen(SpaceBoi game) {
-        //TEMPSTUFF
-        img = new Texture("playerShip.png");
 
         this.game = game;
 
@@ -38,7 +31,7 @@ public class GameScreen implements Screen {
 
         gameUI = new GameUI();
 
-        player = new Player(0,0);
+        player = new Player(0,0, "playerShip.png");
 
         inputProcessor = new PlayerInputProcessor(player);
 
@@ -61,7 +54,7 @@ public class GameScreen implements Screen {
 
     private void batchedDraw() {
         game.getBatch().begin();
-        game.getBatch().draw(img, player.getX(), player.getY());
+        game.getBatch().draw(player.getSprite(), player.getX(), player.getY());
         game.debugFont.draw(game.getBatch(), "GAME", 5, 20);
         game.getBatch().end();
     }
@@ -74,7 +67,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
-        player.updateMovement(); //TEMP
+        player.updateMovement(); //Värt att ha här?
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batchedDraw();
         draw();
