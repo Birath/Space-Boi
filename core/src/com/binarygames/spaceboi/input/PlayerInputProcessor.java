@@ -15,22 +15,34 @@ public class PlayerInputProcessor implements InputProcessor {
     //Keyboardrelated
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.A){
-            player.setMoveLeft(true);
+        if (keycode == Input.Keys.W){
+            player.setMoveUp(true);
+        }
+        if (keycode == Input.Keys.S){
+            player.setMoveDown(true);
         }
         if (keycode == Input.Keys.D){
             player.setMoveRight(true);
+        }
+        if(keycode == Input.Keys.A){
+            player.setMoveLeft(true);
         }
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.A){
-            player.setMoveLeft(false);
+        if (keycode == Input.Keys.W){
+            player.setMoveUp(false);
+        }
+        if (keycode == Input.Keys.S){
+            player.setMoveDown(false);
         }
         if (keycode == Input.Keys.D){
             player.setMoveRight(false);
+        }
+        if(keycode == Input.Keys.A){
+            player.setMoveLeft(false);
         }
         return true;
     }
