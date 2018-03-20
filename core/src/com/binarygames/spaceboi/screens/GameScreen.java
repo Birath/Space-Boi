@@ -8,12 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.bodies.Planet;
 import com.binarygames.spaceboi.entities.Player;
@@ -90,7 +84,7 @@ public class GameScreen implements Screen {
 
     private void batchedDraw() {
         game.getBatch().begin();
-        game.getBatch().draw(img, player.getX(), player.getY());
+        game.getBatch().draw(player.getSprite(), player.getX(), player.getY());
         game.debugFont.draw(game.getBatch(), "GAME", 5, 20);
         game.getBatch().end();
     }
@@ -103,7 +97,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
-        player.updateMovement(); //TEMP
+        player.updateMovement(); //Värt att ha här?
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         debugRenderer.render(world, camera.combined);
