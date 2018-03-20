@@ -8,6 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.bodies.Planet;
 import com.binarygames.spaceboi.entities.Player;
@@ -55,7 +61,7 @@ public class GameScreen implements Screen {
 
         gameUI = new GameUI();
         world = new World(new Vector2(0f, 0f), true);
-        player = new Player(world, 0,0, 10000);
+        player = new Player(world, 0,0, "playerShip.png", 10000);
 
         inputProcessor = new PlayerInputProcessor(player);
 
