@@ -40,7 +40,7 @@ public abstract class Entity extends BaseBody{
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
-        fixtureDef.density = 0.2f;
+        fixtureDef.density = 0.1f;
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.8f;
         Fixture fixture = body.createFixture(fixtureDef);
@@ -49,9 +49,11 @@ public abstract class Entity extends BaseBody{
 
     public void updateMovement(){
         if(moveUp){
+            body.setLinearVelocity(0, 10);
             y += speedY;
             if(y > Gdx.graphics.getHeight() - this.sprite.getHeight()){
                 y = Gdx.graphics.getHeight() - this.sprite.getHeight();
+
             }
         }
         if(moveDown){
@@ -61,12 +63,15 @@ public abstract class Entity extends BaseBody{
             }
         }
         if(moveRight){
+            body.applyForceToCenter(200f, 0, true);
             x += speedX; //Behövs det * deltatime?
             if(x > Gdx.graphics.getWidth() - this.sprite.getWidth()){
                 x = Gdx.graphics.getWidth() - this.sprite.getWidth();
             }
         }
         if(moveLeft){
+            body.applyForceToCenter(-200f, 0, true);
+
             x -= speedX;
             if(x < 0){
                 x = 0;

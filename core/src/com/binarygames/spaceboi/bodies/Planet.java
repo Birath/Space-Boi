@@ -10,7 +10,7 @@ public class Planet extends BaseStaticBody {
     private Body body;
 
     //private ShapeRenderer renderer = new ShapeRenderer();
-    private static final int DENSITY = 50000;
+    private static final int DENSITY = 100000;
 
 
     public Planet(World aWorld, float x, float y, float radius) {

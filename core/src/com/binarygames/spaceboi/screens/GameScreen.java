@@ -75,6 +75,7 @@ public class GameScreen implements Screen {
 
         planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), Gdx.graphics.getHeight()));
         planets.add(new Planet(world,  Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world,  Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() * 4, Gdx.graphics.getHeight() * 1.5f));
     }
 
     private void update(float delta) {
