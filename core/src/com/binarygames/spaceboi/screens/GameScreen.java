@@ -10,15 +10,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.bodies.Planet;
+import com.binarygames.spaceboi.entities.PLAYER_STATES;
 import com.binarygames.spaceboi.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
+import com.sun.media.jfxmedia.events.PlayerStateEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,38 @@ public class GameScreen implements Screen {
         planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), Gdx.graphics.getHeight()));
         planets.add(new Planet(world,  Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, Gdx.graphics.getHeight()));
         planets.add(new Planet(world,  Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() * 4, Gdx.graphics.getHeight() * 1.5f));
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                for (Planet planet: planets) {
+                    if (contact.getFixtureA().getBody() == planet.getBody() ||
+                        contact.getFixtureB().getBody() == planet.getBody() &&
+                        contact.getFixtureA().getBody() == player.getBody() ||
+                        contact.getFixtureB().getBody() == player.getBody()
+                        ) {
+                        System.out.println("Touching");
+                        player.setPlayerState(PLAYER_STATES.JUMPING);
+                    }
+
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+                System.out.println("Not touching");
+                player.setPlayerState(PLAYER_STATES.STANDING);
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        });
     }
 
     private void update(float delta) {
@@ -107,15 +140,16 @@ public class GameScreen implements Screen {
         player.updateMovement(); //Värt att ha här?
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        // Physics stuff
         debugRenderer.render(world, camera.combined);
         Vector2 playerPos = player.getBody().getPosition();
-        System.out.println("BodyPos: " + playerPos);
+        //System.out.println("BodyPos: " + playerPos);
         float clostestDistance = 0f;
         Planet closestPlanet = null;
         for (Planet planet: planets) {
             Vector2 planetPos = planet.getBody().getPosition();
             float distance = planetPos.dst(playerPos);
-            System.out.println("Distance: " + distance + " Mass: " + planet.getMass() + " Player mass: " + player.getMass());
+            //System.out.println("Distance: " + distance + " Mass: " + planet.getMass() + " Player mass: " + player.getMass());
             if (clostestDistance == 0f) {
                 clostestDistance = distance;
                 closestPlanet = planet;
@@ -131,10 +165,10 @@ public class GameScreen implements Screen {
         float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
 
         double force  = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
-        System.out.println("Force: " + force);
+        //System.out.println("Force: " + force);
         float forceX = MathUtils.cos(angle) * (float) force;
         float forceY = MathUtils.sin(angle) * (float) force;
-        System.out.println("Force Y: " + forceY + " Force X: " + forceX);
+        //System.out.println("Force Y: " + forceY + " Force X: " + forceX);
         player.getBody().applyForceToCenter(forceX, forceY, true);
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
