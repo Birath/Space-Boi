@@ -2,9 +2,9 @@ package com.binarygames.spaceboi.entities;
 
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Player extends Entity {
-    public Player(World world, float x, float y, String path, int mass) {
-        super(world, x, y, path, mass);
+public class Player extends EntityDynamic {
+    public Player(World world, float x, float y, String path, float mass, float radius) {
+        super(world, x, y, path, mass, radius);
     }
 }
 
