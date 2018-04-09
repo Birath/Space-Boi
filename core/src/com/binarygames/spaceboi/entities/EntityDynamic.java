@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
-import com.binarygames.spaceboi.bodies.BaseBody;
+import com.binarygames.spaceboi.bodies.BaseDynamicBody;
 
-public abstract class Entity extends BaseBody{
+public abstract class EntityDynamic extends BaseDynamicBody {
     private Texture img;
     private Sprite sprite;
 
@@ -21,39 +21,19 @@ public abstract class Entity extends BaseBody{
     private boolean moveRight = false;
     private boolean moveLeft = false;
 
-    private Body body;
-
-    public Entity(World world, float x, float y, String path, int mass){
-        super(world, x, y, mass);
+    public EntityDynamic(World world, float x, float y, String path, float mass, float radius){
+        super(world, x, y, mass, radius);
         img = new Texture(path);
         this.sprite = new Sprite(img);
         this.x = x;
         this.y = y;
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.DynamicBody;
-        groundBodyDef.position.set(pos);
-        System.out.println(groundBodyDef);
-        this.body = world.createBody(groundBodyDef);
-
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(rad);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.density = 0.1f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.8f;
-        Fixture fixture = body.createFixture(fixtureDef);
-        circleShape.dispose();
     }
 
     public void updateMovement(){
         if(moveUp){
-            body.setLinearVelocity(0, 10);
             y += speedY;
             if(y > Gdx.graphics.getHeight() - this.sprite.getHeight()){
                 y = Gdx.graphics.getHeight() - this.sprite.getHeight();
-
             }
         }
         if(moveDown){
@@ -63,18 +43,17 @@ public abstract class Entity extends BaseBody{
             }
         }
         if(moveRight){
-            body.applyForceToCenter(200f, 0, true);
             x += speedX; //Behövs det * deltatime?
             if(x > Gdx.graphics.getWidth() - this.sprite.getWidth()){
                 x = Gdx.graphics.getWidth() - this.sprite.getWidth();
+                body.applyForceToCenter(200f, 0, true);
             }
         }
         if(moveLeft){
-            body.applyForceToCenter(-200f, 0, true);
-
             x -= speedX;
             if(x < 0){
                 x = 0;
+                body.applyForceToCenter(-200f, 0, true);
             }
         }
     }

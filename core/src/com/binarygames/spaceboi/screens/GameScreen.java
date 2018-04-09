@@ -6,8 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -16,10 +14,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.bodies.Planet;
 import com.binarygames.spaceboi.entities.PLAYER_STATES;
+import com.binarygames.spaceboi.entities.Planet;
 import com.binarygames.spaceboi.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
-import com.sun.media.jfxmedia.events.PlayerStateEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class GameScreen implements Screen {
     private Texture img;
 
     public GameScreen(SpaceBoi game) {
-        //TEMPSTUFF
+        //TEMPSTUFF - Laddar in bild
         img = new Texture("playerShip.png");
 
         this.game = game;
@@ -62,14 +60,17 @@ public class GameScreen implements Screen {
 
         gameUI = new GameUI();
         world = new World(new Vector2(0f, 0f), true);
-        player = new Player(world, 0,0, "playerShip.png", 10000);
 
+        //Entities:
+        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 1000000000, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world,  Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 1000000000,  Gdx.graphics.getHeight()));
+        player = new Player(world, 0,0, "playerShip.png", 10000, 100);
+
+        //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player);
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(gameUI.getStage());
         multiplexer.addProcessor(inputProcessor);
-
         Gdx.input.setInputProcessor(multiplexer);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -115,6 +116,8 @@ public class GameScreen implements Screen {
         camera.position.set(player.getBody().getPosition().x , player.getBody().getPosition().y , 0);
         camera.update();
 
+        player.updateMovement();
+
         gameUI.act(delta);
     }
 
@@ -137,7 +140,9 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
-        player.updateMovement(); //Värt att ha här?
+
+
+        //Detta nedan är kropparnas logik. Vi vill flytta på det. Behöver vi något handler objekt då playern och planeterna måste hålla koll på varandra? - gör en funktion
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         // Physics stuff

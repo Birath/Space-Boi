@@ -1,23 +1,20 @@
-package com.binarygames.spaceboi.bodies;
+package com.binarygames.spaceboi.entities;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.bodies.BaseStaticBody;
 
-
-public class Planet extends BaseStaticBody {
+public class EntityStatic extends BaseStaticBody {
     private Body body;
 
     //private ShapeRenderer renderer = new ShapeRenderer();
-    private static final int DENSITY = 100000;
+    private static final int DENSITY = 50000;
 
 
-    public Planet(World aWorld, float x, float y, float radius) {
-        super(aWorld, x, y, radius);
-
-        System.out.println("Planet: " + x + ", " + y);
-        System.out.println("Planet rad: " + rad);
+    public EntityStatic(World aWorld, float x, float y, float mass, float radius) {
+        super(aWorld, x, y, mass, radius);
 
 
         BodyDef groundBodyDef = new BodyDef();
@@ -30,7 +27,6 @@ public class Planet extends BaseStaticBody {
 
         body.createFixture(groundCircle, 0.0f);
         groundCircle.dispose();
-        System.out.println(body);
 
     }
 

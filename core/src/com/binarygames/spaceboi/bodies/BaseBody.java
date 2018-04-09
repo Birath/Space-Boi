@@ -14,10 +14,9 @@ public abstract class BaseBody {
     public static final float BOX_TO_WORLD = 32f;
     public static final double CONSTANT = 6.674 * Math.pow(10, -11);
 
-    public BaseBody(World aWorld, float x, float y, float mass) {
+    public BaseBody(World aWorld, float x, float y, float mass, float radius) { //Just nu tar vi in mass som argument. Tror dock att vi vill ha konstanter eller skala med volym och densitet.
         this.world = aWorld;
-        System.out.println("BaseRad: " + rad);
-        this.rad = 100 * WORLD_TO_BOX;
+        this.rad = radius * WORLD_TO_BOX;
         this.mass = mass;
         this.pos = new Vector2(x * WORLD_TO_BOX, y * WORLD_TO_BOX);
     }
