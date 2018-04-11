@@ -13,10 +13,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class GameScreen implements Screen {
     private PlayerInputProcessor inputProcessor;
 
     private GameUI gameUI;
+
+    private GameWorld gameWorld;
 
     private Player player;
 
@@ -59,10 +63,14 @@ public class GameScreen implements Screen {
         gameUI = new GameUI();
         world = new World(new Vector2(0f, 0f), true);
 
+        gameWorld = new GameWorld(game);
+
         //Entities:
+        player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
+        gameWorld.addDynamicEntity(player);
+
         planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 1000000000, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world,  Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 1000000000,  Gdx.graphics.getHeight()));
-        player = new Player(world, 0,0, "playerShip.png", 10000, 100);
+        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 1000000000, Gdx.graphics.getHeight()));
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player);
@@ -72,13 +80,11 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
 
         debugRenderer = new Box2DDebugRenderer();
-
-
     }
 
     private void update(float delta) {
         updatePlayerPhysics();
-        camera.position.set(player.getBody().getPosition().x , player.getBody().getPosition().y , 0);
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
         camera.update();
 
         player.updateMovement();
@@ -92,7 +98,11 @@ public class GameScreen implements Screen {
 
     private void batchedDraw() {
         game.getBatch().begin();
-        game.getBatch().draw(player.getSprite(), player.getX(), player.getY());
+
+        gameWorld.render(game.getBatch());
+
+        game.getBatch().draw(player.getSprite(), player.getX(), player.getY()); // TODO remove
+
         game.debugFont.draw(game.getBatch(), "GAME", 5, 20);
         game.getBatch().end();
     }
@@ -127,21 +137,21 @@ public class GameScreen implements Screen {
     public void hide() {
 
     }
-    public void updatePlayerPhysics(){
+
+    public void updatePlayerPhysics() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         debugRenderer.render(world, camera.combined);
         Vector2 playerPos = player.getBody().getPosition();
         float closestDistance = 0f;
         Planet closestPlanet = null;
-        for (Planet planet: planets) {
+        for (Planet planet : planets) {
             Vector2 planetPos = planet.getBody().getPosition();
             float distance = planetPos.dst(playerPos);
             if (closestDistance == 0f) {
                 closestDistance = distance;
                 closestPlanet = planet;
-            }
-            else if (distance < closestDistance) {
+            } else if (distance < closestDistance) {
                 closestDistance = distance;
                 closestPlanet = planet;
             }
@@ -151,7 +161,7 @@ public class GameScreen implements Screen {
 
         float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
 
-        double force  = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
+        double force = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
         float forceX = MathUtils.cos(angle) * (float) force;
         float forceY = MathUtils.sin(angle) * (float) force;
         player.getBody().applyForceToCenter(forceX, forceY, true);

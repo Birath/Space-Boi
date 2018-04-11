@@ -8,14 +8,14 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityStatic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class World {
+public class GameWorld {
 
     private SpaceBoi game;
 
     private List<EntityDynamic> dynamicEntities;
     private List<EntityStatic> staticEntities;
 
-    public World(SpaceBoi game) {
+    public GameWorld(SpaceBoi game) {
         this.game = game;
 
         dynamicEntities = new ArrayList<>();
@@ -35,6 +35,14 @@ public class World {
         for (EntityDynamic entity : dynamicEntities) {
             //entity.render(batch); TODO add
         }
+    }
+
+    public void addDynamicEntity(EntityDynamic entity) {
+        dynamicEntities.add(entity);
+    }
+
+    public void addStaticEntity(EntityStatic entity) {
+        staticEntities.add(entity);
     }
 
 }

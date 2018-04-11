@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
+
     private Texture img;
     private Sprite sprite;
 
