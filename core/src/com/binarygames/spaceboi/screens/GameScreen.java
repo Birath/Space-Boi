@@ -17,7 +17,6 @@ import com.binarygames.spaceboi.entities.Planet;
 import com.binarygames.spaceboi.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +77,7 @@ public class GameScreen implements Screen {
     }
 
     private void update(float delta) {
+        updatePlayerPhysics();
         camera.position.set(player.getBody().getPosition().x , player.getBody().getPosition().y , 0);
         camera.update();
 
@@ -102,43 +102,10 @@ public class GameScreen implements Screen {
 
     }
 
+
     @Override
     public void render(float delta) {
         update(delta);
-
-
-        //Detta nedan är kropparnas logik. Vi vill flytta på det. Behöver vi något handler objekt då playern och planeterna måste hålla koll på varandra? - gör en funktion
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined);
-        Vector2 playerPos = player.getBody().getPosition();
-        float clostestDistance = 0f;
-        Planet closestPlanet = null;
-        for (Planet planet: planets) {
-            Vector2 planetPos = planet.getBody().getPosition();
-            float distance = planetPos.dst(playerPos);
-            if (clostestDistance == 0f) {
-                clostestDistance = distance;
-                closestPlanet = planet;
-            }
-            else if (distance < clostestDistance) {
-                clostestDistance = distance;
-                closestPlanet = planet;
-            }
-        }
-        Vector2 closestPos = closestPlanet.getBody().getPosition();
-        float distance = closestPos.dst(playerPos);
-
-        float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
-
-        double force  = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
-        float forceX = MathUtils.cos(angle) * (float) force;
-        float forceY = MathUtils.sin(angle) * (float) force;
-        player.getBody().applyForceToCenter(forceX, forceY, true);
-
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
     }
 
     @Override
@@ -159,6 +126,39 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+    public void updatePlayerPhysics(){
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        debugRenderer.render(world, camera.combined);
+        Vector2 playerPos = player.getBody().getPosition();
+        float closestDistance = 0f;
+        Planet closestPlanet = null;
+        for (Planet planet: planets) {
+            Vector2 planetPos = planet.getBody().getPosition();
+            float distance = planetPos.dst(playerPos);
+            if (closestDistance == 0f) {
+                closestDistance = distance;
+                closestPlanet = planet;
+            }
+            else if (distance < closestDistance) {
+                closestDistance = distance;
+                closestPlanet = planet;
+            }
+        }
+        Vector2 closestPos = closestPlanet.getBody().getPosition();
+        float distance = closestPos.dst(playerPos);
+
+        float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
+
+        double force  = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
+        float forceX = MathUtils.cos(angle) * (float) force;
+        float forceY = MathUtils.sin(angle) * (float) force;
+        player.getBody().applyForceToCenter(forceX, forceY, true);
+
+        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+        batchedDraw();
+        draw();
     }
 
     @Override
