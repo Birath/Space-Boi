@@ -48,6 +48,9 @@
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
   </component>
+  <component name="ProjectCodeStyleConfiguration">
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module filepath="$PROJECT_DIR$/Space-Boi.iml" fileurl="file://$PROJECT_DIR$/Space-Boi.iml" />
@@ -55,7 +58,7 @@
       <module filepath="$PROJECT_DIR$/desktop/desktop.iml" fileurl="file://$PROJECT_DIR$/desktop/desktop.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">

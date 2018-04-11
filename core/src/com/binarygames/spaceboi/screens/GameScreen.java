@@ -13,14 +13,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.entities.Planet;
-import com.binarygames.spaceboi.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.binarygames.spaceboi.bodies.BaseStaticBody.WORLD_TO_BOX;
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody.WORLD_TO_BOX;
 
 public class GameScreen implements Screen {
 

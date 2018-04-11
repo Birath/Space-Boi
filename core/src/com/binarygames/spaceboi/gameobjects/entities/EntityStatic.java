@@ -1,10 +1,10 @@
-package com.binarygames.spaceboi.entities;
+package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.binarygames.spaceboi.bodies.BaseStaticBody;
+import com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody;
 
 public class EntityStatic extends BaseStaticBody {
     private Body body;
