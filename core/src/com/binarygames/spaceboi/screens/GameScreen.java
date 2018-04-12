@@ -12,8 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.bodies.Planet;
-import com.binarygames.spaceboi.entities.PLAYER_STATES;
+import com.binarygames.spaceboi.entities.PLAYER_STATE;
 import com.binarygames.spaceboi.entities.Planet;
 import com.binarygames.spaceboi.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
@@ -75,9 +74,6 @@ public class GameScreen implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), Gdx.graphics.getHeight()));
-        planets.add(new Planet(world,  Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world,  Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() * 4, Gdx.graphics.getHeight() * 1.5f));
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
@@ -88,7 +84,7 @@ public class GameScreen implements Screen {
                         contact.getFixtureB().getBody() == player.getBody()
                         ) {
                         System.out.println("Touching");
-                        player.setPlayerState(PLAYER_STATES.JUMPING);
+                        player.setPlayerState(PLAYER_STATE.STANDING);
                     }
 
                 }
@@ -97,7 +93,7 @@ public class GameScreen implements Screen {
             @Override
             public void endContact(Contact contact) {
                 System.out.println("Not touching");
-                player.setPlayerState(PLAYER_STATES.STANDING);
+                player.setPlayerState(PLAYER_STATE.JUMPING);
             }
 
             @Override

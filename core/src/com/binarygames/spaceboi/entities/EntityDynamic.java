@@ -16,10 +16,10 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     private float x;
     private float y;
 
-    private boolean moveUp = false;
-    private boolean moveDown = false;
-    private boolean moveRight = false;
-    private boolean moveLeft = false;
+    protected boolean moveUp = false;
+    protected boolean moveDown = false;
+    protected boolean moveRight = false;
+    protected boolean moveLeft = false;
 
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius){
         super(world, x, y, mass, radius);

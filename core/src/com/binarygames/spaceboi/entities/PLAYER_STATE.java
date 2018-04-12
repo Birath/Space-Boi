@@ -1,6 +1,6 @@
 package com.binarygames.spaceboi.entities;
 
-public enum  PLAYER_STATES {
+public enum PLAYER_STATE {
     JUMPING,
     STANDING
 }
