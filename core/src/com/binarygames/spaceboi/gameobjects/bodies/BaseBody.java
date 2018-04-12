@@ -1,10 +1,11 @@
-package com.binarygames.spaceboi.bodies;
+package com.binarygames.spaceboi.gameobjects.bodies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class BaseBody {
+
     protected float mass;
     protected Vector2 pos;
     protected World world;

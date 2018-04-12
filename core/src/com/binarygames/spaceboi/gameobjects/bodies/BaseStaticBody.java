@@ -1,4 +1,4 @@
-package com.binarygames.spaceboi.bodies;
+package com.binarygames.spaceboi.gameobjects.bodies;
 
 import com.badlogic.gdx.physics.box2d.World;
 

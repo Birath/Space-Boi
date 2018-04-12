@@ -1,4 +1,4 @@
-package com.binarygames.spaceboi.bodies;
+package com.binarygames.spaceboi.gameobjects.bodies;
 
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -13,7 +13,7 @@ public abstract class BaseDynamicBody extends BaseBody {
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.DynamicBody;
         groundBodyDef.position.set(pos);
-        this.body = world.createBody(groundBodyDef);
+        body = world.createBody(groundBodyDef);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(rad);
@@ -25,5 +25,9 @@ public abstract class BaseDynamicBody extends BaseBody {
         fixtureDef.restitution = 0.8f;
         Fixture fixture = body.createFixture(fixtureDef);
         circleShape.dispose();
+    }
+
+    public Body getBody() {
+        return body;
     }
 }

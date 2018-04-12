@@ -2,7 +2,7 @@ package com.binarygames.spaceboi.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.binarygames.spaceboi.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 public class PlayerInputProcessor implements InputProcessor {
 
