@@ -1,4 +1,4 @@
-package com.binarygames.spaceboi.entities;
+package com.binarygames.spaceboi.gameobjects.entities;
 
 public enum PLAYER_STATE {
     JUMPING,

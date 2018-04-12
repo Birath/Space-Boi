@@ -12,9 +12,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.entities.PLAYER_STATE;
-import com.binarygames.spaceboi.entities.Planet;
-import com.binarygames.spaceboi.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.PLAYER_STATE;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.GameUI;
 
@@ -68,8 +69,8 @@ public class GameScreen implements Screen {
         player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
         gameWorld.addDynamicEntity(player);
 
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 1000000000, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 1000000000, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 100000000000f, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 100000000000f, Gdx.graphics.getHeight()));
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player);
@@ -91,6 +92,9 @@ public class GameScreen implements Screen {
                         ) {
                         System.out.println("Touching");
                         player.setPlayerState(PLAYER_STATE.STANDING);
+                        if (contact.getFixtureB().getBody().getUserData() == null) //TODO Hack fix later
+                            player.setPlanetBody(contact.getFixtureB().getBody());
+                        else player.setPlanetBody(contact.getFixtureA().getBody());
                     }
 
                 }
