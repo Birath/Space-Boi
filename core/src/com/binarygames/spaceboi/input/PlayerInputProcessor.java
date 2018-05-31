@@ -15,7 +15,7 @@ public class PlayerInputProcessor implements InputProcessor {
     //Keyboardrelated
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.W){
+        if (keycode == Input.Keys.SPACE){
             player.setMoveUp(true);
         }
         if (keycode == Input.Keys.S){
@@ -27,12 +27,12 @@ public class PlayerInputProcessor implements InputProcessor {
         if(keycode == Input.Keys.A){
             player.setMoveLeft(true);
         }
-        return true;
+        return true; //Maybe I shouldnt return true if an event wasnt handled
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.W){
+        if (keycode == Input.Keys.SPACE){
             player.setMoveUp(false);
         }
         if (keycode == Input.Keys.S){
@@ -66,14 +66,22 @@ public class PlayerInputProcessor implements InputProcessor {
     }
 
 
-    //Touchrelated
+    //Touchrelated - Also used for mouseclicks!
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(button == Input.Buttons.LEFT){
+            player.setMouseHeld(true);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(button == Input.Buttons.LEFT){
+            player.setMouseHeld(false);
+            return true;
+        }
         return false;
     }
 

@@ -69,8 +69,8 @@ public class GameScreen implements Screen {
         player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
         gameWorld.addDynamicEntity(player);
 
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 100000000000f, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 100000000000f, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 50000000000f, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 50000000000f, Gdx.graphics.getHeight()));
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player);

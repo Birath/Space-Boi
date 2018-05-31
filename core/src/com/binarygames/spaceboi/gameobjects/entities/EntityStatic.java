@@ -1,9 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody;
 
 public class EntityStatic extends BaseStaticBody {
@@ -22,11 +19,23 @@ public class EntityStatic extends BaseStaticBody {
 
         this.body = world.createBody(groundBodyDef);
 
+        /*
         CircleShape groundCircle = new CircleShape();
         groundCircle.setRadius(rad);
 
         body.createFixture(groundCircle, 0.0f);
         groundCircle.dispose();
+        */
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(rad);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 0.2f;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0f;
+        Fixture fixture = body.createFixture(fixtureDef);
+        circleShape.dispose();
 
     }
 

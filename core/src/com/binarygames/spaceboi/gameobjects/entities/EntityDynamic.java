@@ -3,6 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
@@ -23,15 +24,20 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected boolean moveRight = false;
     protected boolean moveLeft = false;
 
+    protected Vector2 baseVel;
+    protected Vector2 specialVel;
+
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, mass, radius);
         img = new Texture(path);
         this.sprite = new Sprite(img);
         this.x = x;
         this.y = y;
+        baseVel = new Vector2(0, 0);
+        specialVel = new Vector2(0, 0);
     }
 
-    public void updateMovement() {
+    public void updateMovement() { //Används ej!
         if (moveUp) {
             y += speedY;
             if (y > Gdx.graphics.getHeight() - this.sprite.getHeight()) {
