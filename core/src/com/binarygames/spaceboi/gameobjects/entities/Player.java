@@ -23,7 +23,10 @@ public class Player extends EntityDynamic {
             Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
             Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
             System.out.println("Perpendicular: " + perpen);
-            if (moveUp) { body.setLinearVelocity(-toPlanet.x*2 + body.getLinearVelocity().x, -toPlanet.y*2 + body.getLinearVelocity().y); }
+            if (moveUp) {
+                body.setLinearVelocity(-toPlanet.x*2 + body.getLinearVelocity().x, -toPlanet.y*2 + body.getLinearVelocity().y);
+                playerState = PLAYER_STATE.JUMPING;
+            }
             if (moveRight) body.setLinearVelocity(perpen);
             if (moveLeft) body.setLinearVelocity(-perpen.x, -perpen.y);
         }

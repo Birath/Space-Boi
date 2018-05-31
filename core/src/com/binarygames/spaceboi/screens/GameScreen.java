@@ -85,10 +85,10 @@ public class GameScreen implements Screen {
             @Override
             public void beginContact(Contact contact) {
                 for (Planet planet: planets) {
-                    if (contact.getFixtureA().getBody() == planet.getBody() ||
-                        contact.getFixtureB().getBody() == planet.getBody() &&
-                        contact.getFixtureA().getBody() == player.getBody() ||
-                        contact.getFixtureB().getBody() == player.getBody()
+                    if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
+                        contact.getFixtureB().getBody().equals(planet.getBody()) &&
+                        contact.getFixtureA().getBody().equals(player.getBody()) ||
+                        contact.getFixtureB().getBody().equals(player.getBody())
                         ) {
                         System.out.println("Touching");
                         player.setPlayerState(PLAYER_STATE.STANDING);
@@ -194,7 +194,7 @@ public class GameScreen implements Screen {
         }
         Vector2 closestPos = closestPlanet.getBody().getPosition();
         float distance = closestPos.dst(playerPos);
-
+        // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
         float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
 
         double force = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
