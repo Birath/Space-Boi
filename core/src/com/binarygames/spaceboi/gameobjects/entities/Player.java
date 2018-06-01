@@ -50,7 +50,7 @@ public class Player extends EntityDynamic {
         }
         //SHOOTING
         if (mouseHeld){
-            Vector2 recoil = new Vector2(body.getLinearVelocity().x - mouseCoord.x, body.getLinearVelocity().y - mouseCoord.y);
+            Vector2 recoil = new Vector2(body.getPosition().x - mouseCoord.x, body.getPosition().y - mouseCoord.y);
             recoil.setLength2(1);
             recoil.scl(20);
 
