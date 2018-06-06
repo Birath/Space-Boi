@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.entities.PLAYER_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
@@ -43,6 +44,8 @@ public class GameScreen implements Screen {
 
     private List<Planet> planets = new ArrayList<Planet>();
 
+    private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
+
     //TEMPSTUFF(har tillhörande imports ovan)
     private Texture img;
 
@@ -66,11 +69,11 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(game);
 
         //Entities:
-        player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
+        player = new Player(world, 0, 0, "playerShip.png", 1000, 100);
         gameWorld.addDynamicEntity(player);
 
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 50000000000f, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 50000000000f, Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight()*2));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() *2, (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight()));
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player, camera);
@@ -84,10 +87,10 @@ public class GameScreen implements Screen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                for (Planet planet: planets) {
+                for (Planet planet : planets) {
                     if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
                         contact.getFixtureB().getBody().equals(planet.getBody()) &&
-                        contact.getFixtureA().getBody().equals(player.getBody()) ||
+                            contact.getFixtureA().getBody().equals(player.getBody()) ||
                         contact.getFixtureB().getBody().equals(player.getBody())
                         ) {
                         System.out.println("Touching");
@@ -124,6 +127,8 @@ public class GameScreen implements Screen {
         camera.update();
 
         player.updateMovement();
+        batchedDraw();
+        draw();
 
         gameUI.act(delta);
     }
@@ -133,6 +138,11 @@ public class GameScreen implements Screen {
     }
 
     private void batchedDraw() {
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        debugRenderer.render(world, camera.combined);
+
         game.getBatch().begin();
 
         gameWorld.render(game.getBatch());
@@ -175,16 +185,29 @@ public class GameScreen implements Screen {
     }
 
     public void updatePlayerPhysics() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined);
         Vector2 playerPos = player.getBody().getPosition();
-        float closestDistance = 0f;
+        Planet closestPlanet = getClosestPlanet(playerPos);
+
+        Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
+        float distance = closestPlanetPos.dst(playerPos) - closestPlanet.getRad();
+        // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
+        float angle = MathUtils.atan2(closestPlanetPos.y - playerPos.y, closestPlanetPos.x - playerPos.x);
+
+        double force = GRAVITY_CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 2);
+        float forceX = MathUtils.cos(angle) * (float) force;
+        float forceY = MathUtils.sin(angle) * (float) force;
+        player.getBody().applyForceToCenter(forceX, forceY, true);
+
+        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+    }
+
+    private Planet getClosestPlanet(Vector2 bodyPos) {
+        float closestDistance = 0.0f;
         Planet closestPlanet = null;
         for (Planet planet : planets) {
             Vector2 planetPos = planet.getBody().getPosition();
-            float distance = planetPos.dst(playerPos);
-            if (closestDistance == 0f) {
+            float distance = planetPos.dst(bodyPos) - planet.getRad();
+            if (closestDistance == 0.0f) {
                 closestDistance = distance;
                 closestPlanet = planet;
             } else if (distance < closestDistance) {
@@ -192,19 +215,7 @@ public class GameScreen implements Screen {
                 closestPlanet = planet;
             }
         }
-        Vector2 closestPos = closestPlanet.getBody().getPosition();
-        float distance = closestPos.dst(playerPos);
-        // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-        float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
-
-        double force = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
-        float forceX = MathUtils.cos(angle) * (float) force;
-        float forceY = MathUtils.sin(angle) * (float) force;
-        player.getBody().applyForceToCenter(forceX, forceY, true);
-
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
+        return closestPlanet;
     }
 
     @Override
