@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
 
     private Player player;
 
-    private List<Planet> planets = new ArrayList<Planet>();
+    private List<Planet> planets = new ArrayList<>();
 
     private FrameRate frameRate;
 
@@ -69,14 +69,18 @@ public class GameScreen implements Screen {
         gameUI = new GameUI();
         world = new World(new Vector2(0f, 0f), true);
 
-        gameWorld = new GameWorld(game);
+        gameWorld = new GameWorld(game, world);
 
         //Entities:
         player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
         gameWorld.addDynamicEntity(player);
 
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 50000000000f, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 50000000000f, Gdx.graphics.getHeight()));
+        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png", 50000000000f, Gdx.graphics.getHeight());
+        planets.add(planet1);
+        gameWorld.addStaticEntity(planet1);
+        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png", 50000000000f, Gdx.graphics.getHeight());
+        planets.add(planet2);
+        gameWorld.addStaticEntity(planet2);
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player, camera);
@@ -90,12 +94,12 @@ public class GameScreen implements Screen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                for (Planet planet: planets) {
+                for (Planet planet : planets) {
                     if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
-                        contact.getFixtureB().getBody().equals(planet.getBody()) &&
-                        contact.getFixtureA().getBody().equals(player.getBody()) ||
-                        contact.getFixtureB().getBody().equals(player.getBody())
-                        ) {
+                            contact.getFixtureB().getBody().equals(planet.getBody()) &&
+                                    contact.getFixtureA().getBody().equals(player.getBody()) ||
+                            contact.getFixtureB().getBody().equals(player.getBody())
+                            ) {
                         System.out.println("Touching");
                         player.setPlayerState(PLAYER_STATE.STANDING);
                         if (contact.getFixtureB().getBody().getUserData() == null) //TODO Hack fix later
@@ -130,10 +134,11 @@ public class GameScreen implements Screen {
         camera.update();
 
         frameRate.update();
-
-        player.updateMovement();
-
+        gameWorld.update(delta);
         gameUI.act(delta);
+
+        batchedDraw();
+        draw();
     }
 
     private void draw() {
@@ -143,7 +148,7 @@ public class GameScreen implements Screen {
     private void batchedDraw() {
         game.getBatch().begin();
 
-        gameWorld.render(game.getBatch());
+        gameWorld.render(game.getBatch(), camera);
 
         game.getBatch().draw(player.getSprite(), player.getX(), player.getY()); // TODO remove
 
@@ -212,8 +217,6 @@ public class GameScreen implements Screen {
         player.getBody().applyForceToCenter(forceX, forceY, true);
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
     }
 
     @Override

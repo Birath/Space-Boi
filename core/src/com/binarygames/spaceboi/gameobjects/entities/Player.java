@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -12,7 +11,7 @@ public class Player extends EntityDynamic {
     private Body planetBody;
 
     private boolean mouseHeld;
-    private Vector2 mouseCoord = new Vector2(0,0);
+    private Vector2 mouseCoord = new Vector2(0, 0);
 
     public Player(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, path, mass, radius);
@@ -32,14 +31,12 @@ public class Player extends EntityDynamic {
             perpen.scl(20);
 
             //MOVE
-            if (moveRight){
+            if (moveRight) {
                 body.setLinearVelocity(perpen);
-            }
-            else if (moveLeft){
+            } else if (moveLeft) {
                 body.setLinearVelocity(-perpen.x, -perpen.y);
-            }
-            else {
-                body.setLinearVelocity(0,0);
+            } else {
+                body.setLinearVelocity(0, 0);
             }
 
             //JUMP
@@ -49,7 +46,7 @@ public class Player extends EntityDynamic {
             }
         }
         //SHOOTING
-        if (mouseHeld){
+        if (mouseHeld) {
             Vector2 recoil = new Vector2(body.getPosition().x - mouseCoord.x, body.getPosition().y - mouseCoord.y);
             recoil.setLength2(1);
             recoil.scl(20);
@@ -69,10 +66,12 @@ public class Player extends EntityDynamic {
     public void setPlanetBody(Body planetBody) {
         this.planetBody = planetBody;
     }
-    public void setMouseHeld(boolean mouseHeld){
+
+    public void setMouseHeld(boolean mouseHeld) {
         this.mouseHeld = mouseHeld;
     }
-    public void setMouseXAndMouseY(float x, float y){
+
+    public void setMouseXAndMouseY(float x, float y) {
         mouseCoord.set(x, y);
     }
 }
