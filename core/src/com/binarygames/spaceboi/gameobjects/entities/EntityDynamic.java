@@ -32,7 +32,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.y = y;
     }
 
-    public void updateMovement() {
+    public void updateMovement() { //Detta används ej längre, bör tas bort!
         if (moveUp) {
             y += speedY;
             if (y > Gdx.graphics.getHeight() - this.sprite.getHeight()) {

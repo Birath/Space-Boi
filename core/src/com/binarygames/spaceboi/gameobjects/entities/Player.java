@@ -2,8 +2,8 @@ package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.binarygames.spaceboi.screens.GameScreen;
 
 public class Player extends EntityDynamic {
 
@@ -14,9 +14,12 @@ public class Player extends EntityDynamic {
     private boolean mouseHeld;
     private Vector2 mouseCoord = new Vector2(0,0);
 
-    public Player(World world, float x, float y, String path, float mass, float radius) {
+    private GameScreen gameScreen;
+
+    public Player(World world, float x, float y, String path, float mass, float radius, GameScreen gameScreen) {
         super(world, x, y, path, mass, radius);
         body.setUserData("player");
+        this.gameScreen = gameScreen;
     }
 
     @Override
@@ -55,7 +58,19 @@ public class Player extends EntityDynamic {
             recoil.scl(20);
 
             body.setLinearVelocity(recoil);
+
+            createBullet(recoil);
         }
+    }
+
+    private void createBullet(Vector2 recoil){
+        recoil.setLength2(1);
+        recoil.scl(-1);
+        Vector2 shootFrom = new Vector2(body.getPosition().add(recoil.scl(rad + 10)));
+
+        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 1000, 10);
+        bullet.getBody().setLinearVelocity(recoil);
+        gameScreen.appendEntity(bullet);
     }
 
     public PLAYER_STATE getPlayerState() {

@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.PLAYER_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
@@ -43,6 +44,7 @@ public class GameScreen implements Screen {
     private Player player;
 
     private List<Planet> planets = new ArrayList<Planet>();
+    private List<EntityDynamic> entities = new ArrayList<>();
 
     private FrameRate frameRate;
 
@@ -72,11 +74,13 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(game);
 
         //Entities:
-        player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
+        player = new Player(world, 0, 0, "playerShip.png", 10000, 100, this);
         gameWorld.addDynamicEntity(player);
 
         planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 50000000000f, Gdx.graphics.getHeight()));
         planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 50000000000f, Gdx.graphics.getHeight()));
+
+        entities.add(player);
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player, camera);
@@ -184,41 +188,46 @@ public class GameScreen implements Screen {
     }
 
     public void updatePlayerPhysics() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined);
-        Vector2 playerPos = player.getBody().getPosition();
-        float closestDistance = 0f;
-        Planet closestPlanet = null;
-        for (Planet planet : planets) {
-            Vector2 planetPos = planet.getBody().getPosition();
-            float distance = planetPos.dst(playerPos);
-            if (closestDistance == 0f) {
-                closestDistance = distance;
-                closestPlanet = planet;
-            } else if (distance < closestDistance) {
-                closestDistance = distance;
-                closestPlanet = planet;
+        for(EntityDynamic entity : entities){
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+            debugRenderer.render(world, camera.combined);
+            Vector2 entityPos = entity.getBody().getPosition();
+            float closestDistance = 0f;
+            Planet closestPlanet = null;
+            for (Planet planet : planets) {
+                Vector2 planetPos = planet.getBody().getPosition();
+                float distance = planetPos.dst(entityPos);
+                if (closestDistance == 0f) {
+                    closestDistance = distance;
+                    closestPlanet = planet;
+                } else if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestPlanet = planet;
+                }
             }
+            Vector2 closestPos = closestPlanet.getBody().getPosition();
+            float distance = closestPos.dst(entityPos);
+            // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
+            float angle = MathUtils.atan2(closestPos.y - entityPos.y, closestPos.x - entityPos.x);
+
+            double force = Planet.CONSTANT * closestPlanet.getMass() * entity.getMass() / Math.pow(distance, 1.1);
+            float forceX = MathUtils.cos(angle) * (float) force;
+            float forceY = MathUtils.sin(angle) * (float) force;
+            entity.getBody().applyForceToCenter(forceX, forceY, true);
+
+            world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+            batchedDraw();
+            draw();
         }
-        Vector2 closestPos = closestPlanet.getBody().getPosition();
-        float distance = closestPos.dst(playerPos);
-        // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-        float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
-
-        double force = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
-        float forceX = MathUtils.cos(angle) * (float) force;
-        float forceY = MathUtils.sin(angle) * (float) force;
-        player.getBody().applyForceToCenter(forceX, forceY, true);
-
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
     }
 
     @Override
     public void dispose() {
         gameUI.dispose();
         frameRate.dispose();
+    }
+    public void appendEntity(EntityDynamic entity){
+        entities.add(entity);
     }
 }
