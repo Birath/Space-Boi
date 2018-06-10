@@ -17,6 +17,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
+import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
 
 import java.util.ArrayList;
@@ -43,12 +44,17 @@ public class GameScreen implements Screen {
 
     private List<Planet> planets = new ArrayList<Planet>();
 
+    private FrameRate frameRate;
+
     //TEMPSTUFF(har tillhörande imports ovan)
     private Texture img;
 
     public GameScreen(SpaceBoi game) {
         //TEMPSTUFF - Laddar in bild
         img = new Texture("playerShip.png");
+
+        //Framerate
+        frameRate = new FrameRate();
 
         this.game = game;
         // Mysko skit för att få scalingen av debuggkameran rätt
@@ -123,6 +129,8 @@ public class GameScreen implements Screen {
         camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
         camera.update();
 
+        frameRate.update();
+
         player.updateMovement();
 
         gameUI.act(delta);
@@ -152,6 +160,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
+        frameRate.render();
     }
 
     @Override
@@ -210,5 +219,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         gameUI.dispose();
+        frameRate.dispose();
     }
 }
