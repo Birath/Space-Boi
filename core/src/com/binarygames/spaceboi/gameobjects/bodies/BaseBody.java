@@ -1,5 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.bodies;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,6 +23,8 @@ public abstract class BaseBody {
         this.mass = mass;
         this.pos = new Vector2(x * WORLD_TO_BOX, y * WORLD_TO_BOX);
     }
+
+    public abstract void render(SpriteBatch batch, OrthographicCamera camera);
 
     public float getMass() {
         return mass;

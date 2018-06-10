@@ -1,21 +1,32 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody;
 
-public class EntityStatic extends BaseStaticBody {
+public abstract class EntityStatic extends BaseStaticBody {
+
     private Body body;
+
+    private Texture texture;
+
+    private float x;
+    private float y;
 
     //private ShapeRenderer renderer = new ShapeRenderer();
     private static final int DENSITY = 50000;
 
-
-    public EntityStatic(World aWorld, float x, float y, float mass, float radius) {
+    public EntityStatic(World aWorld, float x, float y, String path, float mass, float radius) {
         super(aWorld, x, y, mass, radius);
-
+        texture = new Texture(path);
+        this.x = x;
+        this.y = y;
 
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.position.set(pos);
@@ -28,6 +39,12 @@ public class EntityStatic extends BaseStaticBody {
         body.createFixture(groundCircle, 0.0f);
         groundCircle.dispose();
 
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
+        batch.draw(texture, screenCoords.x - texture.getWidth() / 2, screenCoords.y - texture.getHeight() / 2);
     }
 
     public Body getBody() {

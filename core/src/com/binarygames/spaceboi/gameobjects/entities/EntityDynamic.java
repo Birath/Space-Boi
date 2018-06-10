@@ -1,16 +1,18 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
 
-    private Texture img;
+    private Texture texture;
     private Sprite sprite;
 
     private int speedX = 8;
@@ -26,8 +28,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, mass, radius);
-        img = new Texture(path);
-        this.sprite = new Sprite(img);
+        texture = new Texture(path);
+        this.sprite = new Sprite(texture);
         this.x = x;
         this.y = y;
     }
@@ -59,6 +61,12 @@ public abstract class EntityDynamic extends BaseDynamicBody {
                 body.applyForceToCenter(-200f, 0, true);
             }
         }
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
+        batch.draw(texture, screenCoords.x - texture.getWidth() / 2, screenCoords.y - texture.getHeight() / 2);
     }
 
     public void setMoveUp(boolean moveUp) {
