@@ -22,7 +22,7 @@ public abstract class BaseDynamicBody extends BaseBody {
         fixtureDef.shape = circleShape;
         fixtureDef.density = 0.2f;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.8f;
+        fixtureDef.restitution = 0f;
         Fixture fixture = body.createFixture(fixtureDef);
         circleShape.dispose();
     }
