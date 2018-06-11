@@ -12,7 +12,7 @@ import com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody;
 
 public abstract class EntityStatic extends BaseStaticBody {
 
-    private Body body;
+    protected Body body;
 
     private Texture texture;
 

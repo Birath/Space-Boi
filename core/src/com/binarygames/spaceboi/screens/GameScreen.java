@@ -74,16 +74,8 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(game, world);
 
         //Entities:
-        player = new Player(world, 0, 0, "playerShip.png", 1000, 100, this);
-        gameWorld.addDynamicEntity(player);
-
-        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png", (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight());
-        gameWorld.addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png", (float) Math.pow(4.0*10, 7), Gdx.graphics.getHeight());
-        gameWorld.addStaticEntity(planet2);
-
-        entities.add(player);
-
+        gameWorld.createWorld();
+        player = gameWorld.getPlayer();
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player, camera);
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -93,49 +85,16 @@ public class GameScreen implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                for (Planet planet: planets) {
-                    if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
-                        contact.getFixtureB().getBody().equals(planet.getBody()) &&
-                        contact.getFixtureA().getBody().equals(player.getBody()) ||
-                        contact.getFixtureB().getBody().equals(player.getBody())
-                        ) {
-                        player.setPlayerState(PLAYER_STATE.STANDING);
-                        if (contact.getFixtureA().getBody().equals(player.getBody()))
-                            player.setPlanetBody(contact.getFixtureB().getBody());
-                        else player.setPlanetBody(contact.getFixtureA().getBody());
-                    }
 
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-                // TODO make sure that it's the player that's ending the contact
-                player.setPlayerState(PLAYER_STATE.JUMPING);
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }
-        });
     }
 
     private void update(float delta) {
-        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
-        camera.update();
-
         frameRate.update();
         gameWorld.update(delta);
         gameUI.act(delta);
+
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
+        camera.update();
 
         batchedDraw();
         draw();
@@ -161,46 +120,39 @@ public class GameScreen implements Screen {
         game.getBatch().end();
     }
 
-    @Override
-    public void show() {
+    @Override public void show() {
 
     }
 
 
-    @Override
-    public void render(float delta) {
+    @Override public void render(float delta) {
         update(delta);
         frameRate.render();
     }
 
-    @Override
-    public void resize(int width, int height) {
+    @Override public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
 
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
 
     }
 
-    @Override
-    public void hide() {
+    @Override public void hide() {
 
     }
 
 
-
-    @Override
-    public void dispose() {
+    @Override public void dispose() {
         gameUI.dispose();
         frameRate.dispose();
     }
-    public void appendEntity(EntityDynamic entity){
+
+    public void appendEntity(EntityDynamic entity) {
         entities.add(entity);
     }
 }
