@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.entities.PLAYER_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
@@ -73,7 +72,7 @@ public class GameScreen implements Screen {
         gameWorld.addDynamicEntity(player);
 
         planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight()*2));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() *2, (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight()));
+        planets.add(new Planet(world, Gdx.graphics.getWidth() * 3, Gdx.graphics.getHeight() *2, (float) Math.pow(4.0*10, 7), Gdx.graphics.getHeight()));
 
         //Input processor och multiplexer, hanterar användarens input
         inputProcessor = new PlayerInputProcessor(player, camera);
@@ -90,12 +89,11 @@ public class GameScreen implements Screen {
                 for (Planet planet : planets) {
                     if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
                         contact.getFixtureB().getBody().equals(planet.getBody()) &&
-                            contact.getFixtureA().getBody().equals(player.getBody()) ||
+                        contact.getFixtureA().getBody().equals(player.getBody()) ||
                         contact.getFixtureB().getBody().equals(player.getBody())
                         ) {
-                        System.out.println("Touching");
                         player.setPlayerState(PLAYER_STATE.STANDING);
-                        if (contact.getFixtureB().getBody().getUserData() == null) //TODO Hack fix later
+                        if (contact.getFixtureA().getBody().equals(player.getBody()))
                             player.setPlanetBody(contact.getFixtureB().getBody());
                         else player.setPlanetBody(contact.getFixtureA().getBody());
                     }
@@ -105,7 +103,7 @@ public class GameScreen implements Screen {
 
             @Override
             public void endContact(Contact contact) {
-                System.out.println("Not touching");
+                // TODO make sure that it's the player that's ending the contact
                 player.setPlayerState(PLAYER_STATE.JUMPING);
             }
 
@@ -189,14 +187,17 @@ public class GameScreen implements Screen {
         Planet closestPlanet = getClosestPlanet(playerPos);
 
         Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
-        float distance = closestPlanetPos.dst(playerPos) - closestPlanet.getRad();
-        // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-        float angle = MathUtils.atan2(closestPlanetPos.y - playerPos.y, closestPlanetPos.x - playerPos.x);
+        float distance = closestPlanetPos.dst(playerPos);
+        if (closestPlanet.getRad() * 1.5 >= distance) {
+            float angle = MathUtils.atan2(closestPlanetPos.y - playerPos.y, closestPlanetPos.x - playerPos.x);
+            // Set constant gravity while inside a set radius
 
-        double force = GRAVITY_CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 2);
-        float forceX = MathUtils.cos(angle) * (float) force;
-        float forceY = MathUtils.sin(angle) * (float) force;
-        player.getBody().applyForceToCenter(forceX, forceY, true);
+            // TODO Maybe change to not depend on planet radius. Not sure what else to use tho
+            double force = GRAVITY_CONSTANT * closestPlanet.getMass() * player.getMass() / closestPlanet.getRad();
+            float forceX = MathUtils.cos(angle) * (float) force;
+            float forceY = MathUtils.sin(angle) * (float) force;
+            player.getBody().applyForceToCenter(forceX, forceY, true);
+        }
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
