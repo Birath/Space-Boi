@@ -10,6 +10,7 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.EntityStatic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,12 @@ public class GameWorld {
 
     private SpaceBoi game;
     private World world;
+    private Player player;
 
     private List<EntityDynamic> dynamicEntities;
     private List<EntityStatic> staticEntities;
+
+    private List<EntityDynamic> addDynamicEntities = new ArrayList<>();
 
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
 
@@ -30,6 +34,24 @@ public class GameWorld {
 
         dynamicEntities = new ArrayList<>();
         staticEntities = new ArrayList<>();
+
+
+    }
+
+    public void createWorld() {
+        Player player = new Player(world, 0, 0, "playerShip.png", 1000, 100, this);
+        addDynamicEntity(player);
+        this.player = player;
+
+        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png",
+                                    (float) Math.pow(4.6 * 10, 7), Gdx.graphics.getHeight());
+        addStaticEntity(planet1);
+        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png",
+                                    (float) Math.pow(4.0 * 10, 7), Gdx.graphics.getHeight());
+        addStaticEntity(planet2);
+
+        world.setContactListener(new GameConctatListener(player));
+
     }
 
     public void update(float delta) {
@@ -37,14 +59,16 @@ public class GameWorld {
         for (EntityDynamic entity : dynamicEntities) {
             entity.updateMovement();
         }
+        dynamicEntities.addAll(addDynamicEntities);
+        addDynamicEntities.clear();
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         for (EntityStatic entity : staticEntities) {
-            entity.render(batch, camera);
+            //entity.render(batch, camera);
         }
         for (EntityDynamic entity : dynamicEntities) {
-            entity.render(batch, camera);
+            //entity.render(batch, camera);
         }
     }
 
@@ -85,16 +109,20 @@ public class GameWorld {
                     closestPlanet = planet;
                 }
             }
-
-        } return closestPlanet;
+        }
+        return closestPlanet;
     }
 
     public void addDynamicEntity(EntityDynamic entity) {
-        dynamicEntities.add(entity);
+        addDynamicEntities.add(entity);
     }
 
     public void addStaticEntity(EntityStatic entity) {
         staticEntities.add(entity);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
 }
