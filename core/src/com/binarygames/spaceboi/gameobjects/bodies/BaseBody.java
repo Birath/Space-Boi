@@ -15,7 +15,6 @@ public abstract class BaseBody {
 
     public static final float WORLD_TO_BOX = 0.03125f;
     public static final float BOX_TO_WORLD = 32f;
-    public static final double CONSTANT = 6.674 * Math.pow(10, -11);
 
     public BaseBody(World aWorld, float x, float y, float mass, float radius) { //Just nu tar vi in mass som argument. Tror dock att vi vill ha konstanter eller skala med volym och densitet.
         this.world = aWorld;
@@ -28,6 +27,10 @@ public abstract class BaseBody {
 
     public float getMass() {
         return mass;
+    }
+
+    public float getRad() {
+        return rad;
     }
 
     protected abstract Body getBody();

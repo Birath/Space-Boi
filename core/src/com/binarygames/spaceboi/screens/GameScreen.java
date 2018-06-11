@@ -74,14 +74,12 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(game, world);
 
         //Entities:
-        player = new Player(world, 0, 0, "playerShip.png", 10000, 100, this);
+        player = new Player(world, 0, 0, "playerShip.png", 1000, 100, this);
         gameWorld.addDynamicEntity(player);
 
-        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png", 50000000000f, Gdx.graphics.getHeight());
-        planets.add(planet1);
+        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png", (float) Math.pow(4.6*10, 7), Gdx.graphics.getHeight());
         gameWorld.addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png", 50000000000f, Gdx.graphics.getHeight());
-        planets.add(planet2);
+        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png", (float) Math.pow(4.0*10, 7), Gdx.graphics.getHeight());
         gameWorld.addStaticEntity(planet2);
 
         entities.add(player);
@@ -98,15 +96,14 @@ public class GameScreen implements Screen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                for (Planet planet : planets) {
+                for (Planet planet: planets) {
                     if (contact.getFixtureA().getBody().equals(planet.getBody()) ||
-                            contact.getFixtureB().getBody().equals(planet.getBody()) &&
-                                    contact.getFixtureA().getBody().equals(player.getBody()) ||
-                            contact.getFixtureB().getBody().equals(player.getBody())
-                            ) {
-                        System.out.println("Touching");
+                        contact.getFixtureB().getBody().equals(planet.getBody()) &&
+                        contact.getFixtureA().getBody().equals(player.getBody()) ||
+                        contact.getFixtureB().getBody().equals(player.getBody())
+                        ) {
                         player.setPlayerState(PLAYER_STATE.STANDING);
-                        if (contact.getFixtureB().getBody().getUserData() == null) //TODO Hack fix later
+                        if (contact.getFixtureA().getBody().equals(player.getBody()))
                             player.setPlanetBody(contact.getFixtureB().getBody());
                         else player.setPlanetBody(contact.getFixtureA().getBody());
                     }
@@ -116,7 +113,7 @@ public class GameScreen implements Screen {
 
             @Override
             public void endContact(Contact contact) {
-                System.out.println("Not touching");
+                // TODO make sure that it's the player that's ending the contact
                 player.setPlayerState(PLAYER_STATE.JUMPING);
             }
 
@@ -133,7 +130,6 @@ public class GameScreen implements Screen {
     }
 
     private void update(float delta) {
-        updatePlayerPhysics();
         camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
         camera.update();
 
@@ -150,6 +146,11 @@ public class GameScreen implements Screen {
     }
 
     private void batchedDraw() {
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        debugRenderer.render(world, camera.combined);
+
         game.getBatch().begin();
 
         gameWorld.render(game.getBatch(), camera);
@@ -192,41 +193,7 @@ public class GameScreen implements Screen {
 
     }
 
-    public void updatePlayerPhysics() {
-        for(EntityDynamic entity : entities){
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-            debugRenderer.render(world, camera.combined);
-            Vector2 entityPos = entity.getBody().getPosition();
-            float closestDistance = 0f;
-            Planet closestPlanet = null;
-            for (Planet planet : planets) {
-                Vector2 planetPos = planet.getBody().getPosition();
-                float distance = planetPos.dst(entityPos);
-                if (closestDistance == 0f) {
-                    closestDistance = distance;
-                    closestPlanet = planet;
-                } else if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closestPlanet = planet;
-                }
-            }
-            Vector2 closestPos = closestPlanet.getBody().getPosition();
-            float distance = closestPos.dst(entityPos);
-            // https://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-            float angle = MathUtils.atan2(closestPos.y - entityPos.y, closestPos.x - entityPos.x);
 
-            double force = Planet.CONSTANT * closestPlanet.getMass() * entity.getMass() / Math.pow(distance, 1.1);
-            float forceX = MathUtils.cos(angle) * (float) force;
-            float forceY = MathUtils.sin(angle) * (float) force;
-            entity.getBody().applyForceToCenter(forceX, forceY, true);
-
-
-        }
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
-    }
 
     @Override
     public void dispose() {
