@@ -12,7 +12,6 @@ import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
 
-    private Texture texture;
     private Sprite sprite;
 
     private int speedX = 8;
@@ -28,8 +27,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, mass, radius);
-        texture = new Texture(path);
-        this.sprite = new Sprite(texture);
+        this.sprite = new Sprite(new Texture(path));
+        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
         this.x = x;
         this.y = y;
     }
@@ -63,10 +62,10 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         }
     }
 
-    @Override
-    public void render(SpriteBatch batch, OrthographicCamera camera) {
+    @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
         Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
-        batch.draw(texture, screenCoords.x - texture.getWidth() / 2, screenCoords.y - texture.getHeight() / 2);
+        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.draw(batch);
     }
 
     public void setMoveUp(boolean moveUp) {

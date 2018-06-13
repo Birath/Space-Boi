@@ -60,10 +60,10 @@ public class GameScreen implements Screen {
 
         this.game = game;
         // Mysko skit för att få scalingen av debuggkameran rätt
-        camera = new OrthographicCamera(SpaceBoi.VIRTUAL_WIDTH * 0.1f, SpaceBoi.VIRTUAL_HEIGHT * 0.1f);
+        camera = new OrthographicCamera();
         //box2dCamera = new OrthographicCamera(Gdx.graphics.getWidth() * WORLD_TO_BOX, Gdx.graphics.getHeight() * WORLD_TO_BOX);
         // Vet inte riktigt vad jag håller på med här, men det verkar funka // Björn
-        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX);
+        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX, camera);
         viewport.apply();
 
         //camera = new OrthographicCamera();

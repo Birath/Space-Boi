@@ -74,7 +74,7 @@ public class Player extends EntityDynamic {
         recoil.scl(-1);
         Vector2 shootFrom = new Vector2(body.getPosition().add(recoil.scl(rad + 10)));
         System.out.println(shootFrom);
-        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 1000, 10);
+        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 10, 0.2f);
         bullet.getBody().setLinearVelocity(recoil);
         gameWorld.addDynamicEntity(bullet);
     }

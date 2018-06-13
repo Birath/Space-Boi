@@ -39,15 +39,13 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(world, 0, 0, "playerShip.png", 1000, 100, this);
+        Player player = new Player(world, 0, 0, "playerShip.png", 500, 2, this);
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), "moon.png",
-                                    (float) Math.pow(4.6 * 10, 7), Gdx.graphics.getHeight());
+        Planet planet1 = new Planet(world, 35, 30, "moon.png",(float) Math.pow(4.6 * 10, 7), 20);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, "moon.png",
-                                    (float) Math.pow(4.0 * 10, 7), Gdx.graphics.getHeight());
+        Planet planet2 = new Planet(world, 100, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 15);
         addStaticEntity(planet2);
 
         world.setContactListener(new GameConctatListener(player));
@@ -65,10 +63,10 @@ public class GameWorld {
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         for (EntityStatic entity : staticEntities) {
-            //entity.render(batch, camera);
+            entity.render(batch, camera);
         }
         for (EntityDynamic entity : dynamicEntities) {
-            //entity.render(batch, camera);
+            entity.render(batch, camera);
         }
     }
 

@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,7 +15,7 @@ public abstract class EntityStatic extends BaseStaticBody {
 
     protected Body body;
 
-    private Texture texture;
+    private Sprite sprite;
 
     private float x;
     private float y;
@@ -24,9 +25,12 @@ public abstract class EntityStatic extends BaseStaticBody {
 
     public EntityStatic(World aWorld, float x, float y, String path, float mass, float radius) {
         super(aWorld, x, y, mass, radius);
-        texture = new Texture(path);
         this.x = x;
         this.y = y;
+
+        sprite = new Sprite(new Texture(path));
+        //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
 
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.position.set(pos);
@@ -44,7 +48,8 @@ public abstract class EntityStatic extends BaseStaticBody {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
-        batch.draw(texture, screenCoords.x - texture.getWidth() / 2, screenCoords.y - texture.getHeight() / 2);
+        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.draw(batch);
     }
 
     public Body getBody() {
