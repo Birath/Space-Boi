@@ -6,10 +6,6 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Player extends EntityDynamic {
 
-    private PLAYER_STATE playerState;
-
-    private Body planetBody;
-
     private boolean mouseHeld;
     private Vector2 mouseCoord = new Vector2(0, 0);
 
@@ -23,7 +19,7 @@ public class Player extends EntityDynamic {
 
     @Override
     public void updateMovement() {
-        if (playerState == PLAYER_STATE.STANDING) {
+        if (entityState == ENTITY_STATE.STANDING) {
 
             Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
             toPlanet.setLength2(1);
@@ -45,7 +41,7 @@ public class Player extends EntityDynamic {
             //JUMP
             if (moveUp) {
                 body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
-                playerState = PLAYER_STATE.JUMPING;
+                entityState = ENTITY_STATE.JUMPING;
             }
         }
         //SHOOTING
@@ -60,35 +56,16 @@ public class Player extends EntityDynamic {
         }
     }
 
-    public void hitPlanet(Planet planet) {
-        playerState = PLAYER_STATE.STANDING;
-        planetBody = planet.getBody();
-    }
-
-    public void leftPlanet() {
-        playerState = PLAYER_STATE.JUMPING;
-    }
-
     private void createBullet(Vector2 recoil){
         recoil.setLength2(1);
         recoil.scl(-1);
-        Vector2 shootFrom = new Vector2(body.getPosition().add(recoil.scl(rad + 10)));
+        Vector2 shootFrom = new Vector2(body.getPosition().add(recoil.scl(rad)));
         System.out.println(shootFrom);
-        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 10, 0.2f);
+        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 8, 0.2f);
+
+        recoil.scl(15);
         bullet.getBody().setLinearVelocity(recoil);
         gameWorld.addDynamicEntity(bullet);
-    }
-
-    public PLAYER_STATE getPlayerState() {
-        return playerState;
-    }
-
-    public void setPlayerState(PLAYER_STATE playerState) {
-        this.playerState = playerState;
-    }
-
-    public void setPlanetBody(Body planetBody) {
-        this.planetBody = planetBody;
     }
 
     public void setMouseHeld(boolean mouseHeld) {

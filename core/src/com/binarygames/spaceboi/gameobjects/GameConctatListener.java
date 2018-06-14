@@ -5,27 +5,38 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.binarygames.spaceboi.gameobjects.entities.Bullet;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
-public class GameConctatListener implements ContactListener {
+public class GameConctatListener implements ContactListener { //extend to include all entities
 
-    private Player player;
+    private EntityDynamic entity;
 
-    public GameConctatListener(Player player) {
-        this.player = player;
+    public GameConctatListener(EntityDynamic entity) {
+        this.entity = entity;
     }
 
     @Override public void beginContact(Contact contact) {
+        //ENTITY IS PLAYER
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
             Player.class.isInstance(fixtureB.getBody().getUserData())) {
-            player.hitPlanet((Planet) fixtureA.getBody().getUserData());
+            entity.hitPlanet((Planet) fixtureA.getBody().getUserData());
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                    Planet.class.isInstance(fixtureB.getBody().getUserData())) {
-            player.hitPlanet((Planet) fixtureB.getBody().getUserData());
+            entity.hitPlanet((Planet) fixtureB.getBody().getUserData());
+        }
+
+        //ENTITY IS BULLET
+        else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Bullet.class.isInstance(fixtureB.getBody().getUserData())
+                || (Planet.class.isInstance(fixtureB.getBody().getUserData()) &&
+                Bullet.class.isInstance(fixtureA.getBody().getUserData()))){
+            //entity.hitPlanet(); //DOESNT WORK ;(
         }
 
     }
@@ -36,10 +47,10 @@ public class GameConctatListener implements ContactListener {
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
             Player.class.isInstance(fixtureB.getBody().getUserData())) {
-            player.leftPlanet();
+            entity.leftPlanet();
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                    Planet.class.isInstance(fixtureB.getBody().getUserData())) {
-            player.leftPlanet();
+            entity.leftPlanet();
         }
     }
 

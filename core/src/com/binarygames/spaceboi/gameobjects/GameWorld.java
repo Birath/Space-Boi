@@ -7,11 +7,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
-import com.binarygames.spaceboi.gameobjects.entities.EntityStatic;
-import com.binarygames.spaceboi.gameobjects.entities.Planet;
-import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class GameWorld {
     }
 
     public void update(float delta) {
-        applyGravity(delta);
+        applyGravity(delta, dynamicEntities);
         for (EntityDynamic entity : dynamicEntities) {
             entity.updateMovement();
         }
@@ -70,18 +68,19 @@ public class GameWorld {
         }
     }
 
-    public void applyGravity(float delta) {
-        for (EntityDynamic entity : dynamicEntities) {
+    public void applyGravity(float delta, List<EntityDynamic> dynamicObjectList) {
+        for (EntityDynamic entity : dynamicObjectList) {
+
             Vector2 entityPos = entity.getBody().getPosition();
             Planet closestPlanet = getClosestPlanet(entityPos);
 
             Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
             float distance = closestPlanetPos.dst(entityPos);
-            if (closestPlanet.getRad() * 1.5 >= distance) {
+            if (closestPlanet.getRad() * 2 >= distance) {
                 float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
                 // Set constant gravity while inside a set radius
 
-                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho
+                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //ALbin
                 double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
                 float forceX = MathUtils.cos(angle) * (float) force;
                 float forceY = MathUtils.sin(angle) * (float) force;
@@ -91,10 +90,18 @@ public class GameWorld {
         world.step(delta, 6, 2);
     }
 
+    private void removeBullets(List<EntityDynamic> toRemoveList){
+        for (EntityDynamic entity : toRemoveList){
+            if (entity.entityState == ENTITY_STATE.STANDING){
+                world.destroyBody(entity.getBody()); //Also remove from list?
+            }
+        }
+    }
+
     private Planet getClosestPlanet(Vector2 bodyPos) {
         float closestDistance = 0.0f;
         Planet closestPlanet = null;
-        for (EntityStatic entityStatic : staticEntities) {
+        for (EntityStatic entityStatic : staticEntities) { //Seems like we need to have a planetList since we want to apply gravity using every object in staticEntities
             if (Planet.class.isInstance(entityStatic)) {
                 Planet planet = (Planet) entityStatic;
                 Vector2 planetPos = planet.getBody().getPosition();
