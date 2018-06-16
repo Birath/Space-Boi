@@ -46,9 +46,9 @@ public class Player extends EntityDynamic {
         }
         //SHOOTING
         if (mouseHeld) {
-            Vector2 recoil = new Vector2(body.getPosition().x - mouseCoord.x, body.getPosition().y - mouseCoord.y);
+            Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoord.x, body.getPosition().y * PPM - mouseCoord.y);
             recoil.setLength2(1);
-            recoil.scl(20);
+            recoil.scl(60);
 
             body.setLinearVelocity(recoil);
 
@@ -58,10 +58,9 @@ public class Player extends EntityDynamic {
 
     private void createBullet(Vector2 recoil){
         recoil.setLength2(1);
-        recoil.scl(-1);
-        Vector2 shootFrom = new Vector2(body.getPosition().add(recoil.scl(rad)));
-        System.out.println(shootFrom);
-        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 8, 0.2f);
+        recoil.scl(-(rad * PPM));
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
+        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 8, 2f);
 
         recoil.scl(15);
         bullet.getBody().setLinearVelocity(recoil);

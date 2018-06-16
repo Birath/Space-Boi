@@ -24,7 +24,7 @@ import com.binarygames.spaceboi.ui.GameUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody.WORLD_TO_BOX;
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public class GameScreen implements Screen {
 
@@ -61,10 +61,12 @@ public class GameScreen implements Screen {
         this.game = game;
         // Mysko skit för att få scalingen av debuggkameran rätt
         camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         //box2dCamera = new OrthographicCamera(Gdx.graphics.getWidth() * WORLD_TO_BOX, Gdx.graphics.getHeight() * WORLD_TO_BOX);
         // Vet inte riktigt vad jag håller på med här, men det verkar funka // Björn
-        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX, camera);
-        viewport.apply();
+
+        //viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX, camera);
+        //viewport.apply();
 
         //camera = new OrthographicCamera();
 
@@ -86,6 +88,7 @@ public class GameScreen implements Screen {
         debugRenderer = new Box2DDebugRenderer();
 
 
+
     }
 
     private void update(float delta) {
@@ -93,9 +96,9 @@ public class GameScreen implements Screen {
         gameWorld.update(delta);
         gameUI.act(delta);
 
-        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
+        camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
         camera.update();
-
+        game.getBatch().setProjectionMatrix(camera.combined);
         batchedDraw();
         draw();
     }
@@ -108,13 +111,11 @@ public class GameScreen implements Screen {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined.scl(PPM));
 
         game.getBatch().begin();
 
         gameWorld.render(game.getBatch(), camera);
-
-        game.getBatch().draw(player.getSprite(), player.getX(), player.getY()); // TODO remove
 
         game.debugFont.draw(game.getBatch(), "GAME", 5, 20);
         game.getBatch().end();
@@ -132,6 +133,8 @@ public class GameScreen implements Screen {
 
     @Override public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        camera.setToOrtho(false, width / 2, height / 2);
+        //viewport.update();
     }
 
     @Override public void pause() {
