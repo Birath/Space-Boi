@@ -33,7 +33,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, mass, radius);
         this.sprite = new Sprite(new Texture(path));
-        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
+        sprite.setSize(radius * 2, radius * 2);
         this.x = x;
         this.y = y;
     }
@@ -66,8 +66,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     }
 
     @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
-        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
-        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
     }
 

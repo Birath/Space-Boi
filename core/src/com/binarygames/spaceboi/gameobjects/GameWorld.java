@@ -11,6 +11,7 @@ import com.binarygames.spaceboi.gameobjects.entities.*;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameWorld {
@@ -37,13 +38,13 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(world, 0, 0, "playerShip.png", 500, 2, this);
+        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this);
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, 35, 30, "moon.png",(float) Math.pow(4.6 * 10, 7), 20);
+        Planet planet1 = new Planet(world, 35, 30, "moon.png",(float) Math.pow(4.6 * 10, 7), 100);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, 100, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 15);
+        Planet planet2 = new Planet(world, 170, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 75);
         addStaticEntity(planet2);
 
         world.setContactListener(new GameConctatListener(player));

@@ -30,7 +30,7 @@ public abstract class EntityStatic extends BaseStaticBody {
 
         sprite = new Sprite(new Texture(path));
         //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
+        sprite.setSize(radius * 2, radius * 2);
 
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.position.set(pos);
@@ -47,8 +47,7 @@ public abstract class EntityStatic extends BaseStaticBody {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
-        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
     }
 
