@@ -12,11 +12,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.entities.PLAYER_STATE;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
+import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
+import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
 
 import java.util.ArrayList;
@@ -41,7 +43,10 @@ public class GameScreen implements Screen {
 
     private Player player;
 
-    private List<Planet> planets = new ArrayList<Planet>();
+    private List<EntityDynamic> entities = new ArrayList<>();
+    private List<Planet> planets = new ArrayList<>();
+
+    private FrameRate frameRate;
 
     //TEMPSTUFF(har tillhörande imports ovan)
     private Texture img;
@@ -50,12 +55,15 @@ public class GameScreen implements Screen {
         //TEMPSTUFF - Laddar in bild
         img = new Texture("playerShip.png");
 
+        //Framerate
+        frameRate = new FrameRate();
+
         this.game = game;
         // Mysko skit för att få scalingen av debuggkameran rätt
-        camera = new OrthographicCamera(SpaceBoi.VIRTUAL_WIDTH * 0.1f, SpaceBoi.VIRTUAL_HEIGHT * 0.1f);
+        camera = new OrthographicCamera();
         //box2dCamera = new OrthographicCamera(Gdx.graphics.getWidth() * WORLD_TO_BOX, Gdx.graphics.getHeight() * WORLD_TO_BOX);
         // Vet inte riktigt vad jag håller på med här, men det verkar funka // Björn
-        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX);
+        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX, camera);
         viewport.apply();
 
         //camera = new OrthographicCamera();
@@ -63,17 +71,13 @@ public class GameScreen implements Screen {
         gameUI = new GameUI();
         world = new World(new Vector2(0f, 0f), true);
 
-        gameWorld = new GameWorld(game);
+        gameWorld = new GameWorld(game, world);
 
         //Entities:
-        player = new Player(world, 0, 0, "playerShip.png", 10000, 100);
-        gameWorld.addDynamicEntity(player);
-
-        planets.add(new Planet(world, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight(), 50000000000f, Gdx.graphics.getHeight()));
-        planets.add(new Planet(world, Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2, 50000000000f, Gdx.graphics.getHeight()));
-
+        gameWorld.createWorld();
+        player = gameWorld.getPlayer();
         //Input processor och multiplexer, hanterar användarens input
-        inputProcessor = new PlayerInputProcessor(player);
+        inputProcessor = new PlayerInputProcessor(player, camera);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(gameUI.getStage());
         multiplexer.addProcessor(inputProcessor);
@@ -81,51 +85,19 @@ public class GameScreen implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                for (Planet planet: planets) {
-                    if (contact.getFixtureA().getBody() == planet.getBody() ||
-                        contact.getFixtureB().getBody() == planet.getBody() &&
-                        contact.getFixtureA().getBody() == player.getBody() ||
-                        contact.getFixtureB().getBody() == player.getBody()
-                        ) {
-                        System.out.println("Touching");
-                        player.setPlayerState(PLAYER_STATE.STANDING);
-                        if (contact.getFixtureB().getBody().getUserData() == null) //TODO Hack fix later
-                            player.setPlanetBody(contact.getFixtureB().getBody());
-                        else player.setPlanetBody(contact.getFixtureA().getBody());
-                    }
 
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-                System.out.println("Not touching");
-                player.setPlayerState(PLAYER_STATE.JUMPING);
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }
-        });
     }
 
     private void update(float delta) {
-        updatePlayerPhysics();
+        frameRate.update();
+        gameWorld.update(delta);
+        gameUI.act(delta);
+
         camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
         camera.update();
 
-        player.updateMovement();
-
-        gameUI.act(delta);
+        batchedDraw();
+        draw();
     }
 
     private void draw() {
@@ -133,9 +105,14 @@ public class GameScreen implements Screen {
     }
 
     private void batchedDraw() {
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        debugRenderer.render(world, camera.combined);
+
         game.getBatch().begin();
 
-        gameWorld.render(game.getBatch());
+        gameWorld.render(game.getBatch(), camera);
 
         game.getBatch().draw(player.getSprite(), player.getX(), player.getY()); // TODO remove
 
@@ -143,72 +120,39 @@ public class GameScreen implements Screen {
         game.getBatch().end();
     }
 
-    @Override
-    public void show() {
+    @Override public void show() {
 
     }
 
 
-    @Override
-    public void render(float delta) {
+    @Override public void render(float delta) {
         update(delta);
+        frameRate.render();
     }
 
-    @Override
-    public void resize(int width, int height) {
+    @Override public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
-    @Override
-    public void pause() {
+    @Override public void pause() {
 
     }
 
-    @Override
-    public void resume() {
+    @Override public void resume() {
 
     }
 
-    @Override
-    public void hide() {
+    @Override public void hide() {
 
     }
 
-    public void updatePlayerPhysics() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined);
-        Vector2 playerPos = player.getBody().getPosition();
-        float closestDistance = 0f;
-        Planet closestPlanet = null;
-        for (Planet planet : planets) {
-            Vector2 planetPos = planet.getBody().getPosition();
-            float distance = planetPos.dst(playerPos);
-            if (closestDistance == 0f) {
-                closestDistance = distance;
-                closestPlanet = planet;
-            } else if (distance < closestDistance) {
-                closestDistance = distance;
-                closestPlanet = planet;
-            }
-        }
-        Vector2 closestPos = closestPlanet.getBody().getPosition();
-        float distance = closestPos.dst(playerPos);
 
-        float angle = MathUtils.atan2(closestPos.y - playerPos.y, closestPos.x - playerPos.x);
-
-        double force = Planet.CONSTANT * closestPlanet.getMass() * player.getMass() / Math.pow(distance, 1.1);
-        float forceX = MathUtils.cos(angle) * (float) force;
-        float forceY = MathUtils.sin(angle) * (float) force;
-        player.getBody().applyForceToCenter(forceX, forceY, true);
-
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        batchedDraw();
-        draw();
-    }
-
-    @Override
-    public void dispose() {
+    @Override public void dispose() {
         gameUI.dispose();
+        frameRate.dispose();
+    }
+
+    public void appendEntity(EntityDynamic entity) {
+        entities.add(entity);
     }
 }

@@ -1,42 +1,55 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseStaticBody;
 
-public class EntityStatic extends BaseStaticBody {
-    private Body body;
+public abstract class EntityStatic extends BaseStaticBody {
+
+    protected Body body;
+
+    private Sprite sprite;
+
+    private float x;
+    private float y;
 
     //private ShapeRenderer renderer = new ShapeRenderer();
     private static final int DENSITY = 50000;
 
-
-    public EntityStatic(World aWorld, float x, float y, float mass, float radius) {
+    public EntityStatic(World aWorld, float x, float y, String path, float mass, float radius) {
         super(aWorld, x, y, mass, radius);
+        this.x = x;
+        this.y = y;
 
+        sprite = new Sprite(new Texture(path));
+        //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
 
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.position.set(pos);
 
         this.body = world.createBody(groundBodyDef);
 
-        /*
         CircleShape groundCircle = new CircleShape();
         groundCircle.setRadius(rad);
 
         body.createFixture(groundCircle, 0.0f);
         groundCircle.dispose();
-        */
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(rad);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.density = 0.2f;
-        fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0f;
-        Fixture fixture = body.createFixture(fixtureDef);
-        circleShape.dispose();
+    }
 
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
+        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.draw(batch);
     }
 
     public Body getBody() {

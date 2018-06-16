@@ -1,16 +1,22 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
 
-    private Texture img;
+    public ENTITY_STATE entityState; //How to do this in a nice way without setting them public?
+
+    public Body planetBody;
+
     private Sprite sprite;
 
     private int speedX = 8;
@@ -24,46 +30,45 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected boolean moveRight = false;
     protected boolean moveLeft = false;
 
-    protected Vector2 baseVel;
-    protected Vector2 specialVel;
-
     public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
         super(world, x, y, mass, radius);
-        img = new Texture(path);
-        this.sprite = new Sprite(img);
+        this.sprite = new Sprite(new Texture(path));
+        sprite.setSize(radius * 2 / WORLD_TO_BOX, radius * 2 / WORLD_TO_BOX);
         this.x = x;
         this.y = y;
-        baseVel = new Vector2(0, 0);
-        specialVel = new Vector2(0, 0);
     }
 
-    public void updateMovement() { //Används ej!
-        if (moveUp) {
-            y += speedY;
-            if (y > Gdx.graphics.getHeight() - this.sprite.getHeight()) {
-                y = Gdx.graphics.getHeight() - this.sprite.getHeight();
+    public void updateMovement() {
+        if (entityState == ENTITY_STATE.STANDING){
+            Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
+            toPlanet.setLength2(1);
+            toPlanet.scl(50);
+
+            Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
+            perpen.setLength2(1);
+            perpen.scl(20);
+
+            //MOVE
+            if (moveRight) {
+                body.setLinearVelocity(perpen);
+            } else if (moveLeft) {
+                body.setLinearVelocity(-perpen.x, -perpen.y);
+            } else {
+                body.setLinearVelocity(0, 0);
+            }
+
+            //JUMP
+            if (moveUp) {
+                body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
+                entityState = ENTITY_STATE.JUMPING;
             }
         }
-        if (moveDown) {
-            y -= speedY;
-            if (y < 0) {
-                y = 0;
-            }
-        }
-        if (moveRight) {
-            x += speedX; //Behövs det * deltatime?
-            if (x > Gdx.graphics.getWidth() - this.sprite.getWidth()) {
-                x = Gdx.graphics.getWidth() - this.sprite.getWidth();
-                body.applyForceToCenter(200f, 0, true);
-            }
-        }
-        if (moveLeft) {
-            x -= speedX;
-            if (x < 0) {
-                x = 0;
-                body.applyForceToCenter(-200f, 0, true);
-            }
-        }
+    }
+
+    @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
+        Vector3 screenCoords = camera.project(new Vector3(body.getPosition(), 0));
+        sprite.setPosition(screenCoords.x - sprite.getWidth() / 2, screenCoords.y - sprite.getHeight() / 2);
+        sprite.draw(batch);
     }
 
     public void setMoveUp(boolean moveUp) {
@@ -98,6 +103,28 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     public Body getBody() {
         return body;
+    }
+
+    //Planetbody and ENTITY_STATE stuff
+    public void setPlanetBody(Body planetBody) {
+        this.planetBody = planetBody;
+    }
+
+    public void hitPlanet(Planet planet) {
+        entityState = ENTITY_STATE.STANDING;
+        planetBody = planet.getBody();
+    }
+
+    public void leftPlanet() {
+        entityState = ENTITY_STATE.JUMPING;
+    }
+
+    public ENTITY_STATE getEntityState() {
+        return entityState;
+    }
+
+    public void setEntityState(ENTITY_STATE playerState) {
+        this.entityState = playerState;
     }
 
 
