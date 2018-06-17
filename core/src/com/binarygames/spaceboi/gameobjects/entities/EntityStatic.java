@@ -59,6 +59,10 @@ public abstract class EntityStatic extends BaseStaticBody {
         return mass;
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
+
     @Override
     protected int getDensity() {
         return DENSITY;

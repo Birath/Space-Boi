@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -50,6 +51,13 @@ public class GameScreen implements Screen {
     private FrameRate frameRate;
 
     private float lastAngle;
+
+    private boolean interpolateRotation = false;
+    private final int interpolateCount = 30;
+    private int currentInterpolateCount;
+
+    private final float whenToInterpolate = 5;
+    private float angleToInterpolate;
 
     //TEMPSTUFF(har tillhörande imports ovan)
     private Texture img;
@@ -99,6 +107,26 @@ public class GameScreen implements Screen {
         camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
 
         // set camera rotation
+        /*if (interpolateRotation) {
+            if (currentInterpolateCount == interpolateCount) {
+                interpolateRotation = false;
+                lastAngle = player.getPlayerAngle();
+            } else {
+                camera.rotate(angleToInterpolate / interpolateCount);
+                currentInterpolateCount++;
+            }
+        } else {
+            float angleDiff = lastAngle - player.getPlayerAngle();
+            if (angleDiff >= whenToInterpolate) {
+                angleToInterpolate = angleDiff;
+                currentInterpolateCount = 0;
+                interpolateRotation = true;
+                lastAngle = player.getPlayerAngle();
+            } else {
+                lastAngle = player.getPlayerAngle();
+                camera.rotate(angleDiff);
+            }
+        } */
         float angleDiff = lastAngle - player.getPlayerAngle();
         lastAngle = player.getPlayerAngle();
         camera.rotate(angleDiff);
@@ -167,4 +195,5 @@ public class GameScreen implements Screen {
     public void appendEntity(EntityDynamic entity) {
         entities.add(entity);
     }
+
 }
