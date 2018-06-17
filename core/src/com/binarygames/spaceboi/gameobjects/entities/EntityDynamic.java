@@ -39,7 +39,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     }
 
     public void updateMovement() {
-        if (entityState == ENTITY_STATE.STANDING){
+        if (entityState == ENTITY_STATE.STANDING) {
             Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
             toPlanet.setLength2(1);
             toPlanet.scl(50);
@@ -65,7 +65,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         }
     }
 
-    @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
         sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
     }

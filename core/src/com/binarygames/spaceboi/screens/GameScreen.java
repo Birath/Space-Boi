@@ -86,9 +86,6 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
 
         debugRenderer = new Box2DDebugRenderer();
-
-
-
     }
 
     private void update(float delta) {
@@ -108,7 +105,6 @@ public class GameScreen implements Screen {
     }
 
     private void batchedDraw() {
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         debugRenderer.render(world, camera.combined.scl(PPM));
@@ -121,36 +117,43 @@ public class GameScreen implements Screen {
         game.getBatch().end();
     }
 
-    @Override public void show() {
+    @Override
+    public void show() {
 
     }
 
 
-    @Override public void render(float delta) {
+    @Override
+    public void render(float delta) {
         update(delta);
         frameRate.render();
     }
 
-    @Override public void resize(int width, int height) {
+    @Override
+    public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         camera.setToOrtho(false, width / 2, height / 2);
         //viewport.update();
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
 
     }
 
-    @Override public void resume() {
+    @Override
+    public void resume() {
 
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
 
     }
 
 
-    @Override public void dispose() {
+    @Override
+    public void dispose() {
         gameUI.dispose();
         frameRate.dispose();
     }
