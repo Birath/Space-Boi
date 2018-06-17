@@ -42,9 +42,9 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, 35, 30, "moon.png",(float) Math.pow(4.6 * 10, 7), 100);
+        Planet planet1 = new Planet(world, 10, 30, "moon.png",(float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, 170, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 75);
+        Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
         world.setContactListener(new GameConctatListener());
@@ -78,7 +78,7 @@ public class GameWorld {
 
             Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
             float distance = closestPlanetPos.dst(entityPos);
-            if (closestPlanet.getRad() * 2 >= distance) {
+            if (closestPlanet.getRad() * 3 >= distance) {
                 float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
                 // Set constant gravity while inside a set radius
 

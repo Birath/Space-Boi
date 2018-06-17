@@ -48,7 +48,7 @@ public class Player extends EntityDynamic {
         if (mouseHeld) {
             Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoord.x, body.getPosition().y * PPM - mouseCoord.y);
             recoil.setLength2(1);
-            recoil.scl(60);
+            recoil.scl(30);
 
             body.setLinearVelocity(recoil);
 

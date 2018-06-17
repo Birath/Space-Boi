@@ -119,12 +119,13 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.entityState = playerState;
     }
     public void hitPlanet(Planet planet) {
-        System.out.println("Player is set to standing");
+        System.out.println("hitPlanet in entitydynamic called");
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();
     }
 
     public void leftPlanet() {
+        System.out.println("leftPlanet called");
         entityState = ENTITY_STATE.JUMPING;
     }
 

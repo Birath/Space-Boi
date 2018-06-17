@@ -25,13 +25,11 @@ public class GameConctatListener implements ContactListener {
 
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
             Player.class.isInstance(fixtureB.getBody().getUserData())) {
-            System.out.println("Player hit planet");
             entity = (Player) fixtureB.getBody().getUserData();
             entity.hitPlanet((Planet) fixtureA.getBody().getUserData());
         }
         else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                    Planet.class.isInstance(fixtureB.getBody().getUserData())) {
-            System.out.println("Player hit planet");
             entity = (Player) fixtureA.getBody().getUserData();
             entity.hitPlanet((Planet) fixtureB.getBody().getUserData());
         }
