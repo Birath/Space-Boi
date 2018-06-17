@@ -47,7 +47,7 @@ public class GameWorld {
         Planet planet2 = new Planet(world, 170, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 75);
         addStaticEntity(planet2);
 
-        world.setContactListener(new GameConctatListener(player));
+        world.setContactListener(new GameConctatListener());
 
     }
 
@@ -57,6 +57,7 @@ public class GameWorld {
             entity.updateMovement();
         }
         dynamicEntities.addAll(addDynamicEntities);
+        removeBullets(dynamicEntities);
         addDynamicEntities.clear();
     }
 
@@ -81,7 +82,7 @@ public class GameWorld {
                 float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
                 // Set constant gravity while inside a set radius
 
-                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //ALbin
+                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //Albin
                 double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
                 float forceX = MathUtils.cos(angle) * (float) force;
                 float forceY = MathUtils.sin(angle) * (float) force;
@@ -92,9 +93,21 @@ public class GameWorld {
     }
 
     private void removeBullets(List<EntityDynamic> toRemoveList){
+        Iterator<EntityDynamic> itr = toRemoveList.iterator();
+
+        while(itr.hasNext()){
+            EntityDynamic entity = itr.next();
+            if ((entity.getEntityState() == ENTITY_STATE.STANDING) && entity instanceof Bullet){
+                world.destroyBody(entity.getBody());
+                itr.remove();
+            }
+        }
+
+
+
         for (EntityDynamic entity : toRemoveList){
-            if (entity.entityState == ENTITY_STATE.STANDING){
-                world.destroyBody(entity.getBody()); //Also remove from list?
+            if (entity.getEntityState() == ENTITY_STATE.STANDING && entity instanceof Bullet){
+                world.destroyBody(entity.getBody());
             }
         }
     }

@@ -13,7 +13,7 @@ import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
 
-    public ENTITY_STATE entityState; //How to do this in a nice way without setting them public?
+    protected ENTITY_STATE entityState; //How to do this in a nice way without setting them public?
 
     public Body planetBody;
 
@@ -38,7 +38,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.y = y;
     }
 
-    public void updateMovement() {
+    public void updateMovement() { //Denna orsakade vissa problem pga att planetbody var null för bullets. Ska implementeras sen igen
+        /*
         if (entityState == ENTITY_STATE.STANDING){
             Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
             toPlanet.setLength2(1);
@@ -63,6 +64,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
                 entityState = ENTITY_STATE.JUMPING;
             }
         }
+        */
     }
 
     @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
@@ -109,15 +111,6 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.planetBody = planetBody;
     }
 
-    public void hitPlanet(Planet planet) {
-        entityState = ENTITY_STATE.STANDING;
-        planetBody = planet.getBody();
-    }
-
-    public void leftPlanet() {
-        entityState = ENTITY_STATE.JUMPING;
-    }
-
     public ENTITY_STATE getEntityState() {
         return entityState;
     }
@@ -125,6 +118,14 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void setEntityState(ENTITY_STATE playerState) {
         this.entityState = playerState;
     }
+    public void hitPlanet(Planet planet) {
+        System.out.println("Player is set to standing");
+        entityState = ENTITY_STATE.STANDING;
+        planetBody = planet.getBody();
+    }
 
+    public void leftPlanet() {
+        entityState = ENTITY_STATE.JUMPING;
+    }
 
 }
