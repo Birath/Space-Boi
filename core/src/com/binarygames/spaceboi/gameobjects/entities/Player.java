@@ -10,7 +10,7 @@ public class Player extends EntityDynamic {
 
     private boolean mouseHeld;
 
-    private Vector2 mouseCoord = new Vector2(0, 0);
+    private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
 
     private GameWorld gameWorld;
@@ -47,7 +47,7 @@ public class Player extends EntityDynamic {
         }
         //SHOOTING
         if (mouseHeld) {
-            Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoord.x, body.getPosition().y * PPM - mouseCoord.y);
+            Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
             recoil.setLength2(1);
             recoil.scl(30);
 
@@ -80,8 +80,12 @@ public class Player extends EntityDynamic {
         this.mouseHeld = mouseHeld;
     }
 
-    public void setMouseXAndMouseY(float x, float y) {
-        mouseCoord.set(x, y);
+    public boolean isMouseHeld() {
+        return mouseHeld;
+    }
+
+    public void setMouseCoords(float x, float y) {
+        mouseCoords.set(x, y);
     }
 
     private void updateToPlanet() {

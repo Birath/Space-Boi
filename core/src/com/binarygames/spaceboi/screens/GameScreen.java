@@ -110,10 +110,7 @@ public class GameScreen implements Screen {
         debugRenderer.render(world, camera.combined.scl(PPM));
 
         game.getBatch().begin();
-
         gameWorld.render(game.getBatch(), camera);
-
-        game.debugFont.draw(game.getBatch(), "GAME", 5, 20);
         game.getBatch().end();
     }
 
