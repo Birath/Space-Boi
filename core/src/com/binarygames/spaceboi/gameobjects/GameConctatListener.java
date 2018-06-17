@@ -10,12 +10,11 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
-public class GameConctatListener implements ContactListener { //extend to include all entities
+public class GameConctatListener implements ContactListener {
 
     private EntityDynamic entity;
 
-    public GameConctatListener(EntityDynamic entity) {
-        this.entity = entity;
+    public GameConctatListener() {
     }
 
     @Override public void beginContact(Contact contact) {
@@ -23,22 +22,30 @@ public class GameConctatListener implements ContactListener { //extend to includ
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
+
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
             Player.class.isInstance(fixtureB.getBody().getUserData())) {
+            entity = (Player) fixtureB.getBody().getUserData();
             entity.hitPlanet((Planet) fixtureA.getBody().getUserData());
-        } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
+        }
+        else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                    Planet.class.isInstance(fixtureB.getBody().getUserData())) {
+            entity = (Player) fixtureA.getBody().getUserData();
             entity.hitPlanet((Planet) fixtureB.getBody().getUserData());
         }
 
         //ENTITY IS BULLET
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
-                Bullet.class.isInstance(fixtureB.getBody().getUserData())
-                || (Planet.class.isInstance(fixtureB.getBody().getUserData()) &&
-                Bullet.class.isInstance(fixtureA.getBody().getUserData()))){
-            //entity.hitPlanet(); //DOESNT WORK ;(
-        }
+                Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
+            entity = (Bullet) fixtureB.getBody().getUserData();
+            entity.hitPlanet((Planet) fixtureA.getBody().getUserData());
+            }
 
+        else if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Planet.class.isInstance(fixtureB.getBody().getUserData())) {
+            entity = (Bullet) fixtureA.getBody().getUserData();
+            entity.hitPlanet((Planet) fixtureB.getBody().getUserData());
+        }
     }
 
     @Override public void endContact(Contact contact) {

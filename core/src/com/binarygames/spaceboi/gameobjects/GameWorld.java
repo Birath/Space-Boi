@@ -42,12 +42,12 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, 35, 30, "moon.png",(float) Math.pow(4.6 * 10, 7), 100);
+        Planet planet1 = new Planet(world, 10, 30, "moon.png",(float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, 170, 30, "moon.png", (float) Math.pow(4.0 * 10, 7), 75);
+        Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
-        world.setContactListener(new GameConctatListener(player));
+        world.setContactListener(new GameConctatListener());
 
     }
 
@@ -57,6 +57,7 @@ public class GameWorld {
             entity.updateMovement();
         }
         dynamicEntities.addAll(addDynamicEntities);
+        removeBullets(dynamicEntities);
         addDynamicEntities.clear();
     }
 
@@ -77,11 +78,11 @@ public class GameWorld {
 
             Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
             float distance = closestPlanetPos.dst(entityPos);
-            if (closestPlanet.getRad() * 2 >= distance) {
+            if (closestPlanet.getRad() * 3 >= distance) {
                 float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
                 // Set constant gravity while inside a set radius
 
-                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //ALbin
+                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //Albin
                 double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
                 float forceX = MathUtils.cos(angle) * (float) force;
                 float forceY = MathUtils.sin(angle) * (float) force;
@@ -92,9 +93,21 @@ public class GameWorld {
     }
 
     private void removeBullets(List<EntityDynamic> toRemoveList){
+        Iterator<EntityDynamic> itr = toRemoveList.iterator();
+
+        while(itr.hasNext()){
+            EntityDynamic entity = itr.next();
+            if ((entity.getEntityState() == ENTITY_STATE.STANDING) && entity instanceof Bullet){
+                world.destroyBody(entity.getBody());
+                itr.remove();
+            }
+        }
+
+
+
         for (EntityDynamic entity : toRemoveList){
-            if (entity.entityState == ENTITY_STATE.STANDING){
-                world.destroyBody(entity.getBody()); //Also remove from list?
+            if (entity.getEntityState() == ENTITY_STATE.STANDING && entity instanceof Bullet){
+                world.destroyBody(entity.getBody());
             }
         }
     }
