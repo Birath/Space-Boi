@@ -42,7 +42,7 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, 10, 30, "moon.png",(float) Math.pow(3 * 10, 7), 100);
+        Planet planet1 = new Planet(world, 10, 30, "moon.png", (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
@@ -87,26 +87,31 @@ public class GameWorld {
                 float forceX = MathUtils.cos(angle) * (float) force;
                 float forceY = MathUtils.sin(angle) * (float) force;
                 entity.getBody().applyForceToCenter(forceX, forceY, true);
+
+                // TODO move to nice place
+                if (entity instanceof Player) {
+                    Vector2 playerForce = new Vector2(forceX, forceY);
+                    ((Player) entity).setPlayerAngle(playerForce.angle());
+                }
             }
         }
         world.step(delta, 6, 2);
     }
 
-    private void removeBullets(List<EntityDynamic> toRemoveList){
+    private void removeBullets(List<EntityDynamic> toRemoveList) {
         Iterator<EntityDynamic> itr = toRemoveList.iterator();
 
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
             EntityDynamic entity = itr.next();
-            if ((entity.getEntityState() == ENTITY_STATE.STANDING) && entity instanceof Bullet){
+            if ((entity.getEntityState() == ENTITY_STATE.STANDING) && entity instanceof Bullet) {
                 world.destroyBody(entity.getBody());
                 itr.remove();
             }
         }
 
 
-
-        for (EntityDynamic entity : toRemoveList){
-            if (entity.getEntityState() == ENTITY_STATE.STANDING && entity instanceof Bullet){
+        for (EntityDynamic entity : toRemoveList) {
+            if (entity.getEntityState() == ENTITY_STATE.STANDING && entity instanceof Bullet) {
                 world.destroyBody(entity.getBody());
             }
         }

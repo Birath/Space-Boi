@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -47,6 +48,8 @@ public class GameScreen implements Screen {
     private List<Planet> planets = new ArrayList<>();
 
     private FrameRate frameRate;
+
+    private float lastAngle;
 
     //TEMPSTUFF(har tillhörande imports ovan)
     private Texture img;
@@ -94,6 +97,12 @@ public class GameScreen implements Screen {
         gameUI.act(delta);
 
         camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+
+        // set camera rotation
+        float angleDiff = lastAngle - player.getPlayerAngle();
+        lastAngle = player.getPlayerAngle();
+        camera.rotate(angleDiff);
+
         camera.update();
         game.getBatch().setProjectionMatrix(camera.combined);
         batchedDraw();
@@ -107,7 +116,7 @@ public class GameScreen implements Screen {
     private void batchedDraw() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        debugRenderer.render(world, camera.combined.scl(PPM));
+        //debugRenderer.render(world, camera.combined.scl(PPM)); TODO fix matching rotation on debug rendering
 
         game.getBatch().begin();
         gameWorld.render(game.getBatch(), camera);

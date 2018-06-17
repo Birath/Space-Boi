@@ -13,6 +13,8 @@ public class Player extends EntityDynamic {
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
 
+    private float playerAngle = 0f;
+
     private GameWorld gameWorld;
 
     public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
@@ -61,7 +63,7 @@ public class Player extends EntityDynamic {
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
-        getSprite().setRotation(toPlanet.angle() + 90); // TODO fix magic number
+        getSprite().setRotation(getPlayerAngle());
         getSprite().draw(batch);
     }
 
@@ -92,6 +94,14 @@ public class Player extends EntityDynamic {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
         toPlanet.scl(50);
+    }
+
+    public float getPlayerAngle() {
+        return playerAngle + 90; // TODO fix magic number
+    }
+
+    public void setPlayerAngle(float angle) {
+        playerAngle = angle;
     }
 
 }
