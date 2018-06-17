@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private final int interpolateCount = 30;
     private int currentInterpolateCount;
 
-    private final float whenToInterpolate = 5;
+    private final float whenToInterpolate = 10;
     private float angleToInterpolate;
 
     //TEMPSTUFF(har tillhörande imports ovan)
@@ -107,9 +107,12 @@ public class GameScreen implements Screen {
         camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
 
         // set camera rotation
-        /*if (interpolateRotation) {
+        if (interpolateRotation) {
             if (currentInterpolateCount == interpolateCount) {
                 interpolateRotation = false;
+                System.out.println("TOINTERPOLATE: " + angleToInterpolate);
+                System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
+                System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
                 lastAngle = player.getPlayerAngle();
             } else {
                 camera.rotate(angleToInterpolate / interpolateCount);
@@ -117,7 +120,10 @@ public class GameScreen implements Screen {
             }
         } else {
             float angleDiff = lastAngle - player.getPlayerAngle();
-            if (angleDiff >= whenToInterpolate) {
+            if (angleDiff > 360 - whenToInterpolate) {
+                angleDiff = 360 - angleDiff;
+            }
+            if (Math.abs(angleDiff) >= whenToInterpolate) {
                 angleToInterpolate = angleDiff;
                 currentInterpolateCount = 0;
                 interpolateRotation = true;
@@ -126,10 +132,7 @@ public class GameScreen implements Screen {
                 lastAngle = player.getPlayerAngle();
                 camera.rotate(angleDiff);
             }
-        } */
-        float angleDiff = lastAngle - player.getPlayerAngle();
-        lastAngle = player.getPlayerAngle();
-        camera.rotate(angleDiff);
+        }
 
         camera.update();
         game.getBatch().setProjectionMatrix(camera.combined);
@@ -195,5 +198,4 @@ public class GameScreen implements Screen {
     public void appendEntity(EntityDynamic entity) {
         entities.add(entity);
     }
-
 }
