@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class Player extends EntityDynamic {
 
     private boolean mouseHeld;
+
+    private Weapon weapon;
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
@@ -17,10 +20,12 @@ public class Player extends EntityDynamic {
 
     private GameWorld gameWorld;
 
-    public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
+    public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld, Weapon weapon) {
         super(world, x, y, path, mass, radius);
         body.setUserData(this);
         this.gameWorld = gameWorld;
+
+        this.weapon = weapon;
     }
 
     @Override
@@ -51,7 +56,7 @@ public class Player extends EntityDynamic {
         if (mouseHeld) {
             Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
             recoil.setLength2(1);
-            recoil.scl(30);
+            recoil.scl(weapon.getRecoil());
 
             body.setLinearVelocity(recoil);
 
@@ -71,11 +76,8 @@ public class Player extends EntityDynamic {
         recoil.setLength2(1);
         recoil.scl(-(rad * PPM));
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-        EntityDynamic bullet = new Bullet(world, shootFrom.x, shootFrom.y, "playerShip.png", 8, 2f);
 
-        recoil.scl(15);
-        bullet.getBody().setLinearVelocity(recoil);
-        gameWorld.addDynamicEntity(bullet);
+        weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
     }
 
     public void setMouseHeld(boolean mouseHeld) {

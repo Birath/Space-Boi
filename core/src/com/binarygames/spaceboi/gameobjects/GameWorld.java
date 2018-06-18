@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.entities.*;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
@@ -38,11 +40,12 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this);
+        Machinegun weapon = new Machinegun(world, this);
+        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this, weapon);
         addDynamicEntity(player);
         this.player = player;
 
-        Planet planet1 = new Planet(world, 10, 30, "moon.png", (float) Math.pow(3 * 10, 7), 100);
+        Planet planet1 = new Planet(world, 10, 30, "moon.png",(float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
@@ -98,21 +101,16 @@ public class GameWorld {
         world.step(delta, 6, 2);
     }
 
-    private void removeBullets(List<EntityDynamic> toRemoveList) {
+    private void removeBullets(List<EntityDynamic> toRemoveList){
         Iterator<EntityDynamic> itr = toRemoveList.iterator();
 
-        while (itr.hasNext()) {
+        while(itr.hasNext()){
             EntityDynamic entity = itr.next();
-            if ((entity.getEntityState() == ENTITY_STATE.STANDING) && entity instanceof Bullet) {
-                world.destroyBody(entity.getBody());
-                itr.remove();
-            }
-        }
-
-
-        for (EntityDynamic entity : toRemoveList) {
-            if (entity.getEntityState() == ENTITY_STATE.STANDING && entity instanceof Bullet) {
-                world.destroyBody(entity.getBody());
+            if (entity instanceof Bullet){
+                if(((Bullet) entity).toRemove(player.getBody().getPosition().x, player.getBody().getPosition().y)){
+                    world.destroyBody(entity.getBody());
+                    itr.remove();
+                }
             }
         }
     }
