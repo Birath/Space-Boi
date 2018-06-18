@@ -13,7 +13,7 @@ import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
 
-    protected ENTITY_STATE entityState; //How to do this in a nice way without setting them public?
+    protected ENTITY_STATE entityState;
 
     public Body planetBody;
 
@@ -38,33 +38,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.y = y;
     }
 
-    public void updateMovement() { //Denna orsakade vissa problem pga att planetbody var null för bullets. Ska implementeras sen igen
-        /*
-        if (entityState == ENTITY_STATE.STANDING){
-            Vector2 toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
-            toPlanet.setLength2(1);
-            toPlanet.scl(50);
-
-            Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
-            perpen.setLength2(1);
-            perpen.scl(20);
-
-            //MOVE
-            if (moveRight) {
-                body.setLinearVelocity(perpen);
-            } else if (moveLeft) {
-                body.setLinearVelocity(-perpen.x, -perpen.y);
-            } else {
-                body.setLinearVelocity(0, 0);
-            }
-
-            //JUMP
-            if (moveUp) {
-                body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
-                entityState = ENTITY_STATE.JUMPING;
-            }
-        }
-        */
+    public void updateMovement() {
+        //Specific for each sub-entity.
     }
 
     @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
@@ -119,13 +94,11 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.entityState = playerState;
     }
     public void hitPlanet(Planet planet) {
-        System.out.println("hitPlanet in entitydynamic called");
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();
     }
 
     public void leftPlanet() {
-        System.out.println("leftPlanet called");
         entityState = ENTITY_STATE.JUMPING;
     }
 
