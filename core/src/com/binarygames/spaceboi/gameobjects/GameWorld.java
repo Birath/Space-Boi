@@ -52,10 +52,11 @@ public class GameWorld {
     }
 
     public void update(float delta) {
-        applyGravity(delta, dynamicEntities);
         for (EntityDynamic entity : dynamicEntities) {
+            applyGravity(entity);
             entity.updateMovement();
         }
+        world.step(delta, 6, 2);
         dynamicEntities.addAll(addDynamicEntities);
         removeBullets(dynamicEntities);
         addDynamicEntities.clear();
@@ -70,32 +71,32 @@ public class GameWorld {
         }
     }
 
-    public void applyGravity(float delta, List<EntityDynamic> dynamicObjectList) {
-        for (EntityDynamic entity : dynamicObjectList) {
+    private void applyGravity(EntityDynamic entity) {
 
-            Vector2 entityPos = entity.getBody().getPosition();
-            Planet closestPlanet = getClosestPlanet(entityPos);
 
-            Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
-            float distance = closestPlanetPos.dst(entityPos);
-            if (closestPlanet.getRad() * 3 >= distance) {
-                float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
-                // Set constant gravity while inside a set radius
+        Vector2 entityPos = entity.getBody().getPosition();
+        Planet closestPlanet = getClosestPlanet(entityPos);
 
-                // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //Albin
-                double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
-                float forceX = MathUtils.cos(angle) * (float) force;
-                float forceY = MathUtils.sin(angle) * (float) force;
-                entity.getBody().applyForceToCenter(forceX, forceY, true);
+        Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
+        float distance = closestPlanetPos.dst(entityPos);
+        if (closestPlanet.getRad() * Planet.GRAVITY_RADIUS >= distance) {
+            float angle = MathUtils.atan2(closestPlanetPos.y - entityPos.y, closestPlanetPos.x - entityPos.x);
+            // Set constant gravity while inside a set radius
 
-                // TODO move to nice place
-                if (entity instanceof Player) {
-                    Vector2 playerForce = new Vector2(forceX, forceY);
-                    ((Player) entity).setPlayerAngle(playerForce.angle());
-                }
+            // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //Albin
+            double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
+            float forceX = MathUtils.cos(angle) * (float) force;
+            float forceY = MathUtils.sin(angle) * (float) force;
+            entity.getBody().applyForceToCenter(forceX, forceY, true);
+
+            // TODO move to nice place
+            if (entity instanceof Player) {
+                Vector2 playerForce = new Vector2(forceX, forceY);
+                ((Player) entity).setPlayerAngle(playerForce.angle());
             }
         }
-        world.step(delta, 6, 2);
+
+
     }
 
     private void removeBullets(List<EntityDynamic> toRemoveList) {

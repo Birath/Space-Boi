@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Planet extends EntityStatic {
 
     private ShapeRenderer shapeRenderer;
+    public static final int GRAVITY_RADIUS = 3;
 
     public Planet(World aWorld, float x, float y, String path, float mass, float radius) {
         super(aWorld, x, y, path, mass, radius);
@@ -28,7 +29,7 @@ public class Planet extends EntityStatic {
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.end();
         shapeRenderer.begin();
-        shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, 3 * rad * PPM);
+        shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, GRAVITY_RADIUS * rad * PPM);
         shapeRenderer.end();
         batch.begin();
     }
