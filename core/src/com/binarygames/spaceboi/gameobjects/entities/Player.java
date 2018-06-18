@@ -1,9 +1,11 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
@@ -104,6 +106,11 @@ public class Player extends EntityDynamic {
 
     public void setPlayerAngle(float angle) {
         playerAngle = angle;
+    }
+
+    @Override
+    public void hitPlanet(Planet planet) {
+        super.hitPlanet(planet);
     }
 
 }

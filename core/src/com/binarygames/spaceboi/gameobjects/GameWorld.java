@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,9 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +47,7 @@ public class GameWorld {
         Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
-        world.setContactListener(new GameConctatListener());
+        world.setContactListener(new EntityContactListener());
 
     }
 
