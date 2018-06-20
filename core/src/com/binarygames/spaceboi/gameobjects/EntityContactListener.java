@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.Bullet;
+import com.binarygames.spaceboi.gameobjects.entities.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
@@ -28,6 +29,17 @@ public class EntityContactListener implements ContactListener {
             player.hitPlanet((Planet) fixtureB.getBody().getUserData());
         }
 
+        //ENTITY IS ENEMY
+        if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
+            enemy.hitPlanet((Planet) fixtureA.getBody().getUserData());
+        } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Planet.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
+            enemy.hitPlanet((Planet) fixtureB.getBody().getUserData());
+        }
+
         //ENTITY IS BULLET
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
@@ -45,6 +57,8 @@ public class EntityContactListener implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
+
+        //ENTITY IS PLAYER
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureB.getBody().getUserData();
@@ -53,6 +67,16 @@ public class EntityContactListener implements ContactListener {
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureA.getBody().getUserData();
             player.leftPlanet();
+        }
+        //ENTITY IS ENEMY
+        if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
+            enemy.leftPlanet();
+        } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Planet.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
+            enemy.leftPlanet();
         }
     }
 

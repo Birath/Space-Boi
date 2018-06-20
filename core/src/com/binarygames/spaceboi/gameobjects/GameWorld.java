@@ -42,6 +42,9 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
+        Enemy enemy = new Enemy(world, 250, 30, "moon.png", 500, 10, this);
+        addDynamicEntity(enemy);
+
         Planet planet1 = new Planet(world, 10, 30, "moon.png", (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
@@ -74,8 +77,8 @@ public class GameWorld {
     private void applyGravity(EntityDynamic entity) {
         Vector2 entityPos = entity.getBody().getPosition();
         ArrayList<Planet> planetsWithinRange = getPlanetsWithinGravityRange(entityPos);
+        Planet closetstPlanet = getClosestPlanet(planetsWithinRange, entityPos);
         if (entity.getEntityState() == ENTITY_STATE.STANDING) {
-            Planet closetstPlanet = getClosestPlanet(planetsWithinRange, entityPos);
             planetsWithinRange.clear();
             planetsWithinRange.add(closetstPlanet);
         }
@@ -103,10 +106,12 @@ public class GameWorld {
             entity.getBody().applyForceToCenter(forceX, forceY, true);
         */
         // TODO move to nice place
-        if (entity instanceof Player) {
+        if (entity instanceof Player && closetstPlanet != null) {
             // TODO Change to toPlanet vector instead
-            Vector2 playerForce = new Vector2(finalGravity);
-            ((Player) entity).setPlayerAngle(playerForce.angle());
+            player.setClosestPlanet(closetstPlanet);
+            Vector2 relativeVector = closetstPlanet.getBody().getPosition().sub(player.getBody().getPosition());
+            float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+            player.setPlayerAngle(angleToPlanet);
         }
     }
 
