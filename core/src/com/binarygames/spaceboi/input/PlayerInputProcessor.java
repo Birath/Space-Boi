@@ -5,16 +5,24 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 
 public class PlayerInputProcessor implements InputProcessor {
 
     private Player player;
     private Camera camera;
+    private World world;
+    private GameWorld gameWorld;
 
-    public PlayerInputProcessor(Player player, Camera camera) {
+    public PlayerInputProcessor(Player player, Camera camera, World world, GameWorld gameWorld) {
         this.player = player;
         this.camera = camera;
+        this.world = world;
+        this.gameWorld = gameWorld;
     }
 
     //Keyboardrelated
@@ -62,6 +70,16 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
+        if (character == 'k') {
+            if (player.getWeapon() instanceof Machinegun) {
+                player.setWeapon(new GrenadeLauncher(world, gameWorld));
+                System.out.println("Weapon set to GrenadeLauncher");
+            } else {
+                player.setWeapon(new Machinegun(world, gameWorld));
+                System.out.println("Weapon set to Machinegun");
+            }
+            return true;
+        }
         return false;
     }
 

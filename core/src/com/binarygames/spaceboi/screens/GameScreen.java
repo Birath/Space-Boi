@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
         //Input processor och multiplexer, hanterar användarens input
-        inputProcessor = new PlayerInputProcessor(player, camera);
+        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(gameUI.getStage());
         multiplexer.addProcessor(inputProcessor);

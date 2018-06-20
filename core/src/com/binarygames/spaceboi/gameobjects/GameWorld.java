@@ -147,8 +147,7 @@ public class GameWorld {
             if (closestDistance < 0) {
                 closestPlanet = planet;
                 closestDistance = planet.getBody().getPosition().dst(entityPos);
-            }
-            else if (planet.getBody().getPosition().dst(entityPos) < closestDistance) {
+            } else if (planet.getBody().getPosition().dst(entityPos) < closestDistance) {
                 closestPlanet = planet;
                 closestDistance = planet.getBody().getPosition().dst(entityPos);
             }

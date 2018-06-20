@@ -108,6 +108,14 @@ public class Player extends EntityDynamic {
         playerAngle = angle;
     }
 
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
