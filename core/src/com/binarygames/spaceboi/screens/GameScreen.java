@@ -5,18 +5,13 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
-import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
@@ -59,13 +54,7 @@ public class GameScreen implements Screen {
     private final float whenToInterpolate = 10;
     private float angleToInterpolate;
 
-    //TEMPSTUFF(har tillhörande imports ovan)
-    private Texture img;
-
     public GameScreen(SpaceBoi game) {
-        //TEMPSTUFF - Laddar in bild
-        img = new Texture("playerShip.png");
-
         //Framerate
         frameRate = new FrameRate();
 
@@ -119,10 +108,8 @@ public class GameScreen implements Screen {
                 currentInterpolateCount++;
             }
         } else {
-            float angleDiff = lastAngle - player.getPlayerAngle();
-            if (angleDiff > 360 - whenToInterpolate) {
-                angleDiff = 360 - angleDiff;
-            }
+            // float angleDiff = lastAngle - player.getPlayerAngle();
+            float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
             if (Math.abs(angleDiff) >= whenToInterpolate) {
                 angleToInterpolate = angleDiff;
                 currentInterpolateCount = 0;
@@ -133,6 +120,10 @@ public class GameScreen implements Screen {
                 camera.rotate(angleDiff);
             }
         }
+
+        /* float angleDiff = lastAngle - player.getPlayerAngle();
+        lastAngle = player.getPlayerAngle();
+        camera.rotate(angleDiff); */
 
         camera.update();
         game.getBatch().setProjectionMatrix(camera.combined);
@@ -198,4 +189,10 @@ public class GameScreen implements Screen {
     public void appendEntity(EntityDynamic entity) {
         entities.add(entity);
     }
+
+    private float angleDifference(float angle1, float angle2) {
+        float diff = (angle2 - angle1 + 180) % 360 - 180;
+        return diff < -180 ? diff + 360 : diff;
+    }
+
 }
