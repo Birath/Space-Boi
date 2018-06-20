@@ -42,6 +42,9 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
+        Enemy enemy = new Enemy(world, 250, 30, "moon.png", 500, 10, this);
+        addDynamicEntity(enemy);
+
         Planet planet1 = new Planet(world, 10, 30, "moon.png", (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
