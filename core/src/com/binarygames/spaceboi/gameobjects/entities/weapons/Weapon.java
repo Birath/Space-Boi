@@ -33,8 +33,30 @@ public abstract class Weapon {
     public Weapon(World aWorld, GameWorld aGameWorld) {
         this.world = aWorld;
         this.gameWorld = aGameWorld;
+
+        reloading = false;
+        timeBetweenShotsIsFinished = false;
         //this.sprite = new Sprite(new Texture(path)); - Sprites shall be added later
         //sprite.setSize(radius * 2, radius * 2);
+    }
+
+    public void update(float delta) {
+        if (reloading) {
+            if (currentReloadTime >= reloadTime) {
+                reloading = false;
+                currentReloadTime = 0;
+            } else {
+                currentReloadTime += delta;
+            }
+        }
+        if (!timeBetweenShotsIsFinished) {
+            if (currentTimeBetweenShots >= timeBetweenShots) {
+                timeBetweenShotsIsFinished = true;
+                currentTimeBetweenShots = 0;
+            } else {
+                currentTimeBetweenShots += delta;
+            }
+        }
     }
 
     public void Shoot(float x, float y, Vector2 shootDirection) {

@@ -54,7 +54,7 @@ public class GameWorld {
     public void update(float delta) {
         for (EntityDynamic entity : dynamicEntities) {
             applyGravity(entity);
-            entity.updateMovement();
+            entity.update(delta);
         }
         world.step(delta, 6, 2);
         dynamicEntities.addAll(addDynamicEntities);

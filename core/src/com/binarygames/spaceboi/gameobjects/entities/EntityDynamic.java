@@ -38,11 +38,12 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.y = y;
     }
 
-    public void updateMovement() {
+    public void update(float delta) {
         //Specific for each sub-entity.
     }
 
-    @Override public void render(SpriteBatch batch, OrthographicCamera camera) {
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
         sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
     }
@@ -93,6 +94,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void setEntityState(ENTITY_STATE playerState) {
         this.entityState = playerState;
     }
+
     public void hitPlanet(Planet planet) {
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();

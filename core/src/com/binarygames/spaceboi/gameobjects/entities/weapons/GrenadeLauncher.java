@@ -16,11 +16,17 @@ public class GrenadeLauncher extends Weapon {
         this.path = "playerShip.png";
         this.recoil = 35;
         this.removeBulletDelay = 2000;
+        this.timeBetweenShots = 1;
+        this.magSize = this.currentMag = 4;
+        this.reloadTime = 4;
     }
 
     @Override
     public void Shoot(float x, float y, Vector2 shootDirection) {
-        shootDirection.scl(bulletSpeed);
-        new Bullet(world, x, y, path, shootDirection, gameWorld, bulletMass, bulletRadius, removeBulletDelay);
+        if (canShoot()) {
+            shootDirection.scl(bulletSpeed);
+            new Bullet(world, x, y, path, shootDirection, gameWorld, bulletMass, bulletRadius, removeBulletDelay);
+            weaponMaths();
+        }
     }
 }

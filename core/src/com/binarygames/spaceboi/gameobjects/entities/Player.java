@@ -1,7 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -31,7 +29,7 @@ public class Player extends EntityDynamic {
     }
 
     @Override
-    public void updateMovement() {
+    public void update(float delta) {
         if (entityState == ENTITY_STATE.STANDING) {
             updateToPlanet();
 
@@ -54,6 +52,9 @@ public class Player extends EntityDynamic {
                 entityState = ENTITY_STATE.JUMPING;
             }
         }
+
+        weapon.update(delta);
+
         //SHOOTING
         if (mouseHeld) {
             Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
