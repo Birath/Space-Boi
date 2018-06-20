@@ -74,13 +74,18 @@ public class GameWorld {
     private void applyGravity(EntityDynamic entity) {
         Vector2 entityPos = entity.getBody().getPosition();
         ArrayList<Planet> planetsWithinRange = getPlanetsWithinGravityRange(entityPos);
+        if (entity.getEntityState() == ENTITY_STATE.STANDING) {
+            Planet closetstPlanet = getClosestPlanet(planetsWithinRange, entityPos);
+            planetsWithinRange.clear();
+            planetsWithinRange.add(closetstPlanet);
+        }
         Vector2 finalGravity = new Vector2();
         for (Planet planet : planetsWithinRange) {
-            float angle = MathUtils.atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
+            float angle = MathUtils
+                    .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
             Vector2 gravityPull = new Vector2(
                     (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad()),
-                    (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad())
-            );
+                    (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad()));
             finalGravity.add(gravityPull);
         }
         entity.getBody().applyForceToCenter(finalGravity, true);
@@ -133,6 +138,22 @@ public class GameWorld {
             }
         }
         return planetsWithinRange;
+    }
+
+    private Planet getClosestPlanet(ArrayList<Planet> planets, Vector2 entityPos) {
+        float closestDistance = -1.0f;
+        Planet closestPlanet = null;
+        for (Planet planet : planets) {
+            if (closestDistance < 0) {
+                closestPlanet = planet;
+                closestDistance = planet.getBody().getPosition().dst(entityPos);
+            }
+            else if (planet.getBody().getPosition().dst(entityPos) < closestDistance) {
+                closestPlanet = planet;
+                closestDistance = planet.getBody().getPosition().dst(entityPos);
+            }
+        }
+        return closestPlanet;
     }
 
     public void addDynamicEntity(EntityDynamic entity) {
