@@ -21,6 +21,7 @@ public class Player extends EntityDynamic {
     private float playerAngle = 0f;
 
     private GameWorld gameWorld;
+    private Planet closestPlanet;
 
     public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld, Weapon weapon) {
         super(world, x, y, path, mass, radius);
@@ -108,11 +109,13 @@ public class Player extends EntityDynamic {
         playerAngle = angle;
     }
 
-    @Override
-    public void hitPlanet(Planet planet) {
-        super.hitPlanet(planet);
+    public Planet getClosestPlanet() {
+        return closestPlanet;
     }
 
+    public void setClosestPlanet(final Planet closestPlanet) {
+        this.closestPlanet = closestPlanet;
+    }
 }
 
 
