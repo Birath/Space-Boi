@@ -21,7 +21,7 @@ public class Shotgun extends Weapon {
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 2;
-        this.reloadTime = 4;
+        this.reloadTime = 3;
     }
     @Override
     public void Shoot(float x, float y, Vector2 shootDirection) {
