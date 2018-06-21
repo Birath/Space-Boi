@@ -20,9 +20,11 @@ public class Enemy extends EntityDynamic {
         this.gameWorld = gameWorld; //Add this to entityDynamic?
         player = gameWorld.getPlayer();
         body.setUserData(this);
+
+        this.health = 100;
     }
     @Override
-    public void updateMovement() {
+    public void update(float delta) {
         if (entityState == ENTITY_STATE.STANDING) {
             updateToPlanet(); //Probably doesnt matter if these are inside the if or not
             updateWalkingDirection();
@@ -49,10 +51,8 @@ public class Enemy extends EntityDynamic {
     }
     private void updateWalkingDirection(){
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
-        //System.out.println(toPlayer);
 
         float angle = perpen.angle(toPlayer);
-        System.out.println(Math.abs(angle));
         if(Math.abs(angle) < 90){
             moveLeft = false;
             moveRight = true;

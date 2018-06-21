@@ -27,6 +27,7 @@ public class Player extends EntityDynamic {
         this.gameWorld = gameWorld;
 
         this.weapon = weapon;
+        this.health = 100;
     }
 
     @Override
@@ -63,7 +64,6 @@ public class Player extends EntityDynamic {
             recoil.scl(weapon.getRecoil());
 
             body.setLinearVelocity(recoil);
-
             createBullet(recoil);
         }
     }

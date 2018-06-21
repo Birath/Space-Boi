@@ -30,6 +30,7 @@ public class EntityContactListener implements ContactListener {
         }
 
         //ENTITY IS ENEMY
+            //ENEMY TOUCHED PLANET
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
@@ -38,6 +39,16 @@ public class EntityContactListener implements ContactListener {
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
             enemy.hitPlanet((Planet) fixtureB.getBody().getUserData());
+        }
+        //ENEMY TOUCHED BULLET
+        if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
+            enemy.reduceHealth(10);
+        } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
+            Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
+            enemy.reduceHealth(10);
         }
 
         //ENTITY IS BULLET

@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,7 +38,7 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Machinegun weapon = new Machinegun(world, this);
+        Shotgun weapon = new Shotgun(world, this);
         Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this, weapon);
         addDynamicEntity(player);
         this.player = player;
@@ -62,6 +63,7 @@ public class GameWorld {
         world.step(delta, 6, 2);
         dynamicEntities.addAll(addDynamicEntities);
         removeBullets(dynamicEntities);
+        removeDead(dynamicEntities);
         addDynamicEntities.clear();
     }
 
@@ -123,6 +125,19 @@ public class GameWorld {
             EntityDynamic entity = itr.next();
             if (entity instanceof Bullet) {
                 if (((Bullet) entity).toRemove(player.getBody().getPosition().x, player.getBody().getPosition().y)) {
+                    world.destroyBody(entity.getBody());
+                    itr.remove();
+                }
+            }
+        }
+    }
+    private void removeDead(List<EntityDynamic> entityList) {
+        Iterator<EntityDynamic> itr = entityList.iterator();
+
+        while (itr.hasNext()) {
+            EntityDynamic entity = itr.next();
+            if (entity instanceof Enemy || entity instanceof Player) {
+                if(entity.isDead()){
                     world.destroyBody(entity.getBody());
                     itr.remove();
                 }

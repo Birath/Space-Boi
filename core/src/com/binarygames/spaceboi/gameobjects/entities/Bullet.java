@@ -32,7 +32,6 @@ public class Bullet extends EntityDynamic {
 
     public boolean toRemove(float x, float y) {
         if (entityState == ENTITY_STATE.STANDING) {
-            System.out.println("Current: " + TimeUtils.millis() + " timeTouched: " + timeTouched);
             if ((TimeUtils.millis() - timeTouched) > removeDelay) {
                 return true;
             }

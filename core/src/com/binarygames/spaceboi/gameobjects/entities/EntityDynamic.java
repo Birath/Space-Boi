@@ -25,6 +25,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     private float x;
     private float y;
 
+    protected int health = 1337;
+
     protected boolean moveUp = false;
     protected boolean moveDown = false;
     protected boolean moveRight = false;
@@ -80,6 +82,21 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     public Body getBody() {
         return body;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+    public void reduceHealth(int amount){
+        health = health - amount;
+    }
+    public boolean isDead(){
+        if(health < 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     //Planetbody and ENTITY_STATE stuff

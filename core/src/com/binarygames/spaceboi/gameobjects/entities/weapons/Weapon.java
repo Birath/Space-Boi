@@ -12,6 +12,8 @@ public abstract class Weapon {
     private Sprite sprite;
     protected String path;
 
+    private int damage;
+
     protected float bulletMass;
     protected float bulletRadius;
     protected float bulletSpeed;
@@ -45,6 +47,7 @@ public abstract class Weapon {
             if (currentReloadTime >= reloadTime) {
                 reloading = false;
                 currentReloadTime = 0;
+                currentMag = magSize;
             } else {
                 currentReloadTime += delta;
             }
@@ -64,7 +67,7 @@ public abstract class Weapon {
     }
 
     public boolean canShoot() {
-        if (currentMag > 1 && !reloading && timeBetweenShotsIsFinished) {
+        if (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished) {
             return true;
         }
         return false;
@@ -85,7 +88,12 @@ public abstract class Weapon {
     }
 
     public float getRecoil() {
-        return this.recoil;
+        if(canShoot()){ //A solution to recoil problem that affects the player minimally
+            return this.recoil;
+        }
+        else{
+            return 0;
+        }
     }
 
 }
