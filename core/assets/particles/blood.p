@@ -2,8 +2,8 @@ blood
 - Delay -
 active: false
 - Duration - 
-lowMin: 3000.0
-lowMax: 3000.0
+lowMin: 500.0
+lowMax: 500.0
 - Count - 
 min: 0
 max: 20
@@ -13,10 +13,14 @@ lowMax: 0.0
 highMin: 250.0
 highMax: 250.0
 relative: false
-scalingCount: 1
+scalingCount: 3
 scaling0: 1.0
-timelineCount: 1
+scaling1: 0.25490198
+scaling2: 0.0
+timelineCount: 3
 timeline0: 0.0
+timeline1: 0.06849315
+timeline2: 0.13013698
 - Life - 
 lowMin: 0.0
 lowMax: 0.0

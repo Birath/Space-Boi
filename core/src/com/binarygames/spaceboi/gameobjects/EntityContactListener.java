@@ -29,7 +29,7 @@ public class EntityContactListener implements ContactListener {
         }
 
         //ENTITY IS ENEMY
-            //ENEMY TOUCHED PLANET
+        //ENEMY TOUCHED PLANET
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
@@ -44,14 +44,14 @@ public class EntityContactListener implements ContactListener {
                 Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
-            if(bullet.getShooter() != enemy){
+            if (bullet.getShooter() != enemy) {
                 enemy.reduceHealth(bullet.getDamage());
             }
         } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
-            if(bullet.getShooter() != enemy){
+            if (bullet.getShooter() != enemy) {
                 enemy.reduceHealth(bullet.getDamage());
             }
         }
@@ -60,11 +60,11 @@ public class EntityContactListener implements ContactListener {
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
-            bullet.hitPlanet((Planet) fixtureA.getBody().getUserData());
+            bullet.setHasHitPlanetTrue();
         } else if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
-            bullet.hitPlanet((Planet) fixtureB.getBody().getUserData());
+            bullet.setHasHitPlanetTrue();
         }
     }
 

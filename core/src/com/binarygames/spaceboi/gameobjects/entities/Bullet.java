@@ -34,7 +34,8 @@ public class Bullet extends EntityDynamic {
     public void hitPlanet(Planet planet) {
         //Do nothing
     }
-    public void setHasHitPlanetTrue(){
+
+    public void setHasHitPlanetTrue() {
         this.hasHitPlanet = true;
     }
 
