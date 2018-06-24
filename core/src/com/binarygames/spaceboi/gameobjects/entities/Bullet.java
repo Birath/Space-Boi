@@ -12,6 +12,7 @@ public class Bullet extends EntityDynamic {
     private long removeDelay;
     private int damage;
     private EntityDynamic shooter;
+    private boolean hasHitPlanet = false;
 
     public Bullet(World world, float x, float y, String path, Vector2 speed, GameWorld gameWorld, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
         super(world, x, y, path, mass, radius);
@@ -23,19 +24,20 @@ public class Bullet extends EntityDynamic {
         this.damage = damage;
         this.gameWorld = gameWorld;
         this.shooter = shooter;
+        timeTouched = TimeUtils.millis();
         gameWorld.addDynamicEntity(this);
     }
 
     @Override
     public void hitPlanet(Planet planet) {
-        if (this.entityState != ENTITY_STATE.STANDING) {
-            this.entityState = ENTITY_STATE.STANDING;
-            timeTouched = TimeUtils.millis();
-        }
+        //Do nothing
+    }
+    public void setHasHitPlanetTrue(){
+        this.hasHitPlanet = true;
     }
 
     public boolean toRemove(float x, float y) {
-        if (entityState == ENTITY_STATE.STANDING) {
+        if (hasHitPlanet) {
             if ((TimeUtils.millis() - timeTouched) > removeDelay) {
                 return true;
             }
