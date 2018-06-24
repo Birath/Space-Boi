@@ -72,23 +72,26 @@ public class MainMenuScreen implements Screen {
             }
         });
         stage.addActor(playButton);
-        /* TODO Add
+
         TextButton settingsButton = new TextButton("Settings", buttonStyle);
         settingsButton.setPosition(SpaceBoi.VIRTUAL_WIDTH / 2 - settingsButton.getWidth() / 2, SpaceBoi.VIRTUAL_HEIGHT * 0.2f);
-        playButton.addListener(event -> {
-            game.setScreen(new SettingsScreen(game));
-            dispose();
-            return false;
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SettingsScreen(game));
+                dispose();
+            }
         });
+
         stage.addActor(settingsButton);
-        */
+
 
 
 
         // Quit Button
         TextButton quitButton = new TextButton("Quit", buttonStyle);
         quitButton.setPosition(SpaceBoi.VIRTUAL_WIDTH / 2 - quitButton.getWidth() / 2,
-                playButton.getY() - quitButton.getHeight() - 75);
+                playButton.getY() - quitButton.getHeight() - 150);
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
