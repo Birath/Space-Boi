@@ -58,23 +58,6 @@ public class PlayerInputProcessor implements InputProcessor {
             player.setMoveLeft(true);
             return true;
         }
-
-        //Numbers
-        if (keycode == Input.Keys.NUM_1) {
-            player.setWeapon(0);
-            System.out.println("Equipped " + player.getWeapon().toString());
-            return true;
-        }
-        if (keycode == Input.Keys.NUM_2) {
-            player.setWeapon(1);
-            System.out.println("Equipped " + player.getWeapon().toString());
-            return true;
-        }
-        if (keycode == Input.Keys.NUM_3) {
-            player.setWeapon(2);
-            System.out.println("Equipped " + player.getWeapon().toString());
-            return true;
-        }
         return false;
     }
 
@@ -101,6 +84,22 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
+        //Numbers
+        if (character == '1') {
+            player.setWeapon(0);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (character == '2') {
+            player.setWeapon(1);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (character == '3') {
+            player.setWeapon(2);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
         return false;
     }
 
