@@ -125,10 +125,10 @@ public class GameScreen implements Screen {
                     }
                 } else {
                     // float angleDiff = lastAngle - player.getPlayerAngle();
-                    System.out.println("Player angle: " + player.getPlayerAngle());
-                    System.out.println("Camera angle " + getCameraRotation());
-                    System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
-                    System.out.println();
+                    // System.out.println("Player angle: " + player.getPlayerAngle());
+                    // System.out.println("Camera angle " + getCameraRotation());
+                    // System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
+                    // System.out.println();
 
                     float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
                     //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());

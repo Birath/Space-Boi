@@ -6,7 +6,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Bullet extends EntityDynamic {
-    private GameWorld gameWorld;
+
+    protected GameWorld gameWorld;
 
     private long timeTouched;
     private long removeDelay;
@@ -45,8 +46,16 @@ public class Bullet extends EntityDynamic {
         }
         return false;
     }
-    public int getDamage(){
+
+    public void onRemove() {
+        // Runs once the bullet is removed from game
+    }
+
+    public int getDamage() {
         return this.damage;
     }
-    public EntityDynamic getShooter(){ return this.shooter;}
+
+    public EntityDynamic getShooter() {
+        return this.shooter;
+    }
 }

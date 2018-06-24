@@ -3,7 +3,6 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class GrenadeLauncher extends Weapon {
@@ -27,7 +26,7 @@ public class GrenadeLauncher extends Weapon {
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Bullet(world, x, y, path, shootDirection, gameWorld, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+            new Grenade(world, x, y, path, shootDirection, gameWorld, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
             weaponMaths();
         }
     }
