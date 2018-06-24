@@ -67,10 +67,7 @@ public abstract class Weapon {
     }
 
     public boolean canShoot() {
-        if (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished) {
-            return true;
-        }
-        return false;
+        return (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished);
     }
 
     public void weaponMaths() {
@@ -88,10 +85,9 @@ public abstract class Weapon {
     }
 
     public float getRecoil() {
-        if(canShoot()){ //A solution to recoil problem that affects the player minimally
+        if (canShoot()) { //A solution to recoil problem that affects the player minimally
             return this.recoil;
-        }
-        else{
+        } else {
             return 0;
         }
     }

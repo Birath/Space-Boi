@@ -90,13 +90,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void reduceHealth(int amount){
         health = health - amount;
     }
+
     public boolean isDead(){
-        if(health < 0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return health <= 0;
     }
 
     //Planetbody and ENTITY_STATE stuff
