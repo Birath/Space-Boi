@@ -79,10 +79,10 @@ public class GameWorld {
     private void applyGravity(EntityDynamic entity) {
         Vector2 entityPos = entity.getBody().getPosition();
         ArrayList<Planet> planetsWithinRange = getPlanetsWithinGravityRange(entityPos);
-        Planet closetstPlanet = getClosestPlanet(planetsWithinRange, entityPos);
+        Planet closestPlanet = getClosestPlanet(planetsWithinRange, entityPos);
         if (entity.getEntityState() == ENTITY_STATE.STANDING) {
             planetsWithinRange.clear();
-            planetsWithinRange.add(closetstPlanet);
+            planetsWithinRange.add(closestPlanet);
         }
         Vector2 finalGravity = new Vector2();
         for (Planet planet : planetsWithinRange) {
@@ -108,10 +108,10 @@ public class GameWorld {
             entity.getBody().applyForceToCenter(forceX, forceY, true);
         */
         // TODO move to nice place
-        if (entity instanceof Player && closetstPlanet != null) {
+        if (entity instanceof Player && closestPlanet != null) {
             // TODO Change to toPlanet vector instead
-            player.setClosestPlanet(closetstPlanet);
-            Vector2 relativeVector = closetstPlanet.getBody().getPosition().sub(player.getBody().getPosition());
+            player.setClosestPlanet(closestPlanet);
+            Vector2 relativeVector = closestPlanet.getBody().getPosition().sub(player.getBody().getPosition());
             float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
             player.setPlayerAngle(angleToPlanet);
         }
@@ -131,13 +131,14 @@ public class GameWorld {
             }
         }
     }
+
     private void removeDead(List<EntityDynamic> entityList) {
         Iterator<EntityDynamic> itr = entityList.iterator();
 
         while (itr.hasNext()) {
             EntityDynamic entity = itr.next();
             if (entity instanceof Enemy || entity instanceof Player) {
-                if(entity.isDead()){
+                if (entity.isDead()) {
                     world.destroyBody(entity.getBody());
                     itr.remove();
                 }
