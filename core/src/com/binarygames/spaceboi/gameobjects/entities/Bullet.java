@@ -10,15 +10,19 @@ public class Bullet extends EntityDynamic {
 
     private long timeTouched;
     private long removeDelay;
+    private int damage;
+    private EntityDynamic shooter;
 
-    public Bullet(World world, float x, float y, String path, Vector2 speed, GameWorld gameWorld, float mass, float radius, long removeDelay) {
+    public Bullet(World world, float x, float y, String path, Vector2 speed, GameWorld gameWorld, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
         super(world, x, y, path, mass, radius);
         this.removeDelay = removeDelay;
         body.setUserData(this);
 
         this.getBody().setLinearVelocity(speed);
 
+        this.damage = damage;
         this.gameWorld = gameWorld;
+        this.shooter = shooter;
         gameWorld.addDynamicEntity(this);
     }
 
@@ -41,4 +45,8 @@ public class Bullet extends EntityDynamic {
         }
         return false;
     }
+    public int getDamage(){
+        return this.damage;
+    }
+    public EntityDynamic getShooter(){ return this.shooter;}
 }

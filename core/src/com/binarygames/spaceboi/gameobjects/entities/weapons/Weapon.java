@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public abstract class Weapon {
 
@@ -11,8 +12,9 @@ public abstract class Weapon {
     protected GameWorld gameWorld;
     private Sprite sprite;
     protected String path;
+    protected EntityDynamic shooter;
 
-    private int damage;
+    protected int damage;
 
     protected float bulletMass;
     protected float bulletRadius;
@@ -32,9 +34,10 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
-    public Weapon(World aWorld, GameWorld aGameWorld) {
+    public Weapon(World aWorld, GameWorld aGameWorld, EntityDynamic shooter) {
         this.world = aWorld;
         this.gameWorld = aGameWorld;
+        this.shooter = shooter;
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
@@ -91,5 +94,7 @@ public abstract class Weapon {
             return 0;
         }
     }
-
+    public String toString() {
+        return getClass().getName();
+    }
 }

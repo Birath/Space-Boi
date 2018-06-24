@@ -1,10 +1,7 @@
 package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.binarygames.spaceboi.gameobjects.entities.Bullet;
-import com.binarygames.spaceboi.gameobjects.entities.Enemy;
-import com.binarygames.spaceboi.gameobjects.entities.Planet;
-import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.*;
 
 public class EntityContactListener implements ContactListener {
 
@@ -12,11 +9,13 @@ public class EntityContactListener implements ContactListener {
     public EntityContactListener() {
     }
 
+
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
+
 
         //ENTITY IS PLAYER
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
@@ -43,12 +42,18 @@ public class EntityContactListener implements ContactListener {
         //ENEMY TOUCHED BULLET
         if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
+            Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
-            enemy.reduceHealth(10);
+            if(bullet.getShooter() != enemy){
+                enemy.reduceHealth(bullet.getDamage());
+            }
         } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
+            Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
-            enemy.reduceHealth(10);
+            if(bullet.getShooter() != enemy){
+                enemy.reduceHealth(bullet.getDamage());
+            }
         }
 
         //ENTITY IS BULLET

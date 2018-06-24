@@ -38,8 +38,7 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Shotgun weapon = new Shotgun(world, this);
-        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this, weapon);
+        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this);
         addDynamicEntity(player);
         this.player = player;
 

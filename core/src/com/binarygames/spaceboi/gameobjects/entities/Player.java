@@ -5,13 +5,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends EntityDynamic {
 
     private boolean mouseHeld;
 
     private Weapon weapon;
+    private List<Weapon> weaponList;
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
@@ -21,12 +28,18 @@ public class Player extends EntityDynamic {
     private GameWorld gameWorld;
     private Planet closestPlanet;
 
-    public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld, Weapon weapon) {
+    private int jumpHeight = 50;
+
+    public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
         super(world, x, y, path, mass, radius);
         body.setUserData(this);
         this.gameWorld = gameWorld;
 
-        this.weapon = weapon;
+        weaponList = new ArrayList<>();
+        weaponList.add(new Shotgun(world, gameWorld, this));
+        weaponList.add(new Machinegun(world, gameWorld, this));
+        weaponList.add(new GrenadeLauncher(world, gameWorld, this));
+        this.weapon = weaponList.get(0);
         this.health = 100;
     }
 
@@ -41,8 +54,9 @@ public class Player extends EntityDynamic {
 
             //MOVE
             if (moveRight) {
-                body.setLinearVelocity(perpen);
+                body.setLinearVelocity(perpen); //Dynamiska adderande blir kanse bättre än att bara sätta saker och ting
             } else if (moveLeft) {
+                perpen.scl(1); //Stoppar copyrightstrike - ändrar ingenting
                 body.setLinearVelocity(-perpen.x, -perpen.y);
             } else {
                 body.setLinearVelocity(0, 0);
@@ -55,16 +69,11 @@ public class Player extends EntityDynamic {
             }
         }
 
-        weapon.update(delta);
 
         //SHOOTING
+        updateWeapons(delta);
         if (mouseHeld) {
-            Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
-            recoil.setLength2(1);
-            recoil.scl(weapon.getRecoil());
-
-            body.setLinearVelocity(recoil);
-            createBullet(recoil);
+            Shoot();
         }
     }
 
@@ -76,59 +85,71 @@ public class Player extends EntityDynamic {
         getSprite().draw(batch);
     }
 
-    private void createBullet(Vector2 recoil) {
+    private void Shoot(){
+        Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
+        recoil.setLength2(1);
+
+        //Setting recoil of player
+        recoil.scl(weapon.getRecoil());
+        body.setLinearVelocity(recoil);
+
+        //Shooting the bullet
         recoil.setLength2(1);
         recoil.scl(-(rad * PPM));
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-
         weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
     }
+    private void updateWeapons(float delta){
+        for(Weapon weaponObject : weaponList){
+            weaponObject.update(delta);
+        }
+    }
 
+    //Mouse related, called by playerinputprocessor
     public void setMouseHeld(boolean mouseHeld) {
         this.mouseHeld = mouseHeld;
     }
-
     public boolean isMouseHeld() {
         return mouseHeld;
     }
-
     public void setMouseCoords(float x, float y) {
         mouseCoords.set(x, y);
     }
 
+    //Rotation of player
     private void updateToPlanet() {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
-        toPlanet.scl(50);
+        toPlanet.scl(jumpHeight);
     }
-
     public float getPlayerAngle() {
         return playerAngle + 90; // TODO fix magic number
     }
-
     public void setPlayerAngle(float angle) {
         playerAngle = angle;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
+    //Handeling planet
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
     }
-
     public Planet getClosestPlanet() {
         return closestPlanet;
     }
-
     public void setClosestPlanet(final Planet closestPlanet) {
         this.closestPlanet = closestPlanet;
+    }
+
+    //Weapon
+    public void addWeapon(Weapon weapon){
+        this.weaponList.add(weapon);
+    }
+    public void setWeapon(int index){
+        this.weapon = weaponList.get(index);
+    }
+    public Weapon getWeapon() {
+        return weapon;
     }
 }
 

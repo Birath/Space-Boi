@@ -28,6 +28,7 @@ public class PlayerInputProcessor implements InputProcessor {
     //Keyboardrelated
     @Override
     public boolean keyDown(int keycode) {
+        //WASD Movement
         if (keycode == Input.Keys.SPACE) {
             player.setMoveUp(true);
             return true;
@@ -42,6 +43,23 @@ public class PlayerInputProcessor implements InputProcessor {
         }
         if (keycode == Input.Keys.A) {
             player.setMoveLeft(true);
+            return true;
+        }
+
+        //Numbers
+        if (keycode == Input.Keys.NUM_1) {
+            player.setWeapon(0);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (keycode == Input.Keys.NUM_2) {
+            player.setWeapon(1);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (keycode == Input.Keys.NUM_3) {
+            player.setWeapon(2);
+            System.out.println("Equipped " + player.getWeapon().toString());
             return true;
         }
         return false;
@@ -70,16 +88,6 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        if (character == 'k') {
-            if (player.getWeapon() instanceof Machinegun) {
-                player.setWeapon(new GrenadeLauncher(world, gameWorld));
-                System.out.println("Weapon set to GrenadeLauncher");
-            } else {
-                player.setWeapon(new Machinegun(world, gameWorld));
-                System.out.println("Weapon set to Machinegun");
-            }
-            return true;
-        }
         return false;
     }
 
