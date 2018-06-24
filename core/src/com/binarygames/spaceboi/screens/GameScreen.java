@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -101,6 +102,7 @@ public class GameScreen implements Screen {
                 interpolateRotation = false;
                 System.out.println("TOINTERPOLATE: " + angleToInterpolate);
                 System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
+                System.out.println("CAMANGLE: " + getCameraRotation());
                 System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
                 lastAngle = player.getPlayerAngle();
             } else {
@@ -109,8 +111,15 @@ public class GameScreen implements Screen {
             }
         } else {
             // float angleDiff = lastAngle - player.getPlayerAngle();
+            System.out.println("Player angle: " + player.getPlayerAngle());
+            System.out.println("Camera angle " + getCameraRotation());
+            System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
+            System.out.println();
+
             float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
+            //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());
             if (Math.abs(angleDiff) >= whenToInterpolate) {
+                //angleToInterpolate = Math.abs(angleDiff) + 180;
                 angleToInterpolate = angleDiff;
                 currentInterpolateCount = 0;
                 interpolateRotation = true;
@@ -118,6 +127,7 @@ public class GameScreen implements Screen {
             } else {
                 lastAngle = player.getPlayerAngle();
                 camera.rotate(angleDiff);
+                //camera.rotate(Math.abs(angleDiff) + 180);
             }
         }
 
@@ -136,7 +146,8 @@ public class GameScreen implements Screen {
     }
 
     private void batchedDraw() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
+                       (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         //debugRenderer.render(world, camera.combined.scl(PPM)); TODO fix matching rotation on debug rendering
 
@@ -174,20 +185,23 @@ public class GameScreen implements Screen {
 
     }
 
-    @Override
-    public void hide() {
+    @Override public void hide() {
 
     }
 
 
-    @Override
-    public void dispose() {
+    @Override public void dispose() {
         gameUI.dispose();
         frameRate.dispose();
     }
 
     public void appendEntity(EntityDynamic entity) {
         entities.add(entity);
+    }
+
+    public float getCameraRotation() {
+        float camAngle = -(float) Math.atan2(camera.up.x, camera.up.y) * MathUtils.radiansToDegrees + 180;
+        return camAngle;
     }
 
     private float angleDifference(float angle1, float angle2) {
