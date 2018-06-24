@@ -1,53 +1,113 @@
 package com.binarygames.spaceboi.screens;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.BufferUtils;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.ui.BlurUtils;
 
 
-public class InGameMenuScreen implements Screen {
+
+public class InGameMenuScreen {
 
     private SpaceBoi game;
 
     private Stage stage;
 
+    private TextButton.TextButtonStyle textButtonStyle;
 
-    public void InGameMenuScreen(final SpaceBoi game){
+    private GameScreen gameScreen;
+
+    private Pixmap pixmap;
+
+    private Texture frameTex;
+
+    public InGameMenuScreen(GameScreen gameScreen, SpaceBoi game) {
         this.game = game;
+        this.gameScreen = gameScreen;
+
+        stage = new Stage();
+        Fonts fonts = new Fonts();
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = fonts.getButtonFont();
+    }
+
+    public void createBlurredBackground(){
+        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
+
+        // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
+        for (int i = 4; i < pixels.length; i += 4) {
+            pixels[i - 1] = (byte) 255;
+        }
+
+        pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+        frameTex = new Texture(BlurUtils.blur(pixmap, 3, 3, true));
+
+        Image image = new Image(frameTex);
+        image.setPosition(0,0);
+        stage.addActor(image);
+
+        createButtons();
+
 
     }
 
-    public void show(){
+    private void createButtons(){
+        TextButton resumeButton = new TextButton("Resume", textButtonStyle);
+        resumeButton.setPosition((Gdx.graphics.getWidth()/2)-(resumeButton.getWidth()/2), Gdx.graphics.getHeight()/9-resumeButton.getHeight()/2);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameScreen.resume();
+            }
+        });
 
+        stage.addActor(resumeButton);
+
+        TextButton optionsButton = new TextButton("Options", textButtonStyle);
+        optionsButton.setPosition((Gdx.graphics.getWidth()/2)-(optionsButton.getWidth()/2), Gdx.graphics.getHeight()/6-optionsButton.getHeight()/2);
+        optionsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameScreen.resume();
+            }
+        });
+        stage.addActor(optionsButton);
+
+        TextButton quitButton = new TextButton("Quit", textButtonStyle);
+        quitButton.setPosition((Gdx.graphics.getWidth()/2)-(quitButton.getWidth()/2), Gdx.graphics.getHeight()/3-quitButton.getHeight()/2);
+        quitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game));
+                //gameScreen.dispose();
+                dispose();
+            }
+        });
+        stage.addActor(quitButton);
     }
 
-    public void render(float delta){
-
+    public void act(float delta){
+        stage.act(delta);
     }
 
-    @Override
-    public void resize(int width, int height){
-
+    public void draw(){
+        stage.draw();
     }
 
-    @Override
-    public void pause() {
-
+    public Stage getStage() {
+        return stage;
     }
 
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose(){
         stage.dispose();
     }
-
 }

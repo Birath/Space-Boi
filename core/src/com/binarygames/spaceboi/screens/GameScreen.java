@@ -6,11 +6,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
@@ -27,6 +31,12 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 public class GameScreen implements Screen {
 
     private SpaceBoi game;
+
+    private static final int GAME_RUNNING = 0;
+    private static final int GAME_PAUSED = 1;
+    public int state;
+
+    private InGameMenuScreen inGameMenuScreen;
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
@@ -72,6 +82,7 @@ public class GameScreen implements Screen {
         //camera = new OrthographicCamera();
 
         gameUI = new GameUI();
+        inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 
         gameWorld = new GameWorld(game, world);
@@ -80,61 +91,90 @@ public class GameScreen implements Screen {
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
         //Input processor och multiplexer, hanterar användarens input
-        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld);
+        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(gameUI.getStage());
+        multiplexer.addProcessor(inGameMenuScreen.getStage());
         multiplexer.addProcessor(inputProcessor);
         Gdx.input.setInputProcessor(multiplexer);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        state = GAME_RUNNING;
     }
 
     private void update(float delta) {
-        frameRate.update();
-        gameWorld.update(delta);
-        gameUI.act(delta);
 
-        camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+        switch (state) {
+            case GAME_RUNNING:
+                gameWorld.update(delta);
+                gameUI.act(delta);
 
-        // set camera rotation
-        if (interpolateRotation) {
-            if (currentInterpolateCount == interpolateCount) {
-                interpolateRotation = false;
-                lastAngle = player.getPlayerAngle();
-            } else {
-                camera.rotate(angleToInterpolate / interpolateCount);
-                currentInterpolateCount++;
-            }
-        } else {
-            // float angleDiff = lastAngle - player.getPlayerAngle();
+                // set camera rotation
+                if (interpolateRotation) {
+                    if (currentInterpolateCount == interpolateCount) {
+                        interpolateRotation = false;
+                        System.out.println("TOINTERPOLATE: " + angleToInterpolate);
+                        System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
+                        System.out.println("CAMANGLE: " + getCameraRotation());
+                        System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
+                        lastAngle = player.getPlayerAngle();
+                    } else {
+                        camera.rotate(angleToInterpolate / interpolateCount);
+                        currentInterpolateCount++;
+                    }
+                } else {
+                    // float angleDiff = lastAngle - player.getPlayerAngle();
+                    // System.out.println("Player angle: " + player.getPlayerAngle());
+                    // System.out.println("Camera angle " + getCameraRotation());
+                    // System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
+                    // System.out.println();
 
-            float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
-            //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());
-            if (Math.abs(angleDiff) >= whenToInterpolate) {
-                //angleToInterpolate = Math.abs(angleDiff) + 180;
-                angleToInterpolate = angleDiff;
-                currentInterpolateCount = 0;
-                interpolateRotation = true;
-                lastAngle = player.getPlayerAngle();
-            } else {
-                lastAngle = player.getPlayerAngle();
-                camera.rotate(angleDiff);
-                //camera.rotate(Math.abs(angleDiff) + 180);
-            }
-        }
+                    float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
+                    //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());
+                    if (Math.abs(angleDiff) >= whenToInterpolate) {
+                        //angleToInterpolate = Math.abs(angleDiff) + 180;
+                        angleToInterpolate = angleDiff;
+                        currentInterpolateCount = 0;
+                        interpolateRotation = true;
+                        lastAngle = player.getPlayerAngle();
+                    } else {
+                        lastAngle = player.getPlayerAngle();
+                        camera.rotate(angleDiff);
+                        //camera.rotate(Math.abs(angleDiff) + 180);
+                    }
+                }
 
         /* float angleDiff = lastAngle - player.getPlayerAngle();
         lastAngle = player.getPlayerAngle();
         camera.rotate(angleDiff); */
 
-        camera.update();
-        game.getBatch().setProjectionMatrix(camera.combined);
-        batchedDraw();
-        draw();
+                camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+                camera.update();
+                game.getBatch().setProjectionMatrix(camera.combined);
+                batchedDraw();
+                draw();
+                break;
+
+            case GAME_PAUSED:
+                inGameMenuScreen.act(delta);
+                draw();
+                break;
+
+        }
+        frameRate.update();
     }
 
     private void draw() {
-        gameUI.draw();
+
+        switch (state){
+            case GAME_RUNNING:
+                gameUI.draw();
+                break;
+            case GAME_PAUSED:
+                inGameMenuScreen.draw();
+                break;
+        }
     }
 
     private void batchedDraw() {
@@ -163,18 +203,20 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        inGameMenuScreen.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         camera.setToOrtho(false, width / 2, height / 2);
         //viewport.update();
     }
 
-    @Override
-    public void pause() {
-
+    @Override public void pause() {
+        if (state == GAME_RUNNING) {
+            state = GAME_PAUSED;
+            inGameMenuScreen.createBlurredBackground();
+        }
     }
 
-    @Override
-    public void resume() {
-
+    @Override public void resume() {
+        if (state == GAME_PAUSED) state = GAME_RUNNING;
     }
 
     @Override public void hide() {
@@ -184,6 +226,7 @@ public class GameScreen implements Screen {
 
     @Override public void dispose() {
         gameUI.dispose();
+        inGameMenuScreen.dispose();
         frameRate.dispose();
     }
 

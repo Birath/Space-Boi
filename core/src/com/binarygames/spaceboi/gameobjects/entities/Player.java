@@ -109,6 +109,7 @@ public class Player extends EntityDynamic {
     public void setMouseHeld(boolean mouseHeld) {
         this.mouseHeld = mouseHeld;
     }
+
     public boolean isMouseHeld() {
         return mouseHeld;
     }
