@@ -16,6 +16,9 @@ public class Machinegun extends Weapon {
         this.path = "playerShip.png";
         this.recoil = 20;
         this.removeBulletDelay = 10;
+        this.timeBetweenShots = 0.1f;
+        this.magSize = this.currentMag = 30;
+        this.reloadTime = 3;
     }
 
     @Override
