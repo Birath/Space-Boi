@@ -124,6 +124,7 @@ public class GameWorld {
             EntityDynamic entity = itr.next();
             if (entity instanceof Bullet) {
                 if (((Bullet) entity).toRemove(player.getBody().getPosition().x, player.getBody().getPosition().y)) {
+                    ((Bullet) entity).onRemove();
                     world.destroyBody(entity.getBody());
                     itr.remove();
                 }
