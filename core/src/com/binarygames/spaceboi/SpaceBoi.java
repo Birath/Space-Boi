@@ -21,6 +21,8 @@ public class SpaceBoi extends Game {
 
     public BitmapFont debugFont;
 
+    private GamePreferences preferences = new GamePreferences();
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -49,6 +51,10 @@ public class SpaceBoi extends Game {
 
     public AssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public GamePreferences getPreferences() {
+        return preferences;
     }
 
     private void loadDebugFont() {
