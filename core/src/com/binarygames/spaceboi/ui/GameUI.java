@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,18 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
 
     private Stage stage;
 
-    private BitmapFont labelFont;
     private LabelStyle labelStyle;
 
-    private BitmapFont buttonFont;
     private TextButtonStyle buttonStyle;
 
     private Texture texture;
@@ -41,10 +37,13 @@ public class GameUI {
     private ProgressBar healthBar;
     private ProgressBar.ProgressBarStyle healthBarStyle;
 
+    private Fonts fonts;
+
     public GameUI() {
         stage = new Stage();
+        fonts = new Fonts();
 
-        loadFonts();
+        //loadFonts();
         loadStyles();
         health = 5;
 
@@ -87,7 +86,7 @@ public class GameUI {
         return stage;
     }
 
-    private void loadFonts() {
+    /*private void loadFonts() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
@@ -111,16 +110,16 @@ public class GameUI {
 
         // Dispose of FontGenerator
         generator.dispose();
-    }
+    }*/
 
     private void loadStyles() {
         // Button style
         buttonStyle = new TextButtonStyle();
-        buttonStyle.font = buttonFont;
+        buttonStyle.font = fonts.getButtonFont();
 
         // Label style
         labelStyle = new LabelStyle();
-        labelStyle.font = labelFont;
+        labelStyle.font = fonts.getLabelFont();
 
         // Progress bar styles
         Pixmap pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
@@ -175,8 +174,6 @@ public class GameUI {
 
     public void dispose() {
         stage.dispose();
-        buttonFont.dispose();
-        labelFont.dispose();
     }
 
 }

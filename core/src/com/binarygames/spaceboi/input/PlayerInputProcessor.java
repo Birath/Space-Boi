@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.input;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
@@ -10,6 +11,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
+import com.binarygames.spaceboi.screens.GameScreen;
 
 public class PlayerInputProcessor implements InputProcessor {
 
@@ -17,19 +19,30 @@ public class PlayerInputProcessor implements InputProcessor {
     private Camera camera;
     private World world;
     private GameWorld gameWorld;
+    private GameScreen gameScreen;
 
-    public PlayerInputProcessor(Player player, Camera camera, World world, GameWorld gameWorld) {
+    public PlayerInputProcessor(Player player, Camera camera, World world, GameWorld gameWorld, GameScreen gameScreen) {
         this.player = player;
         this.camera = camera;
         this.world = world;
         this.gameWorld = gameWorld;
+        this.gameScreen = gameScreen;
     }
 
     //Keyboardrelated
     @Override
     public boolean keyDown(int keycode) {
         //WASD Movement
-        if (keycode == Input.Keys.SPACE) {
+        //possibly move to another inputprocessor ui
+        if ((gameScreen.state == 1) && (keycode == Input.Keys.ESCAPE)) {
+            gameScreen.resume();
+            return true;
+        }
+        if (keycode == Input.Keys.ESCAPE){
+            gameScreen.pause();
+            return true;
+        }
+        if (keycode == Input.Keys.SPACE){
             player.setMoveUp(true);
             return true;
         }
