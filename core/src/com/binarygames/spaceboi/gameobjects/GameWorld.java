@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
@@ -18,6 +19,7 @@ public class GameWorld {
 
     private SpaceBoi game;
     private World world;
+    private ParticleHandler particleHandler;
     private Player player;
 
     private List<EntityDynamic> dynamicEntities;
@@ -31,10 +33,10 @@ public class GameWorld {
         this.game = game;
         this.world = world;
 
+        particleHandler = new ParticleHandler();
+
         dynamicEntities = new ArrayList<>();
         staticEntities = new ArrayList<>();
-
-
     }
 
     public void createWorld() {
@@ -51,7 +53,6 @@ public class GameWorld {
         addStaticEntity(planet2);
 
         world.setContactListener(new EntityContactListener());
-
     }
 
     public void update(float delta) {
@@ -186,6 +187,10 @@ public class GameWorld {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public ParticleHandler getParticleHandler() {
+        return particleHandler;
     }
 
 }

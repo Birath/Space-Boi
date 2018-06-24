@@ -152,7 +152,7 @@ public class GameScreen implements Screen {
                 camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
                 camera.update();
                 game.getBatch().setProjectionMatrix(camera.combined);
-                batchedDraw();
+                batchedDraw(delta);
                 draw();
                 break;
 
@@ -167,7 +167,7 @@ public class GameScreen implements Screen {
 
     private void draw() {
 
-        switch (state){
+        switch (state) {
             case GAME_RUNNING:
                 gameUI.draw();
                 break;
@@ -177,14 +177,15 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void batchedDraw() {
+    private void batchedDraw(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
-                       (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+                (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         //debugRenderer.render(world, camera.combined.scl(PPM)); TODO fix matching rotation on debug rendering
 
         game.getBatch().begin();
         gameWorld.render(game.getBatch(), camera);
+        gameWorld.getParticleHandler().updateAndDrawEffects(game.getBatch(), delta);
         game.getBatch().end();
     }
 
@@ -208,23 +209,27 @@ public class GameScreen implements Screen {
         //viewport.update();
     }
 
-    @Override public void pause() {
+    @Override
+    public void pause() {
         if (state == GAME_RUNNING) {
             state = GAME_PAUSED;
             inGameMenuScreen.createBlurredBackground();
         }
     }
 
-    @Override public void resume() {
+    @Override
+    public void resume() {
         if (state == GAME_PAUSED) state = GAME_RUNNING;
     }
 
-    @Override public void hide() {
+    @Override
+    public void hide() {
 
     }
 
 
-    @Override public void dispose() {
+    @Override
+    public void dispose() {
         gameUI.dispose();
         inGameMenuScreen.dispose();
         frameRate.dispose();

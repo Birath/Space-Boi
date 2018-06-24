@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 
 public class Bullet extends EntityDynamic {
 
@@ -49,6 +50,7 @@ public class Bullet extends EntityDynamic {
 
     public void onRemove() {
         // Runs once the bullet is removed from game
+        gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD, getBody().getPosition().x * PPM, getBody().getPosition().y * PPM);
     }
 
     public int getDamage() {
