@@ -26,6 +26,7 @@ public class Grenade extends Bullet {
     public void onRemove() {
         // Grenade explosion
         System.out.println("REMOVE");
+        // TODO fixa det problem som finns här pls
         new Bullet(world, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed, gameWorld, shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
         for (int i = 1; i + 1 < shrapnelAmount; i++) {
             new Bullet(world, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed.rotate(360 / i), gameWorld, shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
