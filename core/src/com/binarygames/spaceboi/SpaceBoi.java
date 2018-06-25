@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.MainMenuScreen;
 
 public class SpaceBoi extends Game {
@@ -21,11 +22,14 @@ public class SpaceBoi extends Game {
 
     public BitmapFont debugFont;
 
+    public static Fonts font;
+
     private GamePreferences preferences = new GamePreferences();
 
     @Override
     public void create() {
         batch = new SpriteBatch();
+        font = new Fonts();
 
         assetManager = new AssetManager();
 

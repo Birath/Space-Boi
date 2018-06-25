@@ -10,6 +10,8 @@ public class Fonts {
 
     private BitmapFont buttonFont;
     private BitmapFont labelFont;
+    private BitmapFont titleFont;
+    private BitmapFont mainMenuButtonFont;
 
     public Fonts(){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
@@ -33,6 +35,23 @@ public class Fonts {
         labelFont = generator.generateFont(parameter);
         labelFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
+        parameter.size = 72;
+        parameter.color = Color.WHITE;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 3;
+
+        titleFont = generator.generateFont(parameter);
+        titleFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        // Button font
+        parameter.size = 46;
+        parameter.color = Color.WHITE;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 3;
+
+        mainMenuButtonFont = generator.generateFont(parameter);
+        mainMenuButtonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         // Dispose of FontGenerator
         generator.dispose();
     }
@@ -43,5 +62,13 @@ public class Fonts {
 
     public BitmapFont getLabelFont() {
         return labelFont;
+    }
+
+    public BitmapFont getTitleFont() {
+        return titleFont;
+    }
+
+    public BitmapFont getMainMenuButtonFont() {
+        return mainMenuButtonFont;
     }
 }

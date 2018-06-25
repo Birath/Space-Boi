@@ -10,16 +10,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import javafx.scene.effect.GaussianBlur;
 
 public class MainMenuScreen implements Screen {
 
@@ -36,6 +35,8 @@ public class MainMenuScreen implements Screen {
 
     private BitmapFont buttonFont;
     private TextButtonStyle buttonStyle;
+
+    private Image backgroundImage;
 
     public MainMenuScreen(final SpaceBoi game) {
         this.game = game;
@@ -54,15 +55,21 @@ public class MainMenuScreen implements Screen {
         loadFonts();
         loadStyles();
 
+        // Menu background
+        backgroundImage = new Image(new Texture(Gdx.files.internal("space_boi_menu_placeholder.jpg")));
+        backgroundImage.setOrigin(backgroundImage.getWidth()/2, backgroundImage.getHeight()/2);
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.addActor(backgroundImage);
+
         // Game title
         Label titleLabel = new Label("SpaceBoi", titleStyle);
-        titleLabel.setPosition(SpaceBoi.VIRTUAL_WIDTH / 2 - titleLabel.getWidth() / 2,
-                SpaceBoi.VIRTUAL_HEIGHT * 0.7f + titleLabel.getHeight());
+        titleLabel.setPosition(stage.getWidth() / 2 - titleLabel.getWidth() / 2,
+                stage.getHeight() * 0.7f + titleLabel.getHeight());
         stage.addActor(titleLabel);
 
         // Play Button
         TextButton playButton = new TextButton("Play", buttonStyle);
-        playButton.setPosition(SpaceBoi.VIRTUAL_WIDTH / 2 - playButton.getWidth() / 2, SpaceBoi.VIRTUAL_HEIGHT * 0.4f);
+        playButton.setPosition(stage.getWidth() / 2 - playButton.getWidth() / 2, stage.getHeight() * 0.4f);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -90,7 +97,7 @@ public class MainMenuScreen implements Screen {
 
         // Quit Button
         TextButton quitButton = new TextButton("Quit", buttonStyle);
-        quitButton.setPosition(SpaceBoi.VIRTUAL_WIDTH / 2 - quitButton.getWidth() / 2,
+        quitButton.setPosition(stage.getWidth() / 2 - quitButton.getWidth() / 2,
                 playButton.getY() - quitButton.getHeight() - 150);
         quitButton.addListener(new ChangeListener() {
             @Override
@@ -122,7 +129,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -177,10 +184,10 @@ public class MainMenuScreen implements Screen {
     private void loadStyles() {
         // Title style
         titleStyle = new LabelStyle();
-        titleStyle.font = titleFont;
+        titleStyle.font = SpaceBoi.font.getTitleFont();
 
         // Button style
         buttonStyle = new TextButtonStyle();
-        buttonStyle.font = buttonFont;
+        buttonStyle.font = SpaceBoi.font.getMainMenuButtonFont();
     }
 }
