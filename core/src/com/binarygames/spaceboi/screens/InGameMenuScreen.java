@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.ui.BlurUtils;
 
@@ -62,7 +64,7 @@ public class InGameMenuScreen {
 
     private void createButtons(){
         TextButton resumeButton = new TextButton("Resume", textButtonStyle);
-        resumeButton.setPosition((Gdx.graphics.getWidth()/2)-(resumeButton.getWidth()/2), Gdx.graphics.getHeight()/9-resumeButton.getHeight()/2);
+        resumeButton.setPosition((stage.getWidth()/2)-(resumeButton.getWidth()/2), stage.getHeight()*7/10-resumeButton.getHeight()/2);
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -73,7 +75,7 @@ public class InGameMenuScreen {
         stage.addActor(resumeButton);
 
         TextButton optionsButton = new TextButton("Options", textButtonStyle);
-        optionsButton.setPosition((Gdx.graphics.getWidth()/2)-(optionsButton.getWidth()/2), Gdx.graphics.getHeight()/6-optionsButton.getHeight()/2);
+        optionsButton.setPosition((stage.getWidth()/2)-(optionsButton.getWidth()/2), stage.getHeight()*5/10-optionsButton.getHeight()/2);
         optionsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -83,7 +85,7 @@ public class InGameMenuScreen {
         stage.addActor(optionsButton);
 
         TextButton quitButton = new TextButton("Quit", textButtonStyle);
-        quitButton.setPosition((Gdx.graphics.getWidth()/2)-(quitButton.getWidth()/2), Gdx.graphics.getHeight()/3-quitButton.getHeight()/2);
+        quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), stage.getHeight()*3/10-quitButton.getHeight()/2);
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
