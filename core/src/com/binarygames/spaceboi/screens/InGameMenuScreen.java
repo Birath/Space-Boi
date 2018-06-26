@@ -79,7 +79,7 @@ public class InGameMenuScreen {
         optionsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameScreen.resume();
+                game.setScreen(new SettingsScreen(game, gameScreen));
             }
         });
         stage.addActor(optionsButton);

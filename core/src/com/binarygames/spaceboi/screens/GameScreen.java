@@ -90,13 +90,7 @@ public class GameScreen implements Screen {
         //Entities:
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
-        //Input processor och multiplexer, hanterar användarens input
-        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(gameUI.getStage());
-        multiplexer.addProcessor(inGameMenuScreen.getStage());
-        multiplexer.addProcessor(inputProcessor);
-        Gdx.input.setInputProcessor(multiplexer);
+
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -191,6 +185,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        //Input processor och multiplexer, hanterar användarens input
+        // Flyttades så att inputsen uppdateras efter settingsscreen
+        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameUI.getStage());
+        multiplexer.addProcessor(inGameMenuScreen.getStage());
+        multiplexer.addProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
 
