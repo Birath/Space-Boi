@@ -16,10 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import javafx.scene.effect.GaussianBlur;
 
 public class MainMenuScreen implements Screen {
 
@@ -45,7 +43,6 @@ public class MainMenuScreen implements Screen {
         viewport.apply();
 
         stage = new Stage(viewport);
-        Gdx.input.setInputProcessor(stage);
 
         /*
             UI Elements
@@ -78,14 +75,11 @@ public class MainMenuScreen implements Screen {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new SettingsScreen(game));
-                dispose();
+                game.setScreen(new SettingsScreen(game, MainMenuScreen.this));
             }
         });
 
         stage.addActor(settingsButton);
-
-
 
 
         // Quit Button
@@ -103,7 +97,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

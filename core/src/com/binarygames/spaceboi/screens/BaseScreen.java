@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,9 +30,12 @@ public abstract class BaseScreen {
     protected BitmapFont buttonFont;
     protected TextButton.TextButtonStyle buttonStyle;
 
+    protected Screen previousScreen;
 
-    protected BaseScreen(SpaceBoi game) {
+
+    protected BaseScreen(SpaceBoi game, Screen previousScreen) {
         this.game = game;
+        this.previousScreen = previousScreen;
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, camera);
