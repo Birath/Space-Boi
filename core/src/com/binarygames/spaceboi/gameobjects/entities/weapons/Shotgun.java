@@ -1,5 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -24,6 +26,12 @@ public class Shotgun extends Weapon {
         this.magSize = this.currentMag = 2;
         this.reloadTime = 3;
         this.damage = 10;
+
+        //Sprite setup:
+        this.radius = 5;
+        this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
+        sprite.setSize(radius * 2, radius * 2);
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
     }
 
     @Override

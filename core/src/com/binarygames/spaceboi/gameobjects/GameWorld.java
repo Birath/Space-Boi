@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,6 +19,7 @@ import java.util.List;
 public class GameWorld {
 
     private SpaceBoi game;
+    private Camera camera;
     private World world;
     private ParticleHandler particleHandler;
     private Player player;
@@ -29,9 +31,10 @@ public class GameWorld {
 
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
 
-    public GameWorld(SpaceBoi game, World world) {
+    public GameWorld(SpaceBoi game, World world, Camera camera) {
         this.game = game;
         this.world = world;
+        this.camera = camera;
 
         particleHandler = new ParticleHandler(game);
 
@@ -199,6 +202,10 @@ public class GameWorld {
 
     public ParticleHandler getParticleHandler() {
         return particleHandler;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
 }

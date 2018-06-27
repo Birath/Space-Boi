@@ -1,8 +1,10 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
@@ -68,8 +70,8 @@ public class Player extends EntityDynamic {
                 entityState = ENTITY_STATE.JUMPING;
             }
         }
-
-
+        //Aiming
+        updateMouseCoords();
         //SHOOTING
         updateWeapons(delta);
         if (mouseHeld) {
@@ -80,6 +82,7 @@ public class Player extends EntityDynamic {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
+        weapon.render(batch, camera, this);
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
         getSprite().setRotation(getPlayerAngle());
         getSprite().draw(batch);
@@ -110,13 +113,20 @@ public class Player extends EntityDynamic {
     public void setMouseHeld(boolean mouseHeld) {
         this.mouseHeld = mouseHeld;
     }
-
+    public Vector2 getMouseCoords() {
+        return mouseCoords;
+    }
     public boolean isMouseHeld() {
         return mouseHeld;
     }
 
     public void setMouseCoords(float x, float y) {
         mouseCoords.set(x, y);
+    }
+    private void updateMouseCoords(){
+        Vector3 mouseCoordinatos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        gameWorld.getCamera().unproject(mouseCoordinatos);
+        setMouseCoords(mouseCoordinatos.x, mouseCoordinatos.y);
     }
 
     //Rotation of player
