@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
 public abstract class EntityDynamic extends BaseDynamicBody {
@@ -23,9 +24,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected boolean moveRight = false;
     protected boolean moveLeft = false;
 
-    public EntityDynamic(World world, float x, float y, String path, float mass, float radius) {
-        super(world, x, y, mass, radius);
-        this.sprite = new Sprite(new Texture(path));
+    public EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+        super(gameWorld, x, y, mass, radius);
+        this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
         sprite.setSize(radius * 2, radius * 2);
     }
 
@@ -43,12 +44,15 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void setMoveUp(boolean moveUp) {
         this.moveUp = moveUp;
     }
+
     public void setMoveDown(boolean moveDown) {
         this.moveDown = moveDown;
     }
+
     public void setMoveRight(boolean moveRight) {
         this.moveRight = moveRight;
     }
+
     public void setMoveLeft(boolean moveLeft) {
         this.moveLeft = moveLeft;
     }
@@ -57,19 +61,21 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public Sprite getSprite() {
         return sprite;
     }
+
     public Body getBody() {
         return body;
     }
 
     //Health
-    public int getHealth(){
+    public int getHealth() {
         return health;
     }
-    public void reduceHealth(int amount){
+
+    public void reduceHealth(int amount) {
         health = health - amount;
     }
 
-    public boolean isDead(){
+    public boolean isDead() {
         return health <= 0;
     }
 
@@ -77,6 +83,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public ENTITY_STATE getEntityState() {
         return entityState;
     }
+
     public void setEntityState(ENTITY_STATE playerState) {
         this.entityState = playerState;
     }
@@ -85,10 +92,12 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void setPlanetBody(Body planetBody) {
         this.planetBody = planetBody;
     }
+
     public void hitPlanet(Planet planet) {
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();
     }
+
     public void leftPlanet() {
         entityState = ENTITY_STATE.JUMPING;
     }

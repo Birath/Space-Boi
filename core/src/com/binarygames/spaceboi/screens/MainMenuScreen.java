@@ -56,8 +56,8 @@ public class MainMenuScreen implements Screen {
         loadStyles();
 
         // Menu background
-        backgroundImage = new Image(new Texture(Gdx.files.internal("space_boi_menu_placeholder.jpg")));
-        backgroundImage.setOrigin(backgroundImage.getWidth()/2, backgroundImage.getHeight()/2);
+        backgroundImage = new Image(game.getAssetManager().get("menu/space_boi_menu_placeholder.jpg", Texture.class));
+        backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);
 
@@ -73,8 +73,7 @@ public class MainMenuScreen implements Screen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO GOTO loadingscreen
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LoadingScreen(game));
                 dispose();
             }
         });
@@ -91,8 +90,6 @@ public class MainMenuScreen implements Screen {
         });
 
         stage.addActor(settingsButton);
-
-
 
 
         // Quit Button
@@ -157,7 +154,7 @@ public class MainMenuScreen implements Screen {
 
     private void loadFonts() {
         // Title font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = 72;

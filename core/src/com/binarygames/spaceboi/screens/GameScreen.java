@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
 
         //camera = new OrthographicCamera();
 
-        gameUI = new GameUI();
+        gameUI = new GameUI(game);
         inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 

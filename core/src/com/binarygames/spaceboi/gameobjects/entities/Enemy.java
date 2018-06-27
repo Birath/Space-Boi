@@ -10,7 +10,7 @@ public class Enemy extends EntityDynamic {
 
     private Vector2 toPlanet = new Vector2(0, 0);
     private Vector2 toPlayer = new Vector2(0, 0);
-    private Vector2 perpen = new Vector2(0,0);
+    private Vector2 perpen = new Vector2(0, 0);
     private GameWorld gameWorld;
     private Player player;
 
@@ -19,15 +19,16 @@ public class Enemy extends EntityDynamic {
     private float moveSpeed = 5;
 
 
-    public Enemy(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld){
-        super(world, x, y, path, mass, radius);
+    public Enemy(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
+        super(gameWorld, x, y, path, mass, radius);
         this.gameWorld = gameWorld;
         player = gameWorld.getPlayer();
         body.setUserData(this);
 
         this.health = 100;
-        this.weapon = new Machinegun(world, gameWorld, this);
+        this.weapon = new Machinegun(gameWorld, this);
     }
+
     @Override
     public void update(float delta) {
         updateToPlanet();
@@ -38,7 +39,7 @@ public class Enemy extends EntityDynamic {
             perpen.setLength2(1);
             perpen.scl(moveSpeed);
 
-            if (Shoot()){
+            if (Shoot()) {
 
             }
             //MOVE
@@ -51,30 +52,32 @@ public class Enemy extends EntityDynamic {
             }
         }
     }
+
     private void updateToPlanet() {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
         toPlanet.scl(50);
     }
-    private void updateWalkingDirection(){
+
+    private void updateWalkingDirection() {
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
 
         float angle = perpen.angle(toPlayer);
-        if(Math.abs(angle) < 90){
+        if (Math.abs(angle) < 90) {
             moveLeft = false;
             moveRight = true;
-        }
-        else{
+        } else {
             moveRight = false;
             moveLeft = true;
         }
     }
-    private boolean Shoot(){
+
+    private boolean Shoot() {
         //Calculating if shooting is to happen
         Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
         float angle = awayFromPlanet.angle(toPlayer);
 
-        if(Math.abs(angle) < 110){
+        if (Math.abs(angle) < 110) {
             Vector2 recoil = new Vector2(-toPlayer.x, -toPlayer.y);
             recoil.setLength2(1);
 

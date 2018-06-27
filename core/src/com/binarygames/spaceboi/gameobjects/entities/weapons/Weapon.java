@@ -34,9 +34,9 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
-    public Weapon(World aWorld, GameWorld aGameWorld, EntityDynamic shooter) {
-        this.world = aWorld;
-        this.gameWorld = aGameWorld;
+    public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
+        this.world = gameWorld.getWorld();
+        this.gameWorld = gameWorld;
         this.shooter = shooter;
 
         reloading = false;
@@ -94,6 +94,7 @@ public abstract class Weapon {
             return 0;
         }
     }
+
     public String toString() {
         return getClass().getName();
     }

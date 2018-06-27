@@ -11,15 +11,15 @@ public class Grenade extends Bullet {
     private int shrapnelAmount = 10;
     private Vector2 shrapnelPosition = getBody().getPosition();
 
-    private String shrapnelPath = "playerShip.png";
+    private String shrapnelPath = "game/entities/player/playerShip.png";
     private Vector2 shrapnelSpeed = new Vector2(2, 0);
     private float shrapnelMass = 2;
     private float shrapnelRadius = 2;
     private long shrapnelRemoveDelay = 0;
     private int shrapnelDamage = 1;
 
-    public Grenade(World world, float x, float y, String path, Vector2 speed, GameWorld gameWorld, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
-        super(world, x, y, path, speed, gameWorld, mass, radius, removeDelay, damage, shooter);
+    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
+        super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter);
     }
 
     @Override
@@ -27,9 +27,9 @@ public class Grenade extends Bullet {
         // Grenade explosion
         System.out.println("REMOVE");
         // TODO fixa det problem som finns här pls
-        new Bullet(world, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed, gameWorld, shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
+        new Bullet(gameWorld, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed, shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
         for (int i = 1; i + 1 < shrapnelAmount; i++) {
-            new Bullet(world, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed.rotate(360 / i), gameWorld, shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
+            new Bullet(gameWorld, getBody().getPosition().x + rad, getBody().getPosition().y + rad, shrapnelPath, shrapnelSpeed.rotate(360 / i), shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
         }
     }
 

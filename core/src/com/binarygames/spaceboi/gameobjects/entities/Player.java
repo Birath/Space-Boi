@@ -30,15 +30,15 @@ public class Player extends EntityDynamic {
 
     private int jumpHeight = 50;
 
-    public Player(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
-        super(world, x, y, path, mass, radius);
+    public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+        super(gameWorld, x, y, path, mass, radius);
         body.setUserData(this);
         this.gameWorld = gameWorld;
 
         weaponList = new ArrayList<>();
-        weaponList.add(new Shotgun(world, gameWorld, this));
-        weaponList.add(new Machinegun(world, gameWorld, this));
-        weaponList.add(new GrenadeLauncher(world, gameWorld, this));
+        weaponList.add(new Shotgun(gameWorld, this));
+        weaponList.add(new Machinegun(gameWorld, this));
+        weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
         this.health = 100;
     }
@@ -85,7 +85,7 @@ public class Player extends EntityDynamic {
         getSprite().draw(batch);
     }
 
-    private void Shoot(){
+    private void Shoot() {
         Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
         recoil.setLength2(1);
 
@@ -99,8 +99,9 @@ public class Player extends EntityDynamic {
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
         weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
     }
-    private void updateWeapons(float delta){
-        for(Weapon weaponObject : weaponList){
+
+    private void updateWeapons(float delta) {
+        for (Weapon weaponObject : weaponList) {
             weaponObject.update(delta);
         }
     }
@@ -113,6 +114,7 @@ public class Player extends EntityDynamic {
     public boolean isMouseHeld() {
         return mouseHeld;
     }
+
     public void setMouseCoords(float x, float y) {
         mouseCoords.set(x, y);
     }
@@ -123,9 +125,11 @@ public class Player extends EntityDynamic {
         toPlanet.setLength2(1);
         toPlanet.scl(jumpHeight);
     }
+
     public float getPlayerAngle() {
         return playerAngle + 90; // TODO fix magic number
     }
+
     public void setPlayerAngle(float angle) {
         playerAngle = angle;
     }
@@ -135,20 +139,24 @@ public class Player extends EntityDynamic {
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
     }
+
     public Planet getClosestPlanet() {
         return closestPlanet;
     }
+
     public void setClosestPlanet(final Planet closestPlanet) {
         this.closestPlanet = closestPlanet;
     }
 
     //Weapon
-    public void addWeapon(Weapon weapon){
+    public void addWeapon(Weapon weapon) {
         this.weaponList.add(weapon);
     }
-    public void setWeapon(int index){
+
+    public void setWeapon(int index) {
         this.weapon = weaponList.get(index);
     }
+
     public Weapon getWeapon() {
         return weapon;
     }
