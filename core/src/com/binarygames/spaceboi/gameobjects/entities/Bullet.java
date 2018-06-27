@@ -16,8 +16,8 @@ public class Bullet extends EntityDynamic {
     private EntityDynamic shooter;
     private boolean hasHitPlanet = false;
 
-    public Bullet(World world, float x, float y, String path, Vector2 speed, GameWorld gameWorld, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
-        super(world, x, y, path, mass, radius);
+    public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
+        super(gameWorld, x, y, path, mass, radius);
         this.removeDelay = removeDelay;
         body.setUserData(this);
 

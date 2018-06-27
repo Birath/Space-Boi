@@ -1,17 +1,26 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
+
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public abstract class Weapon {
 
     protected World world;
     protected GameWorld gameWorld;
-    private Sprite sprite;
+    protected Sprite sprite;
     protected String path;
+    protected float radius;
+
     protected EntityDynamic shooter;
 
     protected int damage;
@@ -34,15 +43,13 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
-    public Weapon(World aWorld, GameWorld aGameWorld, EntityDynamic shooter) {
-        this.world = aWorld;
-        this.gameWorld = aGameWorld;
+    public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
+        this.world = gameWorld.getWorld();
+        this.gameWorld = gameWorld;
         this.shooter = shooter;
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
-        //this.sprite = new Sprite(new Texture(path)); - Sprites shall be added later
-        //sprite.setSize(radius * 2, radius * 2);
     }
 
     public void update(float delta) {
@@ -94,7 +101,23 @@ public abstract class Weapon {
             return 0;
         }
     }
+
     public String toString() {
         return getClass().getName();
+    }
+    public void render(SpriteBatch batch, OrthographicCamera camera, Player player) {
+        Vector2 weaponPosition = new Vector2(player.getBody().getPosition().x * PPM - player.getMouseCoords().x,
+                player.getBody().getPosition().y * PPM - player.getMouseCoords().y);
+        weaponPosition.setLength2(1);
+        weaponPosition.scl(-(player.getRad() * PPM));
+
+        sprite.setPosition(player.getBody().getPosition().x * PPM - sprite.getWidth() / 2 + weaponPosition.x,
+                player.getBody().getPosition().y * PPM - sprite.getHeight() / 2 + weaponPosition.y);
+
+        Vector2 relativeVector = player.getMouseCoords().sub(sprite.getX(), sprite.getY());
+        float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        sprite.setRotation(angleToMouse - 90);
+
+        sprite.draw(batch);
     }
 }

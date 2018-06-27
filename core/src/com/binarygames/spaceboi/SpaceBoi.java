@@ -9,13 +9,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.binarygames.spaceboi.screens.Fonts;
-import com.binarygames.spaceboi.screens.MainMenuScreen;
+import com.binarygames.spaceboi.screens.StartupScreen;
 
 public class SpaceBoi extends Game {
 
     private SpriteBatch batch;
 
     private AssetManager assetManager;
+    private Assets assets;
 
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
@@ -31,12 +32,15 @@ public class SpaceBoi extends Game {
         batch = new SpriteBatch();
         font = new Fonts();
 
+        // Assets
         assetManager = new AssetManager();
+        assets = new Assets(assetManager);
+        assets.loadMenuAssets();
 
         debugFont = new BitmapFont();
         loadDebugFont();
 
-        this.setScreen(new MainMenuScreen(this));
+        this.setScreen(new StartupScreen(this));
     }
 
     @Override
@@ -57,12 +61,16 @@ public class SpaceBoi extends Game {
         return assetManager;
     }
 
+    public Assets getAssets() {
+        return assets;
+    }
+
     public GamePreferences getPreferences() {
         return preferences;
     }
 
     private void loadDebugFont() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = 20;

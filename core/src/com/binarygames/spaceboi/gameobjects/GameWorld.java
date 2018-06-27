@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,6 +19,7 @@ import java.util.List;
 public class GameWorld {
 
     private SpaceBoi game;
+    private Camera camera;
     private World world;
     private ParticleHandler particleHandler;
     private Player player;
@@ -29,27 +31,28 @@ public class GameWorld {
 
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
 
-    public GameWorld(SpaceBoi game, World world) {
+    public GameWorld(SpaceBoi game, World world, Camera camera) {
         this.game = game;
         this.world = world;
+        this.camera = camera;
 
-        particleHandler = new ParticleHandler();
+        particleHandler = new ParticleHandler(game);
 
         dynamicEntities = new ArrayList<>();
         staticEntities = new ArrayList<>();
     }
 
     public void createWorld() {
-        Player player = new Player(world, 0, 0, "playerShip.png", 500, 10, this);
+        Player player = new Player(this, 0, 0, "game/entities/player/playerShip.png", 500, 10);
         addDynamicEntity(player);
         this.player = player;
 
-        Enemy enemy = new Enemy(world, 250, 30, "moon.png", 500, 10, this);
+        Enemy enemy = new Enemy(world, 250, 30, "game/entities/planets/moon.png", 500, 10, this);
         addDynamicEntity(enemy);
 
-        Planet planet1 = new Planet(world, 10, 30, "moon.png", (float) Math.pow(3 * 10, 7), 100);
+        Planet planet1 = new Planet(this, 10, 30, "game/entities/planets/moon.png", (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(world, 230, 30, "moon.png", (float) Math.pow(3 * 10, 7), 75);
+        Planet planet2 = new Planet(this, 230, 30, "game/entities/planets/moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
         world.setContactListener(new EntityContactListener());
@@ -189,8 +192,20 @@ public class GameWorld {
         return player;
     }
 
+    public SpaceBoi getGame() {
+        return game;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
     public ParticleHandler getParticleHandler() {
         return particleHandler;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
 }

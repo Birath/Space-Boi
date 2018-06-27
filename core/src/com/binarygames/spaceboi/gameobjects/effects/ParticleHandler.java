@@ -6,21 +6,26 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-
-import javax.xml.soap.Text;
+import com.binarygames.spaceboi.SpaceBoi;
 
 public class ParticleHandler {
+
+    private SpaceBoi game;
 
     private ParticleEffectPool bloodEffectPool;
     private Array<ParticleEffectPool.PooledEffect> effects;
 
-    public ParticleHandler() {
+    public ParticleHandler(SpaceBoi game) {
+        this.game = game;
+
         effects = new Array();
 
-        TextureAtlas effectsAtlas = new TextureAtlas(Gdx.files.internal("particles/particle_effects.atlas"));
+        TextureAtlas effectsAtlas = game.getAssetManager().get("game/particles/particle_effects.atlas", TextureAtlas.class);
 
-        ParticleEffect bloodEffect = new ParticleEffect();
-        bloodEffect.load(Gdx.files.internal("particles/blood.p"), effectsAtlas);
+        // ParticleEffect bloodEffect = new ParticleEffect();
+        // bloodEffect.load(Gdx.files.internal("particles/blood.p"), effectsAtlas);
+        ParticleEffect bloodEffect = game.getAssetManager().get("game/particles/blood.p", ParticleEffect.class);
+        bloodEffect.loadEmitterImages(effectsAtlas);
         bloodEffect.scaleEffect(0.1f);
         bloodEffectPool = new ParticleEffectPool(bloodEffect, 1, 50);
     }

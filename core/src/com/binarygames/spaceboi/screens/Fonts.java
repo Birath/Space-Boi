@@ -13,8 +13,8 @@ public class Fonts {
     private BitmapFont titleFont;
     private BitmapFont mainMenuButtonFont;
 
-    public Fonts(){
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
+    public Fonts() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         // Button font

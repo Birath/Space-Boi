@@ -121,9 +121,6 @@ public class PlayerInputProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             player.setMouseHeld(true);
-
-            Vector3 mouseCoords = getMouseCoords(screenX, screenY);
-            player.setMouseCoords(mouseCoords.x, mouseCoords.y);
             return true;
         }
         return false;
@@ -140,18 +137,6 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (player.isMouseHeld()) {
-            Vector3 mouseCoords = getMouseCoords(screenX, screenY);
-            player.setMouseCoords(mouseCoords.x, mouseCoords.y);
-            return true;
-        }
-
         return false;
-    }
-
-    private Vector3 getMouseCoords(int screenX, int screenY) {
-        Vector3 mouseCoords = new Vector3(screenX, screenY, 0);
-        camera.unproject(mouseCoords);
-        return mouseCoords;
     }
 }

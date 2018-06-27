@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 
 public class Planet extends EntityStatic {
@@ -12,8 +13,8 @@ public class Planet extends EntityStatic {
     private ShapeRenderer shapeRenderer;
     public static final int GRAVITY_RADIUS = 3;
 
-    public Planet(World aWorld, float x, float y, String path, float mass, float radius) {
-        super(aWorld, x, y, path, mass, radius);
+    public Planet(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+        super(gameWorld, x, y, path, mass, radius);
         body.setUserData(this);
 
         shapeRenderer = new ShapeRenderer();

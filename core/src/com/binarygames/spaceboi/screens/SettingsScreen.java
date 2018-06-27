@@ -3,6 +3,7 @@ package com.binarygames.spaceboi.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -20,7 +21,7 @@ public class SettingsScreen extends BaseScreen implements Screen {
         table.setFillParent(true);
 
         stage.addActor(table);
-        Skin uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
+        Skin uiSkin = game.getAssetManager().get("menu/uiskin.json", Skin.class);
         final Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, uiSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
         musicVolumeSlider.addListener(event -> {
@@ -45,9 +46,9 @@ public class SettingsScreen extends BaseScreen implements Screen {
         });
 
         final Label title = new Label("Settings", titleStyle);
-        final Label musicVolumeLabel = new Label("Music volume", uiSkin);
-        final Label musicCheckBoxLabel = new Label("Music enabled", uiSkin);
-        table.row();
+        final Label musicVolumeLabel = new Label("Music volume", titleStyle);
+        final Label musicCheckBoxLabel = new Label("Music enabled", titleStyle);
+
         table.add(title);
         table.row().pad(10, 0, 10, 0);
         table.add(musicVolumeLabel).left();

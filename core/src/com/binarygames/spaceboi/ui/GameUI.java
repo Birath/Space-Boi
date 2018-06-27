@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
@@ -39,7 +40,7 @@ public class GameUI {
 
     private Fonts fonts;
 
-    public GameUI() {
+    public GameUI(SpaceBoi game) {
         stage = new Stage();
         fonts = new Fonts();
 
@@ -48,29 +49,29 @@ public class GameUI {
         health = 5;
 
         // Health icon
-        texture = new Texture("health_icon.png");
+        texture = game.getAssetManager().get("game/ui/health_icon.png", Texture.class);
         image = new Image(texture);
         image.setSize(50, 50);
-        image.setPosition(Gdx.graphics.getWidth()*16/20 - image.getImageWidth(), Gdx.graphics.getHeight()/20 - image.getImageHeight());
-        image.setOrigin(image.getX() - image.getWidth()/2, image.getY() - image.getHeight()/2);
+        image.setPosition(Gdx.graphics.getWidth() * 16 / 20 - image.getImageWidth(), Gdx.graphics.getHeight() / 20 - image.getImageHeight());
+        image.setOrigin(image.getX() - image.getWidth() / 2, image.getY() - image.getHeight() / 2);
         stage.addActor(image);
 
         // Health indicator
         label = new Label(Float.toString(image.getOriginY()), labelStyle);
-        label.setPosition(Gdx.graphics.getWidth()*18/20 - label.getWidth(), Gdx.graphics.getHeight()/10 - label.getHeight());
+        label.setPosition(Gdx.graphics.getWidth() * 18 / 20 - label.getWidth(), Gdx.graphics.getHeight() / 10 - label.getHeight());
         stage.addActor(label);
 
         // Jet pack fuel bar
         jetPackFuel = 75; //
         jetPackBar = new ProgressBar(0, 100, 1, true, jetPackBarStyle);
         jetPackBar.setValue(jetPackFuel);
-        jetPackBar.setBounds(Gdx.graphics.getWidth()*39/40, Gdx.graphics.getHeight()/10, 20, 100);
+        jetPackBar.setBounds(Gdx.graphics.getWidth() * 39 / 40, Gdx.graphics.getHeight() / 10, 20, 100);
         stage.addActor(jetPackBar);
 
         // Health bar
         healthBar = new ProgressBar(0, 10, 1, false, healthBarStyle);
         healthBar.setValue(health);
-        healthBar.setBounds(Gdx.graphics.getWidth()*17/20,  image.getOriginY() - healthBar.getHeight()/2, 100, 20);
+        healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2, 100, 20);
         stage.addActor(healthBar);
     }
 
@@ -138,14 +139,14 @@ public class GameUI {
         healthBarStyle = new ProgressBar.ProgressBarStyle();
         healthBarStyle.background = drawable;
 
-        pixmap = new Pixmap(20, 0 , Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(20, 0, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.ORANGE);
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
         jetPackBarStyle.knob = drawable;
 
-        pixmap = new Pixmap(0, 20 , Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
