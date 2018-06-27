@@ -14,45 +14,45 @@ public final class GamePreferences {
 
     public GamePreferences() {}
 
-    private Preferences getPrefernces() {
+    private Preferences getPreferences() {
         return Gdx.app.getPreferences(PREF_NAME);
     }
 
     public float getMusicVolume() {
-        return getPrefernces().getFloat(PREF_MUSIC_VOLUME, DEFAULT_VOLUME);
+        return getPreferences().getFloat(PREF_MUSIC_VOLUME, DEFAULT_VOLUME);
     }
 
     public void setMusicVolume(float volume) {
-        getPrefernces().putFloat(PREF_MUSIC_VOLUME, volume);
-        getPrefernces().flush();
+        getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
+        getPreferences().flush();
     }
 
-    public boolean isMusicEnabed() {
-        return getPrefernces().getBoolean(PREF_MUSIC_ENABLED, true);
+    public boolean isMusicEnabled() {
+        return getPreferences().getBoolean(PREF_MUSIC_ENABLED, true);
     }
 
     public void setMusicEnabled(boolean musicEnabled) {
-        getPrefernces().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
-        getPrefernces().flush();
+        getPreferences().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+        getPreferences().flush();
 
     }
 
     public float getSoundVolume() {
-        return getPrefernces().getFloat(PREF_SOUND_VOLUME, DEFAULT_VOLUME);
+        return getPreferences().getFloat(PREF_SOUND_VOLUME, DEFAULT_VOLUME);
     }
 
     public void setSoundVolume(float soundVolume) {
-        getPrefernces().putFloat(PREF_SOUND_VOLUME, soundVolume);
-        getPrefernces().flush();
+        getPreferences().putFloat(PREF_SOUND_VOLUME, soundVolume);
+        getPreferences().flush();
     }
 
     public boolean isSoundEnabled() {
-        return getPrefernces().getBoolean(PREF_SOUND_ENABLED, true);
+        return getPreferences().getBoolean(PREF_SOUND_ENABLED, true);
     }
 
     public void setSoundEnabled(boolean soundEnabled) {
-        getPrefernces().putBoolean(PREF_SOUND_ENABLED, soundEnabled);
-        getPrefernces().flush();
+        getPreferences().putBoolean(PREF_SOUND_ENABLED, soundEnabled);
+        getPreferences().flush();
     }
 }
 

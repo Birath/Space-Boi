@@ -6,25 +6,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
-import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
@@ -43,16 +34,12 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private World world;
 
-    private PlayerInputProcessor inputProcessor;
-
     private GameUI gameUI;
 
     private GameWorld gameWorld;
 
     private Player player;
-
-    private List<EntityDynamic> entities = new ArrayList<>();
-    private List<Planet> planets = new ArrayList<>();
+    private InputMultiplexer multiplexer;
 
     private FrameRate frameRate;
 
@@ -87,10 +74,15 @@ public class GameScreen implements Screen {
 
         gameWorld = new GameWorld(game, world);
 
+
         //Entities:
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
 
+        PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameUI.getStage());
+        multiplexer.addProcessor(inputProcessor);
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -187,12 +179,13 @@ public class GameScreen implements Screen {
     public void show() {
         //Input processor och multiplexer, hanterar användarens input
         // Flyttades så att inputsen uppdateras efter settingsscreen
-        inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(gameUI.getStage());
-        multiplexer.addProcessor(inGameMenuScreen.getStage());
-        multiplexer.addProcessor(inputProcessor);
-        Gdx.input.setInputProcessor(multiplexer);
+        if (state == GAME_RUNNING) {
+
+            Gdx.input.setInputProcessor(multiplexer);
+        } else {
+            Gdx.input.setInputProcessor(inGameMenuScreen.getStage());
+        }
+
 
     }
 
@@ -215,13 +208,18 @@ public class GameScreen implements Screen {
     public void pause() {
         if (state == GAME_RUNNING) {
             state = GAME_PAUSED;
+            System.out.println("Pausing game");
             inGameMenuScreen.createBlurredBackground();
+            Gdx.input.setInputProcessor(inGameMenuScreen.getStage());
         }
     }
 
     @Override
     public void resume() {
-        if (state == GAME_PAUSED) state = GAME_RUNNING;
+        if (state == GAME_PAUSED) {
+            Gdx.input.setInputProcessor(multiplexer);
+            state = GAME_RUNNING;
+        }
     }
 
     @Override
@@ -235,10 +233,6 @@ public class GameScreen implements Screen {
         gameUI.dispose();
         inGameMenuScreen.dispose();
         frameRate.dispose();
-    }
-
-    public void appendEntity(EntityDynamic entity) {
-        entities.add(entity);
     }
 
     public float getCameraRotation() {
