@@ -1,12 +1,17 @@
 package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.binarygames.spaceboi.gameobjects.entities.*;
+import com.binarygames.spaceboi.gameobjects.entities.Bullet;
+import com.binarygames.spaceboi.gameobjects.entities.Enemy;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 public class EntityContactListener implements ContactListener {
 
+    private GameWorld gameWorld;
 
-    public EntityContactListener() {
+    public EntityContactListener(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
     }
 
 
@@ -21,18 +26,20 @@ public class EntityContactListener implements ContactListener {
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureB.getBody().getUserData();
-            player.hitPlanet((Planet) fixtureA.getBody().getUserData());
+            Planet planet = (Planet) fixtureA.getBody().getUserData();
+            player.hitPlanet(planet);
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureA.getBody().getUserData();
-            player.hitPlanet((Planet) fixtureB.getBody().getUserData());
+            Planet planet = (Planet) fixtureB.getBody().getUserData();
+            player.hitPlanet(planet);
         }
         //Player x Bullet
         else if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Player player = (Player) fixtureB.getBody().getUserData();
-            if (bullet.getShooter() != player) {
+            if (!bullet.getShooter().equals(player)) {
                 player.reduceHealth(bullet.getDamage());
                 bullet.setHasHitPlanetTrue(); //Remove bullets only if they dont hit yourself
             }
@@ -40,7 +47,7 @@ public class EntityContactListener implements ContactListener {
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Player player = (Player) fixtureA.getBody().getUserData();
-            if (bullet.getShooter() != player) {
+            if (!bullet.getShooter().equals(player)) {
                 player.reduceHealth(bullet.getDamage());
                 bullet.setHasHitPlanetTrue();
             }
@@ -61,7 +68,7 @@ public class EntityContactListener implements ContactListener {
                 Enemy.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
-            if (bullet.getShooter() != enemy) {
+            if (!bullet.getShooter().equals(enemy)) {
                 enemy.reduceHealth(bullet.getDamage());
                 bullet.setHasHitPlanetTrue();
             }
@@ -69,7 +76,7 @@ public class EntityContactListener implements ContactListener {
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
-            if (bullet.getShooter() != enemy) {
+            if (!bullet.getShooter().equals(enemy)) {
                 enemy.reduceHealth(bullet.getDamage());
                 bullet.setHasHitPlanetTrue();
             }
@@ -97,11 +104,15 @@ public class EntityContactListener implements ContactListener {
         if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureB.getBody().getUserData();
-            player.leftPlanet();
+            if (!player.isChained()) {
+                player.leftPlanet();
+            }
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Player player = (Player) fixtureA.getBody().getUserData();
-            player.leftPlanet();
+            if (!player.isChained()) {
+                player.leftPlanet();
+            }
         }
         //Enemy x Planet
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&

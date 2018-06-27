@@ -12,7 +12,7 @@ public class StartupScreen extends BaseScreen implements Screen {
     Image startupImage;
 
     public StartupScreen(SpaceBoi game) {
-        super(game);
+        super(game, null);
 
         stage.clear();
 

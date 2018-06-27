@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class Player extends EntityDynamic {
 
     private GameWorld gameWorld;
     private Planet closestPlanet;
+    private boolean chained = false;
 
     private int jumpHeight = 50;
 
@@ -66,8 +68,15 @@ public class Player extends EntityDynamic {
 
             //JUMP
             if (moveUp) {
-                body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
-                entityState = ENTITY_STATE.JUMPING;
+                if (chained) {
+                    for (JointEdge jointEdge : body.getJointList()) {
+                        gameWorld.addJointToRemove(jointEdge.joint);
+                    }
+                    chained = false;
+                } else {
+                    body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
+                    entityState = ENTITY_STATE.JUMPING;
+                }
             }
         }
         //Aiming
@@ -148,6 +157,13 @@ public class Player extends EntityDynamic {
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
+        // Don't chain the player is holding the jump button
+        if (!moveUp) {
+            gameWorld.addJoints(new JointInfo(body, planet.getBody()));
+            Gdx.app.log("ContactListener", "Creating joint: " + this + ", " + planet);
+            chained = true;
+        }
+
     }
 
     public Planet getClosestPlanet() {
@@ -169,6 +185,10 @@ public class Player extends EntityDynamic {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public boolean isChained() {
+        return chained;
     }
 }
 

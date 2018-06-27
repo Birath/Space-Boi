@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
@@ -97,7 +96,6 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();
     }
-
     public void leftPlanet() {
         entityState = ENTITY_STATE.JUMPING;
     }

@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
+import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +31,9 @@ public class GameWorld {
     private List<EntityStatic> staticEntities;
 
     private List<EntityDynamic> addDynamicEntities = new ArrayList<>();
+
+    private Array<JointInfo> jointsToCreate = new Array<>();
+    private Array<Joint> jointsToDestroy = new Array<>();
 
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
 
@@ -55,7 +61,7 @@ public class GameWorld {
         Planet planet2 = new Planet(this, 230, 30, "game/entities/planets/moon.png", (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
-        world.setContactListener(new EntityContactListener());
+        world.setContactListener(new EntityContactListener(this));
     }
 
     public void update(float delta) {
@@ -68,6 +74,9 @@ public class GameWorld {
         removeBullets(dynamicEntities);
         removeDead(dynamicEntities);
         addDynamicEntities.clear();
+
+        createJoints();
+        removeJoints();
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
@@ -180,12 +189,42 @@ public class GameWorld {
         return closestPlanet;
     }
 
+    private void createJoints() {
+        ArrayIterator<JointInfo> jointInfoIterator = new ArrayIterator<>(jointsToCreate, true);
+        while (jointInfoIterator.hasNext()) {
+            JointInfo jointInfo = jointInfoIterator.next();
+            DistanceJointDef wd = new DistanceJointDef();
+            wd.bodyA = jointInfo.bodyA;
+            wd.bodyB = jointInfo.bodyB;
+            wd.length = wd.bodyA.getPosition().dst(wd.bodyB.getPosition());
+            wd.collideConnected = false;
+            world.createJoint(wd);
+            jointInfoIterator.remove();
+        }
+    }
+
+    private void removeJoints() {
+        for (Joint joint: jointsToDestroy) {
+            world.destroyJoint(joint);
+            joint = null;
+        }
+        jointsToDestroy.clear();
+    }
+
     public void addDynamicEntity(EntityDynamic entity) {
         addDynamicEntities.add(entity);
     }
 
     public void addStaticEntity(EntityStatic entity) {
         staticEntities.add(entity);
+    }
+
+    public void addJoints(JointInfo jointInfo) {
+        jointsToCreate.add(jointInfo);
+    }
+
+    public void addJointToRemove(Joint joint) {
+        jointsToDestroy.add(joint);
     }
 
     public Player getPlayer() {

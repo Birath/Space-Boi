@@ -17,7 +17,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
     private Label progressLabel;
 
     protected LoadingScreen(SpaceBoi game) {
-        super(game);
+        super(game, null);
 
         // Add game assets to AssetManager queue
         game.getAssets().loadGameAssets();
