@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
         inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 
-        gameWorld = new GameWorld(game, world);
+        gameWorld = new GameWorld(game, world, camera);
 
         //Entities:
         gameWorld.createWorld();

@@ -1,5 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -14,13 +16,18 @@ public class Machinegun extends Weapon {
         this.bulletMass = 10;
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
-        this.path = "playerShip.png";
         this.recoil = 10;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 0.1f;
         this.magSize = this.currentMag = 25;
         this.reloadTime = 2;
         this.damage = 5;
+
+        this.path = "playerShip.png";
+        this.radius = 5;
+        this.sprite = new Sprite(new Texture(path));
+        sprite.setSize(radius * 2, radius * 2);
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
     }
 
     @Override
