@@ -61,7 +61,7 @@ public class Assets {
         Ok hello this is code for non-hardcoded loading of files
 
         FileHandle fileHandle;
-        fileHandle = Gdx.files.internal("game/entities/planets");
+        fileHandle = Gdx.files.internal("game/entities/planets/");
         for (FileHandle entry : fileHandle.list()) {
             if (entry.name().endsWith(".png")) {
                 assetManager.load(fileHandle.path() + "/" + entry.name(), Texture.class);

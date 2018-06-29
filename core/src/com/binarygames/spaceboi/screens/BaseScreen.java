@@ -20,20 +20,20 @@ public abstract class BaseScreen {
 
     protected OrthographicCamera camera;
 
-    protected Viewport viewport;
+    private Viewport viewport;
 
-    protected Stage stage;
+    Stage stage;
 
-    protected BitmapFont titleFont;
-    protected Label.LabelStyle titleStyle;
+    BitmapFont titleFont;
+    Label.LabelStyle titleStyle;
 
-    protected BitmapFont buttonFont;
-    protected TextButton.TextButtonStyle buttonStyle;
+    BitmapFont buttonFont;
+    TextButton.TextButtonStyle buttonStyle;
 
-    protected Screen previousScreen;
+    private Screen previousScreen;
 
 
-    protected BaseScreen(SpaceBoi game, Screen previousScreen) {
+    BaseScreen(SpaceBoi game, Screen previousScreen) {
         this.game = game;
         this.previousScreen = previousScreen;
 
@@ -47,7 +47,6 @@ public abstract class BaseScreen {
         loadFonts();
         loadStyles();
     }
-
 
     private void loadFonts() {
         // Title font
@@ -85,4 +84,7 @@ public abstract class BaseScreen {
         buttonStyle.font = buttonFont;
     }
 
+    public Screen getPreviousScreen() {
+        return previousScreen;
+    }
 }

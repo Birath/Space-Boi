@@ -9,7 +9,7 @@ import com.binarygames.spaceboi.SpaceBoi;
 
 public class StartupScreen extends BaseScreen implements Screen {
 
-    Image startupImage;
+    private Image startupImage;
 
     public StartupScreen(SpaceBoi game) {
         super(game, null);

@@ -89,7 +89,6 @@ public class MainMenuScreen implements Screen {
 
         stage.addActor(settingsButton);
 
-
         // Quit Button
         TextButton quitButton = new TextButton("Quit", buttonStyle);
         quitButton.setPosition(stage.getWidth() / 2 - quitButton.getWidth() / 2,
@@ -101,6 +100,17 @@ public class MainMenuScreen implements Screen {
             }
         });
         stage.addActor(quitButton);
+
+        // Credits Button
+        TextButton creditsButton = new TextButton("Credits", buttonStyle);
+        creditsButton.setPosition(10, 10);
+        creditsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new CreditsScreen(game, MainMenuScreen.this));
+            }
+        });
+        stage.addActor(creditsButton);
     }
 
     @Override
@@ -117,9 +127,9 @@ public class MainMenuScreen implements Screen {
 
         stage.draw();
 
-        game.getBatch().begin();
-        game.debugFont.draw(game.getBatch(), "MAIN_MENU", 5, 20);
-        game.getBatch().end();
+        //game.getBatch().begin();
+        //game.debugFont.draw(game.getBatch(), "MAIN_MENU", 5, 20);
+        //game.getBatch().end();
     }
 
     @Override
