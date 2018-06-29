@@ -8,6 +8,44 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
 
+    // Locations to all game assets. Use these addresses when creating new objects from assets.
+    // This could be divided up into subdivisions to make access clearer.
+
+    // Menu assets
+    public static final String MENU_BACKGROUND_IMAGE = "menu/space_boi_menu_placeholder.jpg";
+    public static final String MENU_UI_SKIN = "menu/uiskin.json";
+
+    /*
+        Entity assets
+     */
+
+    // Planets
+    public static final String PLANET_MOON = "game/entities/planets/moon.png";
+
+    // Player
+    public static final String PLAYER = "game/entities/player/playerShip.png";
+
+    /*
+        Environment
+     */
+
+    // TODO
+
+    /*
+        Particles
+     */
+
+    public static final String PARTICLE_ATLAS = "game/particles/particle_effects.atlas";
+
+    // Blood
+    public static final String PARTICLE_BLOOD = "game/particles/blood.p";
+
+    /*
+        UI
+     */
+
+    public static final String UI_HEALTH_ICON = "game/ui/health_icon.png";
+
     private AssetManager assetManager;
 
     public Assets(AssetManager assetManager) {
@@ -19,9 +57,9 @@ public class Assets {
             General Menu Assets
          */
 
-        assetManager.load("menu/space_boi_menu_placeholder.jpg", Texture.class);
+        assetManager.load(MENU_BACKGROUND_IMAGE, Texture.class);
 
-        assetManager.load("menu/uiskin.json", Skin.class);
+        assetManager.load(MENU_UI_SKIN, Skin.class);
     }
 
     public void loadGameAssets() {
@@ -30,10 +68,10 @@ public class Assets {
          */
 
         // Planets
-        assetManager.load("game/entities/planets/moon.png", Texture.class);
+        assetManager.load(PLANET_MOON, Texture.class);
 
         // Player
-        assetManager.load("game/entities/player/playerShip.png", Texture.class);
+        assetManager.load(PLAYER, Texture.class);
 
         /*
             Environment
@@ -45,16 +83,16 @@ public class Assets {
             Particles
          */
 
-        assetManager.load("game/particles/particle_effects.atlas", TextureAtlas.class);
+        assetManager.load(PARTICLE_ATLAS, TextureAtlas.class);
 
         // Blood
-        assetManager.load("game/particles/blood.p", ParticleEffect.class);
+        assetManager.load(PARTICLE_BLOOD, ParticleEffect.class);
 
         /*
             UI
          */
 
-        assetManager.load("game/ui/health_icon.png", Texture.class);
+        assetManager.load(UI_HEALTH_ICON, Texture.class);
     }
 
     /*

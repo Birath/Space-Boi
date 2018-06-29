@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
 public class ParticleHandler {
@@ -20,11 +21,11 @@ public class ParticleHandler {
 
         effects = new Array();
 
-        TextureAtlas effectsAtlas = game.getAssetManager().get("game/particles/particle_effects.atlas", TextureAtlas.class);
+        TextureAtlas effectsAtlas = game.getAssetManager().get(Assets.PARTICLE_ATLAS, TextureAtlas.class);
 
         // ParticleEffect bloodEffect = new ParticleEffect();
         // bloodEffect.load(Gdx.files.internal("particles/blood.p"), effectsAtlas);
-        ParticleEffect bloodEffect = game.getAssetManager().get("game/particles/blood.p", ParticleEffect.class);
+        ParticleEffect bloodEffect = game.getAssetManager().get(Assets.PARTICLE_BLOOD, ParticleEffect.class);
         bloodEffect.loadEmitterImages(effectsAtlas);
         bloodEffect.scaleEffect(0.1f);
         bloodEffectPool = new ParticleEffectPool(bloodEffect, 1, 50);

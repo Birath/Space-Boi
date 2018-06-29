@@ -3,7 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
@@ -15,7 +15,7 @@ public class GrenadeLauncher extends Weapon {
         this.bulletMass = 20;
         this.bulletRadius = 4f;
         this.bulletSpeed = 5;
-        this.path = "game/entities/player/playerShip.png";
+        this.path = Assets.PLAYER;
         this.recoil = 35;
         this.removeBulletDelay = 2000;
         this.timeBetweenShots = 1;

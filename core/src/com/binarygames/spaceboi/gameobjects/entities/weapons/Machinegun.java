@@ -3,7 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
@@ -16,7 +16,7 @@ public class Machinegun extends Weapon {
         this.bulletMass = 10;
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
-        this.path = "game/entities/player/playerShip.png";
+        this.path = Assets.PLAYER;
         this.recoil = 10;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 0.1f;

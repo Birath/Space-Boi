@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
 public class SettingsScreen extends BaseScreen implements Screen {
@@ -21,7 +22,7 @@ public class SettingsScreen extends BaseScreen implements Screen {
         table.setFillParent(true);
 
         stage.addActor(table);
-        Skin uiSkin = game.getAssetManager().get("menu/uiskin.json", Skin.class);
+        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         final Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, uiSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
         musicVolumeSlider.addListener(event -> {

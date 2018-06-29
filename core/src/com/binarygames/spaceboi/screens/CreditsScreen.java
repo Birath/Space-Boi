@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
 public class CreditsScreen extends BaseScreen implements Screen {
@@ -23,7 +24,7 @@ public class CreditsScreen extends BaseScreen implements Screen {
         stage.clear();
 
         // Menu background
-        Image backgroundImage = new Image(game.getAssetManager().get("menu/space_boi_menu_placeholder.jpg", Texture.class));
+        Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);

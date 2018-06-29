@@ -1,7 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
@@ -11,7 +11,7 @@ public class Grenade extends Bullet {
     private int shrapnelAmount = 10;
     private Vector2 shrapnelPosition = getBody().getPosition();
 
-    private String shrapnelPath = "game/entities/player/playerShip.png";
+    private String shrapnelPath = Assets.PLAYER;
     private Vector2 shrapnelSpeed = new Vector2(2, 0);
     private float shrapnelMass = 2;
     private float shrapnelRadius = 2;

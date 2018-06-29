@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
@@ -50,16 +51,16 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(this, 0, 0, "game/entities/player/playerShip.png", 500, 10);
+        Player player = new Player(this, 0, 0, Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
 
-        Enemy enemy = new Enemy(world, 250, 30, "game/entities/planets/moon.png", 500, 10, this);
+        Enemy enemy = new Enemy(world, 250, 30, Assets.PLANET_MOON, 500, 10, this);
         addDynamicEntity(enemy);
 
-        Planet planet1 = new Planet(this, 10, 30, "game/entities/planets/moon.png", (float) Math.pow(3 * 10, 7), 100);
+        Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
-        Planet planet2 = new Planet(this, 230, 30, "game/entities/planets/moon.png", (float) Math.pow(3 * 10, 7), 75);
+        Planet planet2 = new Planet(this, 230, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
 
         world.setContactListener(new EntityContactListener(this));
@@ -205,7 +206,7 @@ public class GameWorld {
     }
 
     private void removeJoints() {
-        for (Joint joint: jointsToDestroy) {
+        for (Joint joint : jointsToDestroy) {
             world.destroyJoint(joint);
             joint = null;
         }

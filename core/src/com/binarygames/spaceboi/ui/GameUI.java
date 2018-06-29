@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.screens.Fonts;
 
@@ -49,7 +50,7 @@ public class GameUI {
         health = 5;
 
         // Health icon
-        texture = game.getAssetManager().get("game/ui/health_icon.png", Texture.class);
+        texture = game.getAssetManager().get(Assets.UI_HEALTH_ICON, Texture.class);
         image = new Image(texture);
         image.setSize(50, 50);
         image.setPosition(Gdx.graphics.getWidth() * 16 / 20 - image.getImageWidth(), Gdx.graphics.getHeight() / 20 - image.getImageHeight());
