@@ -32,8 +32,6 @@ public class Player extends EntityDynamic {
     private Planet closestPlanet;
     private boolean chained = false;
 
-    private int jumpHeight = 50;
-
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
         body.setUserData(this);
@@ -45,6 +43,8 @@ public class Player extends EntityDynamic {
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
         this.health = 100;
+        this.jumpHeight = 50;
+        this.moveSpeed = 20;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Player extends EntityDynamic {
 
             Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
             perpen.setLength2(1);
-            perpen.scl(20);
+            perpen.scl(moveSpeed);
 
             //MOVE
             if (moveRight) {

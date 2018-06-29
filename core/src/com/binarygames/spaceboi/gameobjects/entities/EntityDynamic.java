@@ -23,6 +23,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected boolean moveRight = false;
     protected boolean moveLeft = false;
 
+    protected int jumpHeight;
+    protected int moveSpeed;
+
     public EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, mass, radius);
         this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
@@ -90,6 +93,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     //Planet interaction
     public void setPlanetBody(Body planetBody) {
         this.planetBody = planetBody;
+    }
+    public Body getPlanetBody() {
+        return planetBody;
     }
 
     public void hitPlanet(Planet planet) {

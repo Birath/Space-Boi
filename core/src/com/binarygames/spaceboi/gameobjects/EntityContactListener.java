@@ -2,7 +2,7 @@ package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.Bullet;
-import com.binarygames.spaceboi.gameobjects.entities.Enemy;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
