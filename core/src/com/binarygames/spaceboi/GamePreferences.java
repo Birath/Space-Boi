@@ -12,7 +12,11 @@ public final class GamePreferences {
     private static final String PREF_NAME = "spaceboi";
     public static final float DEFAULT_VOLUME = 0.5f;
 
-    public GamePreferences() {}
+    private SpaceBoi game;
+
+    public GamePreferences(SpaceBoi game) {
+        this.game = game;
+    }
 
     private Preferences getPreferences() {
         return Gdx.app.getPreferences(PREF_NAME);
@@ -25,6 +29,8 @@ public final class GamePreferences {
     public void setMusicVolume(float volume) {
         getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
         getPreferences().flush();
+
+        game.getMusicManager().setVolume(volume);
     }
 
     public boolean isMusicEnabled() {
@@ -35,6 +41,11 @@ public final class GamePreferences {
         getPreferences().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
         getPreferences().flush();
 
+        if (musicEnabled) {
+            game.getMusicManager().play(Assets.MENU_BACKGROUND_MUSIC);
+        } else {
+            game.getMusicManager().stop();
+        }
     }
 
     public float getSoundVolume() {

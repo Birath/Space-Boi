@@ -42,6 +42,9 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final SpaceBoi game) {
         this.game = game;
 
+        // Menu music
+        game.getMusicManager().play(Assets.MENU_BACKGROUND_MUSIC);
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, camera);
         viewport.apply();

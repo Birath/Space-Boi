@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,7 +13,14 @@ public class Assets {
     // This could be divided up into subdivisions to make access clearer.
 
     // Menu assets
+
+    // Images
     public static final String MENU_BACKGROUND_IMAGE = "menu/space_boi_menu_placeholder.jpg";
+
+    // Audio
+    public static final String MENU_BACKGROUND_MUSIC = "menu/Flume - Helix.mp3";
+
+    // Data
     public static final String MENU_UI_SKIN = "menu/uiskin.json";
 
     /*
@@ -60,6 +68,8 @@ public class Assets {
         assetManager.load(MENU_BACKGROUND_IMAGE, Texture.class);
 
         assetManager.load(MENU_UI_SKIN, Skin.class);
+
+        assetManager.load(MENU_BACKGROUND_MUSIC, Music.class);
     }
 
     public void loadGameAssets() {
