@@ -76,6 +76,10 @@ public abstract class Weapon {
         //depends on sub-weapon
     }
 
+    public void timeBetweenShotsStart() {
+
+    }
+
     public boolean canShoot() {
         return (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished);
     }
@@ -91,6 +95,7 @@ public abstract class Weapon {
             // Do between shots delay
             timeBetweenShotsIsFinished = false;
             currentTimeBetweenShots = 0;
+            timeBetweenShotsStart();
         }
     }
 
@@ -105,6 +110,7 @@ public abstract class Weapon {
     public String toString() {
         return getClass().getName();
     }
+
     public void render(SpriteBatch batch, OrthographicCamera camera, Player player) {
         Vector2 weaponPosition = new Vector2(player.getBody().getPosition().x * PPM - player.getMouseCoords().x,
                 player.getBody().getPosition().y * PPM - player.getMouseCoords().y);

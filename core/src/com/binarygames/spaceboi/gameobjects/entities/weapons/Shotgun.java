@@ -45,6 +45,14 @@ public class Shotgun extends Weapon {
                 new Bullet(gameWorld, x, y, path, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
             }
             weaponMaths();
+
+            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_SHOTGUN_SHOT);
         }
+    }
+
+    @Override
+    public void timeBetweenShotsStart() {
+        // TODO play at right time
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_SHOTGUN_PUMP);
     }
 }

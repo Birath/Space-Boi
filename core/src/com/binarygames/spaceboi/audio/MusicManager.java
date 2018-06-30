@@ -41,11 +41,13 @@ public class MusicManager {
     }
 
     public void setLooping(boolean looping) {
-        music.setLooping(looping);
+        if (music != null) {
+            music.setLooping(looping);
+        }
     }
 
     public boolean isPlaying() {
-        return music.isPlaying();
+        return (music != null) && music.isPlaying();
     }
 
     public void setVolume(float volume) {

@@ -37,6 +37,20 @@ public class SettingsScreen extends BaseScreen implements Screen {
             return false;
         });
 
+        final Slider soundVolumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, uiSkin);
+        soundVolumeSlider.setValue(game.getPreferences().getSoundVolume());
+        soundVolumeSlider.addListener(event -> {
+            game.getPreferences().setSoundVolume(soundVolumeSlider.getValue());
+            return false;
+        });
+
+        final CheckBox soundEnabledCheckBox = new CheckBox(null, uiSkin);
+        soundEnabledCheckBox.setChecked(game.getPreferences().isSoundEnabled());
+        soundEnabledCheckBox.addListener(event -> {
+            game.getPreferences().setMusicEnabled(soundEnabledCheckBox.isChecked());
+            return false;
+        });
+
         final TextButton quitButton = new TextButton("Quit", uiSkin);
         quitButton.addListener(new ChangeListener() {
             @Override
@@ -48,9 +62,17 @@ public class SettingsScreen extends BaseScreen implements Screen {
 
         final Label title = new Label("Settings", titleStyle);
         final Label musicVolumeLabel = new Label("Music volume", titleStyle);
+        final Label soundVolumeLabel = new Label("Sound volume", titleStyle);
         final Label musicCheckBoxLabel = new Label("Music enabled", titleStyle);
+        final Label soundCheckBoxLabel = new Label("Sound enabled", titleStyle);
 
         table.add(title);
+        table.row().pad(10, 0, 10, 0);
+        table.add(soundVolumeLabel).left();
+        table.add(soundVolumeSlider);
+        table.row().pad(10, 0, 10, 0);
+        table.add(soundCheckBoxLabel).left();
+        table.add(soundEnabledCheckBox);
         table.row().pad(10, 0, 10, 0);
         table.add(musicVolumeLabel).left();
         table.add(musicVolumeSlider);

@@ -2,6 +2,7 @@ package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -32,6 +33,10 @@ public class Assets {
 
     // Player
     public static final String PLAYER = "game/entities/player/playerShip.png";
+
+    // Weapons
+    public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";
+    public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3";
 
     /*
         Environment
@@ -82,6 +87,10 @@ public class Assets {
 
         // Player
         assetManager.load(PLAYER, Texture.class);
+
+        // Weapons
+        assetManager.load(WEAPON_SHOTGUN_SHOT, Sound.class);
+        assetManager.load(WEAPON_SHOTGUN_PUMP, Sound.class);
 
         /*
             Environment

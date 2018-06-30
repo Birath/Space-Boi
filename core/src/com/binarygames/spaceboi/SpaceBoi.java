@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.binarygames.spaceboi.audio.MusicManager;
+import com.binarygames.spaceboi.audio.SoundManager;
 import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.StartupScreen;
 
@@ -20,6 +21,7 @@ public class SpaceBoi extends Game {
     private Assets assets;
 
     private MusicManager musicManager;
+    private SoundManager soundManager;
 
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
@@ -42,8 +44,9 @@ public class SpaceBoi extends Game {
         assets = new Assets(assetManager);
         assets.loadMenuAssets();
 
-        // Music
+        // Audio
         musicManager = new MusicManager(this);
+        soundManager = new SoundManager(this);
 
         debugFont = new BitmapFont();
         loadDebugFont();
@@ -73,6 +76,10 @@ public class SpaceBoi extends Game {
 
     public MusicManager getMusicManager() {
         return musicManager;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     public GamePreferences getPreferences() {
