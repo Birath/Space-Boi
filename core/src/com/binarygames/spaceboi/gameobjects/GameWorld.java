@@ -14,6 +14,7 @@ import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
@@ -55,8 +56,14 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        Enemy enemy = new Enemy(world, 250, 30, Assets.PLANET_MOON, 500, 10, this);
+        Enemy enemy = new Enemy(this, 250, 30, Assets.PLANET_MOON, 500, 10);
         addDynamicEntity(enemy);
+
+        for(int i = 0; i < 5; i++){
+            Chaser chaser = new Chaser(this, 250 + i*5, 30, Assets.PLANET_MOON, 350, 7);
+            addDynamicEntity(chaser);
+        }
+
 
         Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);

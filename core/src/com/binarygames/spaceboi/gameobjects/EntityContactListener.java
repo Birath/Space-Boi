@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.Bullet;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
@@ -52,6 +53,19 @@ public class EntityContactListener implements ContactListener {
                 bullet.setHasHitPlanetTrue();
             }
         }
+        //Player x Chaser
+        else if (Chaser.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Player.class.isInstance(fixtureB.getBody().getUserData())) {
+            Chaser chaser = (Chaser) fixtureA.getBody().getUserData();
+            Player player = (Player) fixtureB.getBody().getUserData();
+            player.reduceHealth(chaser.getDamage());
+        } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Chaser.class.isInstance(fixtureB.getBody().getUserData())) {
+            Chaser chaser = (Chaser) fixtureB.getBody().getUserData();
+            Player player = (Player) fixtureA.getBody().getUserData();
+            player.reduceHealth(chaser.getDamage());
+        }
+
 
         //Enemy x Planet
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
