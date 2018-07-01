@@ -42,7 +42,7 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
-        this.health = 100;
+        this.health = 1000;
         this.jumpHeight = 50;
         this.moveSpeed = 20;
     }
@@ -100,6 +100,7 @@ public class Player extends EntityDynamic {
     private void Shoot() {
         Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
         recoil.setLength2(1);
+        System.out.println(recoil);
 
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
