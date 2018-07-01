@@ -27,7 +27,7 @@ public class Enemy extends EntityDynamic {
         player = gameWorld.getPlayer();
         body.setUserData(this);
 
-        this.health = 100;
+        this.health = 50;
         this.jumpHeight = 50;
         this.moveSpeed = 5;
         this.weapon = new Machinegun(gameWorld, this);

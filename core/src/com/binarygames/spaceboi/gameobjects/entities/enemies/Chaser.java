@@ -14,7 +14,7 @@ public class Chaser extends Enemy {
         player = gameWorld.getPlayer();
         body.setUserData(this);
 
-        this.health = 10;
+        this.health = 5;
         this.jumpHeight = 50;
         this.moveSpeed = 15;
         this.weapon = new Machinegun(gameWorld, this);
