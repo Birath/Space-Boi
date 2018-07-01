@@ -16,6 +16,7 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
+import com.binarygames.spaceboi.util.Console;
 
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
@@ -35,6 +36,8 @@ public class GameScreen implements Screen {
     private World world;
 
     private GameUI gameUI;
+
+    private Console console;
 
     private GameWorld gameWorld;
 
@@ -67,6 +70,8 @@ public class GameScreen implements Screen {
         //viewport.apply();
 
         //camera = new OrthographicCamera();
+
+        console = new Console(game, this);
 
         gameUI = new GameUI(game);
         inGameMenuScreen = new InGameMenuScreen(this, game);
@@ -149,10 +154,13 @@ public class GameScreen implements Screen {
 
         }
         frameRate.update();
+
+        if (console.isVisible()) {
+            console.update(delta);
+        }
     }
 
     private void draw() {
-
         switch (state) {
             case GAME_RUNNING:
                 gameUI.draw();
@@ -160,6 +168,9 @@ public class GameScreen implements Screen {
             case GAME_PAUSED:
                 inGameMenuScreen.draw();
                 break;
+        }
+        if (console.isVisible()) {
+            console.render();
         }
     }
 
@@ -243,6 +254,14 @@ public class GameScreen implements Screen {
     private float angleDifference(float angle1, float angle2) {
         float diff = (angle2 - angle1 + 180) % 360 - 180;
         return diff < -180 ? diff + 360 : diff;
+    }
+
+    public InputMultiplexer getMultiplexer() {
+        return multiplexer;
+    }
+
+    public Console getConsole() {
+        return console;
     }
 
 }
