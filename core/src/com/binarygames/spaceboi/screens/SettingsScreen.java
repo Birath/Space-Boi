@@ -1,86 +1,59 @@
 package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.ui.AudioSettingsTab;
 
 public class SettingsScreen extends BaseScreen implements Screen {
-
 
     public SettingsScreen(SpaceBoi game, Screen previousScreen) {
         super(game, previousScreen);
 
         stage.clear();
 
-        Table table = new Table();
-        table.setFillParent(true);
+        // Menu background
+        Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
+        backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.addActor(backgroundImage);
 
-        stage.addActor(table);
-        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
-        final Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, uiSkin);
-        musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
-        musicVolumeSlider.addListener(event -> {
-            game.getPreferences().setMusicVolume(musicVolumeSlider.getValue());
-            return false;
-        });
+        AudioSettingsTab audioSettingsTab = new AudioSettingsTab(game);
+        stage.addActor(audioSettingsTab.getTable());
 
-        final CheckBox musicEnabledCheckBox = new CheckBox(null, uiSkin);
-        musicEnabledCheckBox.setChecked(game.getPreferences().isMusicEnabled());
-        musicEnabledCheckBox.addListener(event -> {
-            game.getPreferences().setMusicEnabled(musicEnabledCheckBox.isChecked());
-            return false;
-        });
-
-        final Slider soundVolumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, uiSkin);
-        soundVolumeSlider.setValue(game.getPreferences().getSoundVolume());
-        soundVolumeSlider.addListener(event -> {
-            game.getPreferences().setSoundVolume(soundVolumeSlider.getValue());
-            return false;
-        });
-
-        final CheckBox soundEnabledCheckBox = new CheckBox(null, uiSkin);
-        soundEnabledCheckBox.setChecked(game.getPreferences().isSoundEnabled());
-        soundEnabledCheckBox.addListener(event -> {
-            game.getPreferences().setSoundEnabled(soundEnabledCheckBox.isChecked());
-            return false;
-        });
-
-        final TextButton quitButton = new TextButton("Quit", uiSkin);
-        quitButton.addListener(new ChangeListener() {
+        final TextButton backButton = new TextButton("Back", buttonStyle);
+        backButton.setPosition(10, 10);
+        backButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
                 game.setScreen(previousScreen);
                 dispose();
             }
         });
+        stage.addActor(backButton);
+
+        final TextButton applyButton = new TextButton("Apply", buttonStyle);
+        applyButton.setPosition(stage.getWidth() - applyButton.getWidth() - 10, 10);
+        applyButton.setVisible(false); // Is shown when settings which need to be applied are changed, ie resolution
+        applyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // TODO
+            }
+        });
+        stage.addActor(applyButton);
 
         final Label title = new Label("Settings", titleStyle);
-        final Label musicVolumeLabel = new Label("Music volume", titleStyle);
-        final Label soundVolumeLabel = new Label("Sound volume", titleStyle);
-        final Label musicCheckBoxLabel = new Label("Music enabled", titleStyle);
-        final Label soundCheckBoxLabel = new Label("Sound enabled", titleStyle);
-
-        table.add(title);
-        table.row().pad(10, 0, 10, 0);
-        table.add(soundVolumeLabel).left();
-        table.add(soundVolumeSlider);
-        table.row().pad(10, 0, 10, 0);
-        table.add(soundCheckBoxLabel).left();
-        table.add(soundEnabledCheckBox);
-        table.row().pad(10, 0, 10, 0);
-        table.add(musicVolumeLabel).left();
-        table.add(musicVolumeSlider);
-        table.row().pad(10, 0, 10, 0);
-        table.add(musicCheckBoxLabel).left();
-        table.add(musicEnabledCheckBox);
-        table.row().pad(10, 0, 10, 0);
-        table.add(quitButton);
+        title.setPosition(10, stage.getHeight() - title.getHeight() - 10);
+        stage.addActor(title);
     }
 
     @Override
@@ -95,16 +68,15 @@ public class SettingsScreen extends BaseScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
-        game.getBatch().begin();
-        game.debugFont.draw(game.getBatch(), "Settings", 5, 20);
-        game.getBatch().end();
-
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(getPreviousScreen());
+            dispose();
+        }
     }
 
     @Override
     public void resize(final int width, final int height) {
         stage.getViewport().update(width, height, true);
-
     }
 
     @Override
@@ -128,7 +100,6 @@ public class SettingsScreen extends BaseScreen implements Screen {
         stage.dispose();
         titleFont.dispose();
         buttonFont.dispose();
-
     }
 
 

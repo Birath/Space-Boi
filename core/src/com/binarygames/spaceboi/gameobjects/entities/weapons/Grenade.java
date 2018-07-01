@@ -3,6 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Grenade extends Bullet {
@@ -30,7 +31,7 @@ public class Grenade extends Bullet {
         shrapnelDirection.setLength2(1);
         shrapnelDirection.scl(rad * PPM);
 
-        float angleDiff = 360/shrapnelAmount;
+        float angleDiff = 360 / shrapnelAmount;
 
         for (int i = 1; i + 1 < shrapnelAmount; i++) {
             new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirection.x, getBody().getPosition().y * PPM + shrapnelDirection.y,
