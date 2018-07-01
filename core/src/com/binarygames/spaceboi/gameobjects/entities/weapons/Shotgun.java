@@ -20,7 +20,7 @@ public class Shotgun extends Weapon {
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
-        this.recoil = 50;
+        this.recoil = 30;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 2;

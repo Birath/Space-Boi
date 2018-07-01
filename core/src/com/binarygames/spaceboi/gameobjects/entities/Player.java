@@ -83,7 +83,7 @@ public class Player extends EntityDynamic {
         updateMouseCoords();
         //SHOOTING
         updateWeapons(delta);
-        if (mouseHeld) {
+        if (mouseHeld && weapon.canShoot()) {
             Shoot();
         }
     }
@@ -103,7 +103,10 @@ public class Player extends EntityDynamic {
 
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
-        body.setLinearVelocity(recoil);
+
+        Vector2 newVelocity = body.getLinearVelocity();
+        newVelocity.add(recoil);
+        body.setLinearVelocity(newVelocity);
 
         //Shooting the bullet
         recoil.setLength2(1);
@@ -122,9 +125,11 @@ public class Player extends EntityDynamic {
     public void setMouseHeld(boolean mouseHeld) {
         this.mouseHeld = mouseHeld;
     }
+
     public Vector2 getMouseCoords() {
         return mouseCoords;
     }
+
     public boolean isMouseHeld() {
         return mouseHeld;
     }
@@ -132,7 +137,8 @@ public class Player extends EntityDynamic {
     public void setMouseCoords(float x, float y) {
         mouseCoords.set(x, y);
     }
-    private void updateMouseCoords(){
+
+    private void updateMouseCoords() {
         Vector3 mouseCoordinatos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         gameWorld.getCamera().unproject(mouseCoordinatos);
         setMouseCoords(mouseCoordinatos.x, mouseCoordinatos.y);
