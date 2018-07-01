@@ -47,7 +47,7 @@ public class SettingsScreen extends BaseScreen implements Screen {
         final CheckBox soundEnabledCheckBox = new CheckBox(null, uiSkin);
         soundEnabledCheckBox.setChecked(game.getPreferences().isSoundEnabled());
         soundEnabledCheckBox.addListener(event -> {
-            game.getPreferences().setMusicEnabled(soundEnabledCheckBox.isChecked());
+            game.getPreferences().setSoundEnabled(soundEnabledCheckBox.isChecked());
             return false;
         });
 
