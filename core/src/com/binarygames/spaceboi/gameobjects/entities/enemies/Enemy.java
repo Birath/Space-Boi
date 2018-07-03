@@ -20,7 +20,6 @@ public class Enemy extends EntityDynamic {
 
     protected ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
 
-
     public Enemy(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
         this.gameWorld = gameWorld;

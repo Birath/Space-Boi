@@ -12,16 +12,16 @@ public class GrenadeLauncher extends Weapon {
     public GrenadeLauncher(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
 
-        this.bulletMass = 20;
+        this.bulletMass = 40;
         this.bulletRadius = 4f;
-        this.bulletSpeed = 5;
+        this.bulletSpeed = 2;
         this.path = Assets.PLAYER;
         this.recoil = 35;
         this.removeBulletDelay = 2000;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;
-        this.damage = 20;
+        this.damage = 0;
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));

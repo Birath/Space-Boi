@@ -1,10 +1,12 @@
-package com.binarygames.spaceboi.gameobjects.entities;
+package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
 
 public class Bullet extends EntityDynamic {
 

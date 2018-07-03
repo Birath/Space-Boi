@@ -43,7 +43,7 @@ public class Player extends EntityDynamic {
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
         this.health = 1000;
-        this.jumpHeight = 50;
+        this.jumpHeight = 20;
         this.moveSpeed = 20;
     }
 

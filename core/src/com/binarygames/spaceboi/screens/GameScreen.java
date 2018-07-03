@@ -105,11 +105,13 @@ public class GameScreen implements Screen {
                 if (interpolateRotation) {
                     if (currentInterpolateCount == interpolateCount) {
                         interpolateRotation = false;
+                        /*
                         System.out.println("TOINTERPOLATE: " + angleToInterpolate);
                         System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
                         System.out.println("CAMANGLE: " + getCameraRotation());
                         System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
                         lastAngle = player.getPlayerAngle();
+                        */
                     } else {
                         camera.rotate(angleToInterpolate / interpolateCount);
                         currentInterpolateCount++;

@@ -16,6 +16,8 @@ import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Grenade;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class GameWorld {
     private Array<JointInfo> jointsToCreate = new Array<>();
     private Array<Joint> jointsToDestroy = new Array<>();
 
-    private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
+    private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -10);
 
     public GameWorld(SpaceBoi game, World world, Camera camera) {
         this.game = game;
@@ -52,10 +54,13 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(this, 0, 0, Assets.PLAYER, 500, 10);
+        Player player = new Player(this, 0, 200, Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
+        WorldGenerator worldGenerator = new WorldGenerator(this);
+        worldGenerator.createWorld();
 
+        /*
         Enemy enemy = new Enemy(this, 250, 30, Assets.PLANET_MOON, 500, 10);
         addDynamicEntity(enemy);
 
@@ -63,13 +68,13 @@ public class GameWorld {
             Chaser chaser = new Chaser(this, 250 + i*5, 30, Assets.PLANET_MOON, 350, 7);
             addDynamicEntity(chaser);
         }
+        */
 
-
-        Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
+        /*Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(this, 230, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
-
+        */
         world.setContactListener(new EntityContactListener(this));
     }
 
@@ -79,9 +84,12 @@ public class GameWorld {
             entity.update(delta);
         }
         world.step(delta, 6, 2);
-        dynamicEntities.addAll(addDynamicEntities);
+
+
+
         removeBullets(dynamicEntities);
         removeDead(dynamicEntities);
+        dynamicEntities.addAll(addDynamicEntities);
         addDynamicEntities.clear();
 
         createJoints();
