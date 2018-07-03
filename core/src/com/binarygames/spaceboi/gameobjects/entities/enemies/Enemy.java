@@ -41,7 +41,11 @@ public class Enemy extends EntityDynamic {
         if (entityState == ENTITY_STATE.STANDING) {
             updatePerpen();
 
-            if (enemyState == ENEMY_STATE.ATTACKING) {
+            if (enemyState == ENEMY_STATE.IDLE){
+                moveAlongPlanet(); //just to prevent enemy from moving
+            }
+
+            else if (enemyState == ENEMY_STATE.ATTACKING) {
                 if(toShoot()){
                     Shoot();
                 }
@@ -75,7 +79,11 @@ public class Enemy extends EntityDynamic {
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
 
         float angle = perpen.angle(toPlayer);
-        if (Math.abs(angle) < 90) {
+        if (enemyState == ENEMY_STATE.IDLE){
+            moveLeft = false;
+            moveRight = false;
+        }
+        else if (Math.abs(angle) < 90) {
             moveLeft = false;
             moveRight = true;
         } else {
@@ -95,7 +103,7 @@ public class Enemy extends EntityDynamic {
     }
     protected boolean toJump(){
         float angle = toPlanet.angle(toPlayer);
-        return (Math.abs(angle) > 150);
+        return (Math.abs(angle) > 100);
     }
     protected void jump(){
         body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
@@ -103,7 +111,10 @@ public class Enemy extends EntityDynamic {
     }
 
     protected void updateEnemyState(){
-        if(player.getPlanetBody() != this.getPlanetBody()){
+        if(toPlayer.len2() > 800){
+            enemyState = ENEMY_STATE.IDLE;
+        }
+        else if(player.getPlanetBody() != this.getPlanetBody()){
             enemyState = ENEMY_STATE.HUNTING;
         }
         else{
@@ -116,18 +127,28 @@ public class Enemy extends EntityDynamic {
         Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
         float angle = awayFromPlanet.angle(toPlayer);
 
-        return (Math.abs(angle) < 110); //110 should be calculated mathematically
+        return (Math.abs(angle) < 100); //110 should be calculated mathematically
     }
 
     protected void Shoot() {
+        //Setting recoil
         Vector2 recoil = new Vector2(-toPlayer.x, -toPlayer.y);
         recoil.setLength2(1);
-
-        //Setting recoil
         recoil.scl(weapon.getRecoil());
         body.setLinearVelocity(recoil);
 
-        //Creating the bullet
+
+/*        //Creating the bullet NEW
+        float angle = (float) Math.asin( (gameWorld.getGravityConstant() * (3 * Math.pow(10, 9)) * this.getMass() / 300 * toPlayer.len2() /
+                (weapon.getBulletSpeed() * weapon.getBulletSpeed()))) / 2; //sin-1( g*d / v*v) /2
+
+        Vector2 shootDirection = new Vector2(perpen.rotate(angle));
+        shootDirection.setLength2(1);
+        shootDirection.scl(rad * PPM);
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x, body.getPosition().y * PPM + shootDirection.y);
+        weapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);*/
+
+        //Creating the bullet OLD
         recoil.setLength2(1);
         recoil.scl(-(rad * PPM));
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);

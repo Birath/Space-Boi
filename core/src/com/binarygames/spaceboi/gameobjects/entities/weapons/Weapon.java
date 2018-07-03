@@ -107,6 +107,10 @@ public abstract class Weapon {
         }
     }
 
+    public float getBulletSpeed() {
+        return bulletSpeed;
+    }
+
     public String toString() {
         return getClass().getName();
     }

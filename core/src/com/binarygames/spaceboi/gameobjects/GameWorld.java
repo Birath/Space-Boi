@@ -57,14 +57,17 @@ public class GameWorld {
         WorldGenerator worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
 
+        //Player player = new Player(this, worldGenerator.generatePlayerX(), worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
         Player player = new Player(this, 200, 0, Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
 
+        Enemy enemy = new Enemy(this, 215, 0, Assets.PLANET_MOON, 500, 10);
+        addDynamicEntity(enemy);
+
         /*
         Enemy enemy = new Enemy(this, 250, 30, Assets.PLANET_MOON, 500, 10);
         addDynamicEntity(enemy);
-
         for(int i = 0; i < 5; i++){
             Chaser chaser = new Chaser(this, 250 + i*5, 30, Assets.PLANET_MOON, 350, 7);
             addDynamicEntity(chaser);
@@ -128,10 +131,8 @@ public class GameWorld {
         Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
         float distance = closestPlanetPos.dst(entityPos);
         if (closestPlanet.getRad() * Planet.GRAVITY_RADIUS >= distance) {
-
             // Set constant gravity while inside a set radius
-
-            // TODO Maybe change to not depend on planet radius. Not sure what else to use tho - Maybe remove radius and then change Gravity Constant? //Albin
+            // TODO Maybe change to not depend on planet radius. Not sure what else to use tho
             double force = GRAVITY_CONSTANT * closestPlanet.getMass() * entity.getMass() / closestPlanet.getRad();
             float forceX = MathUtils.cos(angle) * (float) force;
             float forceY = MathUtils.sin(angle) * (float) force;
@@ -265,4 +266,7 @@ public class GameWorld {
         return camera;
     }
 
+    public static double getGravityConstant() {
+        return GRAVITY_CONSTANT;
+    }
 }

@@ -27,7 +27,7 @@ public class WorldGenerator {
     public void createWorld(){
         Random random = new Random();
         createPlanet(0, 0, random);
-        int angleOffset = 0;
+        double angleOffset = 0;
 
         for(int i = 0; i < NumberOfCircles; i++){
             int rad = distanceBetweenRows * (i+1) * maxRad; //Distance to circle of planets
@@ -43,9 +43,9 @@ public class WorldGenerator {
             }
             double angleBetweenPlanets = (2 * Math.PI)/NumberOfPlanets;
 
-            if(!((i%2)==0)){ //If multiplanetrow -> offset
-                angleOffset = random.nextInt(30);
-                angleOffset = -15 + angleOffset; //  -15<=angleOffset<=15
+            if((i%2)==0){ //If fewPlanetRow -> offset
+                angleOffset = random.nextInt(4);
+                angleOffset = angleOffset * angleBetweenPlanets;
             }
 
             for(int j = 0; j < NumberOfPlanets; j++){
