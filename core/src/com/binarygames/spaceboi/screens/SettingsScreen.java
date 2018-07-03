@@ -51,6 +51,13 @@ public class SettingsScreen extends BaseScreen implements Screen {
             return false;
         });
 
+        final CheckBox gravityEnabledCheckBox = new CheckBox(null, uiSkin);
+        gravityEnabledCheckBox.setChecked(game.getPreferences().isGravityEnabled());
+        gravityEnabledCheckBox.addListener(event -> {
+            game.getPreferences().setGravityEnabled(gravityEnabledCheckBox.isChecked());
+            return false;
+        });
+
         final TextButton quitButton = new TextButton("Quit", uiSkin);
         quitButton.addListener(new ChangeListener() {
             @Override
@@ -65,6 +72,8 @@ public class SettingsScreen extends BaseScreen implements Screen {
         final Label soundVolumeLabel = new Label("Sound volume", titleStyle);
         final Label musicCheckBoxLabel = new Label("Music enabled", titleStyle);
         final Label soundCheckBoxLabel = new Label("Sound enabled", titleStyle);
+        final Label gravityCheckBoxLabel = new Label("Gravity enabled", titleStyle);
+
 
         table.add(title);
         table.row().pad(10, 0, 10, 0);
@@ -79,6 +88,9 @@ public class SettingsScreen extends BaseScreen implements Screen {
         table.row().pad(10, 0, 10, 0);
         table.add(musicCheckBoxLabel).left();
         table.add(musicEnabledCheckBox);
+        table.row().pad(10, 0, 10, 0);
+        table.add(gravityCheckBoxLabel).left();
+        table.add(gravityEnabledCheckBox);
         table.row().pad(10, 0, 10, 0);
         table.add(quitButton);
     }
