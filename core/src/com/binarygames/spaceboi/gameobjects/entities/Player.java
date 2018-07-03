@@ -25,6 +25,7 @@ public class Player extends EntityDynamic {
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
+    private Vector2 perpen = new Vector2(0,0);
 
     private float playerAngle = 0f;
 
@@ -49,24 +50,21 @@ public class Player extends EntityDynamic {
 
     @Override
     public void update(float delta) {
+        updateToPlanet();
+        updatePerpen();
+
         if (entityState == ENTITY_STATE.STANDING) {
-            updateToPlanet();
-
-            Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
-            perpen.setLength2(1);
-            perpen.scl(moveSpeed);
-
-            //MOVE
+            //Moving
             if (moveRight) {
-                body.setLinearVelocity(perpen); //Dynamiska adderande blir kanse bättre än att bara sätta saker och ting
+                body.setLinearVelocity(perpen); //Dynamiska adderande blir kanske bättre än att bara sätta saker och ting
             } else if (moveLeft) {
-                perpen.scl(1); //Stoppar copyrightstrike - ändrar ingenting
                 body.setLinearVelocity(-perpen.x, -perpen.y);
-            } else {
+            }
+            if( (!moveLeft) && (!moveRight) ) {
                 body.setLinearVelocity(0, 0);
             }
 
-            //JUMP
+            //Jumping
             if (moveUp) {
                 if (chained) {
                     for (JointEdge jointEdge : body.getJointList()) {
@@ -81,7 +79,7 @@ public class Player extends EntityDynamic {
         }
         //Aiming
         updateMouseCoords();
-        //SHOOTING
+        //Shooting
         updateWeapons(delta);
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
@@ -150,6 +148,11 @@ public class Player extends EntityDynamic {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
         toPlanet.scl(jumpHeight);
+    }
+    private void updatePerpen(){
+        perpen = new Vector2(-toPlanet.y, toPlanet.x);
+        perpen.setLength2(1);
+        perpen.scl(moveSpeed);
     }
 
     public float getPlayerAngle() {

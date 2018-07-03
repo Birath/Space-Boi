@@ -15,7 +15,11 @@ public class WorldGenerator {
 
     private int NumberOfCircles = 6;
     private int distanceBetweenRows = 3;
-    private float distanceBetweenPlanets = 0.7f; //Smaller gives larger dist
+    private double distanceBetweenPlanets = 0.7; //Smaller gives larger dist
+
+    private int lastX = 0;
+    private int lastY = 0;
+    private int lastRad = 0;
 
     public WorldGenerator(GameWorld gameWorld){
         this.gameWorld = gameWorld;
@@ -23,6 +27,7 @@ public class WorldGenerator {
     public void createWorld(){
         Random random = new Random();
         createPlanet(0, 0, random);
+        int angleOffset = 0;
 
         for(int i = 0; i < NumberOfCircles; i++){
             int rad = distanceBetweenRows * (i+1) * maxRad; //Distance to circle of planets
@@ -34,12 +39,18 @@ public class WorldGenerator {
                 NumberOfPlanets = NumberOfPlanets + 1; //Prevents division by zero -- 1<=NoP<=3
             }
             else{
-                NumberOfPlanets = (int) Math.floor(0.7 * (circumference/(2*maxRad))); //Circumference / diameter of largest planet and some extra space
+                NumberOfPlanets = (int) Math.floor(distanceBetweenPlanets * (circumference/(2*maxRad))); //Circumference / diameter of largest planet and some extra space
             }
             double angleBetweenPlanets = (2 * Math.PI)/NumberOfPlanets;
+
+            if(!((i%2)==0)){ //If multiplanetrow -> offset
+                angleOffset = random.nextInt(30);
+                angleOffset = -15 + angleOffset; //  -15<=angleOffset<=15
+            }
+
             for(int j = 0; j < NumberOfPlanets; j++){
-                createPlanet((int)Math.round(rad * Math.cos(angleBetweenPlanets * j)), //TODO Prevent planets from always spawning at 0 rads
-                        (int)Math.round(rad * Math.sin(angleBetweenPlanets * j)), random);
+                createPlanet((int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset)),
+                        (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset)), random);
             }
         }
     }
@@ -51,6 +62,15 @@ public class WorldGenerator {
 
         Planet planet = new Planet(gameWorld, x, y, Assets.PLANET_MOON, (float) grav, rad); //TODO Add different sprites depending on gravity and size of planet
         gameWorld.addStaticEntity(planet);
-    }
 
+        this.lastX = x;
+        this.lastY = y;
+        this.lastRad = rad;
+    }
+    public int generatePlayerX(){
+        return lastX + lastRad;
+    }
+    public int generatePlayerY(){
+        return lastY + lastRad;
+    }
 }

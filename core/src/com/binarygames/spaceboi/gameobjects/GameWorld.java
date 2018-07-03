@@ -54,11 +54,12 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        Player player = new Player(this, 0, 200, Assets.PLAYER, 500, 10);
-        addDynamicEntity(player);
-        this.player = player;
         WorldGenerator worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
+
+        Player player = new Player(this, 200, 0, Assets.PLAYER, 500, 10);
+        addDynamicEntity(player);
+        this.player = player;
 
         /*
         Enemy enemy = new Enemy(this, 250, 30, Assets.PLANET_MOON, 500, 10);
