@@ -3,23 +3,40 @@ package com.binarygames.spaceboi.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
+import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.screens.GameScreen;
 
 public class PlayerInputProcessor implements InputProcessor {
 
     private Player player;
     private Camera camera;
+    private World world;
+    private GameWorld gameWorld;
+    private GameScreen gameScreen;
 
-    public PlayerInputProcessor(Player player, Camera camera) {
+    public PlayerInputProcessor(Player player, Camera camera, World world, GameWorld gameWorld, GameScreen gameScreen) {
         this.player = player;
         this.camera = camera;
+        this.world = world;
+        this.gameWorld = gameWorld;
+        this.gameScreen = gameScreen;
     }
 
     //Keyboardrelated
     @Override
     public boolean keyDown(int keycode) {
+        //WASD Movement
+        //possibly move to another inputprocessor ui
+        if ((gameScreen.state == 1) && (keycode == Input.Keys.ESCAPE)) {
+            gameScreen.resume();
+            return true;
+        }
+        if (keycode == Input.Keys.ESCAPE) {
+            gameScreen.pause();
+            return true;
+        }
         if (keycode == Input.Keys.SPACE) {
             player.setMoveUp(true);
             return true;
@@ -62,6 +79,26 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
+        //Numbers
+        if (character == '1') {
+            player.setWeapon(0);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (character == '2') {
+            player.setWeapon(1);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+        if (character == '3') {
+            player.setWeapon(2);
+            System.out.println("Equipped " + player.getWeapon().toString());
+            return true;
+        }
+
+        if (character == '§') {
+            gameScreen.getConsole().show();
+        }
         return false;
     }
 
@@ -83,9 +120,6 @@ public class PlayerInputProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             player.setMouseHeld(true);
-
-            Vector3 mouseCoords = getMouseCoords(screenX, screenY);
-            player.setMouseCoords(mouseCoords.x, mouseCoords.y);
             return true;
         }
         return false;
@@ -102,18 +136,6 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (player.isMouseHeld()) {
-            Vector3 mouseCoords = getMouseCoords(screenX, screenY);
-            player.setMouseCoords(mouseCoords.x, mouseCoords.y);
-            return true;
-        }
-
         return false;
-    }
-
-    private Vector3 getMouseCoords(int screenX, int screenY) {
-        Vector3 mouseCoords = new Vector3(screenX, screenY, 0);
-        camera.unproject(mouseCoords);
-        return mouseCoords;
     }
 }

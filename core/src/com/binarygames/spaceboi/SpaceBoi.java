@@ -8,29 +8,48 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.binarygames.spaceboi.screens.MainMenuScreen;
+import com.binarygames.spaceboi.audio.MusicManager;
+import com.binarygames.spaceboi.audio.SoundManager;
+import com.binarygames.spaceboi.screens.Fonts;
+import com.binarygames.spaceboi.screens.StartupScreen;
 
 public class SpaceBoi extends Game {
 
     private SpriteBatch batch;
 
     private AssetManager assetManager;
+    private Assets assets;
+
+    private MusicManager musicManager;
+    private SoundManager soundManager;
 
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
 
     public BitmapFont debugFont;
 
+    public static Fonts font;
+
+    private GamePreferences preferences = new GamePreferences(this);
+
     @Override
     public void create() {
         batch = new SpriteBatch();
+        font = new Fonts();
 
+        this.setScreen(new StartupScreen(this));
+
+        // Assets
         assetManager = new AssetManager();
+        assets = new Assets(assetManager);
+        assets.loadMenuAssets();
+
+        // Audio
+        musicManager = new MusicManager(this);
+        soundManager = new SoundManager(this);
 
         debugFont = new BitmapFont();
         loadDebugFont();
-
-        this.setScreen(new MainMenuScreen(this));
     }
 
     @Override
@@ -51,8 +70,24 @@ public class SpaceBoi extends Game {
         return assetManager;
     }
 
+    public Assets getAssets() {
+        return assets;
+    }
+
+    public MusicManager getMusicManager() {
+        return musicManager;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public GamePreferences getPreferences() {
+        return preferences;
+    }
+
     private void loadDebugFont() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = 20;

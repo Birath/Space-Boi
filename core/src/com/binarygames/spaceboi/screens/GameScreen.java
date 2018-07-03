@@ -5,26 +5,18 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
-import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.binarygames.spaceboi.util.Console;
 
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
@@ -32,21 +24,25 @@ public class GameScreen implements Screen {
 
     private SpaceBoi game;
 
+    private static final int GAME_RUNNING = 0;
+    private static final int GAME_PAUSED = 1;
+    public int state;
+
+    private InGameMenuScreen inGameMenuScreen;
+
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
     private Viewport viewport;
     private World world;
 
-    private PlayerInputProcessor inputProcessor;
-
     private GameUI gameUI;
+
+    private Console console;
 
     private GameWorld gameWorld;
 
     private Player player;
-
-    private List<EntityDynamic> entities = new ArrayList<>();
-    private List<Planet> planets = new ArrayList<>();
+    private InputMultiplexer multiplexer;
 
     private FrameRate frameRate;
 
@@ -59,13 +55,7 @@ public class GameScreen implements Screen {
     private final float whenToInterpolate = 10;
     private float angleToInterpolate;
 
-    //TEMPSTUFF(har tillhörande imports ovan)
-    private Texture img;
-
     public GameScreen(SpaceBoi game) {
-        //TEMPSTUFF - Laddar in bild
-        img = new Texture("playerShip.png");
-
         //Framerate
         frameRate = new FrameRate();
 
@@ -81,81 +71,134 @@ public class GameScreen implements Screen {
 
         //camera = new OrthographicCamera();
 
-        gameUI = new GameUI();
+        console = new Console(game, this);
+
+        gameUI = new GameUI(game);
+        inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 
-        gameWorld = new GameWorld(game, world);
+        gameWorld = new GameWorld(game, world, camera);
+
 
         //Entities:
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
-        //Input processor och multiplexer, hanterar användarens input
-        inputProcessor = new PlayerInputProcessor(player, camera);
-        InputMultiplexer multiplexer = new InputMultiplexer();
+
+        PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
+        multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(gameUI.getStage());
         multiplexer.addProcessor(inputProcessor);
-        Gdx.input.setInputProcessor(multiplexer);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        state = GAME_RUNNING;
     }
 
     private void update(float delta) {
-        frameRate.update();
-        gameWorld.update(delta);
-        gameUI.act(delta);
 
-        camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+        switch (state) {
+            case GAME_RUNNING:
+                gameWorld.update(delta);
+                gameUI.act(delta);
 
-        // set camera rotation
-        if (interpolateRotation) {
-            if (currentInterpolateCount == interpolateCount) {
-                interpolateRotation = false;
-                System.out.println("TOINTERPOLATE: " + angleToInterpolate);
-                System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
-                System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
-                lastAngle = player.getPlayerAngle();
-            } else {
-                camera.rotate(angleToInterpolate / interpolateCount);
-                currentInterpolateCount++;
-            }
-        } else {
-            float angleDiff = lastAngle - player.getPlayerAngle();
-            if (angleDiff > 360 - whenToInterpolate) {
-                angleDiff = 360 - angleDiff;
-            }
-            if (Math.abs(angleDiff) >= whenToInterpolate) {
-                angleToInterpolate = angleDiff;
-                currentInterpolateCount = 0;
-                interpolateRotation = true;
-                lastAngle = player.getPlayerAngle();
-            } else {
-                lastAngle = player.getPlayerAngle();
-                camera.rotate(angleDiff);
-            }
+                // set camera rotation
+                if (interpolateRotation) {
+                    if (currentInterpolateCount == interpolateCount) {
+                        interpolateRotation = false;
+                        /*
+                        System.out.println("TOINTERPOLATE: " + angleToInterpolate);
+                        System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
+                        System.out.println("CAMANGLE: " + getCameraRotation());
+                        System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
+                        lastAngle = player.getPlayerAngle();
+                        */
+                    } else {
+                        camera.rotate(angleToInterpolate / interpolateCount);
+                        currentInterpolateCount++;
+                    }
+                } else {
+                    // float angleDiff = lastAngle - player.getPlayerAngle();
+                    // System.out.println("Player angle: " + player.getPlayerAngle());
+                    // System.out.println("Camera angle " + getCameraRotation());
+                    // System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
+                    // System.out.println();
+
+                    float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
+                    //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());
+                    if (Math.abs(angleDiff) >= whenToInterpolate) {
+                        //angleToInterpolate = Math.abs(angleDiff) + 180;
+                        angleToInterpolate = angleDiff;
+                        currentInterpolateCount = 0;
+                        interpolateRotation = true;
+                        lastAngle = player.getPlayerAngle();
+                    } else {
+                        lastAngle = player.getPlayerAngle();
+                        camera.rotate(angleDiff);
+                        //camera.rotate(Math.abs(angleDiff) + 180);
+                    }
+                }
+
+        /* float angleDiff = lastAngle - player.getPlayerAngle();
+        lastAngle = player.getPlayerAngle();
+        camera.rotate(angleDiff); */
+
+                camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+                camera.update();
+                game.getBatch().setProjectionMatrix(camera.combined);
+                batchedDraw(delta);
+                draw();
+                break;
+
+            case GAME_PAUSED:
+                inGameMenuScreen.act(delta);
+                draw();
+                break;
+
         }
+        frameRate.update();
 
-        camera.update();
-        game.getBatch().setProjectionMatrix(camera.combined);
-        batchedDraw();
-        draw();
+        if (console.isVisible()) {
+            console.update(delta);
+        }
     }
 
     private void draw() {
-        gameUI.draw();
+        switch (state) {
+            case GAME_RUNNING:
+                gameUI.draw();
+                break;
+            case GAME_PAUSED:
+                inGameMenuScreen.draw();
+                break;
+        }
+        if (console.isVisible()) {
+            console.render();
+        }
     }
 
-    private void batchedDraw() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+    private void batchedDraw(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
+                (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         //debugRenderer.render(world, camera.combined.scl(PPM)); TODO fix matching rotation on debug rendering
 
         game.getBatch().begin();
         gameWorld.render(game.getBatch(), camera);
+        gameWorld.getParticleHandler().updateAndDrawEffects(game.getBatch(), delta);
         game.getBatch().end();
     }
 
     @Override
     public void show() {
+        //Input processor och multiplexer, hanterar användarens input
+        // Flyttades så att inputsen uppdateras efter settingsscreen
+        if (state == GAME_RUNNING) {
+
+            Gdx.input.setInputProcessor(multiplexer);
+        } else {
+            Gdx.input.setInputProcessor(inGameMenuScreen.getStage());
+        }
+
 
     }
 
@@ -169,18 +212,27 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        inGameMenuScreen.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         camera.setToOrtho(false, width / 2, height / 2);
         //viewport.update();
     }
 
     @Override
     public void pause() {
-
+        if (state == GAME_RUNNING) {
+            state = GAME_PAUSED;
+            System.out.println("Pausing game");
+            inGameMenuScreen.createBlurredBackground();
+            Gdx.input.setInputProcessor(inGameMenuScreen.getStage());
+        }
     }
 
     @Override
     public void resume() {
-
+        if (state == GAME_PAUSED) {
+            Gdx.input.setInputProcessor(multiplexer);
+            state = GAME_RUNNING;
+        }
     }
 
     @Override
@@ -192,10 +244,26 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         gameUI.dispose();
+        inGameMenuScreen.dispose();
         frameRate.dispose();
     }
 
-    public void appendEntity(EntityDynamic entity) {
-        entities.add(entity);
+    public float getCameraRotation() {
+        float camAngle = -(float) Math.atan2(camera.up.x, camera.up.y) * MathUtils.radiansToDegrees + 180;
+        return camAngle;
     }
+
+    private float angleDifference(float angle1, float angle2) {
+        float diff = (angle2 - angle1 + 180) % 360 - 180;
+        return diff < -180 ? diff + 360 : diff;
+    }
+
+    public InputMultiplexer getMultiplexer() {
+        return multiplexer;
+    }
+
+    public Console getConsole() {
+        return console;
+    }
+
 }
