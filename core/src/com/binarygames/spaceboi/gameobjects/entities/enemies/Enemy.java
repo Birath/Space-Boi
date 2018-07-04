@@ -1,7 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
@@ -11,24 +10,23 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class Enemy extends EntityDynamic {
 
-    private Vector2 toPlanet = new Vector2(0, 0);
-    private Vector2 toPlayer = new Vector2(0, 0);
-    private Vector2 perpen = new Vector2(0, 0);
-    private GameWorld gameWorld;
-    private Player player;
+    protected Vector2 toPlanet = new Vector2(0, 0);
+    protected Vector2 toPlayer = new Vector2(0, 0);
+    protected Vector2 perpen = new Vector2(0, 0);
+    protected GameWorld gameWorld;
+    protected Player player;
 
-    private Weapon weapon;
+    protected Weapon weapon;
 
-    private ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
+    protected ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
 
-
-    public Enemy(World world, float x, float y, String path, float mass, float radius, GameWorld gameWorld) {
+    public Enemy(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
         this.gameWorld = gameWorld;
         player = gameWorld.getPlayer();
         body.setUserData(this);
 
-        this.health = 100;
+        this.health = 50;
         this.jumpHeight = 50;
         this.moveSpeed = 5;
         this.weapon = new Machinegun(gameWorld, this);
@@ -43,7 +41,7 @@ public class Enemy extends EntityDynamic {
         if (entityState == ENTITY_STATE.STANDING) {
             updatePerpen();
 
-            if (enemyState == ENEMY_STATE.SHOOTING) {
+            if (enemyState == ENEMY_STATE.ATTACKING) {
                 if(toShoot()){
                     Shoot();
                 }
@@ -62,18 +60,18 @@ public class Enemy extends EntityDynamic {
         }
     }
 
-    private void updateToPlanet() {
+    protected void updateToPlanet() {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
         toPlanet.scl(50);
     }
-    private void updatePerpen(){
+    protected void updatePerpen(){
         perpen.set(-toPlanet.y, toPlanet.x);
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
 
-    private void updateWalkingDirection() {
+    protected void updateWalkingDirection() {
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
 
         float angle = perpen.angle(toPlayer);
@@ -85,7 +83,7 @@ public class Enemy extends EntityDynamic {
             moveLeft = true;
         }
     }
-    private void moveAlongPlanet(){
+    protected void moveAlongPlanet(){
         //MOVE
         if (moveRight) {
             body.setLinearVelocity(perpen);
@@ -95,25 +93,25 @@ public class Enemy extends EntityDynamic {
             body.setLinearVelocity(0, 0);
         }
     }
-    private boolean toJump(){
+    protected boolean toJump(){
         float angle = toPlanet.angle(toPlayer);
         return (Math.abs(angle) > 150);
     }
-    private void jump(){
+    protected void jump(){
         body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
         entityState = ENTITY_STATE.JUMPING;
     }
 
-    private void updateEnemyState(){
+    protected void updateEnemyState(){
         if(player.getPlanetBody() != this.getPlanetBody()){
             enemyState = ENEMY_STATE.HUNTING;
         }
         else{
-            enemyState = ENEMY_STATE.SHOOTING;
+            enemyState = ENEMY_STATE.ATTACKING;
         }
     }
 
-    private boolean toShoot(){
+    protected boolean toShoot(){
         //Calculating if shooting is to happen
         Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
         float angle = awayFromPlanet.angle(toPlayer);
@@ -121,7 +119,7 @@ public class Enemy extends EntityDynamic {
         return (Math.abs(angle) < 110); //110 should be calculated mathematically
     }
 
-    private void Shoot() {
+    protected void Shoot() {
         Vector2 recoil = new Vector2(-toPlayer.x, -toPlayer.y);
         recoil.setLength2(1);
 

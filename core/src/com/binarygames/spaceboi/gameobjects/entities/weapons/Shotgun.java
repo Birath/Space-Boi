@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Shotgun extends Weapon {

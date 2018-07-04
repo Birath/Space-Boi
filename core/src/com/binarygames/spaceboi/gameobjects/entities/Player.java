@@ -25,6 +25,7 @@ public class Player extends EntityDynamic {
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
+    private Vector2 perpen = new Vector2(0,0);
 
     private float playerAngle = 0f;
 
@@ -42,32 +43,29 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
-        this.health = 100;
-        this.jumpHeight = 50;
+        this.health = 1000;
+        this.jumpHeight = 20;
         this.moveSpeed = 20;
     }
 
     @Override
     public void update(float delta) {
+        updateToPlanet();
+        updatePerpen();
+        // http://www.iforce2d.net/b2dtut/constant-speed
+        // TODO Check above site about movement
         if (entityState == ENTITY_STATE.STANDING) {
-            updateToPlanet();
-
-            Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
-            perpen.setLength2(1);
-            perpen.scl(moveSpeed);
-            // http://www.iforce2d.net/b2dtut/constant-speed
-            // TODO Check above site about movement
-            //MOVE
+            //Moving
             if (moveRight) {
-                body.setLinearVelocity(perpen); //Dynamiska adderande blir kanse bättre än att bara sätta saker och ting
+                body.setLinearVelocity(perpen); //Dynamiska adderande blir kanske bättre än att bara sätta saker och ting
             } else if (moveLeft) {
-                perpen.scl(1); //Stoppar copyrightstrike - ändrar ingenting
                 body.setLinearVelocity(-perpen.x, -perpen.y);
-            } else {
+            }
+            if( (!moveLeft) && (!moveRight) ) {
                 body.setLinearVelocity(0, 0);
             }
 
-            //JUMP
+            //Jumping
             if (moveUp) {
                 if (chained) {
                     for (JointEdge jointEdge : body.getJointList()) {
@@ -82,7 +80,7 @@ public class Player extends EntityDynamic {
         }
         //Aiming
         updateMouseCoords();
-        //SHOOTING
+        //Shooting
         updateWeapons(delta);
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
@@ -101,6 +99,7 @@ public class Player extends EntityDynamic {
     private void Shoot() {
         Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
         recoil.setLength2(1);
+        System.out.println(recoil);
 
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
@@ -150,6 +149,11 @@ public class Player extends EntityDynamic {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
         toPlanet.scl(jumpHeight);
+    }
+    private void updatePerpen(){
+        perpen = new Vector2(-toPlanet.y, toPlanet.x);
+        perpen.setLength2(1);
+        perpen.scl(moveSpeed);
     }
 
     public float getPlayerAngle() {

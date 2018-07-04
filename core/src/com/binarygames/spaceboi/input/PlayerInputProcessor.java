@@ -1,16 +1,11 @@
 package com.binarygames.spaceboi.input;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.screens.GameScreen;
 
 public class PlayerInputProcessor implements InputProcessor {
@@ -38,11 +33,11 @@ public class PlayerInputProcessor implements InputProcessor {
             gameScreen.resume();
             return true;
         }
-        if (keycode == Input.Keys.ESCAPE){
+        if (keycode == Input.Keys.ESCAPE) {
             gameScreen.pause();
             return true;
         }
-        if (keycode == Input.Keys.SPACE){
+        if (keycode == Input.Keys.SPACE) {
             player.setMoveUp(true);
             return true;
         }
@@ -99,6 +94,10 @@ public class PlayerInputProcessor implements InputProcessor {
             player.setWeapon(2);
             System.out.println("Equipped " + player.getWeapon().toString());
             return true;
+        }
+
+        if (character == '§') {
+            gameScreen.getConsole().show();
         }
         return false;
     }

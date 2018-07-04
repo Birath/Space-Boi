@@ -11,7 +11,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 public class Planet extends EntityStatic {
 
     private ShapeRenderer shapeRenderer;
-    public static final int GRAVITY_RADIUS = 3;
+    public static final int GRAVITY_RADIUS = 2;
 
     public Planet(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
