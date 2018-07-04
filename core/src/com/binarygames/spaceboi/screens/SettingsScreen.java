@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.ui.AudioSettingsTab;
+import com.binarygames.spaceboi.ui.ControlSettingsTab;
 import com.binarygames.spaceboi.ui.SettingsTab;
 import com.binarygames.spaceboi.ui.VideoSettingsTab;
 
@@ -41,6 +42,9 @@ public class SettingsScreen extends BaseScreen implements Screen {
         VideoSettingsTab videoSettingsTab = new VideoSettingsTab(game, this);
         videoSettingsTab.hide();
 
+        ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
+        controlSettingsTab.hide();
+
         final TextButton audioButton = new TextButton("Audio", buttonStyle);
         audioButton.addListener(new ChangeListener() {
             @Override
@@ -54,6 +58,14 @@ public class SettingsScreen extends BaseScreen implements Screen {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
                 setCurrentTab(videoSettingsTab);
+            }
+        });
+
+        final TextButton controlsButton = new TextButton("Controls", buttonStyle);
+        controlsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(final ChangeEvent event, final Actor actor) {
+                setCurrentTab(controlSettingsTab);
             }
         });
 
@@ -79,16 +91,17 @@ public class SettingsScreen extends BaseScreen implements Screen {
 
         setCurrentTab(audioSettingsTab);
 
-        table.add(title);
+        table.add(title).left();
         table.row();
-        table.add(audioButton);
-        table.add(videoButton);
+        table.add(audioButton).left();
+        table.add(videoButton).center();
+        table.add(controlsButton).right();
         table.row();
         settingsCell = table.add(currentSettingsTab.getTable());
         // TODO settingsCell size
         table.row();
-        table.add(backButton);
-        table.add(applyButton);
+        table.add(backButton).left();
+        table.add(applyButton).right();
 
         stage.addActor(table);
     }

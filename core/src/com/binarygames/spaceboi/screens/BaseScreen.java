@@ -28,7 +28,7 @@ public abstract class BaseScreen {
     public Label.LabelStyle titleStyle;
 
     BitmapFont buttonFont;
-    TextButton.TextButtonStyle buttonStyle;
+    public TextButton.TextButtonStyle buttonStyle;
 
     private Screen previousScreen;
 

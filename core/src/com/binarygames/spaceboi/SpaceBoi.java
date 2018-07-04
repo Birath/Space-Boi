@@ -28,8 +28,6 @@ public class SpaceBoi extends Game {
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
 
-    private DisplayMode displayMode;
-
     public BitmapFont debugFont;
 
     public static Fonts font;
