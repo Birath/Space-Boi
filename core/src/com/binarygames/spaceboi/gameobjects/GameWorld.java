@@ -96,9 +96,6 @@ public class GameWorld {
         rotatePlayer(delta);
         world.step(delta, 6, 2);
 
-
-
-        removeBullets(dynamicEntities);
         removeDead(dynamicEntities);
         dynamicEntities.addAll(addDynamicEntities);
         addDynamicEntities.clear();
@@ -157,31 +154,14 @@ public class GameWorld {
     }
 
 
-    private void removeBullets(List<EntityDynamic> toRemoveList) {
-        Iterator<EntityDynamic> itr = toRemoveList.iterator();
-
-        while (itr.hasNext()) {
-            EntityDynamic entity = itr.next();
-            if (entity instanceof Bullet) {
-                if (((Bullet) entity).shouldRemove(player.getBody().getPosition())) {
-                    entity.onRemove();
-                    world.destroyBody(entity.getBody());
-                    itr.remove();
-                }
-            }
-        }
-    }
-
     private void removeDead(List<EntityDynamic> entityList) {
         Iterator<EntityDynamic> itr = entityList.iterator();
-
         while (itr.hasNext()) {
             EntityDynamic entity = itr.next();
-            if (entity instanceof Enemy || entity instanceof Player) {
-                if (entity.shouldRemove()) {
-                    world.destroyBody(entity.getBody());
-                    itr.remove();
-                }
+            if (entity.shouldRemove(player.getBody().getPosition())) {
+                entity.onRemove();
+                world.destroyBody(entity.getBody());
+                itr.remove();
             }
         }
     }

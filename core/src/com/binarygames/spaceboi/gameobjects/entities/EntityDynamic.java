@@ -74,7 +74,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         health -= amount;
     }
 
-    protected abstract boolean shouldRemove(Vector2 playerPosition);
+    public boolean shouldRemove(Vector2 playerPosition) {
+        return health <= 0;
+    }
 
     public boolean shouldRemove() {
         return health <= 0;

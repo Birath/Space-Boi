@@ -61,11 +61,6 @@ public class Enemy extends EntityDynamic {
     }
 
     @Override
-    protected boolean shouldRemove(Vector2 playerPosition) {
-        return false;
-    }
-
-    @Override
     public void onRemove() {
 
     }
