@@ -69,7 +69,7 @@ public class GameWorld {
         WorldGenerator worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
 
-        Player player = new Player(this, 200, 0, Assets.PLAYER, 500, 10);
+        Player player = new Player(this, worldGenerator.generatePlayerX(), worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
 

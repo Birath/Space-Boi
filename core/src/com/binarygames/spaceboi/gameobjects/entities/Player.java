@@ -50,11 +50,12 @@ public class Player extends EntityDynamic {
 
     @Override
     public void update(float delta) {
-        updateToPlanet();
-        updatePerpen();
+
         // http://www.iforce2d.net/b2dtut/constant-speed
         // TODO Check above site about movement
         if (entityState == ENTITY_STATE.STANDING) {
+            updateToPlanet();
+            updatePerpen();
             //Moving
             if (moveRight) {
                 body.setLinearVelocity(perpen); //Dynamiska adderande blir kanske bättre än att bara sätta saker och ting

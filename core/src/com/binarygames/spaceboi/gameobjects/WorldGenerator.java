@@ -5,6 +5,7 @@ import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import java.util.Random;
 
 public class WorldGenerator {
+    private static final int OFFSET = 10;
     private GameWorld gameWorld;
 
     private final int maxRad = 300;
@@ -68,9 +69,9 @@ public class WorldGenerator {
         this.lastRad = rad;
     }
     public int generatePlayerX(){
-        return lastX + lastRad;
+        return lastX + lastRad + OFFSET;
     }
     public int generatePlayerY(){
-        return lastY + lastRad;
+        return lastY + OFFSET;
     }
 }
