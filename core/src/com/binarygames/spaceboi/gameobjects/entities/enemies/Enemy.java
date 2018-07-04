@@ -34,11 +34,11 @@ public class Enemy extends EntityDynamic {
 
     @Override
     public void update(float delta) {
-        updateToPlanet();
         updateWalkingDirection();
         updateEnemyState();
         weapon.update(delta);
         if (entityState == ENTITY_STATE.STANDING) {
+            updateToPlanet();
             updatePerpen();
 
             if (enemyState == ENEMY_STATE.ATTACKING) {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,6 +23,8 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public class GameScreen implements Screen {
 
+    public static final int CAMERA_LERP_ACCELERATION = 25;
+    private CameraRotator cameraRotator;
     private SpaceBoi game;
 
     private static final int GAME_RUNNING = 0;
@@ -52,7 +55,7 @@ public class GameScreen implements Screen {
     private final int interpolateCount = 30;
     private int currentInterpolateCount;
 
-    private final float whenToInterpolate = 10;
+    private final float whenToInterpolate = 30;
     private float angleToInterpolate;
 
     public GameScreen(SpaceBoi game) {
@@ -63,6 +66,7 @@ public class GameScreen implements Screen {
         // Mysko skit för att få scalingen av debuggkameran rätt
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        cameraRotator = new CameraRotator(camera);
         //box2dCamera = new OrthographicCamera(Gdx.graphics.getWidth() * WORLD_TO_BOX, Gdx.graphics.getHeight() * WORLD_TO_BOX);
         // Vet inte riktigt vad jag håller på med här, men det verkar funka // Björn
 
@@ -114,6 +118,8 @@ public class GameScreen implements Screen {
                         */
                     } else {
                         camera.rotate(angleToInterpolate / interpolateCount);
+                        Gdx.app.log("GameScreen", "Current camera angle: " + getCameraRotation());
+                        Gdx.app.log("GameScreen", "Target angle:  " + player.getPlayerAngle());
                         currentInterpolateCount++;
                     }
                 } else {
@@ -124,26 +130,52 @@ public class GameScreen implements Screen {
                     // System.out.println();
 
                     float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
-                    //int angleDiff = MathUtils.ceil(player.getPlayerAngle() - getCameraRotation());
-                    if (Math.abs(angleDiff) >= whenToInterpolate) {
-                        //angleToInterpolate = Math.abs(angleDiff) + 180;
-                        angleToInterpolate = angleDiff;
+                    float rotationAmount = getCameraRotation() - player.getPlayerAngle() + 90;
+                    //float angleDiff = player.getPlayerAngle() - getCameraRotation();
+                    //Gdx.app.log("GameScreen", "Camera angle: " + getCameraRotation());
+                    //Gdx.app.log("GameScreen", "Player angle: " + player.getPlayerAngle() + 270);
+
+                    //Gdx.app.log("GameScreen", "Target Angle: " + (getCameraRotation() + rotationAmount));
+                    float lerpedAngle = MathUtils.lerpAngleDeg(getCameraRotation(), getCameraRotation() + rotationAmount, delta * 10);
+                    //Gdx.app.log("GameScreen", "Lerped angle: " + lerpedAngle);
+                    //System.out.println();
+                    //if (Math.abs(rotationAmount) >= whenToInterpolate) {
+                    //    cameraRotator.startRotation(getCameraRotation(), rotationAmount, 0.5f);
+                    //}
+                    float lerpedAmount = MathUtils.lerp(getCameraRotation(), getCameraRotation() + rotationAmount, delta);
+                    //Gdx.app.log("GameScreen", "Rotate amnt:  " + rotationAmount);
+                    //Gdx.app.log("GameScreen", "Lerped amnt:  " + lerpedAmount);
+                    camera.rotate(rotationAmount);
+                    //camera.rotate(lerpedAmount);
+
+
+
+                    if (Math.abs(rotationAmount) >= whenToInterpolate) {
+                        //angleToInterpolate = (Math.abs(player.getPlayerAngle() - getCameraRotation()) + 180);
+                        //camera.rotate((Math.abs(player.getPlayerAngle() - getCameraRotation()) + 180));
+                        //angleToInterpolate = angleDiff;
                         currentInterpolateCount = 0;
-                        interpolateRotation = true;
+                        //interpolateRotation = true;
                         lastAngle = player.getPlayerAngle();
+                        //cameraRotator.startRotation(rotationAmount, 0.5f);
                     } else {
                         lastAngle = player.getPlayerAngle();
-                        camera.rotate(angleDiff);
-                        //camera.rotate(Math.abs(angleDiff) + 180);
+
+
+                        //camera.rotate(angleDiff);
+                        //Gdx.app.log("GameScreen", "AngleDiff: " + angleDiff);
+                        //camera.rotate((Math.abs(angleDiff) + 180));
+                        //Gdx.app.log("GameScreen", "CameraAngle: " + getCameraRotation());
                     }
                 }
 
         /* float angleDiff = lastAngle - player.getPlayerAngle();
         lastAngle = player.getPlayerAngle();
         camera.rotate(angleDiff); */
-
-                camera.position.set(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0);
+                camera.position.lerp(new Vector3(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0), CAMERA_LERP_ACCELERATION * delta);
+                //camera.position.set(new Vector3(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0));
                 camera.update();
+
                 game.getBatch().setProjectionMatrix(camera.combined);
                 batchedDraw(delta);
                 draw();

@@ -9,9 +9,10 @@ public final class GamePreferences {
     private static final String PREF_SOUND_VOLUME = "sound.volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
+    private static final String DEBUG_PREF_GRAVITY_ENABLED = "gravity.enabled";
     private static final String PREF_FULLSCREEN_ENABLED = "fullscreen.enabled";
     private static final String PREF_NAME = "spaceboi";
-    public static final float DEFAULT_VOLUME = 0.5f;
+    private static final float DEFAULT_VOLUME = 0.5f;
 
     private SpaceBoi game;
 
@@ -73,6 +74,15 @@ public final class GamePreferences {
 
     public void setFullscreenEnable(boolean fullscreenEnabled) {
         getPreferences().putBoolean(PREF_FULLSCREEN_ENABLED, fullscreenEnabled);
+        getPreferences().flush();
+    }
+
+    public boolean isGravityEnabled() {
+        return getPreferences().getBoolean(DEBUG_PREF_GRAVITY_ENABLED, true);
+    }
+
+    public void setGravityEnabled(boolean gravityEnabled) {
+        getPreferences().putBoolean(DEBUG_PREF_GRAVITY_ENABLED, gravityEnabled);
         getPreferences().flush();
     }
 }
