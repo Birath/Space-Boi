@@ -1,8 +1,10 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -28,6 +30,7 @@ public class GameWorld {
     private World world;
     private ParticleHandler particleHandler;
     private Player player;
+    private boolean shouldLerpPlayerAngle = false;
 
     private List<EntityDynamic> dynamicEntities;
     private List<EntityStatic> staticEntities;
@@ -38,6 +41,15 @@ public class GameWorld {
     private Array<Joint> jointsToDestroy = new Array<>();
 
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11);
+    private float targetAngle = 0;
+    private int lerpSpeed = 5;
+    private int currentLerpStep;
+    private float rotationAmmount;
+    private boolean isLerping;
+    private float fromDegrees;
+    private float toDegrees;
+    private float timeSinceStart;
+    private static final float LERP_TIME = 0.1f;
 
     public GameWorld(SpaceBoi game, World world, Camera camera) {
         this.game = game;
@@ -56,12 +68,16 @@ public class GameWorld {
         this.player = player;
 
         Enemy enemy = new Enemy(world, 250, 30, Assets.PLANET_MOON, 500, 10, this);
-        addDynamicEntity(enemy);
+        //addDynamicEntity(enemy);
 
         Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
         addStaticEntity(planet1);
         Planet planet2 = new Planet(this, 230, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 75);
         addStaticEntity(planet2);
+        for (int i = 0; i < 100; i++) {
+            //Planet newPlanet = new Planet(this, 50, i * 75* 3, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 75);
+            //addStaticEntity(newPlanet);
+        }
 
         world.setContactListener(new EntityContactListener(this));
     }
@@ -71,6 +87,7 @@ public class GameWorld {
             applyGravity(entity);
             entity.update(delta);
         }
+        rotatePlayer(delta);
         world.step(delta, 6, 2);
         dynamicEntities.addAll(addDynamicEntities);
         removeBullets(dynamicEntities);
@@ -107,7 +124,9 @@ public class GameWorld {
                     (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad()));
             finalGravity.add(gravityPull);
         }
-        entity.getBody().applyForceToCenter(finalGravity, true);
+        if (game.getPreferences().isGravityEnabled()) {
+            entity.getBody().applyForceToCenter(finalGravity, true);
+        }
         /*
         Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
         float distance = closestPlanetPos.dst(entityPos);
@@ -125,9 +144,6 @@ public class GameWorld {
         if (entity instanceof Player && closestPlanet != null) {
             // TODO Change to toPlanet vector instead
             player.setClosestPlanet(closestPlanet);
-            Vector2 relativeVector = closestPlanet.getBody().getPosition().sub(player.getBody().getPosition());
-            float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
-            player.setPlayerAngle(angleToPlanet);
         }
     }
 
@@ -211,6 +227,77 @@ public class GameWorld {
             joint = null;
         }
         jointsToDestroy.clear();
+    }
+
+    private void rotatePlayer(float delta) {
+        Planet closestPlanet = player.getClosestPlanet();
+        if (shouldLerpPlayerAngle) {
+            if (currentLerpStep == lerpSpeed || player.isChained()) {
+                shouldLerpPlayerAngle = false;
+                currentLerpStep = 0;
+                return;
+            }
+            float currentAngle = player.getPlayerAngle() - 90;
+            player.setPlayerAngle( currentAngle + (rotationAmmount / lerpSpeed));
+            currentLerpStep++;
+            return;
+        }
+
+        if (closestPlanet == null) {
+            return;
+        }
+        Vector2 relativeVector = closestPlanet.getBody().getPosition().sub(player.getBody().getPosition());
+        float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        angleToPlanet = (angleToPlanet + 360) % 360;
+        // float oldAngle = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        /*
+        if (player.getPlayerAngle() -90 - angleToPlanet > 50) {
+            Gdx.app.log("GameWorld", "Angle diff: " + (player.getPlayerAngle() - 90 - angleToPlanet));
+            shouldLerpPlayerAngle = true;
+            targetAngle = angleToPlanet;
+            rotationAmmount = player.getPlayerAngle() - 90 - angleToPlanet;
+            if (player.getPlayerAngle() - 90 > angleToPlanet) {
+                rotationAmmount *= -1;
+            }
+            currentLerpStep = 0;
+            return;
+        }*/
+        //Gdx.app.log("GameWorld", "Angle to planet: " + angleToPlanet);
+        //Gdx.app.log("GameWorld", "Previous Angle:  " + player.getPlayerAngle());
+        float lerpedAngle = 0;
+        float otherInterpolation = 0;
+        // http://www.blueraja.com/blog/404/how-to-use-unity-3ds-linear-interpolation-vector3-lerp-correctly
+        if (isLerping) {
+            timeSinceStart += delta * 5;
+            float progress = timeSinceStart / LERP_TIME;
+            //lerpedAngle = MathUtils.lerpAngleDeg(fromDegrees, toDegrees, progress);
+            //otherInterpolation = Interpolation.linear.apply(fromDegrees, toDegrees, progress);
+            lerpedAngle = MathUtils.lerpAngleDeg(fromDegrees, toDegrees, timeSinceStart);
+            otherInterpolation = Interpolation.linear.apply(fromDegrees, toDegrees, timeSinceStart);
+            //Gdx.app.log("GameWorld", "FromDegrees: " + fromDegrees + " ToDegrees: " + toDegrees + " Progress: " + timeSinceStart);
+            if (timeSinceStart >= 1.0f) {
+                isLerping = false;
+            }
+        } else {
+            fromDegrees = player.getPlayerAngle();
+            toDegrees = angleToPlanet;
+            timeSinceStart = 0;
+            //isLerping = true;
+            lerpedAngle = MathUtils.lerpAngleDeg(fromDegrees, toDegrees, 0);
+            otherInterpolation  = Interpolation.linear.apply(fromDegrees, toDegrees, 0);
+        }
+        if (Math.abs(player.getPlayerAngle() - angleToPlanet) > 20) {
+            lerpSpeed = 5;
+        } else {
+            lerpSpeed = 25;
+        }
+        lerpedAngle = MathUtils.lerpAngleDeg(player.getPlayerAngle(), angleToPlanet, delta * lerpSpeed);
+        //Gdx.app.log("GameWorld", "Lerped angle:        " + lerpedAngle);
+        //Gdx.app.log("GameWorld", "Linear interpolation: " + otherInterpolation);
+        //Gdx.app.log("GameWorld", "Target Angle:        " + angleToPlanet);
+        //player.setPlayerAngle(lerpedAngle);
+        //player.setPlayerAngle(otherInerpolation);
+        player.setPlayerAngle(lerpedAngle);
     }
 
     public void addDynamicEntity(EntityDynamic entity) {

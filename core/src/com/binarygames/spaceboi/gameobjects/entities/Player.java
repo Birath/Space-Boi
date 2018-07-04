@@ -55,7 +55,8 @@ public class Player extends EntityDynamic {
             Vector2 perpen = new Vector2(-toPlanet.y, toPlanet.x);
             perpen.setLength2(1);
             perpen.scl(moveSpeed);
-
+            // http://www.iforce2d.net/b2dtut/constant-speed
+            // TODO Check above site about movement
             //MOVE
             if (moveRight) {
                 body.setLinearVelocity(perpen); //Dynamiska adderande blir kanse bättre än att bara sätta saker och ting
@@ -93,7 +94,7 @@ public class Player extends EntityDynamic {
         getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
         weapon.render(batch, camera, this);
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
-        getSprite().setRotation(getPlayerAngle());
+        getSprite().setRotation(playerAngle + 90);
         getSprite().draw(batch);
     }
 
@@ -152,21 +153,22 @@ public class Player extends EntityDynamic {
     }
 
     public float getPlayerAngle() {
-        return playerAngle + 90; // TODO fix magic number
+        return playerAngle; // TODO fix magic number
     }
 
     public void setPlayerAngle(float angle) {
         playerAngle = angle;
+        //Gdx.app.debug("Player", "New playerAngle: " + angle);
     }
 
     //Handeling planet
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
-        // Don't chain the player is holding the jump button
+        // Don't chain the player if they are holding the jump button
         if (!moveUp) {
             gameWorld.addJoints(new JointInfo(body, planet.getBody()));
-            Gdx.app.log("ContactListener", "Creating joint: " + this + ", " + planet);
+            //Gdx.app.log("Player", "Creating joint: " + this + ", " + planet);
             chained = true;
         }
 
