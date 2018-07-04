@@ -2,6 +2,8 @@ package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -47,6 +49,14 @@ public class SpaceBoi extends Game {
         // Audio
         musicManager = new MusicManager(this);
         soundManager = new SoundManager(this);
+
+        // Video
+        // TODO fix
+        Graphics.Monitor currMonitor = Gdx.graphics.getMonitor();
+        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
+        if (preferences.isFullscreenEnabled() && !Gdx.graphics.setFullscreenMode(displayMode)) {
+            // switching to full-screen mode failed
+        }
 
         debugFont = new BitmapFont();
         loadDebugFont();

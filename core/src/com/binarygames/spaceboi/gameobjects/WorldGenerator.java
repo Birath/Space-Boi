@@ -2,6 +2,9 @@ package com.binarygames.spaceboi.gameobjects;
 
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
+
 import java.util.Random;
 
 public class WorldGenerator {
@@ -22,10 +25,16 @@ public class WorldGenerator {
     private int lastY = 0;
     private int lastRad = 0;
 
+    private int maxEnemies = 5;
+    private int minEnemies = 0;
+    private int enemyMass = 100;
+    private int enemyRad = 8;
+
+
     public WorldGenerator(GameWorld gameWorld){
         this.gameWorld = gameWorld;
     }
-    public void createWorld(){
+   public void createWorld(){
         Random random = new Random();
         createPlanet(0, 0, random);
         int angleOffset = 0;
@@ -67,7 +76,22 @@ public class WorldGenerator {
         this.lastX = x;
         this.lastY = y;
         this.lastRad = rad;
+
+        createEnemies(x, y, random, rad);
     }
+    private void createEnemies(int x, int y, Random random, int rad){
+        int numberOfEnemies = random.nextInt(maxEnemies - minEnemies);
+        numberOfEnemies = numberOfEnemies + minEnemies;
+
+        x = x + rad + enemyRad;
+        y = y + enemyRad;
+
+        for(int i = 0; i < numberOfEnemies; i++){
+            Chaser chaser = new Chaser(gameWorld, x + (enemyRad * i), y, Assets.PLANET_MOON, enemyMass, enemyRad);
+            gameWorld.addDynamicEntity(chaser);
+        }
+    }
+
     public int generatePlayerX(){
         return lastX + lastRad + OFFSET;
     }

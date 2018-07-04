@@ -31,6 +31,11 @@ public class Bullet extends EntityDynamic {
     }
 
     @Override
+    public void update(float delta) {
+        //Do nothing
+    }
+
+    @Override
     public void hitPlanet(Planet planet) {
     }
 

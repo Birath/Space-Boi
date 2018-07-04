@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 
 public final class GamePreferences {
@@ -9,7 +10,14 @@ public final class GamePreferences {
     private static final String PREF_SOUND_VOLUME = "sound.volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
+
     private static final String DEBUG_PREF_GRAVITY_ENABLED = "gravity.enabled";
+
+    private static final String PREF_FULLSCREEN_ENABLED = "fullscreen.enabled";
+
+    private static final String PREF_KEY_SHOOT = "key.shoot";
+    private static final String PREF_KEY_SHOOT_IS_KEYBOARD = "key.shoot";
+
     private static final String PREF_NAME = "spaceboi";
     private static final float DEFAULT_VOLUME = 0.5f;
 
@@ -67,6 +75,15 @@ public final class GamePreferences {
         getPreferences().flush();
     }
 
+    public boolean isFullscreenEnabled() {
+        return getPreferences().getBoolean(PREF_FULLSCREEN_ENABLED, false);
+    }
+
+    public void setFullscreenEnable(boolean fullscreenEnabled) {
+        getPreferences().putBoolean(PREF_FULLSCREEN_ENABLED, fullscreenEnabled);
+        getPreferences().flush();
+    }
+
     public boolean isGravityEnabled() {
         return getPreferences().getBoolean(DEBUG_PREF_GRAVITY_ENABLED, true);
     }
@@ -75,5 +92,24 @@ public final class GamePreferences {
         getPreferences().putBoolean(DEBUG_PREF_GRAVITY_ENABLED, gravityEnabled);
         getPreferences().flush();
     }
+
+    public int getKeyShoot() {
+        return getPreferences().getInteger(PREF_KEY_SHOOT, Input.Buttons.LEFT);
+    }
+
+    public boolean isKeyShootKeyboard() {
+        return getPreferences().getBoolean(PREF_KEY_SHOOT_IS_KEYBOARD, false);
+    }
+
+    public void setKeyShoot(int key) {
+        getPreferences().putInteger(PREF_KEY_SHOOT, key);
+        getPreferences().flush();
+    }
+
+    public void setKeyShootKeyboard(boolean isKeyboard) {
+        getPreferences().putBoolean(PREF_KEY_SHOOT_IS_KEYBOARD, isKeyboard);
+        getPreferences().flush();
+    }
+
 }
 

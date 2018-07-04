@@ -8,7 +8,7 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
-public class Enemy extends EntityDynamic {
+public abstract class Enemy extends EntityDynamic {
 
     protected Vector2 toPlanet = new Vector2(0, 0);
     protected Vector2 toPlayer = new Vector2(0, 0);
@@ -23,41 +23,38 @@ public class Enemy extends EntityDynamic {
     public Enemy(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
         this.gameWorld = gameWorld;
-        player = gameWorld.getPlayer();
         body.setUserData(this);
-
-        this.health = 50;
-        this.jumpHeight = 50;
-        this.moveSpeed = 5;
-        this.weapon = new Machinegun(gameWorld, this);
     }
 
     @Override
     public void update(float delta) {
-        updateWalkingDirection();
-        updateEnemyState();
         weapon.update(delta);
         if (entityState == ENTITY_STATE.STANDING) {
-            updateToPlanet();
-            updatePerpen();
-
-            if (enemyState == ENEMY_STATE.ATTACKING) {
-                if(toShoot()){
-                    Shoot();
-                }
-                else{
-                    moveAlongPlanet();
-                }
+            updateEnemy();
+            if(enemyState == ENEMY_STATE.IDLE){
+                updateIdle();
+            }
+            else if (enemyState == ENEMY_STATE.ATTACKING) {
+                updateAttacking();
             }
             else if (enemyState == ENEMY_STATE.HUNTING){
-                if(toJump()){
-                    jump();
-                }
-                else{
-                    moveAlongPlanet();
-                }
+                updateHunting();
             }
         }
+        else if (entityState == ENTITY_STATE.JUMPING){
+            updateJumping();
+        }
+    }
+    protected abstract void updateIdle();
+    protected abstract void updateHunting();
+    protected abstract void updateAttacking();
+    protected abstract void updateJumping();
+
+    protected void updateEnemy(){
+        updateToPlanet();
+        updatePerpen();
+        updateWalkingDirection();
+        updateEnemyState();
     }
 
     @Override
@@ -75,12 +72,17 @@ public class Enemy extends EntityDynamic {
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
-
     protected void updateWalkingDirection() {
+        player = gameWorld.getPlayer();
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
 
         float angle = perpen.angle(toPlayer);
-        if (Math.abs(angle) < 90) {
+
+        if(enemyState == ENEMY_STATE.IDLE){
+            moveLeft = false;
+            moveRight = false;
+        }
+        else if (Math.abs(angle) < 90) {
             moveLeft = false;
             moveRight = true;
         } else {
@@ -108,35 +110,14 @@ public class Enemy extends EntityDynamic {
     }
 
     protected void updateEnemyState(){
-        if(player.getPlanetBody() != this.getPlanetBody()){
+        if(toPlayer.len2() > 1000){
+            enemyState = ENEMY_STATE.IDLE;
+        }
+        else if(player.getPlanetBody() != this.getPlanetBody()){
             enemyState = ENEMY_STATE.HUNTING;
         }
         else{
             enemyState = ENEMY_STATE.ATTACKING;
         }
-    }
-
-    protected boolean toShoot(){
-        //Calculating if shooting is to happen
-        Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
-        float angle = awayFromPlanet.angle(toPlayer);
-
-        return (Math.abs(angle) < 110); //110 should be calculated mathematically
-    }
-
-    protected void Shoot() {
-        Vector2 recoil = new Vector2(-toPlayer.x, -toPlayer.y);
-        recoil.setLength2(1);
-
-        //Setting recoil
-        recoil.scl(weapon.getRecoil());
-        body.setLinearVelocity(recoil);
-
-        //Creating the bullet
-        recoil.setLength2(1);
-        recoil.scl(-(rad * PPM));
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-
-        weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
     }
 }

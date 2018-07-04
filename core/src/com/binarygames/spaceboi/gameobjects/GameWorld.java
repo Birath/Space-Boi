@@ -16,6 +16,7 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Flyingship;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
@@ -66,25 +67,15 @@ public class GameWorld {
         WorldGenerator worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
 
-        Player player = new Player(this, worldGenerator.generatePlayerX(), worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+        Player player = new Player(this, worldGenerator.generatePlayerX(),
+                worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
 
-        /*
-        Enemy enemy = new Enemy(this, 250, 30, Assets.PLANET_MOON, 500, 10);
-        addDynamicEntity(enemy);
+        Flyingship flyingship = new Flyingship(this, worldGenerator.generatePlayerX() + 40,
+                worldGenerator.generatePlayerY() + 20, Assets.PLANET_MOON, 500, 20);
+        addDynamicEntity(flyingship);
 
-        for(int i = 0; i < 5; i++){
-            Chaser chaser = new Chaser(this, 250 + i*5, 30, Assets.PLANET_MOON, 350, 7);
-            addDynamicEntity(chaser);
-        }
-        */
-
-        /*Planet planet1 = new Planet(this, 10, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 100);
-        addStaticEntity(planet1);
-        Planet planet2 = new Planet(this, 230, 30, Assets.PLANET_MOON, (float) Math.pow(3 * 10, 7), 75);
-        addStaticEntity(planet2);
-        */
         world.setContactListener(new EntityContactListener(this));
     }
 
