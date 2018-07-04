@@ -9,6 +9,7 @@ public final class GamePreferences {
     private static final String PREF_SOUND_VOLUME = "sound.volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
+    private static final String PREF_FULLSCREEN_ENABLED = "fullscreen.enabled";
     private static final String PREF_NAME = "spaceboi";
     public static final float DEFAULT_VOLUME = 0.5f;
 
@@ -63,6 +64,15 @@ public final class GamePreferences {
 
     public void setSoundEnabled(boolean soundEnabled) {
         getPreferences().putBoolean(PREF_SOUND_ENABLED, soundEnabled);
+        getPreferences().flush();
+    }
+
+    public boolean isFullscreenEnabled() {
+        return getPreferences().getBoolean(PREF_FULLSCREEN_ENABLED, false);
+    }
+
+    public void setFullscreenEnable(boolean fullscreenEnabled) {
+        getPreferences().putBoolean(PREF_FULLSCREEN_ENABLED, fullscreenEnabled);
         getPreferences().flush();
     }
 }

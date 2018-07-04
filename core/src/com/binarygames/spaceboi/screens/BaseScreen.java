@@ -25,7 +25,7 @@ public abstract class BaseScreen {
     Stage stage;
 
     BitmapFont titleFont;
-    Label.LabelStyle titleStyle;
+    public Label.LabelStyle titleStyle;
 
     BitmapFont buttonFont;
     TextButton.TextButtonStyle buttonStyle;
