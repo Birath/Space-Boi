@@ -5,7 +5,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public abstract class BaseDynamicBody extends BaseBody {
 
-    public BaseDynamicBody(GameWorld gameWorld, float x, float y, float mass, float radius) {
+    protected BaseDynamicBody(GameWorld gameWorld, float x, float y, float mass, float radius) {
         super(gameWorld, x, y, mass, radius);
 
         //Skapar en body till denna sorts objekt
@@ -26,7 +26,4 @@ public abstract class BaseDynamicBody extends BaseBody {
         circleShape.dispose();
     }
 
-    public Body getBody() {
-        return body;
-    }
 }

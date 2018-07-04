@@ -46,11 +46,6 @@ public abstract class EntityStatic extends BaseStaticBody {
         return sprite;
     }
 
-    @Override
-    protected int getDensity() {
-        return DENSITY;
-    }
-
 
     /*public void act(float delta) {
         super.act(delta);

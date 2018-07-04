@@ -21,10 +21,4 @@ public abstract class BaseStaticBody extends BaseBody {
         groundCircle.dispose();
     }
 
-    public float getVolume() {
-        return (float) ((4 * Math.PI * Math.pow(rad, 3)) / 3);
-    }
-
-    protected abstract int getDensity();
-
 }
