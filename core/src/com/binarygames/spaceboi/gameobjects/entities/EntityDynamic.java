@@ -32,9 +32,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         sprite.setSize(radius * 2, radius * 2);
     }
 
-    public void update(float delta) {
-        //Specific for each sub-entity.
-    }
+    public abstract void update(float delta);
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {

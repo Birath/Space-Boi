@@ -10,9 +10,6 @@ public class Chaser extends Enemy {
 
     public Chaser(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
-        this.gameWorld = gameWorld;
-        player = gameWorld.getPlayer();
-        body.setUserData(this);
 
         this.health = 5;
         this.jumpHeight = 50;
@@ -21,21 +18,35 @@ public class Chaser extends Enemy {
     }
 
     @Override
-    public void update(float delta) {
-        updateToPlanet();
-        updateWalkingDirection();
-        updateEnemyState();
-        weapon.update(delta);
-        if (entityState == ENTITY_STATE.STANDING) {
-            updatePerpen();
-            if(toJump()){
-                jump();
-            }
-            else{
-                moveAlongPlanet();
-            }
+    protected void updateIdle() {
+        moveAlongPlanet();
+    }
+
+    @Override
+    protected void updateHunting() {
+        if(toJump()){
+            jump();
+        }
+        else{
+            moveAlongPlanet();
         }
     }
+
+    @Override
+    protected void updateAttacking() {
+        if(toJump()){
+            jump();
+        }
+        else{
+            moveAlongPlanet();
+        }
+    }
+
+    @Override
+    protected void updateJumping() {
+        //Do nothing
+    }
+
     public int getDamage(){
         return damage;
     }
