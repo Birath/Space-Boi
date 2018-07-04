@@ -97,6 +97,16 @@ public class Player extends EntityDynamic {
         getSprite().draw(batch);
     }
 
+    @Override
+    protected boolean shouldRemove(Vector2 playerPosition) {
+        return false;
+    }
+
+    @Override
+    public void onRemove() {
+        // Do nothing
+    }
+
     private void Shoot() {
         Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
         recoil.setLength2(1);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
@@ -64,22 +65,22 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         return sprite;
     }
 
-    public Body getBody() {
-        return body;
-    }
-
     //Health
     public int getHealth() {
         return health;
     }
 
     public void reduceHealth(int amount) {
-        health = health - amount;
+        health -= amount;
     }
 
-    public boolean isDead() {
+    protected abstract boolean shouldRemove(Vector2 playerPosition);
+
+    public boolean shouldRemove() {
         return health <= 0;
     }
+
+    public abstract void onRemove();
 
     //Entity state
     public ENTITY_STATE getEntityState() {

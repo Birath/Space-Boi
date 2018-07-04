@@ -42,7 +42,7 @@ public class EntityContactListener implements ContactListener {
             Player player = (Player) fixtureB.getBody().getUserData();
             if (!bullet.getShooter().equals(player)) {
                 player.reduceHealth(bullet.getDamage());
-                bullet.setHasHitPlanetTrue(); //Remove bullets only if they dont hit yourself
+                bullet.setHasHit(true); //Remove bullets only if they dont hit yourself
             }
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
@@ -50,7 +50,7 @@ public class EntityContactListener implements ContactListener {
             Player player = (Player) fixtureA.getBody().getUserData();
             if (!bullet.getShooter().equals(player)) {
                 player.reduceHealth(bullet.getDamage());
-                bullet.setHasHitPlanetTrue();
+                bullet.setHasHit(true);
             }
         }
         //Player x Chaser
@@ -84,7 +84,7 @@ public class EntityContactListener implements ContactListener {
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
             if (!bullet.getShooter().equals(enemy)) {
                 enemy.reduceHealth(bullet.getDamage());
-                bullet.setHasHitPlanetTrue();
+                bullet.setHasHit(true);
             }
         } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
@@ -92,7 +92,7 @@ public class EntityContactListener implements ContactListener {
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
             if (!bullet.getShooter().equals(enemy)) {
                 enemy.reduceHealth(bullet.getDamage());
-                bullet.setHasHitPlanetTrue();
+                bullet.setHasHit(true);
             }
         }
 
@@ -100,11 +100,11 @@ public class EntityContactListener implements ContactListener {
         else if (Planet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
-            bullet.setHasHitPlanetTrue();
+            bullet.setHasHit(true);
         } else if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
-            bullet.setHasHitPlanetTrue();
+            bullet.setHasHit(true);
         }
     }
 

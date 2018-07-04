@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,10 +15,8 @@ import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Grenade;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
@@ -166,8 +163,8 @@ public class GameWorld {
         while (itr.hasNext()) {
             EntityDynamic entity = itr.next();
             if (entity instanceof Bullet) {
-                if (((Bullet) entity).toRemove(player.getBody().getPosition().x, player.getBody().getPosition().y)) {
-                    ((Bullet) entity).onRemove();
+                if (((Bullet) entity).shouldRemove(player.getBody().getPosition())) {
+                    entity.onRemove();
                     world.destroyBody(entity.getBody());
                     itr.remove();
                 }
@@ -181,7 +178,7 @@ public class GameWorld {
         while (itr.hasNext()) {
             EntityDynamic entity = itr.next();
             if (entity instanceof Enemy || entity instanceof Player) {
-                if (entity.isDead()) {
+                if (entity.shouldRemove()) {
                     world.destroyBody(entity.getBody());
                     itr.remove();
                 }

@@ -60,6 +60,16 @@ public class Enemy extends EntityDynamic {
         }
     }
 
+    @Override
+    protected boolean shouldRemove(Vector2 playerPosition) {
+        return false;
+    }
+
+    @Override
+    public void onRemove() {
+
+    }
+
     protected void updateToPlanet() {
         toPlanet = new Vector2(planetBody.getPosition().x - body.getPosition().x, planetBody.getPosition().y - body.getPosition().y);
         toPlanet.setLength2(1);
