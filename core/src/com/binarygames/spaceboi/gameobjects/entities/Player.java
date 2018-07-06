@@ -43,14 +43,13 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
-        this.health = 1000;
+        this.health = 100;
         this.jumpHeight = 20;
         this.moveSpeed = 20;
     }
 
     @Override
     public void update(float delta) {
-
         // http://www.iforce2d.net/b2dtut/constant-speed
         // TODO Check above site about movement
         if (entityState == ENTITY_STATE.STANDING) {
@@ -99,7 +98,7 @@ public class Player extends EntityDynamic {
 
     @Override
     public void onRemove() {
-        // Do nothing
+        gameWorld.respawnPlayer();
     }
 
     private void Shoot() {
@@ -207,6 +206,10 @@ public class Player extends EntityDynamic {
 
     public boolean isChained() {
         return chained;
+    }
+
+    public Vector2 getSpawnPos() {
+        return pos;
     }
 }
 

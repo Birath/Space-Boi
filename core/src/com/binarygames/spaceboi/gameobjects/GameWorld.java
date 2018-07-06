@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,9 +16,7 @@ import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Flyingship;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
@@ -29,6 +28,8 @@ public class GameWorld {
     private SpaceBoi game;
     private Camera camera;
     private World world;
+    private WorldGenerator worldGenerator;
+
     private ParticleHandler particleHandler;
     private Player player;
     private boolean shouldLerpPlayerAngle = false;
@@ -64,11 +65,12 @@ public class GameWorld {
     }
 
     public void createWorld() {
-        WorldGenerator worldGenerator = new WorldGenerator(this);
+        worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
-
+        Gdx.app.log("GameWorld", "Spawn point: " + worldGenerator.generatePlayerY() + ", " + worldGenerator.generatePlayerY());
         Player player = new Player(this, worldGenerator.generatePlayerX(),
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+        Gdx.app.log("GameWorld", "Position: " + player.getBody().getPosition());
         addDynamicEntity(player);
         this.player = player;
 
@@ -151,8 +153,10 @@ public class GameWorld {
             EntityDynamic entity = itr.next();
             if (entity.shouldRemove(player.getBody().getPosition())) {
                 entity.onRemove();
-                world.destroyBody(entity.getBody());
-                itr.remove();
+                if (!(entity instanceof Player)) {
+                    world.destroyBody(entity.getBody());
+                    itr.remove();
+                }
             }
         }
     }
@@ -207,6 +211,14 @@ public class GameWorld {
             joint = null;
         }
         jointsToDestroy.clear();
+    }
+
+
+    public void respawnPlayer() {
+        Gdx.app.log("GameWorld", "Respawn pos:   " + worldGenerator.generatePlayerX() + ", " + worldGenerator.generatePlayerY());
+        player.getBody().setTransform(player.getSpawnPos(), player.getBody().getAngle());
+        Gdx.app.log("GameWorld", "After respawn: " + player.getBody().getPosition());
+        player.setHealth(100);
     }
 
     private void rotatePlayer(float delta) {
