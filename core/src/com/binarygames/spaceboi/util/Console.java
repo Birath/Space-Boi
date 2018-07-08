@@ -10,10 +10,7 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.input.ConsoleInputProcessor;
 import com.binarygames.spaceboi.screens.GameScreen;
-import com.binarygames.spaceboi.util.commands.Command;
-import com.binarygames.spaceboi.util.commands.Help;
-import com.binarygames.spaceboi.util.commands.Position;
-import com.binarygames.spaceboi.util.commands.Zoom;
+import com.binarygames.spaceboi.util.commands.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -95,6 +92,8 @@ public class Console {
         commands.put("pos", new Position());
         commands.put("zoom", new Zoom());
         commands.put("help", new Help());
+        commands.put("god", new God());
+        commands.put("gravity", new Gravity());
     }
 
     public void update(float delta) {

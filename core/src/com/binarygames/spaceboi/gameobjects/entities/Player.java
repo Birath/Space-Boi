@@ -25,13 +25,15 @@ public class Player extends EntityDynamic {
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
-    private Vector2 perpen = new Vector2(0,0);
+    private Vector2 perpen = new Vector2(0, 0);
 
     private float playerAngle = 0f;
 
     private GameWorld gameWorld;
     private Planet closestPlanet;
     private boolean chained = false;
+
+    private boolean god = false;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
@@ -61,7 +63,7 @@ public class Player extends EntityDynamic {
             } else if (moveLeft) {
                 body.setLinearVelocity(-perpen.x, -perpen.y);
             }
-            if( (!moveLeft) && (!moveRight) ) {
+            if ((!moveLeft) && (!moveRight)) {
                 body.setLinearVelocity(0, 0);
             }
 
@@ -155,7 +157,8 @@ public class Player extends EntityDynamic {
         toPlanet.setLength2(1);
         toPlanet.scl(jumpHeight);
     }
-    private void updatePerpen(){
+
+    private void updatePerpen() {
         perpen = new Vector2(-toPlanet.y, toPlanet.x);
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
@@ -181,6 +184,13 @@ public class Player extends EntityDynamic {
             chained = true;
         }
 
+    }
+
+    @Override
+    public void reduceHealth(int amount) {
+        if (!god) {
+            health -= amount;
+        }
     }
 
     public Planet getClosestPlanet() {
@@ -210,6 +220,14 @@ public class Player extends EntityDynamic {
 
     public Vector2 getSpawnPos() {
         return pos;
+    }
+
+    public boolean isGod() {
+        return god;
+    }
+
+    public void setGod(boolean god) {
+        this.god = god;
     }
 }
 
