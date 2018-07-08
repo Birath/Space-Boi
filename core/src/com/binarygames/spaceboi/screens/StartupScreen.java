@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public class StartupScreen extends BaseScreen implements Screen {
+public class StartupScreen extends BaseScreen {
 
     private Image startupImage;
 
@@ -57,28 +57,8 @@ public class StartupScreen extends BaseScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
-        stage.dispose();
+        super.dispose();
         // TODO dispose of startup image
     }
 }
