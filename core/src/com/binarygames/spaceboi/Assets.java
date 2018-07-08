@@ -32,7 +32,7 @@ public class Assets {
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
 
     // Player
-    public static final String PLAYER = "game/entities/player/playerShip.png";
+    public static final String PLAYER = "game/entities/player/norrland.jpg";
 
     // Weapons
     public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";

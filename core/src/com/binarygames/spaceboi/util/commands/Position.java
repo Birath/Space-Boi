@@ -1,6 +1,7 @@
-package com.binarygames.spaceboi.util;
+package com.binarygames.spaceboi.util.commands;
 
 import com.badlogic.gdx.math.Vector2;
+import com.binarygames.spaceboi.util.Console;
 
 public class Position implements Command {
 

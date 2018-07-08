@@ -10,6 +10,8 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.input.ConsoleInputProcessor;
 import com.binarygames.spaceboi.screens.GameScreen;
+import com.binarygames.spaceboi.util.commands.Command;
+import com.binarygames.spaceboi.util.commands.Position;
 
 import java.util.HashMap;
 import java.util.Map;
