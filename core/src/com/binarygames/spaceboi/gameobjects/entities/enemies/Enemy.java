@@ -29,8 +29,8 @@ public abstract class Enemy extends EntityDynamic {
     @Override
     public void update(float delta) {
         weapon.update(delta);
+        updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
-            updateEnemy();
             if(enemyState == ENEMY_STATE.IDLE){
                 updateIdle();
             }
@@ -51,10 +51,12 @@ public abstract class Enemy extends EntityDynamic {
     protected abstract void updateJumping();
 
     protected void updateEnemy(){
-        updateToPlanet();
-        updatePerpen();
-        updateWalkingDirection();
-        updateEnemyState();
+        if(planetBody != null){
+            updateToPlanet();
+            updatePerpen();
+            updateWalkingDirection();
+            updateEnemyState();
+        }
     }
 
     @Override
