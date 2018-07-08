@@ -11,6 +11,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.input.ConsoleInputProcessor;
 import com.binarygames.spaceboi.screens.GameScreen;
 import com.binarygames.spaceboi.util.commands.Command;
+import com.binarygames.spaceboi.util.commands.Help;
 import com.binarygames.spaceboi.util.commands.Position;
 import com.binarygames.spaceboi.util.commands.Zoom;
 
@@ -93,6 +94,7 @@ public class Console {
         commands = new HashMap<>();
         commands.put("pos", new Position());
         commands.put("zoom", new Zoom());
+        commands.put("help", new Help());
     }
 
     public void update(float delta) {
@@ -141,13 +143,13 @@ public class Console {
     public void parse() {
         String[] commandString = inputField.getText().split("\\s+");
         String command = commandString[0];
-        command = command.substring(1);
+        command = command.substring(1).toLowerCase();
 
         if (commands.containsKey(command)) {
             switch (commands.get(command).getArgumentType()) {
                 case REQUIRED:
                     if (commandString.length > 1) {
-                        String[] args = Arrays.copyOfRange(commandString, 1, commandString.length - 1);
+                        String[] args = Arrays.copyOfRange(commandString, 1, commandString.length);
                         commands.get(command).run(this, args);
                     } else {
                         echo(commands.get(command).getUsage());
@@ -193,6 +195,10 @@ public class Console {
 
     public GameWorld getGameWorld() {
         return gameWorld;
+    }
+
+    public Map<String, Command> getCommands() {
+        return commands;
     }
 
     public enum ArgumentType {
