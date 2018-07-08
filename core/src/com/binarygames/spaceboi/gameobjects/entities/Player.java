@@ -30,7 +30,6 @@ public class Player extends EntityDynamic {
     private float playerAngle = 0f;
 
     private GameWorld gameWorld;
-    private Planet closestPlanet;
     private boolean chained = false;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
@@ -50,11 +49,11 @@ public class Player extends EntityDynamic {
 
     @Override
     public void update(float delta) {
+        updateToPlanet();
+        updatePerpen();
         // http://www.iforce2d.net/b2dtut/constant-speed
         // TODO Check above site about movement
         if (entityState == ENTITY_STATE.STANDING) {
-            updateToPlanet();
-            updatePerpen();
             //Moving
             if (moveRight) {
                 body.setLinearVelocity(perpen); //Dynamiska adderande blir kanske bättre än att bara sätta saker och ting
@@ -181,14 +180,6 @@ public class Player extends EntityDynamic {
             chained = true;
         }
 
-    }
-
-    public Planet getClosestPlanet() {
-        return closestPlanet;
-    }
-
-    public void setClosestPlanet(final Planet closestPlanet) {
-        this.closestPlanet = closestPlanet;
     }
 
     //Weapon

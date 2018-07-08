@@ -15,37 +15,53 @@ public class Flyingship extends Enemy {
     }
     @Override
     protected void updateIdle() {
-        this.getBody().setLinearVelocity(0,0);
+        //Do nothing
     }
 
     @Override
     protected void updateHunting() {
-        this.getBody().setLinearVelocity(0,0);
+        //Do nothing
     }
 
     @Override
     protected void updateAttacking() {
-        jump();
+        //Do nothing
+    }
+
+    @Override
+    public boolean isAffectedByGravity(){
+        return false;
+    }
+    private void updateIdleJumping(){
+        moveAlongPlanet();
+    }
+    private void updateHuntingJumping(){
+        //Do nothing - does not chase to other planets
+    }
+    private void updateAttackingJumping(){
+        if(toShoot()){
+            Shoot();
+        }
+        else{
+            moveAlongPlanet();
+        }
     }
 
     @Override
     protected void updateJumping() {
-        updateEnemy();
-        if(enemyState == ENEMY_STATE.IDLE || enemyState == ENEMY_STATE.HUNTING){
-            this.getBody().setLinearVelocity(0,0);
+        if(enemyState == ENEMY_STATE.IDLE){
+            updateIdleJumping();
+        }
+        else if(enemyState == ENEMY_STATE.HUNTING){
+            updateHuntingJumping();
         }
         else if(enemyState == ENEMY_STATE.ATTACKING){
-            if(toShoot()){
-                Shoot();
-                moveAlongPlanet();
-            }
-            else{
-                moveAlongPlanet();
-            }
+            updateAttackingJumping();
         }
     }
     private boolean toShoot(){
-        if(toPlayer.len2() < 400){
+        float angle = Math.abs(toPlanet.angle(toPlayer));
+        if(angle < 45){
             return true;
         }
         return false;

@@ -12,7 +12,7 @@ public class Chaser extends Enemy {
         super(gameWorld, x, y, path, mass, radius);
 
         this.health = 5;
-        this.jumpHeight = 50;
+        this.jumpHeight = 20;
         this.moveSpeed = 15;
         this.weapon = new Machinegun(gameWorld, this);
     }
