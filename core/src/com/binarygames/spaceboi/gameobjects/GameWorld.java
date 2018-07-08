@@ -18,6 +18,7 @@ import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Flyingship;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
+import com.binarygames.spaceboi.screens.DeathScreen;
 import com.sun.deploy.util.OrderedHashSet;
 
 import java.util.ArrayList;
@@ -220,6 +221,7 @@ public class GameWorld {
 
 
     public void respawnPlayer() {
+        game.setScreen(new DeathScreen(game, game.getScreen()));
         Gdx.app.log("GameWorld", "Respawn pos:   " + worldGenerator.generatePlayerX() + ", " + worldGenerator.generatePlayerY());
         player.getBody().setTransform(player.getSpawnPos(), player.getBody().getAngle());
         Gdx.app.log("GameWorld", "After respawn: " + player.getBody().getPosition());
@@ -331,6 +333,11 @@ public class GameWorld {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    private void dispose() {
+        world.dispose();
+        game.getScreen().dispose();
     }
 
 }

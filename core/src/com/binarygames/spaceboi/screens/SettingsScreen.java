@@ -16,7 +16,7 @@ import com.binarygames.spaceboi.ui.ControlSettingsTab;
 import com.binarygames.spaceboi.ui.SettingsTab;
 import com.binarygames.spaceboi.ui.VideoSettingsTab;
 
-public class SettingsScreen extends BaseScreen implements Screen {
+public class SettingsScreen extends BaseScreen {
 
     private SettingsTab currentSettingsTab;
     private Cell settingsCell;
@@ -119,11 +119,6 @@ public class SettingsScreen extends BaseScreen implements Screen {
     }
 
     @Override
-    public void show() {
-        Gdx.app.log("Settings", "Showing settings screen");
-    }
-
-    @Override
     public void render(final float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -136,33 +131,7 @@ public class SettingsScreen extends BaseScreen implements Screen {
         }
     }
 
-    @Override
-    public void resize(final int width, final int height) {
-        stage.getViewport().update(width, height, true);
-    }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        Gdx.app.log("Settings", "Disposing settings");
-        stage.dispose();
-        titleFont.dispose();
-        buttonFont.dispose();
-    }
 
 
 }

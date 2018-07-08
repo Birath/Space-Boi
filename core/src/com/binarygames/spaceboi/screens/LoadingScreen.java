@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public class LoadingScreen extends BaseScreen implements Screen {
+public class LoadingScreen extends BaseScreen {
 
     private TextButton playButton;
     private Label progressLabel;
@@ -83,30 +83,5 @@ public class LoadingScreen extends BaseScreen implements Screen {
         game.getBatch().begin();
         game.debugFont.draw(game.getBatch(), "LOADING_SCREEN", 5, 20);
         game.getBatch().end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }
