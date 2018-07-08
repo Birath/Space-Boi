@@ -34,6 +34,7 @@ public class Player extends EntityDynamic {
     private boolean chained = false;
 
     private boolean god = false;
+    private boolean infiniteAmmo = false;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
@@ -228,6 +229,14 @@ public class Player extends EntityDynamic {
 
     public void setGod(boolean god) {
         this.god = god;
+    }
+
+    public boolean hasInfiniteAmmo() {
+        return infiniteAmmo;
+    }
+
+    public void setInfiniteAmmo(boolean infiniteAmmo) {
+        this.infiniteAmmo = infiniteAmmo;
     }
 }
 

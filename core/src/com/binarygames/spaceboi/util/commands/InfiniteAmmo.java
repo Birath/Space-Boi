@@ -2,21 +2,21 @@ package com.binarygames.spaceboi.util.commands;
 
 import com.binarygames.spaceboi.util.Console;
 
-public class God implements Command {
+public class InfiniteAmmo implements Command {
 
     @Override
     public void run(Console console, String[] args) {
         if (args != null) {
             int value = Integer.valueOf(args[0]);
             if (value == 0) {
-                console.getGameWorld().getPlayer().setGod(false);
+                console.getGameWorld().getPlayer().setInfiniteAmmo(false);
             } else if (value == 1) {
-                console.getGameWorld().getPlayer().setGod(true);
+                console.getGameWorld().getPlayer().setInfiniteAmmo(true);
             } else {
                 console.echo("Invalid argument " + value);
             }
         }
-        console.echo("God mode:" + console.getGameWorld().getPlayer().isGod());
+        console.echo("Infinite ammo: " + console.getGameWorld().getPlayer().hasInfiniteAmmo());
     }
 
     @Override
@@ -26,11 +26,11 @@ public class God implements Command {
 
     @Override
     public String getHelpText() {
-        return "Toggles god mode";
+        return "Toggles infinite ammo";
     }
 
     @Override
     public String getUsage() {
-        return "god [1/0]";
+        return "infiniteammo [1/0]";
     }
 }

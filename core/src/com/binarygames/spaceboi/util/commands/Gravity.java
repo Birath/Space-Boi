@@ -15,8 +15,8 @@ public class Gravity implements Command {
             } else {
                 console.echo("Invalid argument " + value);
             }
-            console.echo("Gravity: " + console.getGame().getPreferences().isGravityEnabled());
         }
+        console.echo("Gravity: " + console.getGame().getPreferences().isGravityEnabled());
     }
 
     @Override

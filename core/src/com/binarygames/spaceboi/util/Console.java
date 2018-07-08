@@ -94,6 +94,7 @@ public class Console {
         commands.put("help", new Help());
         commands.put("god", new God());
         commands.put("gravity", new Gravity());
+        commands.put("infiniteammo", new InfiniteAmmo());
     }
 
     public void update(float delta) {
