@@ -76,18 +76,17 @@ public class GameScreen implements Screen {
 
         //camera = new OrthographicCamera();
 
-        console = new Console(game, this);
-
         gameUI = new GameUI(game);
         inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 
         gameWorld = new GameWorld(game, world, camera);
 
-
         //Entities:
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
+
+        console = new Console(game, this, gameWorld);
 
         PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
         multiplexer = new InputMultiplexer();
@@ -148,7 +147,6 @@ public class GameScreen implements Screen {
                     //Gdx.app.log("GameScreen", "Lerped amnt:  " + lerpedAmount);
                     camera.rotate(rotationAmount);
                     //camera.rotate(lerpedAmount);
-
 
 
                     if (Math.abs(rotationAmount) >= whenToInterpolate) {

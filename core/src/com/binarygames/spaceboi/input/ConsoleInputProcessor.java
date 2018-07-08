@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.input;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.binarygames.spaceboi.util.Console;
 
@@ -17,6 +18,9 @@ public class ConsoleInputProcessor implements InputProcessor {
         if (keycode == Input.Keys.ESCAPE) {
             console.hide();
             return true;
+        }
+        if (keycode == Input.Keys.ENTER) {
+            console.parse();
         }
         return false;
     }
