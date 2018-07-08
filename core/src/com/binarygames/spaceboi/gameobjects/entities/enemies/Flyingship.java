@@ -2,9 +2,11 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 
 public class Flyingship extends Enemy {
+
     public Flyingship(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
 
@@ -12,6 +14,7 @@ public class Flyingship extends Enemy {
         this.jumpHeight = 50;
         this.moveSpeed = 5;
         this.weapon = new Shotgun(gameWorld, this);
+        this.entityState = ENTITY_STATE.JUMPING;
     }
     @Override
     protected void updateIdle() {
@@ -39,7 +42,7 @@ public class Flyingship extends Enemy {
         //Do nothing - does not chase to other planets
     }
     private void updateAttackingJumping(){
-        if(toShoot()){
+        if(toShoot() && weapon.canShoot()){
             Shoot();
         }
         else{
@@ -49,15 +52,21 @@ public class Flyingship extends Enemy {
 
     @Override
     protected void updateJumping() {
-        if(enemyState == ENEMY_STATE.IDLE){
-            updateIdleJumping();
+        if(this.planetBody != null){
+            if(enemyState == ENEMY_STATE.IDLE){
+                updateIdleJumping();
+            }
+            else if(enemyState == ENEMY_STATE.HUNTING){
+                updateHuntingJumping();
+            }
+            else if(enemyState == ENEMY_STATE.ATTACKING){
+                updateAttackingJumping();
+            }
         }
-        else if(enemyState == ENEMY_STATE.HUNTING){
-            updateHuntingJumping();
+        else{
+            this.getBody().setLinearVelocity(0,0);
         }
-        else if(enemyState == ENEMY_STATE.ATTACKING){
-            updateAttackingJumping();
-        }
+
     }
     private boolean toShoot(){
         float angle = Math.abs(toPlanet.angle(toPlayer));

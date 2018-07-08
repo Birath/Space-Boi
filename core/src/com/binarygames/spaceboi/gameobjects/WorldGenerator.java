@@ -66,11 +66,11 @@ public class WorldGenerator {
             }
 
             for(int j = 0; j < NumberOfPlanets; j++){
-                createPlanet((int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset)),
-                        (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset)), random);
+                lastX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset));
+                lastY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset));
 
-                createEnemies((int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset)),
-                        (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset)), random, rad, circleNumber);
+                createPlanet(lastX, lastY, random);
+                createEnemies(lastX, lastY, random, lastRad, circleNumber);
             }
         }
     }
@@ -83,9 +83,7 @@ public class WorldGenerator {
         Planet planet = new Planet(gameWorld, x, y, Assets.PLANET_MOON, (float) grav, rad); //TODO Add different sprites depending on gravity and size of planet
         gameWorld.addStaticEntity(planet);
 
-        this.lastX = x;
-        this.lastY = y;
-        this.lastRad = rad;
+        this.lastRad = rad; //rad from planet
     }
     private void createEnemies(int x, int y, Random random, int rad, int circleNumber){
         if((circleNumber%2)==0){

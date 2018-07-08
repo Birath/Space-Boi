@@ -76,15 +76,14 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        /*Flyingship flyingship = new Flyingship(this, worldGenerator.generatePlayerX() + 40,
+        Flyingship flyingship = new Flyingship(this, worldGenerator.generatePlayerX() + 40,
                 worldGenerator.generatePlayerY() + 20, Assets.PLANET_MOON, 500, 20);
-        addDynamicEntity(flyingship);*/
+        addDynamicEntity(flyingship);
 
         world.setContactListener(new EntityContactListener(this));
     }
 
     public void update(float delta) {
-        Gdx.app.log("GameWorld0", "Dynamic Enteties: " + dynamicEntities.size() );
         for (EntityDynamic entity : dynamicEntities) {
             applyGravity(entity);
             entity.update(delta);
