@@ -12,7 +12,9 @@ import com.binarygames.spaceboi.input.ConsoleInputProcessor;
 import com.binarygames.spaceboi.screens.GameScreen;
 import com.binarygames.spaceboi.util.commands.Command;
 import com.binarygames.spaceboi.util.commands.Position;
+import com.binarygames.spaceboi.util.commands.Zoom;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,6 +92,7 @@ public class Console {
 
         commands = new HashMap<>();
         commands.put("pos", new Position());
+        commands.put("zoom", new Zoom());
     }
 
     public void update(float delta) {
@@ -136,13 +139,34 @@ public class Console {
     }
 
     public void parse() {
-        StringBuilder stringBuilder = new StringBuilder(inputField.getText());
-        String input = stringBuilder.substring(1);
-        // TODO get command, and arguments
-        if (commands.containsKey(input)) {
-            commands.get(input).run(this, new String[0]);
+        String[] commandString = inputField.getText().split("\\s+");
+        String command = commandString[0];
+        command = command.substring(1);
+
+        if (commands.containsKey(command)) {
+            switch (commands.get(command).getArgumentType()) {
+                case REQUIRED:
+                    if (commandString.length > 1) {
+                        String[] args = Arrays.copyOfRange(commandString, 1, commandString.length - 1);
+                        commands.get(command).run(this, args);
+                    } else {
+                        echo(commands.get(command).getUsage());
+                    }
+                    break;
+                case OPTIONAL:
+                    if (commandString.length > 1) {
+                        String[] args = Arrays.copyOfRange(commandString, 1, commandString.length);
+                        System.out.println(args.length);
+                        commands.get(command).run(this, args);
+                    } else {
+                        commands.get(command).run(this, null);
+                    }
+                    break;
+                case NONE:
+                    commands.get(command).run(this, null);
+            }
         } else {
-            echo(input + " is not a valid command u scrub");
+            echo(command + " is not a valid command u scrub");
         }
 
         clearInput();
@@ -169,5 +193,9 @@ public class Console {
 
     public GameWorld getGameWorld() {
         return gameWorld;
+    }
+
+    public enum ArgumentType {
+        REQUIRED, OPTIONAL, NONE
     }
 }

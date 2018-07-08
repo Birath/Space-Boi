@@ -18,6 +18,7 @@ import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Flyingship;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
+import com.sun.deploy.util.OrderedHashSet;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ import java.util.List;
 public class GameWorld {
 
     private SpaceBoi game;
-    private Camera camera;
+    private OrthographicCamera camera;
     private World world;
     private WorldGenerator worldGenerator;
 
@@ -53,7 +54,7 @@ public class GameWorld {
     private static final float LERP_TIME = 0.1f;
     private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -10);
 
-    public GameWorld(SpaceBoi game, World world, Camera camera) {
+    public GameWorld(SpaceBoi game, World world, OrthographicCamera camera) {
         this.game = game;
         this.world = world;
         this.camera = camera;
@@ -230,7 +231,7 @@ public class GameWorld {
                 return;
             }
             float currentAngle = player.getPlayerAngle() - 90;
-            player.setPlayerAngle( currentAngle + (rotationAmmount / lerpSpeed));
+            player.setPlayerAngle(currentAngle + (rotationAmmount / lerpSpeed));
             currentLerpStep++;
             return;
         }
@@ -276,7 +277,7 @@ public class GameWorld {
             timeSinceStart = 0;
             //isLerping = true;
             lerpedAngle = MathUtils.lerpAngleDeg(fromDegrees, toDegrees, 0);
-            otherInterpolation  = Interpolation.linear.apply(fromDegrees, toDegrees, 0);
+            otherInterpolation = Interpolation.linear.apply(fromDegrees, toDegrees, 0);
         }
         if (Math.abs(player.getPlayerAngle() - angleToPlanet) > 20) {
             lerpSpeed = 5;
@@ -324,7 +325,7 @@ public class GameWorld {
         return particleHandler;
     }
 
-    public Camera getCamera() {
+    public OrthographicCamera getCamera() {
         return camera;
     }
 

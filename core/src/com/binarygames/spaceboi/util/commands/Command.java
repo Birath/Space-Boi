@@ -6,4 +6,10 @@ public interface Command {
 
     void run(Console console, String[] args);
 
+    Console.ArgumentType getArgumentType();
+
+    String getHelpText();
+
+    String getUsage();
+
 }

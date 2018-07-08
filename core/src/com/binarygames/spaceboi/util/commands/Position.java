@@ -10,4 +10,20 @@ public class Position implements Command {
         Vector2 playerPos = console.getGameWorld().getPlayer().getBody().getPosition();
         console.echo("X: " + playerPos.x + " Y: " + playerPos.y);
     }
+
+    @Override
+    public Console.ArgumentType getArgumentType() {
+        return Console.ArgumentType.NONE;
+    }
+
+    @Override
+    public String getHelpText() {
+        return "Prints the players current position";
+    }
+
+    @Override
+    public String getUsage() {
+        return "pos";
+    }
+
 }
