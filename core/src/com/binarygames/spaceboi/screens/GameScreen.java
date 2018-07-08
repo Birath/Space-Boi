@@ -69,9 +69,10 @@ public class GameScreen implements Screen {
         cameraRotator = new CameraRotator(camera);
         //box2dCamera = new OrthographicCamera(Gdx.graphics.getWidth() * WORLD_TO_BOX, Gdx.graphics.getHeight() * WORLD_TO_BOX);
         // Vet inte riktigt vad jag håller på med här, men det verkar funka // Björn
-
+        camera.zoom = 20.0f;
         //viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH * WORLD_TO_BOX, SpaceBoi.VIRTUAL_HEIGHT * WORLD_TO_BOX, camera);
         //viewport.apply();
+
 
         //camera = new OrthographicCamera();
 
