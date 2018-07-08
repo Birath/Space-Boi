@@ -115,7 +115,7 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void pause() {
-
+        Gdx.app.log("BaseScreen", "Pausing");
     }
 
     @Override
@@ -126,13 +126,6 @@ public abstract class BaseScreen implements Screen {
     @Override
     public void hide() {
         Gdx.app.log("BaseScreen", "Hiding screen");
-    };
-
-    public BitmapFont getButtonFont() {
-        return buttonFont;
     }
 
-    public void setButtonFont(BitmapFont buttonFont) {
-        this.buttonFont = buttonFont;
-    }
 }
