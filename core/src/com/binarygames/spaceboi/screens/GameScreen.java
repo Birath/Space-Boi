@@ -58,6 +58,10 @@ public class GameScreen implements Screen {
     private final float whenToInterpolate = 30;
     private float angleToInterpolate;
 
+
+    private boolean debugRendererIsEnabled = false;
+    private float startCameraAngle = 0;
+
     public GameScreen(SpaceBoi game) {
         //Framerate
         frameRate = new FrameRate();
@@ -80,6 +84,7 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0f, 0f), true);
 
         gameWorld = new GameWorld(game, world, camera);
+        startCameraAngle = getCameraRotation();
 
         //Entities:
         gameWorld.createWorld();
@@ -144,8 +149,11 @@ public class GameScreen implements Screen {
                     float lerpedAmount = MathUtils.lerp(getCameraRotation(), getCameraRotation() + rotationAmount, delta);
                     //Gdx.app.log("GameScreen", "Rotate amnt:  " + rotationAmount);
                     //Gdx.app.log("GameScreen", "Lerped amnt:  " + lerpedAmount);
-                    camera.rotate(rotationAmount);
                     //camera.rotate(lerpedAmount);
+                    // TODO: 2018-07-10 Clean up this mess
+                    if (!debugRendererIsEnabled) {
+                        camera.rotate(rotationAmount);
+                    }
 
 
                     if (Math.abs(rotationAmount) >= whenToInterpolate) {
@@ -210,10 +218,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
                 (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        //debugRenderer.render(world, camera.combined.scl(PPM)); TODO fix matching rotation on debug rendering
+        if (debugRendererIsEnabled) {
+            debugRenderer.render(world, camera.combined.scl(PPM));// TODO fix matching rotation on debug rendering
+        }
 
         game.getBatch().begin();
-        gameWorld.render(game.getBatch(), camera);
+        if (!debugRendererIsEnabled) {
+            gameWorld.render(game.getBatch(), camera);
+        }
         gameWorld.getParticleHandler().updateAndDrawEffects(game.getBatch(), delta);
         game.getBatch().end();
     }
@@ -295,5 +307,14 @@ public class GameScreen implements Screen {
     public Console getConsole() {
         return console;
     }
+
+    public void setDebugRendererIsEnabled(boolean debugRendererIsEnabled) {
+        if (!debugRendererIsEnabled) {
+            //camera.rotate(getCameraRotation() - startCameraAngle);
+
+        }
+        this.debugRendererIsEnabled = debugRendererIsEnabled;
+    }
+
 
 }
