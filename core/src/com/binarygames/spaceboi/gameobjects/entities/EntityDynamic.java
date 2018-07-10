@@ -27,10 +27,26 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected int jumpHeight;
     protected int moveSpeed;
 
-    public EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+    protected EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius, int health, int moveSpeed, int jumpHeight) {
         super(gameWorld, x, y, mass, radius);
+        this.health = health;
+        this.moveSpeed = moveSpeed;
+        this.jumpHeight = jumpHeight;
+        createEntityDynamic(gameWorld, path, radius);
+    }
+
+    protected EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+        super(gameWorld, x, y, mass, radius);
+        this.health = 0;
+        this.moveSpeed = 0;
+        this.jumpHeight = 0;
+        createEntityDynamic(gameWorld, path, radius);
+    }
+
+    private void createEntityDynamic(GameWorld gameWorld, String path, float radius) {
         this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
         sprite.setSize(radius * 2, radius * 2);
+        body.setUserData(this);
     }
 
     public abstract void update(float delta);
@@ -39,6 +55,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
+
     }
 
     //Movement - called by inputprocessor
@@ -99,6 +116,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void setPlanetBody(Body planetBody) {
         this.planetBody = planetBody;
     }
+
     public Body getPlanetBody() {
         return planetBody;
     }
@@ -107,6 +125,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         entityState = ENTITY_STATE.STANDING;
         planetBody = planet.getBody();
     }
+
     public void leftPlanet() {
         entityState = ENTITY_STATE.JUMPING;
     }

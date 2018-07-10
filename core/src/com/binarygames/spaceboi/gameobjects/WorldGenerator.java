@@ -3,7 +3,6 @@ package com.binarygames.spaceboi.gameobjects;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 
 import java.util.Random;
 

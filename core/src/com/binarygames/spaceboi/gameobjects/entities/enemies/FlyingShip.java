@@ -2,16 +2,10 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 
-public class Flyingship extends Enemy {
-    public Flyingship(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius);
-
-        this.health = 200;
-        this.jumpHeight = 50;
-        this.moveSpeed = 5;
-        this.weapon = new Shotgun(gameWorld, this);
+public class FlyingShip extends Enemy {
+    public FlyingShip(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+        super(gameWorld, x, y, path, mass, radius, EnemyType.FLYING_SHIP);
     }
     @Override
     protected void updateIdle() {

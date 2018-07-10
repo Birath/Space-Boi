@@ -2,16 +2,10 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 
 public class Shooter extends Enemy {
     public Shooter(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-            super(gameWorld, x, y, path, mass, radius);
-
-        this.health = 50;
-        this.jumpHeight = 50;
-        this.moveSpeed = 5;
-        this.weapon = new Machinegun(gameWorld, this);
+        super(gameWorld, x, y, path, mass, radius, EnemyType.SHOOTER);
     }
     @Override
     protected void updateIdle() {

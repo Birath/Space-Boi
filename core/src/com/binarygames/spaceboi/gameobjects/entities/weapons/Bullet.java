@@ -19,8 +19,6 @@ public class Bullet extends EntityDynamic {
     public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
         super(gameWorld, x, y, path, mass, radius);
 
-        body.setUserData(this);
-
         this.getBody().setLinearVelocity(speed);
 
         this.damage = damage;

@@ -18,6 +18,10 @@ import java.util.List;
 
 public class Player extends EntityDynamic {
 
+    private static final int START_HEALTH = 100;
+    private static final int MOVE_SPEED = 20;
+    private static final int JUMP_HEIGHT = 20;
+
     private boolean mouseHeld;
 
     private Weapon weapon;
@@ -34,7 +38,7 @@ public class Player extends EntityDynamic {
     private boolean chained = false;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius);
+        super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
         this.gameWorld = gameWorld;
 
@@ -43,9 +47,6 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
-        this.health = 100;
-        this.jumpHeight = 20;
-        this.moveSpeed = 20;
     }
 
     @Override

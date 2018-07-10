@@ -6,6 +6,7 @@ import com.binarygames.spaceboi.SpaceBoi;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
+        System.setProperty("user.name", "bjorn");
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         // TODO load video settings on launch
