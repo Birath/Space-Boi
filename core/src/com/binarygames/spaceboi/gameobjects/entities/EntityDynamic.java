@@ -14,6 +14,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     protected ENTITY_STATE entityState;
 
     public Body planetBody;
+    private Planet closestPlanet;
 
     private Sprite sprite;
 
@@ -128,6 +129,16 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     public void leftPlanet() {
         entityState = ENTITY_STATE.JUMPING;
+    }
+    public boolean isAffectedByGravity(){
+        return true;
+    }
+    public void setClosestPlanet(final Planet closestPlanet) {
+        this.closestPlanet = closestPlanet;
+        this.planetBody = closestPlanet.getBody();
+    }
+    public Planet getClosestPlanet() {
+        return closestPlanet;
     }
 
 }

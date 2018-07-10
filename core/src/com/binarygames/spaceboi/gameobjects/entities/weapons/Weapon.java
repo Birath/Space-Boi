@@ -81,6 +81,9 @@ public abstract class Weapon {
     }
 
     public boolean canShoot() {
+        if (shooter instanceof Player && gameWorld.getPlayer().hasInfiniteAmmo()) {
+            return timeBetweenShotsIsFinished;
+        }
         return (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished);
     }
 

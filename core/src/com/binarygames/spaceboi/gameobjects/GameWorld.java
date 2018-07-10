@@ -124,7 +124,10 @@ public class GameWorld {
             finalGravity.add(gravityPull);
         }
         if (game.getPreferences().isGravityEnabled()) {
-            entity.getBody().applyForceToCenter(finalGravity, true);
+            if (entity.isAffectedByGravity()){
+                entity.getBody().applyForceToCenter(finalGravity, true);
+            }
+
         }
         /*
         Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
@@ -140,9 +143,9 @@ public class GameWorld {
             entity.getBody().applyForceToCenter(forceX, forceY, true);
         */
         // TODO move to nice place
-        if (entity instanceof Player && closestPlanet != null) {
+        if (closestPlanet != null) {
             // TODO Change to toPlanet vector instead
-            player.setClosestPlanet(closestPlanet);
+            entity.setClosestPlanet(closestPlanet);
         }
     }
 

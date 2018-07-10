@@ -14,7 +14,6 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class Enemy extends EntityDynamic {
 
@@ -55,16 +54,19 @@ public abstract class Enemy extends EntityDynamic {
     @Override
     public void update(float delta) {
         weapon.update(delta);
+        updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
-            updateEnemy();
-            if (enemyState == ENEMY_STATE.IDLE) {
+            if(enemyState == ENEMY_STATE.IDLE){
                 updateIdle();
-            } else if (enemyState == ENEMY_STATE.ATTACKING) {
+            }
+            else if (enemyState == ENEMY_STATE.ATTACKING) {
                 updateAttacking();
-            } else if (enemyState == ENEMY_STATE.HUNTING) {
+            }
+            else if (enemyState == ENEMY_STATE.HUNTING){
                 updateHunting();
             }
-        } else if (entityState == ENTITY_STATE.JUMPING) {
+        }
+        else if (entityState == ENTITY_STATE.JUMPING){
             updateJumping();
         }
     }
@@ -77,11 +79,13 @@ public abstract class Enemy extends EntityDynamic {
 
     protected abstract void updateJumping();
 
-    protected void updateEnemy() {
-        updateToPlanet();
-        updatePerpen();
-        updateWalkingDirection();
-        updateEnemyState();
+    protected void updateEnemy(){
+        if(planetBody != null){
+            updateToPlanet();
+            updatePerpen();
+            updateWalkingDirection();
+            updateEnemyState();
+        }
     }
 
     @Override
