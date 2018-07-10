@@ -158,15 +158,8 @@ public abstract class Enemy extends EntityDynamic {
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
         healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
-
         healthBar.setValue(health);
-        if (health > 100) {
-            Gdx.app.log("Enemy", "Health: " + health);
-            Gdx.app.log("Enemy", "Health bar val: " + healthBar.getValue());
-        }
-
-        //healthBar.act(Gdx.graphics.getDeltaTime());
         healthBar.draw(batch, 1);
-        //healthBar.validate();
+
     }
 }

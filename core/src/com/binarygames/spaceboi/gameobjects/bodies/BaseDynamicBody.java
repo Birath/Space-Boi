@@ -5,6 +5,8 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public abstract class BaseDynamicBody extends BaseBody {
 
+    protected Fixture fixture = null;
+
     protected BaseDynamicBody(GameWorld gameWorld, float x, float y, float mass, float radius) {
         super(gameWorld, x, y, mass, radius);
 
@@ -22,7 +24,7 @@ public abstract class BaseDynamicBody extends BaseBody {
         fixtureDef.density = 0.2f;
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0f;
-        Fixture fixture = body.createFixture(fixtureDef);
+        this.fixture = body.createFixture(fixtureDef);
         circleShape.dispose();
     }
 

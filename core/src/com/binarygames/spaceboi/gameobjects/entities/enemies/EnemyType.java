@@ -1,9 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-
 public enum EnemyType {
-    CHASER (5, 15, 50), SHOOTER(50, 5, 50), FLYING_SHIP(200, 5, 50);
+    CHASER (5, 15, 20), SHOOTER(50, 5, 50), FLYING_SHIP(200, 5, 50);
 
     private final int health;
     private final int moveSpeed;

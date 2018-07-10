@@ -194,6 +194,10 @@ public class Player extends EntityDynamic {
         }
     }
 
+    public void increaseHealth(int amount) {
+        health += amount;
+    }
+
     //Weapon
     public void addWeapon(Weapon weapon) {
         this.weaponList.add(weapon);

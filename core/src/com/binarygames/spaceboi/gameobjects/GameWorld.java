@@ -16,6 +16,8 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
+import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
+import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
 
@@ -78,6 +80,9 @@ public class GameWorld {
                 worldGenerator.generatePlayerY() + 20, Assets.PLANET_MOON, 500, 20);
         addDynamicEntity(flyingShip);
 
+        HealthPickup pickup = new HealthPickup(this, worldGenerator.generatePlayerX() + 50,
+                worldGenerator.generatePlayerY() + 40, Assets.UI_HEALTH_ICON, 300, 5);
+        addDynamicEntity(pickup);
         world.setContactListener(new EntityContactListener(this));
     }
 

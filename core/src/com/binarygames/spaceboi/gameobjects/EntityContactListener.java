@@ -1,11 +1,15 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
+import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 
 public class EntityContactListener implements ContactListener {
 
@@ -20,6 +24,17 @@ public class EntityContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+
+        if (fixtureA.isSensor()) {
+            Gdx.app.log("EntityContactListener", "I'm a sensor");
+            //fixtureA.getBody().setLinearVelocity(fixtureA.getBody().getLinearVelocity().scl(-1));
+            fixtureA.getBody().setLinearVelocity(0, 0);
+        }
+        if (fixtureB.isSensor()) {
+            Gdx.app.log("EntityContactListener", "I'm a sensor");
+            //fixtureB.getBody().setLinearVelocity(fixtureB.getBody().getLinearVelocity().scl(-1));
+            fixtureB.getBody().setLinearVelocity(0, 0);
+        }
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
 
 
@@ -106,6 +121,22 @@ public class EntityContactListener implements ContactListener {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             bullet.setHasHit(true);
         }
+
+        // Pickup x Player
+        else if (Pickup.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Player.class.isInstance(fixtureB.getBody().getUserData())) {
+            Pickup pickup = (Pickup) fixtureA.getBody().getUserData();
+            Player player = (Player) fixtureB.getBody().getUserData();
+            pickup.onHit(player);
+
+        } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Pickup.class.isInstance(fixtureB.getBody().getUserData())) {
+            Pickup pickup = (Pickup) fixtureB.getBody().getUserData();
+            Player player = (Player) fixtureA.getBody().getUserData();
+            pickup.onHit(player);
+
+        }
+
     }
 
     @Override
@@ -142,6 +173,23 @@ public class EntityContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+        if (HealthPickup.class.isInstance(fixtureA.getBody().getUserData())) {
+            if (!Planet.class.isInstance(fixtureB.getBody().getUserData())) {
+                contact.setEnabled(false);
+            } else {
+                contact.setEnabled(true);
+            }
+        } else if (HealthPickup.class.isInstance(fixtureB.getBody().getUserData())) {
+            if (!Planet.class.isInstance(fixtureA.getBody().getUserData())) {
+                contact.setEnabled(false);
+            } else {
+                contact.setEnabled(true);
+            }
+
+        }
+
 
     }
 
