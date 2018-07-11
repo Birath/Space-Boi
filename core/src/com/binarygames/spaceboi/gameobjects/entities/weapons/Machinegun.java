@@ -36,5 +36,6 @@ public class Machinegun extends Weapon {
             new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
             weaponMaths();
         }
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
     }
 }

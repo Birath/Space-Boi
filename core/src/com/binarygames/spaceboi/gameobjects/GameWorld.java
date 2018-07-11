@@ -301,6 +301,17 @@ public class GameWorld {
         player.setPlayerAngle(lerpedAngle);
     }
 
+    public ArrayList<Planet> getPlanets() {
+        ArrayList<Planet> planets = new ArrayList<>();
+        for (EntityStatic entityStatic : staticEntities) {
+            if (Planet.class.isInstance(entityStatic)) {
+                Planet planet = (Planet) entityStatic;
+                planets.add(planet);
+            }
+        }
+        return planets;
+    }
+
     public void addDynamicEntity(EntityDynamic entity) {
         addDynamicEntities.add(entity);
     }

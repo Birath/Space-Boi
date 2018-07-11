@@ -9,13 +9,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public abstract class BaseScreen implements Screen {
+public class New_StartupScreen implements Screen {
 
     protected SpaceBoi game;
 
@@ -23,22 +24,21 @@ public abstract class BaseScreen implements Screen {
 
     private Viewport viewport;
 
-    protected Stage stage;
+    Stage stage;
 
     BitmapFont titleFont;
-    public Label.LabelStyle titleStyle;
+    Label.LabelStyle titleStyle;
 
-    private BitmapFont buttonFont;
-    public TextButton.TextButtonStyle buttonStyle;
+    BitmapFont buttonFont;
+    TextButton.TextButtonStyle buttonStyle;
 
-    private Screen previousScreen;
+    private Image startupImage;
 
-    BaseScreen(SpaceBoi game, Screen previousScreen) {
+    public New_StartupScreen(SpaceBoi game) {
         this.game = game;
-        this.previousScreen = previousScreen;
 
         camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, camera);
         viewport.apply();
 
         stage = new Stage(viewport);
@@ -46,6 +46,71 @@ public abstract class BaseScreen implements Screen {
 
         loadFonts();
         loadStyles();
+
+        // Game startup image
+        startupImage = new Image(new Texture(Gdx.files.internal("menu/startup_screen/startup.jpg")));
+        startupImage.setOrigin(startupImage.getWidth() / 2, startupImage.getHeight() / 2);
+        startupImage.setSize(stage.getWidth(), stage.getHeight());
+        stage.addActor(startupImage);
+
+        // Loading label // TODO add text similar to loading screen?
+        Label startupLabel = new Label("Launching SpaceBoi,\nplease fasten your seatbelts...", titleStyle);
+        startupLabel.setX(stage.getWidth() / 2 - startupLabel.getWidth() / 2);
+        startupLabel.setY(stage.getHeight() / 2 + startupLabel.getHeight() / 2);
+        stage.addActor(startupLabel);
+    }
+
+
+    private void update(float delta) {
+        // Load menu and sound assets
+        if (game.getAssetManager().update()) {
+            game.setScreen(new MainMenuScreen(game));
+            dispose();
+        }
+
+        stage.act(delta);
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
+                (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+
+        update(delta);
+
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        // TODO dispose of startup image
     }
 
     private void loadFonts() {
@@ -67,7 +132,7 @@ public abstract class BaseScreen implements Screen {
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 3;
 
-        this.buttonFont = generator.generateFont(parameter);
+        buttonFont = generator.generateFont(parameter);
         buttonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         // Dispose of FontGenerator
@@ -83,49 +148,4 @@ public abstract class BaseScreen implements Screen {
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = buttonFont;
     }
-
-    public Screen getPreviousScreen() {
-        return previousScreen;
-    }
-
-    @Override
-    public void show() {
-        Gdx.app.log("Screen", "Showing screen");
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        titleFont.dispose();
-        buttonFont.dispose();
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(delta);
-        stage.draw();
-    }
-
-    @Override
-    public void pause() {
-        Gdx.app.log("BaseScreen", "Pausing");
-    }
-
-    @Override
-    public void resume() {
-        Gdx.app.log("BaseScreen", "Resuming.");
-    }
-
-    @Override
-    public void hide() {
-        Gdx.app.log("BaseScreen", "Hiding screen");
-    }
-
 }

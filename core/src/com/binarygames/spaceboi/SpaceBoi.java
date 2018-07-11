@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.binarygames.spaceboi.audio.MusicManager;
 import com.binarygames.spaceboi.audio.SoundManager;
 import com.binarygames.spaceboi.screens.Fonts;
+import com.binarygames.spaceboi.screens.New_StartupScreen;
 import com.binarygames.spaceboi.screens.StartupScreen;
 
 public class SpaceBoi extends Game {
@@ -39,7 +40,7 @@ public class SpaceBoi extends Game {
         batch = new SpriteBatch();
         font = new Fonts();
 
-        this.setScreen(new StartupScreen(this));
+        this.setScreen(new New_StartupScreen(this));
 
         // Assets
         assetManager = new AssetManager();

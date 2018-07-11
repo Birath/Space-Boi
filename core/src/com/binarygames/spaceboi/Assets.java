@@ -37,6 +37,7 @@ public class Assets {
     // Weapons
     public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";
     public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3";
+    public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/Ratatata.mp3";
 
     /*
         Environment
@@ -91,6 +92,7 @@ public class Assets {
         // Weapons
         assetManager.load(WEAPON_SHOTGUN_SHOT, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_PUMP, Sound.class);
+        assetManager.load(WEAPON_MACHINEGUN_SHOT, Sound.class);
 
         /*
             Environment

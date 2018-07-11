@@ -10,12 +10,15 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Planet extends EntityStatic {
 
+    private float radius;
+
     private ShapeRenderer shapeRenderer;
     public static final int GRAVITY_RADIUS = 2;
 
     public Planet(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
         body.setUserData(this);
+        this.radius = radius;
 
         shapeRenderer = new ShapeRenderer();
     }
@@ -33,6 +36,10 @@ public class Planet extends EntityStatic {
         shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, GRAVITY_RADIUS * rad * PPM);
         shapeRenderer.end();
         batch.begin();
+    }
+
+    public float getRadius() {
+        return radius;
     }
 
 }

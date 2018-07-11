@@ -13,10 +13,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
+import com.binarygames.spaceboi.ui.MiniMap;
 import com.binarygames.spaceboi.util.Console;
 
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
@@ -39,6 +41,8 @@ public class GameScreen implements Screen {
     private World world;
 
     private GameUI gameUI;
+
+    private MiniMap miniMap;
 
     private Console console;
 
@@ -79,7 +83,6 @@ public class GameScreen implements Screen {
 
         //camera = new OrthographicCamera();
 
-        gameUI = new GameUI(game);
         inGameMenuScreen = new InGameMenuScreen(this, game);
         world = new World(new Vector2(0f, 0f), true);
 
@@ -89,6 +92,10 @@ public class GameScreen implements Screen {
         //Entities:
         gameWorld.createWorld();
         player = gameWorld.getPlayer();
+
+        //UI
+        gameUI = new GameUI(game, player);
+        miniMap = new MiniMap(game.getBatch(), gameWorld);
 
         console = new Console(game, this, gameWorld);
 
@@ -203,6 +210,8 @@ public class GameScreen implements Screen {
     private void draw() {
         switch (state) {
             case GAME_RUNNING:
+                miniMap.render();
+                game.getBatch().setProjectionMatrix(camera.combined);
                 gameUI.draw();
                 break;
             case GAME_PAUSED:

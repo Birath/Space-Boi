@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -128,5 +129,21 @@ public abstract class Weapon {
         sprite.setRotation(angleToMouse - 90);
 
         sprite.draw(batch);
+    }
+
+    public int getCurrentMag(){
+        return currentMag;
+    }
+
+    public int getMagSize() {
+        return magSize;
+    }
+
+    public float getCurrentReloadTime() {
+        return currentReloadTime;
+    }
+
+    public float getReloadTime() {
+        return reloadTime;
     }
 }

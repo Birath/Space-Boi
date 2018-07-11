@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
@@ -32,16 +31,24 @@ public class GameUI {
     private Label label;
     private Integer health;
 
-    private ProgressBar jetPackBar;
-    private ProgressBar.ProgressBarStyle jetPackBarStyle;
-    private Integer jetPackFuel;
+    private ProgressBar oxygenBar;
+    private ProgressBar.ProgressBarStyle oxygenBarStyle;
+    private Integer oxygen;
 
     private ProgressBar healthBar;
     private ProgressBar.ProgressBarStyle healthBarStyle;
 
+    private WeaponStats weaponStats1;
+    private WeaponStats weaponStats2;
+    private WeaponStats weaponStats3;
+
+    private Player player;
+
     private Fonts fonts;
 
-    public GameUI(SpaceBoi game) {
+
+    public GameUI(SpaceBoi game, Player player) {
+        this.player = player;
         stage = new Stage();
         fonts = new Fonts();
 
@@ -63,20 +70,31 @@ public class GameUI {
         stage.addActor(label);
 
         // Jet pack fuel bar
-        jetPackFuel = 75; //
-        jetPackBar = new ProgressBar(0, 100, 1, true, jetPackBarStyle);
-        jetPackBar.setValue(jetPackFuel);
-        jetPackBar.setBounds(Gdx.graphics.getWidth() * 39 / 40, Gdx.graphics.getHeight() / 10, 20, 100);
-        stage.addActor(jetPackBar);
+        oxygen = 75; //
+        oxygenBar = new ProgressBar(0, 100, 1, true, oxygenBarStyle);
+        oxygenBar.setValue(oxygen);
+        oxygenBar.setBounds(Gdx.graphics.getWidth() * 39 / 40, Gdx.graphics.getHeight() / 10, 20, 100);
+        stage.addActor(oxygenBar);
 
         // Health bar
-        healthBar = new ProgressBar(0, 10, 1, false, healthBarStyle);
+        healthBar = new ProgressBar(0, 100, 1, false, healthBarStyle);
         healthBar.setValue(health);
         healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2, 100, 20);
         stage.addActor(healthBar);
+
+
+        weaponStats1 = new WeaponStats(stage,stage.getWidth()/20, stage.getHeight()*9/10, player.getWeaponList().get(0).getMagSize());
+        weaponStats2 = new WeaponStats(stage,stage.getWidth()*3/20, stage.getHeight()*9/10, player.getWeaponList().get(1).getMagSize());
+        weaponStats3 = new WeaponStats(stage,stage.getWidth()*5/20, stage.getHeight()*9/10, player.getWeaponList().get(2).getMagSize());
+
     }
 
     public void act(float delta) {
+        updateHealth(player.getHealth());
+        updateWeaponStats(weaponStats1, 0);
+        updateWeaponStats(weaponStats2, 1);
+        updateWeaponStats(weaponStats3, 2);
+
         stage.act();
     }
 
@@ -87,32 +105,6 @@ public class GameUI {
     public Stage getStage() {
         return stage;
     }
-
-    /*private void loadFonts() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        // Button font
-        parameter.size = 36;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-
-        buttonFont = generator.generateFont(parameter);
-        buttonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Label font
-        parameter.size = 24;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 2;
-
-        labelFont = generator.generateFont(parameter);
-        labelFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Dispose of FontGenerator
-        generator.dispose();
-    }*/
 
     private void loadStyles() {
         // Button style
@@ -129,8 +121,8 @@ public class GameUI {
         pixmap.fill();
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
-        jetPackBarStyle = new ProgressBar.ProgressBarStyle();
-        jetPackBarStyle.background = drawable;
+        oxygenBarStyle = new ProgressBar.ProgressBarStyle();
+        oxygenBarStyle.background = drawable;
 
         pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GRAY);
@@ -145,7 +137,7 @@ public class GameUI {
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
-        jetPackBarStyle.knob = drawable;
+        oxygenBarStyle.knob = drawable;
 
         pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
@@ -155,11 +147,11 @@ public class GameUI {
         healthBarStyle.knob = drawable;
 
         pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.ORANGE);
+        pixmap.setColor(Color.BLUE);
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
-        jetPackBarStyle.knobBefore = drawable;
+        oxygenBarStyle.knobBefore = drawable;
 
         pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
@@ -169,9 +161,18 @@ public class GameUI {
         healthBarStyle.knobBefore = drawable;
     }
 
-    public void updateHealth(Integer health) {
+    private void updateHealth(Integer health) {
         // TODO update health render
+        healthBar.setValue(health);
         label.setText(health.toString());
+    }
+
+    private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex) {
+            if(player.getWeaponList().get(weaponIndex).getCurrentReloadTime() == 0) weaponStats.getWeaponSlot().setValue(100);
+            else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime()/
+                    player.getWeaponList().get(weaponIndex).getReloadTime())*100);
+
+            weaponStats.getAmmoBar().setValue(player.getWeaponList().get(weaponIndex).getCurrentMag());
     }
 
     public void dispose() {

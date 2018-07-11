@@ -20,7 +20,7 @@ public class StartupScreen extends BaseScreen {
         // Game startup image
         startupImage = new Image(new Texture(Gdx.files.internal("menu/startup_screen/startup.jpg")));
         startupImage.setOrigin(startupImage.getWidth() / 2, startupImage.getHeight() / 2);
-        startupImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        startupImage.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(startupImage);
 
         // Loading label // TODO add text similar to loading screen?

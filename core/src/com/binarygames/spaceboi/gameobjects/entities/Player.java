@@ -211,6 +211,10 @@ public class Player extends EntityDynamic {
         return weapon;
     }
 
+    public List<Weapon> getWeaponList() {
+        return weaponList;
+    }
+
     public boolean isChained() {
         return chained;
     }
