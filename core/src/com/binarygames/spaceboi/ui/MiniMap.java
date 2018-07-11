@@ -62,7 +62,7 @@ public class MiniMap {
 
         for (final Planet planet : gameWorld.getPlanets()) {
 
-            if ((player.getBody().getPosition().x - planet.getBody().getPosition().x < 200) && (planet.getBody().getPosition().y < 200)) {
+            if ((player.getBody().getPosition().x - planet.getBody().getPosition().x < 200) && (player.getBody().getPosition().y - planet.getBody().getPosition().y < 200)) {
                 renderer.setColor(Color.CYAN);
                 renderer.circle(planet.getBody().getPosition().x, planet.getBody().getPosition().y, planet.getRadius()*0.01f);
             }
