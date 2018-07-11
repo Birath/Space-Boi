@@ -55,7 +55,11 @@ public abstract class Weapon {
 
     public void update(float delta) {
         if (reloading) {
-            if (currentReloadTime >= reloadTime) {
+            if(currentMag != 0 && gameWorld.getPlayer().isMouseHeld()){ //Interrupt reloading if you want to shoot and have ammo
+                reloading = false;
+                currentReloadTime = 0;
+            }
+            else if (currentReloadTime >= reloadTime) { //If done reloading
                 reloading = false;
                 currentReloadTime = 0;
                 currentMag = magSize;
@@ -73,9 +77,7 @@ public abstract class Weapon {
         }
     }
 
-    public void Shoot(float x, float y, Vector2 shootDirection) {
-        //depends on sub-weapon
-    }
+    public abstract void Shoot(float x, float y, Vector2 shootDirection);
 
     public void timeBetweenShotsStart() {
 
@@ -145,5 +147,11 @@ public abstract class Weapon {
 
     public float getReloadTime() {
         return reloadTime;
+    }
+
+    public void  reload(){
+        if(!(currentMag == magSize)){
+            reloading = true;
+        }
     }
 }

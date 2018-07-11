@@ -26,6 +26,7 @@ public class Player extends EntityDynamic {
 
     private Weapon weapon;
     private List<Weapon> weaponList;
+    private boolean toReload = false;
 
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
@@ -81,6 +82,8 @@ public class Player extends EntityDynamic {
                 }
             }
         }
+        //Reloading
+        reloadWeapon();
         //Aiming
         updateMouseCoords();
         //Shooting
@@ -213,6 +216,16 @@ public class Player extends EntityDynamic {
 
     public List<Weapon> getWeaponList() {
         return weaponList;
+    }
+
+    public void reloadWeapon(){
+        if(toReload){
+            weapon.reload();
+            toReload = false;
+        }
+    }
+    public void setToReloadTrue(){
+        toReload = true;
     }
 
     public boolean isChained() {
