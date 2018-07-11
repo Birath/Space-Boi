@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -55,6 +56,11 @@ public class Player extends EntityDynamic {
     private boolean god = false;
     private boolean infiniteAmmo = false;
 
+    // TODO DONT DO THIS HERE! FIX SOUNDMANAGER
+    private boolean isWalking;
+    private long walkingSoundID;
+    private Sound walkingSound;
+
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
@@ -79,6 +85,8 @@ public class Player extends EntityDynamic {
         walkAnimation = new Animation(0.01f, walkFrames);
         animationTime = 0;
         currentFrame = (TextureRegion) walkAnimation.getKeyFrame(animationTime, true);
+
+        walkingSound = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_FOOTSTEP, Sound.class);
     }
 
     @Override
@@ -120,6 +128,26 @@ public class Player extends EntityDynamic {
         updateWeapons(delta);
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
+        }
+
+        // Walking sound
+        if (entityState == ENTITY_STATE.STANDING) {
+            if (moveLeft || moveRight) {
+                if (!isWalking) {
+                    isWalking = true;
+                    walkingSoundID = walkingSound.loop(gameWorld.getGame().getPreferences().getSoundVolume());
+                }
+            } else {
+                if (isWalking) {
+                    isWalking = false;
+                    walkingSound.stop(walkingSoundID);
+                }
+            }
+        } else {
+            if (isWalking) {
+                isWalking = false;
+                walkingSound.stop(walkingSoundID);
+            }
         }
 
         spriteIsFlipped = Gdx.input.getX() <= Gdx.graphics.getWidth() / 2;
