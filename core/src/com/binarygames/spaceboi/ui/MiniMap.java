@@ -12,14 +12,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
-import com.binarygames.spaceboi.gameobjects.utils.InteractiveViewport;
 
 public class MiniMap {
 
     private static final int SCALE = 4;
 
     private SpriteBatch batch;
-    private InteractiveViewport viewport;
     private OrthographicCamera camera;
     private GameWorld gameWorld;
     private Player player;
@@ -63,7 +61,8 @@ public class MiniMap {
 
 
         for (final Planet planet : gameWorld.getPlanets()) {
-            if ((planet.getBody().getPosition().x < 200) && (planet.getBody().getPosition().y < 200)) {
+
+            if ((player.getBody().getPosition().x - planet.getBody().getPosition().x < 200) && (planet.getBody().getPosition().y < 200)) {
                 renderer.setColor(Color.CYAN);
                 renderer.circle(planet.getBody().getPosition().x, planet.getBody().getPosition().y, planet.getRadius()*0.01f);
             }
