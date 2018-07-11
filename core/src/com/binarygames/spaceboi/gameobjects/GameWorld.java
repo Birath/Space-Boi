@@ -76,9 +76,6 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        HealthPickup pickup = new HealthPickup(this, worldGenerator.generatePlayerX() + 50,
-                worldGenerator.generatePlayerY() + 40, Assets.UI_HEALTH_ICON, 300, 5);
-        addDynamicEntity(pickup);
         world.setContactListener(new EntityContactListener(this));
     }
 
