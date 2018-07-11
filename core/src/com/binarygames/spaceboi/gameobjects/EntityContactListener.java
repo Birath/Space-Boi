@@ -72,13 +72,11 @@ public class EntityContactListener implements ContactListener {
         else if (Chaser.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             Chaser chaser = (Chaser) fixtureA.getBody().getUserData();
-            Player player = (Player) fixtureB.getBody().getUserData();
-            player.reduceHealth(chaser.getDamage());
+            chaser.touchedPlayer();
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Chaser.class.isInstance(fixtureB.getBody().getUserData())) {
             Chaser chaser = (Chaser) fixtureB.getBody().getUserData();
-            Player player = (Player) fixtureA.getBody().getUserData();
-            player.reduceHealth(chaser.getDamage());
+            chaser.touchedPlayer();
         }
 
 
@@ -168,6 +166,16 @@ public class EntityContactListener implements ContactListener {
                 Planet.class.isInstance(fixtureB.getBody().getUserData())) {
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
             enemy.leftPlanet();
+        }
+        //Chaser x Player
+        else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Chaser.class.isInstance(fixtureB.getBody().getUserData())) {
+            Chaser chaser = (Chaser) fixtureB.getBody().getUserData();
+            chaser.stoppedTouchingPlayer();
+        } else if (Chaser.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Player.class.isInstance(fixtureB.getBody().getUserData())) {
+            Chaser chaser = (Chaser) fixtureA.getBody().getUserData();
+            chaser.stoppedTouchingPlayer();
         }
     }
 

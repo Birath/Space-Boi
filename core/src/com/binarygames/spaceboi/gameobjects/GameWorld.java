@@ -76,10 +76,6 @@ public class GameWorld {
         addDynamicEntity(player);
         this.player = player;
 
-        FlyingShip flyingShip = new FlyingShip(this, worldGenerator.generatePlayerX() + 40,
-                worldGenerator.generatePlayerY() + 20, Assets.PLANET_MOON, 500, 20);
-        addDynamicEntity(flyingShip);
-
         HealthPickup pickup = new HealthPickup(this, worldGenerator.generatePlayerX() + 50,
                 worldGenerator.generatePlayerY() + 40, Assets.UI_HEALTH_ICON, 300, 5);
         addDynamicEntity(pickup);

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Player extends EntityDynamic {
 
-    private static final int START_HEALTH = 100;
+    private static final int START_HEALTH = 200;
     private static final int MOVE_SPEED = 20;
     private static final int JUMP_HEIGHT = 20;
 

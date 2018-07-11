@@ -32,7 +32,7 @@ public class FlyingShip extends Enemy {
         moveAlongPlanet();
     }
     private void updateHuntingJumping(){
-        //Do nothing - does not chase to other planets
+        this.getBody().setLinearVelocity(0,0);
     }
     private void updateAttackingJumping(){
         if(toShoot() && weapon.canShoot()){
