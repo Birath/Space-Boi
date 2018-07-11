@@ -13,9 +13,15 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
+
 public class MiniMap {
 
     private static final int SCALE = 4;
+    private static final int MINIMAP_WIDHT = Gdx.graphics.getWidth()/4;
+    private static final int MINIMAP_HEIGHT = Gdx.graphics.getHeight()/4;
+    private static final int MINIMAP_X = Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/4;
+    private static final int MINIMAP_Y = Gdx.graphics.getHeight() - Gdx.graphics.getHeight()/4;
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -58,17 +64,21 @@ public class MiniMap {
         batch.begin();
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-
+        renderer.setColor(Color.RED);
+        renderer.circle(Gdx.graphics.getWidth()-MINIMAP_WIDHT/2, Gdx.graphics.getHeight()-MINIMAP_HEIGHT/2, 10);
 
         for (final Planet planet : gameWorld.getPlanets()) {
+            float x_difference = Math.abs(player.getBody().getPosition().x*PPM - planet.getBody().getPosition().x*PPM);
+            float y_difference = Math.abs(player.getBody().getPosition().y*PPM - planet.getBody().getPosition().y*PPM);
 
-            if ((player.getBody().getPosition().x - planet.getBody().getPosition().x < 200) && (player.getBody().getPosition().y - planet.getBody().getPosition().y < 200)) {
+            if ((x_difference < 1920*2) && (y_difference < 1080*2)) {
                 renderer.setColor(Color.CYAN);
-                renderer.circle(planet.getBody().getPosition().x, planet.getBody().getPosition().y, planet.getRadius()*0.01f);
+                renderer.circle(planet.getBody().getPosition().x*PPM, planet.getBody().getPosition().y*PPM, planet.getRadius()*0.01f);
             }
             //planet.getBody().getPosition();
             //planet.getRadius();
         }
+        renderer.flush();
         renderer.end();
         batch.end();
     }
