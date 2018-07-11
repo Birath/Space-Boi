@@ -6,7 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class Assets {
 
@@ -33,6 +35,7 @@ public class Assets {
 
     // Player
     public static final String PLAYER = "game/entities/player/norrland.jpg";
+    public static final String PLAYER_WALK_ANIMATION = "game/entities/player/walk_animation/walk_animation_atlas.png";
 
     // Weapons
     public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";
@@ -88,6 +91,7 @@ public class Assets {
 
         // Player
         assetManager.load(PLAYER, Texture.class);
+        assetManager.load(PLAYER_WALK_ANIMATION, Texture.class);
 
         // Weapons
         assetManager.load(WEAPON_SHOTGUN_SHOT, Sound.class);
