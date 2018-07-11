@@ -44,7 +44,7 @@ public class LoadingScreen extends BaseScreen {
         playButton = new TextButton("Play!", buttonStyle);
         playButton.setX(stage.getWidth() / 2 - playButton.getWidth() / 2);
         playButton.setY(stage.getHeight() / 8);
-        playButton.setVisible(true);
+        playButton.setVisible(false);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

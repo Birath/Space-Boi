@@ -1,11 +1,16 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
@@ -16,11 +21,23 @@ import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Player extends EntityDynamic {
 
     private static final int START_HEALTH = 200;
     private static final int MOVE_SPEED = 20;
     private static final int JUMP_HEIGHT = 20;
+
+    private static final int WALK_FRAME_COLUMNS = 4;
+    private static final int WALK_FRAME_ROWS = 15;
+
+    public int spriteWidth = 500;
+    public int spriteHeight = 500;
+
+    private Animation walkAnimation;
+    private TextureRegion currentFrame;
+    private float animationTime;
+    private boolean spriteIsFlipped;
 
     private boolean mouseHeld;
 
@@ -40,6 +57,11 @@ public class Player extends EntityDynamic {
     private boolean god = false;
     private boolean infiniteAmmo = false;
 
+    // TODO DONT DO THIS HERE! FIX SOUNDMANAGER
+    private boolean isWalking;
+    private long walkingSoundID;
+    private Sound walkingSound;
+
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
@@ -50,6 +72,22 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
+
+        // Walk animation
+        Texture walkAtlas = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_WALK_ANIMATION, Texture.class);
+        TextureRegion[][] walkTemp = TextureRegion.split(walkAtlas, walkAtlas.getWidth() / WALK_FRAME_COLUMNS, walkAtlas.getHeight() / WALK_FRAME_ROWS);
+        TextureRegion[] walkFrames = new TextureRegion[WALK_FRAME_COLUMNS * WALK_FRAME_ROWS];
+        int walkIndex = 0;
+        for (int i = 0; i < WALK_FRAME_ROWS; i++) {
+            for (int j = 0; j < WALK_FRAME_COLUMNS; j++) {
+                walkFrames[walkIndex++] = walkTemp[i][j];
+            }
+        }
+        walkAnimation = new Animation(0.01f, walkFrames);
+        animationTime = 0;
+        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(animationTime, true);
+
+        walkingSound = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_FOOTSTEP, Sound.class);
     }
 
     @Override
@@ -67,6 +105,9 @@ public class Player extends EntityDynamic {
             }
             if ((!moveLeft) && (!moveRight)) {
                 body.setLinearVelocity(0, 0);
+            } else {
+                animationTime += delta;
+                currentFrame = (TextureRegion) walkAnimation.getKeyFrame(animationTime, true);
             }
 
             //Jumping
@@ -91,6 +132,28 @@ public class Player extends EntityDynamic {
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
         }
+
+        // Walking sound
+        if (entityState == ENTITY_STATE.STANDING) {
+            if (moveLeft || moveRight) {
+                if (!isWalking) {
+                    isWalking = true;
+                    walkingSoundID = walkingSound.loop(gameWorld.getGame().getPreferences().getSoundVolume());
+                }
+            } else {
+                if (isWalking) {
+                    isWalking = false;
+                    walkingSound.stop(walkingSoundID);
+                }
+            }
+        } else {
+            if (isWalking) {
+                isWalking = false;
+                walkingSound.stop(walkingSoundID);
+            }
+        }
+
+        spriteIsFlipped = Gdx.input.getX() <= Gdx.graphics.getWidth() / 2;
     }
 
     @Override
@@ -100,6 +163,14 @@ public class Player extends EntityDynamic {
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
         getSprite().setRotation(playerAngle + 90);
         getSprite().draw(batch);
+
+        if (spriteIsFlipped) {
+            currentFrame.flip(true, false);
+            batch.draw(currentFrame, body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 2, spriteWidth / 2, spriteHeight / 2, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+            currentFrame.flip(true, false);
+        } else {
+            batch.draw(currentFrame, body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 2, spriteWidth / 2, spriteHeight / 2, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+        }
     }
 
     @Override

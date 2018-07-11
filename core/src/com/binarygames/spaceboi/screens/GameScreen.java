@@ -211,7 +211,6 @@ public class GameScreen implements Screen {
         switch (state) {
             case GAME_RUNNING:
                 miniMap.render();
-                game.getBatch().setProjectionMatrix(camera.combined);
                 gameUI.draw();
                 break;
             case GAME_PAUSED:

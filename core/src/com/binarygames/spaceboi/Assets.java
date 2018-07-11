@@ -33,6 +33,9 @@ public class Assets {
 
     // Player
     public static final String PLAYER = "game/entities/player/norrland.jpg";
+    public static final String PLAYER_WALK_ANIMATION = "game/entities/player/walk_animation/walk_animation_atlas.png";
+    public static final String PLAYER_PICKUP_HEALTH = "game/entities/player/health_pickup.mp3"; // https://freesound.org/people/SilverIllusionist/sounds/411172/
+    public static final String PLAYER_FOOTSTEP = "game/entities/player/footstep.wav"; // https://freesound.org/people/Yoyodaman234/sounds/166507/
 
     // Weapons
     public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";
@@ -88,6 +91,9 @@ public class Assets {
 
         // Player
         assetManager.load(PLAYER, Texture.class);
+        assetManager.load(PLAYER_WALK_ANIMATION, Texture.class);
+        assetManager.load(PLAYER_PICKUP_HEALTH, Sound.class);
+        assetManager.load(PLAYER_FOOTSTEP, Sound.class);
 
         // Weapons
         assetManager.load(WEAPON_SHOTGUN_SHOT, Sound.class);
