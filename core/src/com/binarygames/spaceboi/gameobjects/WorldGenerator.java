@@ -62,9 +62,10 @@ public class WorldGenerator {
             for(int j = 0; j < NumberOfPlanets; j++){
                 lastX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset));
                 lastY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset));
+                boolean isLastPlanet = ((j == NumberOfPlanets-1));
 
                 createPlanet(lastX, lastY, random);
-                createEnemies(lastX, lastY, random, lastRad, circleNumber);
+                createEnemies(lastX, lastY, random, lastRad, circleNumber, isLastPlanet);
             }
         }
     }
@@ -79,48 +80,51 @@ public class WorldGenerator {
 
         this.lastRad = rad; //rad from planet
     }
-    private void createEnemies(int x, int y, Random random, int rad, int circleNumber){
-        if((circleNumber%2)==0){
+    private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
+        if(isLastPlanet){
+            //Last planet, do not spawn anything
+        }
+        else if((circleNumber%2)==0){
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
             y = y + (int) EnemyType.FLYING_SHIP.getRad();
             FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.PLANET_MOON, EnemyType.FLYING_SHIP.getMass(), EnemyType.FLYING_SHIP.getRad());
             gameWorld.addDynamicEntity(flyingship);
         }
-        int planetType = random.nextInt(6); //from 0 to bound-1
-        if (planetType < 5){
-            //Spawn Chasers
-            int numberOfEnemies = random.nextInt(maxEnemies - minEnemies);
-            numberOfEnemies = numberOfEnemies + minEnemies;
+        else {
+            //If we are on one of the big circles of planets
+            int planetType = random.nextInt(6); //from 0 to bound-1
+            if (planetType < 5) {
+                //Spawn Chasers
+                int numberOfEnemies = random.nextInt(maxEnemies - minEnemies);
+                numberOfEnemies = numberOfEnemies + minEnemies;
 
-            int r = rad + (int) EnemyType.CHASER.getRad(); //Polära koordinater
-            double angleDiff = 1;
+                int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 10;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
 
-            for(int enemies = 0; enemies < numberOfEnemies; enemies++){
-                Chaser chaser = new Chaser(gameWorld, (int)(x + Math.round(r * Math.cos(angleDiff * enemies))),
-                        (int)(y + Math.round(r * Math.sin(angleDiff * enemies))),
-                        Assets.PLANET_MOON, EnemyType.CHASER.getMass(), EnemyType.CHASER.getRad());
-                gameWorld.addDynamicEntity(chaser);
+                for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
+                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * enemies))),
+                            (int) (y + Math.round(r * Math.sin(angleDiff * enemies))),
+                            Assets.PLANET_MOON, EnemyType.CHASER.getMass(), EnemyType.CHASER.getRad());
+                    gameWorld.addDynamicEntity(chaser);
+                }
+            } else if (planetType >= 5) {
+                //Spawn healtpacks
+                int numberOfHealthPacks = random.nextInt(4);
+                numberOfHealthPacks = numberOfHealthPacks + 4;
+
+                int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater - should not be chaser.rad on healthpack
+                double angleDiff = 2 * Math.PI / numberOfHealthPacks;
+
+                for (int healthPacks = 0; healthPacks < numberOfHealthPacks; healthPacks++) {
+                    HealthPickup pickup = new HealthPickup(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * healthPacks))),
+                            (int) (y + Math.round(r * Math.sin(angleDiff * healthPacks))),
+                            Assets.UI_HEALTH_ICON, 300, 5);
+                    gameWorld.addDynamicEntity(pickup);
+                }
             }
         }
-        else if(planetType >= 5){
-            //Spawn healtpacks
-            int numberOfHealthPacks = random.nextInt(4);
-            numberOfHealthPacks = numberOfHealthPacks + 4;
-
-            int r = rad + (int) EnemyType.CHASER.getRad(); //Polära koordinater - should not be chaser.rad on healthpack
-            double angleDiff = 2 * Math.PI / numberOfHealthPacks;
-
-            for(int healthPacks = 0; healthPacks < numberOfHealthPacks; healthPacks++){
-                HealthPickup pickup = new HealthPickup(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * healthPacks))),
-                        (int)(y + Math.round(r * Math.sin(angleDiff * healthPacks))),
-                        Assets.UI_HEALTH_ICON, 300, 5);
-                gameWorld.addDynamicEntity(pickup);
-            }
-        }
-
-
-
     }
 
     public int generatePlayerX(){

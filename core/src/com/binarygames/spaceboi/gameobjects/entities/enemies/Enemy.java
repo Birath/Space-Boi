@@ -29,8 +29,8 @@ public abstract class Enemy extends EntityDynamic {
 
     protected ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
 
-    public Enemy(GameWorld gameWorld, float x, float y, String path, float mass, float radius, EnemyType enemyType) {
-        super(gameWorld, x, y, path, mass, radius, enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+    public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
+        super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
         switch (enemyType) {
             case CHASER:
                 this.weapon = new Machinegun(gameWorld, this);

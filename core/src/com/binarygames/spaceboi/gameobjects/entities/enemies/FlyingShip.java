@@ -6,7 +6,7 @@ import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 
 public class FlyingShip extends Enemy {
     public FlyingShip(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius, EnemyType.FLYING_SHIP);
+        super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
     }
     @Override

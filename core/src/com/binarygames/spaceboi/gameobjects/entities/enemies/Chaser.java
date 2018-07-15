@@ -13,7 +13,7 @@ public class Chaser extends Enemy {
     private final int damageDelay = 700;
 
     public Chaser(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius, EnemyType.CHASER);
+        super(gameWorld, x, y, path, EnemyType.CHASER);
     }
 
     @Override

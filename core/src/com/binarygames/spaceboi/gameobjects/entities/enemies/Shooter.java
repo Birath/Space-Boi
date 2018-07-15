@@ -5,7 +5,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Shooter extends Enemy {
     public Shooter(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius, EnemyType.SHOOTER);
+        super(gameWorld, x, y, path, EnemyType.SHOOTER);
     }
     @Override
     protected void updateIdle() {
