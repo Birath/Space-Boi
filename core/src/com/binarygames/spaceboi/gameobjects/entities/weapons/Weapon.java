@@ -1,8 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -55,11 +53,10 @@ public abstract class Weapon {
 
     public void update(float delta) {
         if (reloading) {
-            if(currentMag != 0 && gameWorld.getPlayer().isMouseHeld()){ //Interrupt reloading if you want to shoot and have ammo
+            if (currentMag != 0 && gameWorld.getPlayer().isMouseHeld()) { //Interrupt reloading if you want to shoot and have ammo
                 reloading = false;
                 currentReloadTime = 0;
-            }
-            else if (currentReloadTime >= reloadTime) { //If done reloading
+            } else if (currentReloadTime >= reloadTime) { //If done reloading
                 reloading = false;
                 currentReloadTime = 0;
                 currentMag = magSize;
@@ -83,6 +80,10 @@ public abstract class Weapon {
 
     }
 
+    public void onReload() {
+
+    }
+
     public boolean canShoot() {
         if (shooter instanceof Player && gameWorld.getPlayer().hasInfiniteAmmo()) {
             return timeBetweenShotsIsFinished;
@@ -95,8 +96,7 @@ public abstract class Weapon {
 
         if (currentMag == 0) {
             // Do reload
-            reloading = true;
-            currentReloadTime = 0;
+            reload();
         } else {
             // Do between shots delay
             timeBetweenShotsIsFinished = false;
@@ -133,7 +133,7 @@ public abstract class Weapon {
         sprite.draw(batch);
     }
 
-    public int getCurrentMag(){
+    public int getCurrentMag() {
         return currentMag;
     }
 
@@ -149,9 +149,11 @@ public abstract class Weapon {
         return reloadTime;
     }
 
-    public void  reload(){
-        if(!(currentMag == magSize)){
+    public void reload() {
+        if (!(currentMag == magSize)) {
             reloading = true;
+            currentReloadTime = 0;
+            onReload();
         }
     }
 }

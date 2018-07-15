@@ -23,7 +23,7 @@ public class Shotgun extends Weapon {
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 2;
-        this.reloadTime = 3;
+        this.reloadTime = 2.2f;
         this.damage = 10;
 
         //Sprite setup:
@@ -50,8 +50,7 @@ public class Shotgun extends Weapon {
     }
 
     @Override
-    public void timeBetweenShotsStart() {
-        // TODO play at right time
-        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_SHOTGUN_PUMP);
+    public void onReload() {
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_SHOTGUN_RELOAD);
     }
 }
