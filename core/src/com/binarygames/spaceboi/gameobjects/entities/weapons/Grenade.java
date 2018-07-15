@@ -48,5 +48,7 @@ public class Grenade extends Bullet {
             new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirection.x, getBody().getPosition().y * PPM + shrapnelDirection.y,
                     shrapnelPath, shrapnelDirectionWithSpeed.rotate(angleDiff * i), shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
         }
+
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_EXPLOSION);
     }
 }
