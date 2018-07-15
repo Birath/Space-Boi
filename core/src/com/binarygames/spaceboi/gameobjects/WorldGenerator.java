@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
@@ -29,6 +30,8 @@ public class WorldGenerator {
 
     private int maxEnemies = 5;
     private int minEnemies = 1;
+
+    private float radOfWorld;
 
 
     public WorldGenerator(GameWorld gameWorld){
@@ -62,7 +65,7 @@ public class WorldGenerator {
             for(int j = 0; j < NumberOfPlanets; j++){
                 lastX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset));
                 lastY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset));
-                boolean isLastPlanet = ((j == NumberOfPlanets-1));
+                boolean isLastPlanet = ((j == NumberOfPlanets-1) && (circleNumber == NumberOfCircles-1));
 
                 createPlanet(lastX, lastY, random);
                 createEnemies(lastX, lastY, random, lastRad, circleNumber, isLastPlanet);
@@ -83,6 +86,8 @@ public class WorldGenerator {
     private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
         if(isLastPlanet){
             //Last planet, do not spawn anything
+            Vector2 toPlanet = new Vector2(x, y);
+            radOfWorld = toPlanet.len() + Planet.GRAVITY_RADIUS;
         }
         else if((circleNumber%2)==0){
             //Spawn spaceship
