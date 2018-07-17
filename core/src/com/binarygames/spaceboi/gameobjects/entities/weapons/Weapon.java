@@ -10,9 +10,14 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public abstract class Weapon {
+
+    protected List<String> weaponAttachments = new ArrayList<String>();
 
     protected World world;
     protected GameWorld gameWorld;
@@ -155,5 +160,41 @@ public abstract class Weapon {
             currentReloadTime = 0;
             onReload();
         }
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public float getBulletSpeed() {
+        return bulletSpeed;
+    }
+
+    public void setBulletSpeed(float bulletSpeed) {
+        this.bulletSpeed = bulletSpeed;
+    }
+
+    public void setRecoil(float recoil) {
+        this.recoil = recoil;
+    }
+
+    public void setReloadTime(float reloadTime) {
+        this.reloadTime = reloadTime;
+    }
+
+    public float getTimeBetweenShots() {
+        return timeBetweenShots;
+    }
+
+    public void setTimeBetweenShots(float timeBetweenShots) {
+        this.timeBetweenShots = timeBetweenShots;
+    }
+
+    public void setMagSize(int magSize) {
+        this.magSize = magSize;
     }
 }

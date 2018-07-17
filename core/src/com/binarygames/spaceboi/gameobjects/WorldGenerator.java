@@ -7,6 +7,7 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Silencer;
 
 import java.util.Random;
 
@@ -85,7 +86,23 @@ public class WorldGenerator {
     }
     private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
         if(isLastPlanet){
-            //Last planet, do not spawn anything
+            //Last planet aka spawn planet
+
+            int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
+            double angleBetweenEnemies = 10;
+            double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+            for(int i = 0; i < 5; i++){
+                Silencer pickup = new Silencer(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * i + 20))),
+                        (int) (y + Math.round(r * Math.sin(angleDiff * i + 20))),
+                        Assets.PLAYER, 300, 5);
+                gameWorld.addDynamicEntity(pickup);
+            }
+            FlyingShip flyingShip = new FlyingShip(gameWorld, (int) (x + Math.round(r*1.3 * Math.cos(angleDiff + 20))),
+                    (int) (y + Math.round(r*1.3 * Math.sin(angleDiff + 20))),
+                    Assets.PLANET_MOON, EnemyType.FLYING_SHIP.getMass(), EnemyType.FLYING_SHIP.getRad());
+            gameWorld.addDynamicEntity(flyingShip);
+
+            //Calculating for other parts of the code
             Vector2 toPlanet = new Vector2(x, y);
             radOfWorld = toPlanet.len() + Planet.GRAVITY_RADIUS;
         }

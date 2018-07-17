@@ -10,11 +10,9 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 public class HealthPickup extends Pickup {
 
     private static final int HEALTH_INCREASE = 20;
-    private boolean remove = false;
 
     public HealthPickup(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
-
 
     }
 
@@ -29,11 +27,6 @@ public class HealthPickup extends Pickup {
     @Override
     public void update(float delta) {
 
-    }
-
-    @Override
-    public boolean shouldRemove(Vector2 playerPosition) {
-        return remove;
     }
 
     @Override

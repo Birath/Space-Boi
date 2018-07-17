@@ -31,7 +31,7 @@ public class Grenade extends Bullet {
 
     @Override
     public boolean shouldRemove(Vector2 playerPosition) {
-        return hasHit && (TimeUtils.millis() - timeTouched) > removeDelay || (TimeUtils.millis() - timeTouched) > removeDelay;
+        return hasHit && (TimeUtils.millis() - timeTouched) > removeDelay || (TimeUtils.millis() - timeTouched) > removeDelay; //???
     }
 
     @Override
