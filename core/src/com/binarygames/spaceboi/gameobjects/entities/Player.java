@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
@@ -27,9 +28,11 @@ public class Player extends EntityDynamic {
     private static final int START_HEALTH = 200;
     private static final int MOVE_SPEED = 20;
     private static final int JUMP_HEIGHT = 20;
+    private static final float MAX_SPEED = 6000;
 
     private static final int WALK_FRAME_COLUMNS = 4;
     private static final int WALK_FRAME_ROWS = 15;
+    private static final int MAX_RECOIL_ANGLE = 40;
 
     public int spriteWidth = 500;
     public int spriteHeight = 500;
@@ -48,14 +51,15 @@ public class Player extends EntityDynamic {
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
     private Vector2 perpen = new Vector2(0, 0);
-
     private float playerAngle = 0f;
 
     private GameWorld gameWorld;
-    private boolean chained = false;
+    private boolean isChained = false;
 
     private boolean god = false;
     private boolean infiniteAmmo = false;
+    private boolean shouldApplyRecoil = false;
+    private Vector2 storedRecoil;
 
     // TODO DONT DO THIS HERE! FIX SOUNDMANAGER
     private boolean isWalking;
@@ -103,7 +107,7 @@ public class Player extends EntityDynamic {
             } else if (moveLeft) {
                 body.setLinearVelocity(-perpen.x, -perpen.y);
             }
-            if ((!moveLeft) && (!moveRight)) {
+            if (!moveLeft && !moveRight && !(mouseHeld && weapon.canShoot()) && isChained) {
                 body.setLinearVelocity(0, 0);
             } else {
                 animationTime += delta;
@@ -112,25 +116,14 @@ public class Player extends EntityDynamic {
 
             //Jumping
             if (moveUp) {
-                if (chained) {
-                    for (JointEdge jointEdge : body.getJointList()) {
-                        gameWorld.addJointToRemove(jointEdge.joint);
-                    }
-                    chained = false;
+                if (isChained) {
+                    removeJoints();
+                    isChained = false;
                 } else {
                     body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
                     entityState = ENTITY_STATE.JUMPING;
                 }
             }
-        }
-        //Reloading
-        reloadWeapon();
-        //Aiming
-        updateMouseCoords();
-        //Shooting
-        updateWeapons(delta);
-        if (mouseHeld && weapon.canShoot()) {
-            Shoot();
         }
 
         // Walking sound
@@ -154,6 +147,31 @@ public class Player extends EntityDynamic {
         }
 
         spriteIsFlipped = Gdx.input.getX() <= Gdx.graphics.getWidth() / 2;
+
+        //Reloading
+        reloadWeapon();
+        //Aiming
+        updateMouseCoords();
+        //Shooting
+        updateWeapons(delta);
+
+        if (shouldApplyRecoil) {
+            Vector2 speed = body.getLinearVelocity().cpy();
+            if (speed.add(storedRecoil).len() <= MAX_SPEED) {
+                body.setLinearVelocity(body.getLinearVelocity().add(storedRecoil));
+            }
+            shouldApplyRecoil = false;
+            storedRecoil.scl(0);
+        }
+        if (mouseHeld && weapon.canShoot()) {
+            Shoot();
+        }
+    }
+
+    private void removeJoints() {
+        for (JointEdge jointEdge : body.getJointList()) {
+            gameWorld.addJointToRemove(jointEdge.joint);
+        }
     }
 
     @Override
@@ -181,14 +199,27 @@ public class Player extends EntityDynamic {
     private void Shoot() {
         Vector2 recoil = new Vector2(body.getPosition().x * PPM - mouseCoords.x, body.getPosition().y * PPM - mouseCoords.y);
         recoil.setLength2(1);
-        System.out.println(recoil);
 
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
 
-        Vector2 newVelocity = body.getLinearVelocity();
-        newVelocity.add(recoil);
-        body.setLinearVelocity(newVelocity);
+        if (isChained && Math.abs(toPlanet.angle(recoil)) < MAX_RECOIL_ANGLE) {
+            shouldApplyRecoil = false;
+        } else if (isChained) {
+            storedRecoil = recoil.cpy();
+            shouldApplyRecoil = true;
+            removeJoints();
+            isChained = false;
+            entityState = ENTITY_STATE.JUMPING;
+        } else {
+            storedRecoil = recoil.cpy();
+            shouldApplyRecoil = true;
+        }
+        /*
+            Vector2 newVelocity = body.getLinearVelocity();
+            newVelocity.add(recoil);
+            body.setLinearVelocity(newVelocity);
+       */
 
         //Shooting the bullet
         recoil.setLength2(1);
@@ -248,15 +279,19 @@ public class Player extends EntityDynamic {
         //Gdx.app.debug("Player", "New playerAngle: " + angle);
     }
 
-    //Handeling planet
+    //Handling planet
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
+        // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
+        if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished() || weapon instanceof Machinegun)) {
+            // Nothing happens
         // Don't chain the player if they are holding the jump button
-        if (!moveUp) {
+        } else if (moveUp) {
+            // Nothing happens
+        } else {
             gameWorld.addJoints(new JointInfo(body, planet.getBody()));
-            //Gdx.app.log("Player", "Creating joint: " + this + ", " + planet);
-            chained = true;
+            isChained = true;
         }
 
     }
@@ -269,6 +304,7 @@ public class Player extends EntityDynamic {
     }
 
     public void increaseHealth(int amount) {
+        if (health + amount > START_HEALTH)
         health += amount;
     }
 
@@ -300,7 +336,7 @@ public class Player extends EntityDynamic {
     }
 
     public boolean isChained() {
-        return chained;
+        return isChained;
     }
 
     public Vector2 getSpawnPos() {

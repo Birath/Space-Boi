@@ -16,7 +16,7 @@ public class Machinegun extends Weapon {
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
-        this.recoil = 10;
+        this.recoil = 1;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 0.1f;
         this.magSize = this.currentMag = 25;

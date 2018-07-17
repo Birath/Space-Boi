@@ -146,6 +146,14 @@ public abstract class Weapon {
         return magSize;
     }
 
+    public boolean isReloading() {
+        return reloading;
+    }
+
+    public boolean isTimeBetweenShotsIsFinished() {
+        return timeBetweenShotsIsFinished;
+    }
+
     public float getCurrentReloadTime() {
         return currentReloadTime;
     }
