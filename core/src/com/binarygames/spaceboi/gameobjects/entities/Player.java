@@ -339,10 +339,6 @@ public class Player extends EntityDynamic {
         return isChained;
     }
 
-    public Vector2 getSpawnPos() {
-        return pos;
-    }
-
     public boolean isGod() {
         return god;
     }

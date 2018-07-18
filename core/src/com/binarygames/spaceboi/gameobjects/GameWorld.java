@@ -217,10 +217,6 @@ public class GameWorld {
 
     public void respawnPlayer() {
         game.setScreen(new DeathScreen(game, game.getScreen()));
-        Gdx.app.log("GameWorld", "Respawn pos:   " + worldGenerator.generatePlayerX() + ", " + worldGenerator.generatePlayerY());
-        player.getBody().setTransform(player.getSpawnPos(), player.getBody().getAngle());
-        Gdx.app.log("GameWorld", "After respawn: " + player.getBody().getPosition());
-        player.setHealth(100);
     }
 
     private void rotatePlayer(float delta) {
