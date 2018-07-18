@@ -54,6 +54,8 @@ public abstract class Weapon {
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
+
+        gameWorld.addWeapon(this);
     }
 
     public void update(float delta) {
@@ -155,7 +157,7 @@ public abstract class Weapon {
     }
 
     public void reload() {
-        if (!(currentMag == magSize)) {
+        if ((!(currentMag == magSize)) && !reloading) {
             reloading = true;
             currentReloadTime = 0;
             onReload();
@@ -196,5 +198,9 @@ public abstract class Weapon {
 
     public void setMagSize(int magSize) {
         this.magSize = magSize;
+    }
+
+    public EntityDynamic getShooter(){
+        return this.shooter;
     }
 }

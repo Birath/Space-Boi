@@ -3,18 +3,17 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.HomingRocketLauncher;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 
 public class FlyingShip extends Enemy {
 
-    private Weapon rocketLauncher;
+    private Shotgun shotgun;
 
     public FlyingShip(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
 
-        this.rocketLauncher = new HomingRocketLauncher(gameWorld, this);
+        shotgun = new Shotgun(gameWorld, this);
     }
     @Override
     protected void updateIdle() {
@@ -42,8 +41,11 @@ public class FlyingShip extends Enemy {
         this.getBody().setLinearVelocity(0,0);
     }
     private void updateAttackingJumping(){
-        if(toShoot() && weapon.canShoot()){
-            Shoot();
+        if(toShootRockets() && weapon.canShoot()){
+            ShootRockets();
+        }
+        else if(toShootShotgun() && shotgun.canShoot()){
+            ShootShotgun();
         }
         else{
             moveAlongPlanet();
@@ -68,19 +70,32 @@ public class FlyingShip extends Enemy {
         }
 
     }
-    private boolean toShoot(){
+    private boolean toShootShotgun(){
         float angle = Math.abs(toPlanet.angle(toPlayer));
-        if(angle < 90){ //increased from 45
+        if(angle < 45){
             return true;
         }
         return false;
     }
-    private void Shoot(){
+    private boolean toShootRockets(){
+        float angle = Math.abs(toPlanet.angle(toPlayer));
+        if(45 < angle && angle < 75){
+            return true;
+        }
+        return false;
+    }
+    private void ShootShotgun(){
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
                 body.getPosition().y * PPM + shootDirection.y);
 
-        rocketLauncher.Shoot(shootFrom.x, shootFrom.y, shootDirection);
-        //weapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+        shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+    }
+    private void ShootRockets(){
+        Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
+                body.getPosition().y * PPM + shootDirection.y);
+
+        weapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);
     }
 }

@@ -127,8 +127,6 @@ public class Player extends EntityDynamic {
         reloadWeapon();
         //Aiming
         updateMouseCoords();
-        //Shooting
-        updateWeapons(delta);
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
         }

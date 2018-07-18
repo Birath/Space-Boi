@@ -14,7 +14,7 @@ public class HomingRocket extends Bullet {
         Vector2 toPlayer = new Vector2(gameWorld.getPlayer().getBody().getPosition().x - this.getBody().getPosition().x,
                  gameWorld.getPlayer().getBody().getPosition().y - this.getBody().getPosition().y);
 
-        toPlayer.setLength2(1).scl(5); // 5 är magisk bulletspeed
+        toPlayer.setLength2(1).scl(this.getBody().getLinearVelocity().len());
         this.getBody().setLinearVelocity(toPlayer);
 
     }
