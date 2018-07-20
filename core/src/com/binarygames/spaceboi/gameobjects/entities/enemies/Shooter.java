@@ -4,12 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Shooter extends Enemy {
-    public Shooter(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+    public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
     }
     @Override
     protected void updateIdle() {
-        updateWalkingDirection();
+        standStill();
     }
 
     @Override
@@ -53,11 +53,15 @@ public class Shooter extends Enemy {
         recoil.scl(weapon.getRecoil());
         body.setLinearVelocity(recoil);
 
-        //Creating the bulleta
-        recoil.setLength2(1);
-        recoil.scl(-(rad * PPM));
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
+        perpen = new Vector2(-toPlanet.y, toPlanet.x);
+        perpen.setLength2(1).scl(rad * PPM);
+        if(Math.abs(perpen.angle(toPlayer)) > 90){
+            perpen.rotate(180);
+        }
 
-        weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
+                body.getPosition().y * PPM + perpen.y);
+
+        weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
     }
 }

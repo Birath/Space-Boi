@@ -9,11 +9,12 @@ public class FlyingShip extends Enemy {
 
     private Shotgun shotgun;
 
-    public FlyingShip(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+    public FlyingShip(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
 
         shotgun = new Shotgun(gameWorld, this);
+        enemyXP = 100;
     }
     @Override
     protected void updateIdle() {
@@ -38,7 +39,7 @@ public class FlyingShip extends Enemy {
         moveAlongPlanet();
     }
     private void updateHuntingJumping(){
-        this.getBody().setLinearVelocity(0,0);
+        standStill();
     }
     private void updateAttackingJumping(){
         if(toShootRockets() && weapon.canShoot()){
@@ -92,10 +93,15 @@ public class FlyingShip extends Enemy {
         shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
     }
     private void ShootRockets(){
-        Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
-                body.getPosition().y * PPM + shootDirection.y);
+        perpen = new Vector2(-toPlanet.y, toPlanet.x);
+        perpen.setLength2(1).scl(rad * PPM);
+        if(Math.abs(perpen.angle(toPlayer)) > 90){
+            perpen.rotate(180);
+        }
 
-        weapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
+                body.getPosition().y * PPM + perpen.y);
+
+        weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
     }
 }

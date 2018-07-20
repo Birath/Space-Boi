@@ -302,8 +302,15 @@ public class Player extends EntityDynamic {
     }
 
     public void increaseHealth(int amount) {
-        if (health + amount > START_HEALTH)
-        health += amount;
+        if (health + amount >= maxHealth){
+            health = maxHealth;
+        }
+        else{
+            health += amount;
+        }
+    }
+    public void increaseMaxHealth(int amount){
+        maxHealth += amount;
     }
 
     //Weapon

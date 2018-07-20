@@ -11,6 +11,7 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 public class Shotgun extends Weapon {
 
     private int spread = 10;
+    private int numberOfBullets = 7;
 
     public Shotgun(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
@@ -37,9 +38,8 @@ public class Shotgun extends Weapon {
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            int bullets = MathUtils.random(4, 7);
-            int randomAngle = MathUtils.random(-spread, spread);
-            for (int i = 0; i < bullets; i++) {
+            for (int i = 0; i < numberOfBullets; i++) {
+                int randomAngle = MathUtils.random(-spread, spread);
                 Vector2 randomShootDirection = shootDirection.rotate(randomAngle);
                 new Bullet(gameWorld, x, y, path, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
             }
