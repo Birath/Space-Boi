@@ -34,22 +34,28 @@ public class InventoryUI {
         fonts = new Fonts();
         loadStyles();
 
-        Label test = new Label("test", labelStyle);
-        test.setPosition(200, 200);
-        stage.addActor(test);
-
          /*
             Current inventory
           */
         Table currentInventory = new Table();
+        stage.addActor(currentInventory);
 
          /*
             Weapons
           */
         Table weaponsTable = new Table();
         for (Weapon weapon : gameWorld.getPlayer().getWeaponList()) {
+            Label weaponLabel = new Label(weapon.getName(), labelStyle);
+            Label ammoLabel = new Label(weapon.getMagSize() + "/∞", labelStyle);
 
+            weaponsTable.add(weaponLabel);
+            weaponsTable.row();
+            weaponsTable.add(ammoLabel);
+            weaponsTable.row();
         }
+        stage.addActor(weaponsTable);
+
+        stage.setDebugAll(true);
     }
 
     public void update(float delta) {

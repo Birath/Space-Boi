@@ -25,6 +25,7 @@ public class Shotgun extends Weapon {
         this.magSize = this.currentMag = 2;
         this.reloadTime = 2.2f;
         this.damage = 10;
+        this.name = "Shotgun";
 
         //Sprite setup:
         this.radius = 5;

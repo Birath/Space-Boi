@@ -22,6 +22,7 @@ public class GrenadeLauncher extends Weapon {
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;
         this.damage = 0;
+        this.name = "Grenade launcher";
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
