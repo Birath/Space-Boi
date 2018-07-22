@@ -129,18 +129,18 @@ public class Player extends EntityDynamic {
         // Walking sound
         if (entityState == ENTITY_STATE.STANDING) {
             if (moveLeft || moveRight) {
-                if (!isWalking) {
+                if (!isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                     isWalking = true;
                     walkingSoundID = walkingSound.loop(gameWorld.getGame().getPreferences().getSoundVolume());
                 }
             } else {
-                if (isWalking) {
+                if (isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                     isWalking = false;
                     walkingSound.stop(walkingSoundID);
                 }
             }
         } else {
-            if (isWalking) {
+            if (isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                 isWalking = false;
                 walkingSound.stop(walkingSoundID);
             }
@@ -284,7 +284,7 @@ public class Player extends EntityDynamic {
         // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
         if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished() || weapon instanceof Machinegun)) {
             // Nothing happens
-        // Don't chain the player if they are holding the jump button
+            // Don't chain the player if they are holding the jump button
         } else if (moveUp) {
             // Nothing happens
         } else {
@@ -303,7 +303,7 @@ public class Player extends EntityDynamic {
 
     public void increaseHealth(int amount) {
         if (health + amount > START_HEALTH)
-        health += amount;
+            health += amount;
     }
 
     //Weapon
@@ -323,13 +323,14 @@ public class Player extends EntityDynamic {
         return weaponList;
     }
 
-    public void reloadWeapon(){
-        if(toReload){
+    public void reloadWeapon() {
+        if (toReload) {
             weapon.reload();
             toReload = false;
         }
     }
-    public void setToReloadTrue(){
+
+    public void setToReloadTrue() {
         toReload = true;
     }
 
