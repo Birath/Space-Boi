@@ -17,6 +17,7 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class Player extends EntityDynamic {
     private List<Weapon> weaponList;
     private boolean toReload = false;
 
+    private List<WeaponAttachment> inventory;
+
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
     private Vector2 perpen = new Vector2(0, 0);
@@ -76,6 +79,8 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
+
+        inventory = new ArrayList<>();
 
         // Walk animation
         Texture walkAtlas = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_WALK_ANIMATION, Texture.class);
@@ -332,6 +337,14 @@ public class Player extends EntityDynamic {
 
     public void setToReloadTrue() {
         toReload = true;
+    }
+
+    public List<WeaponAttachment> getInventory() {
+        return inventory;
+    }
+
+    public void addToInventory(WeaponAttachment attachment) {
+        inventory.add(attachment);
     }
 
     public boolean isChained() {
