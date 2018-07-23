@@ -11,6 +11,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.HomingRocketLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -22,6 +23,7 @@ public abstract class Enemy extends EntityDynamic {
     protected Vector2 perpen = new Vector2(0, 0);
     protected GameWorld gameWorld;
     protected Player player;
+    protected int enemyXP = 20;
 
     private ProgressBar healthBar;
 
@@ -39,7 +41,7 @@ public abstract class Enemy extends EntityDynamic {
                 this.weapon = new Machinegun(gameWorld, this);
                 break;
             case FLYING_SHIP:
-                this.weapon = new Shotgun(gameWorld, this);
+                this.weapon = new HomingRocketLauncher(gameWorld, this);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid enemy type");
@@ -52,7 +54,6 @@ public abstract class Enemy extends EntityDynamic {
 
     @Override
     public void update(float delta) {
-        weapon.update(delta);
         updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
             if(enemyState == ENEMY_STATE.IDLE){
@@ -89,7 +90,7 @@ public abstract class Enemy extends EntityDynamic {
 
     @Override
     public void onRemove() {
-
+        gameWorld.getXp_handler().increaseXP(enemyXP);
     }
 
     protected void updateToPlanet() {

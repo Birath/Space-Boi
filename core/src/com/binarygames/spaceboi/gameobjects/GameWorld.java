@@ -15,7 +15,9 @@ import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
+import com.binarygames.spaceboi.gameobjects.entities.background_functions.XP_handler;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
@@ -33,11 +35,13 @@ public class GameWorld {
     private WorldGenerator worldGenerator;
 
     private ParticleHandler particleHandler;
+    private XP_handler xp_handler;
     private Player player;
     private boolean shouldLerpPlayerAngle = false;
 
     private List<EntityDynamic> dynamicEntities;
     private List<EntityStatic> staticEntities;
+    private List<Weapon> weaponList;
 
     private List<EntityDynamic> addDynamicEntities = new ArrayList<>();
 
@@ -64,6 +68,7 @@ public class GameWorld {
 
         dynamicEntities = new ArrayList<>();
         staticEntities = new ArrayList<>();
+        weaponList = new ArrayList<>();
     }
 
     public void createWorld() {
@@ -73,11 +78,8 @@ public class GameWorld {
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
         addDynamicEntity(player);
         this.player = player;
-        /*
-        LaunchPad launchPad = new LaunchPad(this, worldGenerator.generatePlayerX(),
-                worldGenerator.generatePlayerY(), Assets.LAUNCH_PAD, 500, 20, 4);
-        addStaticEntity(launchPad);
-        */
+        xp_handler = new XP_handler(player);
+
         world.setContactListener(new EntityContactListener(this));
     }
 
@@ -85,6 +87,11 @@ public class GameWorld {
         for (EntityDynamic entity : dynamicEntities) {
             applyGravity(entity);
             entity.update(delta);
+        }
+        for (Weapon weapon : weaponList){
+            if (weapon.getShooter().getHealth() > 0){
+                weapon.update(delta);
+            }
         }
         rotatePlayer(delta);
         world.step(delta, 6, 2);
@@ -302,6 +309,9 @@ public class GameWorld {
         }
         return planets;
     }
+    public void addWeapon(Weapon weapon){
+        weaponList.add(weapon);
+    }
 
     public void addDynamicEntity(EntityDynamic entity) {
         addDynamicEntities.add(entity);
@@ -321,6 +331,9 @@ public class GameWorld {
 
     public Player getPlayer() {
         return player;
+    }
+    public XP_handler getXp_handler() {
+        return xp_handler;
     }
 
     public SpaceBoi getGame() {

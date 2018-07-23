@@ -13,11 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.input.PlayerInputProcessor;
 import com.binarygames.spaceboi.ui.FrameRate;
 import com.binarygames.spaceboi.ui.GameUI;
+import com.binarygames.spaceboi.ui.InventoryUI;
 import com.binarygames.spaceboi.ui.MiniMap;
 import com.binarygames.spaceboi.util.Console;
 
@@ -46,6 +46,8 @@ public class GameScreen implements Screen {
 
     private Console console;
 
+    private InventoryUI inventoryUI;
+
     private GameWorld gameWorld;
 
     private Player player;
@@ -63,7 +65,7 @@ public class GameScreen implements Screen {
     private float angleToInterpolate;
 
 
-    private boolean debugRendererIsEnabled = true;
+    private boolean debugRendererIsEnabled = false;
     private float startCameraAngle = 0;
 
     public GameScreen(SpaceBoi game) {
@@ -98,6 +100,7 @@ public class GameScreen implements Screen {
         miniMap = new MiniMap(game.getBatch(), gameWorld);
 
         console = new Console(game, this, gameWorld);
+        inventoryUI = new InventoryUI(this, gameWorld);
 
         PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
         multiplexer = new InputMultiplexer();
@@ -205,6 +208,9 @@ public class GameScreen implements Screen {
         if (console.isVisible()) {
             console.update(delta);
         }
+        if (inventoryUI.isVisible()) {
+            inventoryUI.update(delta);
+        }
     }
 
     private void draw() {
@@ -219,6 +225,9 @@ public class GameScreen implements Screen {
         }
         if (console.isVisible()) {
             console.render();
+        }
+        if (inventoryUI.isVisible()) {
+            inventoryUI.render();
         }
     }
 
@@ -296,6 +305,7 @@ public class GameScreen implements Screen {
         gameUI.dispose();
         inGameMenuScreen.dispose();
         frameRate.dispose();
+        inventoryUI.dispose();
     }
 
     public float getCameraRotation() {
@@ -314,6 +324,10 @@ public class GameScreen implements Screen {
 
     public Console getConsole() {
         return console;
+    }
+
+    public InventoryUI getInventoryUI() {
+        return inventoryUI;
     }
 
     public void setDebugRendererIsEnabled(boolean debugRendererIsEnabled) {

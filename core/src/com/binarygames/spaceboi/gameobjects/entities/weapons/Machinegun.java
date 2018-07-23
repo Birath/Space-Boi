@@ -22,6 +22,7 @@ public class Machinegun extends Weapon {
         this.magSize = this.currentMag = 25;
         this.reloadTime = 2;
         this.damage = 5;
+        this.name = "Machine gun";
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
