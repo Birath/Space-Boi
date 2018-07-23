@@ -53,6 +53,8 @@ public class Player extends EntityDynamic {
     private Vector2 perpen = new Vector2(0, 0);
     private float playerAngle = 0f;
 
+    private boolean isLaunching = false;
+
     private GameWorld gameWorld;
     private boolean isChained = false;
 
@@ -65,6 +67,7 @@ public class Player extends EntityDynamic {
     private boolean isWalking;
     private long walkingSoundID;
     private Sound walkingSound;
+    private Planet launchPlanet;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
@@ -123,6 +126,14 @@ public class Player extends EntityDynamic {
                     body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
                     entityState = ENTITY_STATE.JUMPING;
                 }
+            }
+        } else if (isLaunching) {
+            if (launchPlanet.equals(getClosestPlanet())) {
+                Vector2 launchVector = toPlanet.cpy();
+                launchVector.setLength(1).scl(-LaunchPad.LAUNCH_PAD_SPEED);
+                body.setLinearVelocity(launchVector);
+            } else {
+                isLaunching = false;
             }
         }
 
@@ -293,7 +304,17 @@ public class Player extends EntityDynamic {
             gameWorld.addJoints(new JointInfo(body, planet.getBody()));
             isChained = true;
         }
+    }
 
+    public void hitLauchPad(LaunchPad launchPad) {
+        // TODO: 2018-07-21 implement
+        if (getClosestPlanet() != null) {
+            launchPlanet = getClosestPlanet();
+            entityState = ENTITY_STATE.JUMPING;
+            isLaunching = true;
+            removeJoints();
+            isChained = false;
+        }
     }
 
     @Override
