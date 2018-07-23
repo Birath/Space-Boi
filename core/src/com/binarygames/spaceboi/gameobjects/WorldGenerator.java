@@ -1,7 +1,10 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
+import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
@@ -70,6 +73,12 @@ public class WorldGenerator {
 
                 createPlanet(lastX, lastY, random);
                 createEnemies(lastX, lastY, random, lastRad, circleNumber, isLastPlanet);
+
+                int nextX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * (j+1)) + angleOffset));
+                int nextY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * (j+1)) + angleOffset));
+
+                float angleToNextPlanet = MathUtils.atan2(nextY - lastY, nextX - lastX);
+                createLaunchPad(lastX, lastY, lastRad, angleToNextPlanet );
             }
         }
     }
@@ -147,6 +156,14 @@ public class WorldGenerator {
                 }
             }
         }
+    }
+
+    private void createLaunchPad(int x, int y, int planetRadius, float angle) {
+        Gdx.app.log("WorldGenerator", "launchpad angle: " + angle);
+
+        int padX = x + (int) (planetRadius * Math.cos(angle));
+        int padY = y + (int) (planetRadius * Math.sin(angle));
+        gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
     }
 
     public int generatePlayerX(){

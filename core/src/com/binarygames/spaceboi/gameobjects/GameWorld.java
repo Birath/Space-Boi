@@ -69,13 +69,15 @@ public class GameWorld {
     public void createWorld() {
         worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
-        Gdx.app.log("GameWorld", "Spawn point: " + worldGenerator.generatePlayerY() + ", " + worldGenerator.generatePlayerY());
         Player player = new Player(this, worldGenerator.generatePlayerX(),
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
-        Gdx.app.log("GameWorld", "Position: " + player.getBody().getPosition());
         addDynamicEntity(player);
         this.player = player;
-
+        /*
+        LaunchPad launchPad = new LaunchPad(this, worldGenerator.generatePlayerX(),
+                worldGenerator.generatePlayerY(), Assets.LAUNCH_PAD, 500, 20, 4);
+        addStaticEntity(launchPad);
+        */
         world.setContactListener(new EntityContactListener(this));
     }
 

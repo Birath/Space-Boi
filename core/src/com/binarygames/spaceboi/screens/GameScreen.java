@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
     private float angleToInterpolate;
 
 
-    private boolean debugRendererIsEnabled = false;
+    private boolean debugRendererIsEnabled = true;
     private float startCameraAngle = 0;
 
     public GameScreen(SpaceBoi game) {
