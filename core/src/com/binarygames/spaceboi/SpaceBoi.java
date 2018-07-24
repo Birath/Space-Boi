@@ -2,6 +2,8 @@ package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.binarygames.spaceboi.audio.MusicManager;
 import com.binarygames.spaceboi.audio.SoundManager;
 import com.binarygames.spaceboi.screens.Fonts;
+import com.binarygames.spaceboi.screens.New_StartupScreen;
 import com.binarygames.spaceboi.screens.StartupScreen;
 
 public class SpaceBoi extends Game {
@@ -37,7 +40,7 @@ public class SpaceBoi extends Game {
         batch = new SpriteBatch();
         font = new Fonts();
 
-        this.setScreen(new StartupScreen(this));
+        this.setScreen(new New_StartupScreen(this));
 
         // Assets
         assetManager = new AssetManager();
@@ -47,6 +50,14 @@ public class SpaceBoi extends Game {
         // Audio
         musicManager = new MusicManager(this);
         soundManager = new SoundManager(this);
+
+        // Video
+        // TODO fix
+        Graphics.Monitor currMonitor = Gdx.graphics.getMonitor();
+        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
+        if (preferences.isFullscreenEnabled() && !Gdx.graphics.setFullscreenMode(displayMode)) {
+            // switching to full-screen mode failed
+        }
 
         debugFont = new BitmapFont();
         loadDebugFont();

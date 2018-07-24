@@ -1,7 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,9 +10,14 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public abstract class Weapon {
+
+    protected List<String> weaponAttachments = new ArrayList<String>();
 
     protected World world;
     protected GameWorld gameWorld;
@@ -43,6 +47,8 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
+    String name;
+
     public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
         this.world = gameWorld.getWorld();
         this.gameWorld = gameWorld;
@@ -50,11 +56,16 @@ public abstract class Weapon {
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
+
+        gameWorld.addWeapon(this);
     }
 
     public void update(float delta) {
         if (reloading) {
-            if (currentReloadTime >= reloadTime) {
+            if (currentMag != 0 && gameWorld.getPlayer().isMouseHeld()) { //Interrupt reloading if you want to shoot and have ammo
+                reloading = false;
+                currentReloadTime = 0;
+            } else if (currentReloadTime >= reloadTime) { //If done reloading
                 reloading = false;
                 currentReloadTime = 0;
                 currentMag = magSize;
@@ -72,15 +83,20 @@ public abstract class Weapon {
         }
     }
 
-    public void Shoot(float x, float y, Vector2 shootDirection) {
-        //depends on sub-weapon
-    }
+    public abstract void Shoot(float x, float y, Vector2 shootDirection);
 
     public void timeBetweenShotsStart() {
 
     }
 
+    public void onReload() {
+
+    }
+
     public boolean canShoot() {
+        if (shooter instanceof Player && gameWorld.getPlayer().hasInfiniteAmmo()) {
+            return timeBetweenShotsIsFinished;
+        }
         return (currentMag >= 1 && !reloading && timeBetweenShotsIsFinished);
     }
 
@@ -89,8 +105,7 @@ public abstract class Weapon {
 
         if (currentMag == 0) {
             // Do reload
-            reloading = true;
-            currentReloadTime = 0;
+            reload();
         } else {
             // Do between shots delay
             timeBetweenShotsIsFinished = false;
@@ -129,5 +144,81 @@ public abstract class Weapon {
         sprite.setRotation(angleToMouse - 90);
 
         sprite.draw(batch);
+    }
+
+    public int getCurrentMag() {
+        return currentMag;
+    }
+
+    public int getMagSize() {
+        return magSize;
+    }
+
+    public boolean isReloading() {
+        return reloading;
+    }
+
+    public boolean isTimeBetweenShotsIsFinished() {
+        return timeBetweenShotsIsFinished;
+    }
+
+    public float getCurrentReloadTime() {
+        return currentReloadTime;
+    }
+
+    public float getReloadTime() {
+        return reloadTime;
+    }
+
+    public void reload() {
+        if ((!(currentMag == magSize)) && !reloading) {
+            reloading = true;
+            currentReloadTime = 0;
+            onReload();
+        }
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public float getBulletSpeed() {
+        return bulletSpeed;
+    }
+
+    public void setBulletSpeed(float bulletSpeed) {
+        this.bulletSpeed = bulletSpeed;
+    }
+
+    public void setRecoil(float recoil) {
+        this.recoil = recoil;
+    }
+
+    public void setReloadTime(float reloadTime) {
+        this.reloadTime = reloadTime;
+    }
+
+    public float getTimeBetweenShots() {
+        return timeBetweenShots;
+    }
+
+    public void setTimeBetweenShots(float timeBetweenShots) {
+        this.timeBetweenShots = timeBetweenShots;
+    }
+
+    public void setMagSize(int magSize) {
+        this.magSize = magSize;
+    }
+
+    public EntityDynamic getShooter() {
+        return this.shooter;
+    }
+
+    public String getName() {
+        return name;
     }
 }

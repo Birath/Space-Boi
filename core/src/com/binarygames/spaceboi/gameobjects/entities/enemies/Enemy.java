@@ -1,67 +1,108 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.*;
 
-public class Enemy extends EntityDynamic {
+public abstract class Enemy extends EntityDynamic {
 
     protected Vector2 toPlanet = new Vector2(0, 0);
     protected Vector2 toPlayer = new Vector2(0, 0);
     protected Vector2 perpen = new Vector2(0, 0);
     protected GameWorld gameWorld;
     protected Player player;
+    protected int enemyXP = 20;
+
+    private int aggroDistance = 1000;
+    private int deAggroDistance = 2000;
+
+    private boolean hasNoticedPlayer = false;
+
+    private int lastHealth;
+
+    private ProgressBar healthBar;
 
     protected Weapon weapon;
 
     protected ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
 
-    public Enemy(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius);
-        this.gameWorld = gameWorld;
-        player = gameWorld.getPlayer();
-        body.setUserData(this);
+    public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
+        super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+        switch (enemyType) {
+            case CHASER:
+                this.weapon = new Machinegun(gameWorld, this);
+                break;
+            case SHOOTER:
+                this.weapon = new GravityFreeMachineGun(gameWorld, this);
+                break;
+            case FLYING_SHIP:
+                this.weapon = new HomingRocketLauncher(gameWorld, this);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid enemy type");
+        }
 
-        this.health = 50;
-        this.jumpHeight = 50;
-        this.moveSpeed = 5;
-        this.weapon = new Machinegun(gameWorld, this);
+        this.gameWorld = gameWorld;
+        Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
+        healthBar = new ProgressBar(0, health, 1, false, uiSkin);
+        lastHealth = maxHealth;
     }
 
     @Override
     public void update(float delta) {
-        updateToPlanet();
-        updateWalkingDirection();
-        updateEnemyState();
-        weapon.update(delta);
+        updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
-            updatePerpen();
-
-            if (enemyState == ENEMY_STATE.IDLE){
-                moveAlongPlanet(); //just to prevent enemy from moving
+            if(enemyState == ENEMY_STATE.IDLE){
+                updateIdle();
             }
-
             else if (enemyState == ENEMY_STATE.ATTACKING) {
-                if(toShoot()){
-                    Shoot();
-                }
-                else{
-                    moveAlongPlanet();
-                }
+                updateAttacking();
             }
             else if (enemyState == ENEMY_STATE.HUNTING){
-                if(toJump()){
-                    jump();
-                }
-                else{
-                    moveAlongPlanet();
-                }
+                updateHunting();
             }
         }
+        else if (entityState == ENTITY_STATE.JUMPING){
+            updateJumping();
+        }
+    }
+
+    protected abstract void updateIdle();
+
+    protected abstract void updateHunting();
+
+    protected abstract void updateAttacking();
+
+    protected abstract void updateJumping();
+
+    protected void updateEnemy(){
+        if(planetBody != null){
+            updateToPlanet();
+            updatePerpen();
+            updateToPlayer();
+            lookForPlayer();
+            updateEnemyState();
+            updateWalkingDirection();
+        }
+    }
+
+    @Override
+    public void onRemove() {
+        gameWorld.getXp_handler().increaseXP(enemyXP);
+        /*
+        System.out.println("level " + gameWorld.getXp_handler().getLevel());
+        System.out.println("xp " + gameWorld.getXp_handler().getCurrentXP());
+        System.out.println("nextlevel " + gameWorld.getXp_handler().getNextLevel());
+        */
     }
 
     protected void updateToPlanet() {
@@ -69,21 +110,24 @@ public class Enemy extends EntityDynamic {
         toPlanet.setLength2(1);
         toPlanet.scl(50);
     }
-    protected void updatePerpen(){
+
+    protected void updatePerpen() {
         perpen.set(-toPlanet.y, toPlanet.x);
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
+    protected void updateToPlayer(){
+        player = gameWorld.getPlayer();
+        toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
+    }
 
     protected void updateWalkingDirection() {
-        toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
-
         float angle = perpen.angle(toPlayer);
-        if (enemyState == ENEMY_STATE.IDLE){
+
+        if (enemyState == ENEMY_STATE.IDLE) {
             moveLeft = false;
             moveRight = false;
-        }
-        else if (Math.abs(angle) < 90) {
+        } else if (Math.abs(angle) < 90) {
             moveLeft = false;
             moveRight = true;
         } else {
@@ -91,68 +135,59 @@ public class Enemy extends EntityDynamic {
             moveLeft = true;
         }
     }
-    protected void moveAlongPlanet(){
+
+    protected void moveAlongPlanet() {
         //MOVE
         if (moveRight) {
             body.setLinearVelocity(perpen);
         } else if (moveLeft) {
             body.setLinearVelocity(-perpen.x, -perpen.y);
         } else {
-            body.setLinearVelocity(0, 0);
+            standStill();
         }
     }
-    protected boolean toJump(){
-        float angle = toPlanet.angle(toPlayer);
-        return (Math.abs(angle) > 100);
+    protected void standStill(){
+        body.setLinearVelocity(0, 0);
     }
-    protected void jump(){
+
+    protected boolean toJump() {
+        float angle = toPlanet.angle(toPlayer);
+        return (Math.abs(angle) > 150);
+    }
+
+    protected void jump() {
         body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
         entityState = ENTITY_STATE.JUMPING;
     }
+    protected void lookForPlayer(){
+        if(toPlayer.len2() > deAggroDistance && hasNoticedPlayer){ //set player idle if he is far away
+            hasNoticedPlayer = false;
+            lastHealth = health;
+        }
+        else if(toPlayer.len2() < aggroDistance && !hasNoticedPlayer){
+            hasNoticedPlayer = true;
+        }
+        else if(health != lastHealth && !hasNoticedPlayer){
+            hasNoticedPlayer = true;
+        }
+    }
 
-    protected void updateEnemyState(){
-        if(toPlayer.len2() > 800){
+    protected void updateEnemyState() {
+        if (!hasNoticedPlayer) {
             enemyState = ENEMY_STATE.IDLE;
-        }
-        else if(player.getPlanetBody() != this.getPlanetBody()){
+        } else if (player.getPlanetBody() != this.getPlanetBody()) {
             enemyState = ENEMY_STATE.HUNTING;
-        }
-        else{
+        } else {
             enemyState = ENEMY_STATE.ATTACKING;
         }
     }
 
-    protected boolean toShoot(){
-        //Calculating if shooting is to happen
-        Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
-        float angle = awayFromPlanet.angle(toPlayer);
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        super.render(batch, camera);
+        healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+        healthBar.setValue(health);
+        healthBar.draw(batch, 1);
 
-        return (Math.abs(angle) < 100); //110 should be calculated mathematically
-    }
-
-    protected void Shoot() {
-        //Setting recoil
-        Vector2 recoil = new Vector2(-toPlayer.x, -toPlayer.y);
-        recoil.setLength2(1);
-        recoil.scl(weapon.getRecoil());
-        body.setLinearVelocity(recoil);
-
-
-/*        //Creating the bullet NEW
-        float angle = (float) Math.asin( (gameWorld.getGravityConstant() * (3 * Math.pow(10, 9)) * this.getMass() / 300 * toPlayer.len2() /
-                (weapon.getBulletSpeed() * weapon.getBulletSpeed()))) / 2; //sin-1( g*d / v*v) /2
-
-        Vector2 shootDirection = new Vector2(perpen.rotate(angle));
-        shootDirection.setLength2(1);
-        shootDirection.scl(rad * PPM);
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x, body.getPosition().y * PPM + shootDirection.y);
-        weapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);*/
-
-        //Creating the bullet OLD
-        recoil.setLength2(1);
-        recoil.scl(-(rad * PPM));
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-
-        weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
     }
 }

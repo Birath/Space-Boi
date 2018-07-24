@@ -3,6 +3,7 @@ package com.binarygames.spaceboi.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public abstract class BaseScreen {
+public abstract class BaseScreen implements Screen {
 
     protected SpaceBoi game;
 
@@ -22,23 +23,22 @@ public abstract class BaseScreen {
 
     private Viewport viewport;
 
-    Stage stage;
+    protected Stage stage;
 
     BitmapFont titleFont;
-    Label.LabelStyle titleStyle;
+    public Label.LabelStyle titleStyle;
 
-    BitmapFont buttonFont;
-    TextButton.TextButtonStyle buttonStyle;
+    private BitmapFont buttonFont;
+    public TextButton.TextButtonStyle buttonStyle;
 
     private Screen previousScreen;
-
 
     BaseScreen(SpaceBoi game, Screen previousScreen) {
         this.game = game;
         this.previousScreen = previousScreen;
 
         camera = new OrthographicCamera();
-        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, camera);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         viewport.apply();
 
         stage = new Stage(viewport);
@@ -67,7 +67,7 @@ public abstract class BaseScreen {
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 3;
 
-        buttonFont = generator.generateFont(parameter);
+        this.buttonFont = generator.generateFont(parameter);
         buttonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         // Dispose of FontGenerator
@@ -87,4 +87,45 @@ public abstract class BaseScreen {
     public Screen getPreviousScreen() {
         return previousScreen;
     }
+
+    @Override
+    public void show() {
+        Gdx.app.log("Screen", "Showing screen");
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        titleFont.dispose();
+        buttonFont.dispose();
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(delta);
+        stage.draw();
+    }
+
+    @Override
+    public void pause() {
+        Gdx.app.log("BaseScreen", "Pausing");
+    }
+
+    @Override
+    public void resume() {
+        Gdx.app.log("BaseScreen", "Resuming.");
+    }
+
+    @Override
+    public void hide() {
+        Gdx.app.log("BaseScreen", "Hiding screen");
+    }
+
 }

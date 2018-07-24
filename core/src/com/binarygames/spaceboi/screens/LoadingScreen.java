@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public class LoadingScreen extends BaseScreen implements Screen {
+public class LoadingScreen extends BaseScreen {
 
     private TextButton playButton;
     private Label progressLabel;
@@ -32,7 +32,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
-        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundImage.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(backgroundImage);
 
         // Loading label
@@ -44,7 +44,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
         playButton = new TextButton("Play!", buttonStyle);
         playButton.setX(stage.getWidth() / 2 - playButton.getWidth() / 2);
         playButton.setY(stage.getHeight() / 8);
-        playButton.setVisible(true);
+        playButton.setVisible(false);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -83,30 +83,5 @@ public class LoadingScreen extends BaseScreen implements Screen {
         game.getBatch().begin();
         game.debugFont.draw(game.getBatch(), "LOADING_SCREEN", 5, 20);
         game.getBatch().end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }

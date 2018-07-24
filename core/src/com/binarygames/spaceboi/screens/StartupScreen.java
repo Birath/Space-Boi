@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.binarygames.spaceboi.SpaceBoi;
 
-public class StartupScreen extends BaseScreen implements Screen {
+public class StartupScreen extends BaseScreen {
 
     private Image startupImage;
 
@@ -20,7 +20,7 @@ public class StartupScreen extends BaseScreen implements Screen {
         // Game startup image
         startupImage = new Image(new Texture(Gdx.files.internal("menu/startup_screen/startup.jpg")));
         startupImage.setOrigin(startupImage.getWidth() / 2, startupImage.getHeight() / 2);
-        startupImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        startupImage.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(startupImage);
 
         // Loading label // TODO add text similar to loading screen?
@@ -57,28 +57,8 @@ public class StartupScreen extends BaseScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
-        stage.dispose();
+        super.dispose();
         // TODO dispose of startup image
     }
 }

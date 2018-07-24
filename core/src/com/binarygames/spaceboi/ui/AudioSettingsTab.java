@@ -1,34 +1,20 @@
 package com.binarygames.spaceboi.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.screens.SettingsScreen;
 
-public class AudioSettingsTab {
+public class AudioSettingsTab extends SettingsTab {
 
     private SpaceBoi game;
+    private SettingsScreen settingsScreen;
 
-    private Table table;
-
-    BitmapFont titleFont;
-    Label.LabelStyle titleStyle;
-
-    BitmapFont buttonFont;
-    TextButton.TextButtonStyle buttonStyle;
-
-    public AudioSettingsTab(SpaceBoi game) {
+    public AudioSettingsTab(SpaceBoi game, SettingsScreen settingsScreen) {
         this.game = game;
-
-        loadFonts();
-        loadStyles();
+        this.settingsScreen = settingsScreen;
 
         table = new Table();
-        table.setFillParent(true);
 
         Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
 
@@ -60,10 +46,10 @@ public class AudioSettingsTab {
             return false;
         });
 
-        final Label musicVolumeLabel = new Label("Music volume", titleStyle);
-        final Label soundVolumeLabel = new Label("Sound volume", titleStyle);
-        final Label musicCheckBoxLabel = new Label("Music enabled", titleStyle);
-        final Label soundCheckBoxLabel = new Label("Sound enabled", titleStyle);
+        final Label musicVolumeLabel = new Label("Music volume", settingsScreen.titleStyle);
+        final Label soundVolumeLabel = new Label("Sound volume", settingsScreen.titleStyle);
+        final Label musicCheckBoxLabel = new Label("Music enabled", settingsScreen.titleStyle);
+        final Label soundCheckBoxLabel = new Label("Sound enabled", settingsScreen.titleStyle);
 
         table.add(soundVolumeLabel).left();
         table.add(soundVolumeSlider);
@@ -76,46 +62,6 @@ public class AudioSettingsTab {
         table.row().pad(10, 0, 10, 0);
         table.add(musicCheckBoxLabel).left();
         table.add(musicEnabledCheckBox);
-    }
-
-    public Table getTable() {
-        return table;
-    }
-
-    private void loadFonts() {
-        // Title font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        parameter.size = 72;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-
-        titleFont = generator.generateFont(parameter);
-        titleFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Button font
-        parameter.size = 46;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-
-        buttonFont = generator.generateFont(parameter);
-        buttonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Dispose of FontGenerator
-        generator.dispose();
-    }
-
-    private void loadStyles() {
-        // Title style
-        titleStyle = new Label.LabelStyle();
-        titleStyle.font = titleFont;
-
-        // Button style
-        buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = buttonFont;
     }
 
 }

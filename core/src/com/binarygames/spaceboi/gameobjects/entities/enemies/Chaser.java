@@ -1,42 +1,65 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 
 public class Chaser extends Enemy {
 
-    private int damage = 5;
+    private int damage = 30;
 
-    public Chaser(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius);
-        this.gameWorld = gameWorld;
-        player = gameWorld.getPlayer();
-        body.setUserData(this);
+    private long timeLastTouched;
+    private boolean touchingPlayer = false;
 
-        this.health = 5;
-        this.jumpHeight = 50;
-        this.moveSpeed = 15;
-        this.weapon = new Machinegun(gameWorld, this);
+    private final int damageDelay = 700;
+
+    public Chaser(GameWorld gameWorld, float x, float y, String path) {
+        super(gameWorld, x, y, path, EnemyType.CHASER);
     }
 
     @Override
-    public void update(float delta) {
-        updateToPlanet();
-        updateWalkingDirection();
-        updateEnemyState();
-        weapon.update(delta);
-        if (entityState == ENTITY_STATE.STANDING) {
-            updatePerpen();
-            if(toJump()){
-                jump();
-            }
-            else{
-                moveAlongPlanet();
-            }
+    protected void updateIdle() {
+        standStill();
+    }
+
+    @Override
+    protected void updateHunting() {
+        if(toJump()){
+            jump();
+        }
+        else{
+            moveAlongPlanet();
         }
     }
-    public int getDamage(){
-        return damage;
+
+    @Override
+    protected void updateAttacking() {
+        dealDamage();
+        if(toJump()){
+            jump();
+        }
+        else{
+            moveAlongPlanet();
+        }
+    }
+
+    @Override
+    protected void updateJumping() {
+        //Do nothing
+    }
+
+    private void dealDamage(){
+        if ((TimeUtils.millis() - timeLastTouched > damageDelay) && touchingPlayer){
+            gameWorld.getPlayer().reduceHealth(damage);
+            //Play bleed animation
+            timeLastTouched = TimeUtils.millis();
+        }
+    }
+    public void touchedPlayer(){
+        timeLastTouched = TimeUtils.millis();
+        touchingPlayer = true;
+        //play bite animation
+    }
+    public void stoppedTouchingPlayer(){
+        touchingPlayer = false;
     }
 }

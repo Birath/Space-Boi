@@ -16,12 +16,13 @@ public class Machinegun extends Weapon {
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
-        this.recoil = 10;
+        this.recoil = 1;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 0.1f;
         this.magSize = this.currentMag = 25;
         this.reloadTime = 2;
         this.damage = 5;
+        this.name = "Machine gun";
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
@@ -36,5 +37,6 @@ public class Machinegun extends Weapon {
             new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
             weaponMaths();
         }
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
     }
 }

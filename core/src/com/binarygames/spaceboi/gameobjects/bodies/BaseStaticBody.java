@@ -1,30 +1,18 @@
 package com.binarygames.spaceboi.gameobjects.bodies;
 
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+
+import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody;
 
 public abstract class BaseStaticBody extends BaseBody {
 
     public BaseStaticBody(GameWorld gameWorld, float x, float y, float mass, float radius) {
-        super(gameWorld, x, y, mass, radius);
-
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.position.set(pos);
-
-        body = gameWorld.getWorld().createBody(groundBodyDef);
-
-        CircleShape groundCircle = new CircleShape();
-        groundCircle.setRadius(rad);
-
-        body.createFixture(groundCircle, 0.0f);
-        groundCircle.dispose();
+        super(gameWorld, x, y, mass, radius, StaticBody);
     }
 
-    public float getVolume() {
-        return (float) ((4 * Math.PI * Math.pow(rad, 3)) / 3);
+    public BaseStaticBody(GameWorld gameWorld, float x, float y, float mass, float width, float height) {
+        super(gameWorld, x, y, mass, width, height, StaticBody);
+
+
     }
-
-    protected abstract int getDensity();
-
 }

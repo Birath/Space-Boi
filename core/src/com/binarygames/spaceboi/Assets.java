@@ -30,13 +30,22 @@ public class Assets {
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
+    public static final String LAUNCH_PAD = "game/entities/planets/launch_pad.png";
 
     // Player
-    public static final String PLAYER = "game/entities/player/playerShip.png";
+    public static final String PLAYER = "game/entities/player/norrland.jpg";
+    public static final String PLAYER_WALK_ANIMATION = "game/entities/player/walk_animation/walk_animation_atlas.png";
+    public static final String PLAYER_PICKUP_HEALTH = "game/entities/player/health_pickup.mp3"; // https://freesound.org/people/SilverIllusionist/sounds/411172/
+    public static final String PLAYER_FOOTSTEP = "game/entities/player/footstep.wav"; // https://freesound.org/people/Yoyodaman234/sounds/166507/
 
     // Weapons
-    public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3";
-    public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3";
+    public static final String WEAPON_SHOTGUN_SHOT = "game/entities/weapons/shotgun/shot.mp3"; // Free Firearms library
+    public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3"; // Free Firearms library
+    public static final String WEAPON_SHOTGUN_SHOT_PUMP = "game/entities/weapons/shotgun/shot_pump.wav"; // Free Firearms library
+    public static final String WEAPON_SHOTGUN_RELOAD = "game/entities/weapons/shotgun/reload.wav"; // https://freesound.org/people/lensflare8642/sounds/145209/
+    public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/Ratatata.mp3";
+    public static final String WEAPON_GRENADELAUNCHER_EXPLOSION = "game/entities/weapons/grenadelauncher/seismic_charge.wav"; // Stolen from Mickey Mouse
+    public static final String WEAPON_GRENADELAUNCHER_SHOT = "game/entities/weapons/grenadelauncher/shot.mp3"; // https://freesound.org/people/LeMudCrab/sounds/163458/
 
     /*
         Environment
@@ -58,6 +67,7 @@ public class Assets {
      */
 
     public static final String UI_HEALTH_ICON = "game/ui/health_icon.png";
+    public static final String UI_SILENCER_ICON = "game/ui/silencer_icon.jpg";
 
     private AssetManager assetManager;
 
@@ -84,13 +94,22 @@ public class Assets {
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class);
+        assetManager.load(LAUNCH_PAD, Texture.class);
 
         // Player
         assetManager.load(PLAYER, Texture.class);
+        assetManager.load(PLAYER_WALK_ANIMATION, Texture.class);
+        assetManager.load(PLAYER_PICKUP_HEALTH, Sound.class);
+        assetManager.load(PLAYER_FOOTSTEP, Sound.class);
 
         // Weapons
         assetManager.load(WEAPON_SHOTGUN_SHOT, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_PUMP, Sound.class);
+        assetManager.load(WEAPON_SHOTGUN_SHOT_PUMP, Sound.class);
+        assetManager.load(WEAPON_SHOTGUN_RELOAD, Sound.class);
+        assetManager.load(WEAPON_MACHINEGUN_SHOT, Sound.class);
+        assetManager.load(WEAPON_GRENADELAUNCHER_EXPLOSION, Sound.class);
+        assetManager.load(WEAPON_GRENADELAUNCHER_SHOT, Sound.class);
 
         /*
             Environment
@@ -112,6 +131,7 @@ public class Assets {
          */
 
         assetManager.load(UI_HEALTH_ICON, Texture.class);
+        assetManager.load(UI_SILENCER_ICON, Texture.class);
     }
 
     /*

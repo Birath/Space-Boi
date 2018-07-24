@@ -16,12 +16,13 @@ public class GrenadeLauncher extends Weapon {
         this.bulletRadius = 4f;
         this.bulletSpeed = 2;
         this.path = Assets.PLAYER;
-        this.recoil = 35;
+        this.recoil = 15;
         this.removeBulletDelay = 2000;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;
         this.damage = 0;
+        this.name = "Grenade launcher";
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
@@ -34,6 +35,7 @@ public class GrenadeLauncher extends Weapon {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
             new Grenade(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();
         }
     }
