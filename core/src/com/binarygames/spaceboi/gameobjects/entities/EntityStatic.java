@@ -12,34 +12,27 @@ public abstract class EntityStatic extends BaseStaticBody {
 
     private Sprite sprite;
 
-    private float x;
-    private float y;
-
-    //private ShapeRenderer renderer = new ShapeRenderer();
-    private static final int DENSITY = 50000;
-
     public EntityStatic(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, mass, radius);
-        this.x = x;
-        this.y = y;
-
+        body.setUserData(this);
         this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
-        //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
         sprite.setSize(radius * 2, radius * 2);
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
     }
+
+    public EntityStatic(GameWorld gameWorld, float x, float y, String path, float mass, float width, float height) {
+        super(gameWorld, x, y, mass, width, height);
+        body.setUserData(this);
+        this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
+        sprite.setSize(width, height);
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+    }
+
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);
-    }
-
-    public Body getBody() {
-        return body;
-    }
-
-    public float getMass() {
-        return mass;
     }
 
     public Sprite getSprite() {

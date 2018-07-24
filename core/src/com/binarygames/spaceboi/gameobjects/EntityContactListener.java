@@ -3,6 +3,7 @@ package com.binarygames.spaceboi.gameobjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.*;
+import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
@@ -153,6 +154,17 @@ public class EntityContactListener implements ContactListener {
             }
         }
 
+        else if (LaunchPad.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Player.class.isInstance(fixtureB.getBody().getUserData())) {
+            LaunchPad launchPad = (LaunchPad) fixtureA.getBody().getUserData();
+            Player player = (Player) fixtureB.getBody().getUserData();
+            player.hitLauchPad(launchPad);
+        } else if (LaunchPad.class.isInstance(fixtureB.getBody().getUserData()) &&
+                Player.class.isInstance(fixtureA.getBody().getUserData())) {
+            LaunchPad launchPad = (LaunchPad) fixtureB.getBody().getUserData();
+            Player player = (Player) fixtureA.getBody().getUserData();
+            player.hitLauchPad(launchPad);
+        }
     }
 
     @Override

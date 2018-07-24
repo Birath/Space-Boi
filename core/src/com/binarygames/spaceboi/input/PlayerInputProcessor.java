@@ -99,8 +99,12 @@ public class PlayerInputProcessor implements InputProcessor {
         if (character == '§') {
             gameScreen.getConsole().show();
         }
-        if (character == 'r'){
+        if (character == 'r') {
             player.setToReloadTrue();
+        }
+
+        if (character == 'i') {
+            gameScreen.getInventoryUI().show();
         }
         return false;
     }

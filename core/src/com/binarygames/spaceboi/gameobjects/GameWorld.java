@@ -74,10 +74,8 @@ public class GameWorld {
     public void createWorld() {
         worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
-        Gdx.app.log("GameWorld", "Spawn point: " + worldGenerator.generatePlayerY() + ", " + worldGenerator.generatePlayerY());
         Player player = new Player(this, worldGenerator.generatePlayerX(),
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
-        Gdx.app.log("GameWorld", "Position: " + player.getBody().getPosition());
         addDynamicEntity(player);
         this.player = player;
         xp_handler = new XP_handler(player);
@@ -228,10 +226,6 @@ public class GameWorld {
 
     public void respawnPlayer() {
         game.setScreen(new DeathScreen(game, game.getScreen()));
-        Gdx.app.log("GameWorld", "Respawn pos:   " + worldGenerator.generatePlayerX() + ", " + worldGenerator.generatePlayerY());
-        player.getBody().setTransform(player.getSpawnPos(), player.getBody().getAngle());
-        Gdx.app.log("GameWorld", "After respawn: " + player.getBody().getPosition());
-        player.setHealth(100);
     }
 
     private void rotatePlayer(float delta) {

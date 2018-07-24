@@ -17,7 +17,6 @@ public class Planet extends EntityStatic {
 
     public Planet(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
-        body.setUserData(this);
         this.radius = radius;
 
         shapeRenderer = new ShapeRenderer();

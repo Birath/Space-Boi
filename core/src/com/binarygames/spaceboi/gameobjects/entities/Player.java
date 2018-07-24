@@ -17,6 +17,7 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 
 import java.util.ArrayList;
@@ -48,10 +49,14 @@ public class Player extends EntityDynamic {
     private List<Weapon> weaponList;
     private boolean toReload = false;
 
+    private List<WeaponAttachment> inventory;
+
     private Vector2 mouseCoords = new Vector2(0, 0);
     private Vector2 toPlanet = new Vector2(0, 0);
     private Vector2 perpen = new Vector2(0, 0);
     private float playerAngle = 0f;
+
+    private boolean isLaunching = false;
 
     private GameWorld gameWorld;
     private boolean isChained = false;
@@ -65,6 +70,7 @@ public class Player extends EntityDynamic {
     private boolean isWalking;
     private long walkingSoundID;
     private Sound walkingSound;
+    private Planet launchPlanet;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
@@ -76,6 +82,8 @@ public class Player extends EntityDynamic {
         weaponList.add(new Machinegun(gameWorld, this));
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
+
+        inventory = new ArrayList<>();
 
         // Walk animation
         Texture walkAtlas = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_WALK_ANIMATION, Texture.class);
@@ -124,23 +132,31 @@ public class Player extends EntityDynamic {
                     entityState = ENTITY_STATE.JUMPING;
                 }
             }
+        } else if (isLaunching) {
+            if (launchPlanet.equals(getClosestPlanet())) {
+                Vector2 launchVector = toPlanet.cpy();
+                launchVector.setLength(1).scl(-LaunchPad.LAUNCH_PAD_SPEED);
+                body.setLinearVelocity(launchVector);
+            } else {
+                isLaunching = false;
+            }
         }
 
         // Walking sound
         if (entityState == ENTITY_STATE.STANDING) {
             if (moveLeft || moveRight) {
-                if (!isWalking) {
+                if (!isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                     isWalking = true;
                     walkingSoundID = walkingSound.loop(gameWorld.getGame().getPreferences().getSoundVolume());
                 }
             } else {
-                if (isWalking) {
+                if (isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                     isWalking = false;
                     walkingSound.stop(walkingSoundID);
                 }
             }
         } else {
-            if (isWalking) {
+            if (isWalking && gameWorld.getGame().getPreferences().isSoundEnabled()) {
                 isWalking = false;
                 walkingSound.stop(walkingSoundID);
             }
@@ -284,14 +300,24 @@ public class Player extends EntityDynamic {
         // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
         if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished() || weapon instanceof Machinegun)) {
             // Nothing happens
-        // Don't chain the player if they are holding the jump button
+            // Don't chain the player if they are holding the jump button
         } else if (moveUp) {
             // Nothing happens
         } else {
             gameWorld.addJoints(new JointInfo(body, planet.getBody()));
             isChained = true;
         }
+    }
 
+    public void hitLauchPad(LaunchPad launchPad) {
+        // TODO: 2018-07-21 implement
+        if (getClosestPlanet() != null) {
+            launchPlanet = getClosestPlanet();
+            entityState = ENTITY_STATE.JUMPING;
+            isLaunching = true;
+            removeJoints();
+            isChained = false;
+        }
     }
 
     @Override
@@ -302,6 +328,8 @@ public class Player extends EntityDynamic {
     }
 
     public void increaseHealth(int amount) {
+        if (health + amount > START_HEALTH)
+            health += amount;
         if (health + amount >= maxHealth){
             health = maxHealth;
         }
@@ -330,22 +358,27 @@ public class Player extends EntityDynamic {
         return weaponList;
     }
 
-    public void reloadWeapon(){
-        if(toReload){
+    public void reloadWeapon() {
+        if (toReload) {
             weapon.reload();
             toReload = false;
         }
     }
-    public void setToReloadTrue(){
+
+    public void setToReloadTrue() {
         toReload = true;
+    }
+
+    public List<WeaponAttachment> getInventory() {
+        return inventory;
+    }
+
+    public void addToInventory(WeaponAttachment attachment) {
+        inventory.add(attachment);
     }
 
     public boolean isChained() {
         return isChained;
-    }
-
-    public Vector2 getSpawnPos() {
-        return pos;
     }
 
     public boolean isGod() {
