@@ -18,6 +18,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     private Sprite sprite;
 
+    protected int maxHealth;
     protected int health;
 
     protected boolean moveUp = false;
@@ -30,7 +31,7 @@ public abstract class EntityDynamic extends BaseDynamicBody {
 
     protected EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float radius, int health, int moveSpeed, int jumpHeight) {
         super(gameWorld, x, y, mass, radius);
-        this.health = health;
+        this.health = this.maxHealth = health;
         this.moveSpeed = moveSpeed;
         this.jumpHeight = jumpHeight;
         createEntityDynamic(gameWorld, path, radius);

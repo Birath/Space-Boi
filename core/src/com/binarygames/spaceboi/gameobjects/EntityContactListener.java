@@ -9,6 +9,7 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.HomingRocket;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 
@@ -133,7 +134,24 @@ public class EntityContactListener implements ContactListener {
             Pickup pickup = (Pickup) fixtureB.getBody().getUserData();
             Player player = (Player) fixtureA.getBody().getUserData();
             pickup.onHit(player);
-
+        }
+        // Homingrocket x Bullet
+        else if (Bullet.class.isInstance(fixtureA.getBody().getUserData()) &&
+                HomingRocket.class.isInstance(fixtureB.getBody().getUserData())) {
+            Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
+            bullet.setHasHit(true);
+            HomingRocket homingRocket = (HomingRocket) fixtureB.getBody().getUserData();
+            if(!(bullet instanceof HomingRocket)){
+                homingRocket.setHasHit(true); //Did not work
+            }
+        } else if (HomingRocket.class.isInstance(fixtureA.getBody().getUserData()) &&
+                Bullet.class.isInstance(fixtureB.getBody().getUserData())) {
+            Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
+            bullet.setHasHit(true);
+            HomingRocket homingRocket = (HomingRocket) fixtureA.getBody().getUserData();
+            if(!(bullet instanceof HomingRocket)){
+                homingRocket.setHasHit(true);
+            }
         }
 
         else if (LaunchPad.class.isInstance(fixtureA.getBody().getUserData()) &&

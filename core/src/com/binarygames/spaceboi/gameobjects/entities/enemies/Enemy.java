@@ -11,10 +11,7 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.HomingRocketLauncher;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.entities.weapons.*;
 
 public abstract class Enemy extends EntityDynamic {
 
@@ -24,6 +21,13 @@ public abstract class Enemy extends EntityDynamic {
     protected GameWorld gameWorld;
     protected Player player;
     protected int enemyXP = 20;
+
+    private int aggroDistance = 1000;
+    private int deAggroDistance = 2000;
+
+    private boolean hasNoticedPlayer = false;
+
+    private int lastHealth;
 
     private ProgressBar healthBar;
 
@@ -38,7 +42,7 @@ public abstract class Enemy extends EntityDynamic {
                 this.weapon = new Machinegun(gameWorld, this);
                 break;
             case SHOOTER:
-                this.weapon = new Machinegun(gameWorld, this);
+                this.weapon = new GravityFreeMachineGun(gameWorld, this);
                 break;
             case FLYING_SHIP:
                 this.weapon = new HomingRocketLauncher(gameWorld, this);
@@ -50,6 +54,7 @@ public abstract class Enemy extends EntityDynamic {
         this.gameWorld = gameWorld;
         Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         healthBar = new ProgressBar(0, health, 1, false, uiSkin);
+        lastHealth = maxHealth;
     }
 
     @Override
@@ -83,14 +88,21 @@ public abstract class Enemy extends EntityDynamic {
         if(planetBody != null){
             updateToPlanet();
             updatePerpen();
-            updateWalkingDirection();
+            updateToPlayer();
+            lookForPlayer();
             updateEnemyState();
+            updateWalkingDirection();
         }
     }
 
     @Override
     public void onRemove() {
         gameWorld.getXp_handler().increaseXP(enemyXP);
+        /*
+        System.out.println("level " + gameWorld.getXp_handler().getLevel());
+        System.out.println("xp " + gameWorld.getXp_handler().getCurrentXP());
+        System.out.println("nextlevel " + gameWorld.getXp_handler().getNextLevel());
+        */
     }
 
     protected void updateToPlanet() {
@@ -104,11 +116,12 @@ public abstract class Enemy extends EntityDynamic {
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
-
-    protected void updateWalkingDirection() {
+    protected void updateToPlayer(){
         player = gameWorld.getPlayer();
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
+    }
 
+    protected void updateWalkingDirection() {
         float angle = perpen.angle(toPlayer);
 
         if (enemyState == ENEMY_STATE.IDLE) {
@@ -130,8 +143,11 @@ public abstract class Enemy extends EntityDynamic {
         } else if (moveLeft) {
             body.setLinearVelocity(-perpen.x, -perpen.y);
         } else {
-            body.setLinearVelocity(0, 0);
+            standStill();
         }
+    }
+    protected void standStill(){
+        body.setLinearVelocity(0, 0);
     }
 
     protected boolean toJump() {
@@ -143,9 +159,21 @@ public abstract class Enemy extends EntityDynamic {
         body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
         entityState = ENTITY_STATE.JUMPING;
     }
+    protected void lookForPlayer(){
+        if(toPlayer.len2() > deAggroDistance && hasNoticedPlayer){ //set player idle if he is far away
+            hasNoticedPlayer = false;
+            lastHealth = health;
+        }
+        else if(toPlayer.len2() < aggroDistance && !hasNoticedPlayer){
+            hasNoticedPlayer = true;
+        }
+        else if(health != lastHealth && !hasNoticedPlayer){
+            hasNoticedPlayer = true;
+        }
+    }
 
     protected void updateEnemyState() {
-        if (toPlayer.len2() > 1000) {
+        if (!hasNoticedPlayer) {
             enemyState = ENEMY_STATE.IDLE;
         } else if (player.getPlanetBody() != this.getPlanetBody()) {
             enemyState = ENEMY_STATE.HUNTING;

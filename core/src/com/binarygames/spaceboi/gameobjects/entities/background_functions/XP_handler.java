@@ -14,22 +14,30 @@ public class XP_handler {
     public XP_handler(Player player){
         this.player = player;
 
-
     }
     private void levelUp(){
-        player.setHealth(player.getHealth() + healthOnLevelUp);
+        player.increaseMaxHealth(healthOnLevelUp);
         level += 1;
     }
     public void increaseXP(int XP){
         currentXP += XP;
-        if(currentXP > nextLevel){
+        if(currentXP >= nextLevel){
             currentXP = currentXP - nextLevel;
             calcNextLevel();
             levelUp();
         }
     }
     private void calcNextLevel(){
-        x = x+2;
-        nextLevel = 100 + (int) Math.exp(x/10);
+        x += 1;
+        nextLevel = 100 + (int) Math.exp(x/2);
+    }
+    public int getLevel(){
+        return level;
+    }
+    public int getCurrentXP(){
+        return currentXP;
+    }
+    public int getNextLevel(){
+        return nextLevel;
     }
 }

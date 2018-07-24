@@ -12,13 +12,13 @@ public class Chaser extends Enemy {
 
     private final int damageDelay = 700;
 
-    public Chaser(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
+    public Chaser(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.CHASER);
     }
 
     @Override
     protected void updateIdle() {
-        moveAlongPlanet();
+        standStill();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Chaser extends Enemy {
             timeLastTouched = TimeUtils.millis();
         }
     }
-    public void touchedPlayer(){ ;
+    public void touchedPlayer(){
         timeLastTouched = TimeUtils.millis();
         touchingPlayer = true;
         //play bite animation

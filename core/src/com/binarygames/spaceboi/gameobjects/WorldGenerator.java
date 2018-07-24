@@ -9,6 +9,7 @@ import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Silencer;
 
@@ -96,36 +97,33 @@ public class WorldGenerator {
     private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
         if(isLastPlanet){
             //Last planet aka spawn planet
+            int numberOfShooters = 1;
 
-            int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
-            double angleBetweenEnemies = 10;
+            int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
+            double angleBetweenEnemies = 5;
             double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
-            for(int i = 0; i < 5; i++){
-                Silencer pickup = new Silencer(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * i + 20))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * i + 20))),
-                        Assets.PLAYER, 300, 5);
-                gameWorld.addDynamicEntity(pickup);
+            for (int shooters = 0; shooters < numberOfShooters; shooters++) {
+                Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters + 30))),
+                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PLANET_MOON);
+                gameWorld.addDynamicEntity(shooter);
             }
-            FlyingShip flyingShip = new FlyingShip(gameWorld, (int) (x + Math.round(r*1.3 * Math.cos(angleDiff + 20))),
-                    (int) (y + Math.round(r*1.3 * Math.sin(angleDiff + 20))),
-                    Assets.PLANET_MOON, EnemyType.FLYING_SHIP.getMass(), EnemyType.FLYING_SHIP.getRad());
-            gameWorld.addDynamicEntity(flyingShip);
 
             //Calculating for other parts of the code
             Vector2 toPlanet = new Vector2(x, y);
             radOfWorld = toPlanet.len() + Planet.GRAVITY_RADIUS;
         }
+        /*
         else if((circleNumber%2)==0){
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
             y = y + (int) EnemyType.FLYING_SHIP.getRad();
-            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.PLANET_MOON, EnemyType.FLYING_SHIP.getMass(), EnemyType.FLYING_SHIP.getRad());
+            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.PLANET_MOON);
             gameWorld.addDynamicEntity(flyingship);
         }
         else {
             //If we are on one of the big circles of planets
             int planetType = random.nextInt(6); //from 0 to bound-1
-            if (planetType < 5) {
+            if (planetType < 3) {
                 //Spawn Chasers
                 int numberOfEnemies = random.nextInt(maxEnemies - minEnemies);
                 numberOfEnemies = numberOfEnemies + minEnemies;
@@ -137,8 +135,21 @@ public class WorldGenerator {
                 for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
                     Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * enemies))),
                             (int) (y + Math.round(r * Math.sin(angleDiff * enemies))),
-                            Assets.PLANET_MOON, EnemyType.CHASER.getMass(), EnemyType.CHASER.getRad());
+                            Assets.PLANET_MOON);
                     gameWorld.addDynamicEntity(chaser);
+                }
+            }else if (planetType < 5) {
+                //Spawn Shooters
+                int numberOfShooters = 2;
+
+                int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 5;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int shooters = 0; shooters < numberOfShooters; shooters++) {
+                    Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters))),
+                            (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PLANET_MOON);
+                    gameWorld.addDynamicEntity(shooter);
                 }
             } else if (planetType >= 5) {
                 //Spawn healtpacks
@@ -156,6 +167,7 @@ public class WorldGenerator {
                 }
             }
         }
+        */
     }
 
     private void createLaunchPad(int x, int y, int planetRadius, float angle) {
