@@ -9,6 +9,7 @@ public class GravityFreeBullet extends Bullet {
     private boolean invertPerpen = false;
     Vector2 toPlanet;
     Vector2 perpen;
+    private static final int MAXIMUM_DISTANCE = 2300;
 
     public GravityFreeBullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
         super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter);
@@ -36,6 +37,10 @@ public class GravityFreeBullet extends Bullet {
         }
 
         this.getBody().setLinearVelocity(perpen);
+    }
+    @Override
+    public boolean shouldRemove(Vector2 playerPosition) {
+        return (this.getBody().getPosition().sub(this.getShooter().getBody().getPosition()).len2() > MAXIMUM_DISTANCE) || hasHit; //shorter range to removal
     }
 
 }

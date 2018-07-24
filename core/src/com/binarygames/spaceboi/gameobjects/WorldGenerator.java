@@ -97,7 +97,7 @@ public class WorldGenerator {
     private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
         if(isLastPlanet){
             //Last planet aka spawn planet
-            int numberOfShooters = 2;
+            int numberOfShooters = 1;
 
             int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
             double angleBetweenEnemies = 5;
@@ -112,6 +112,7 @@ public class WorldGenerator {
             Vector2 toPlanet = new Vector2(x, y);
             radOfWorld = toPlanet.len() + Planet.GRAVITY_RADIUS;
         }
+        /*
         else if((circleNumber%2)==0){
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
@@ -166,6 +167,7 @@ public class WorldGenerator {
                 }
             }
         }
+        */
     }
 
     private void createLaunchPad(int x, int y, int planetRadius, float angle) {

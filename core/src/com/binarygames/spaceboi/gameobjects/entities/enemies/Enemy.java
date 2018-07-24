@@ -22,6 +22,9 @@ public abstract class Enemy extends EntityDynamic {
     protected Player player;
     protected int enemyXP = 20;
 
+    private int aggroDistance = 1000;
+    private int deAggroDistance = 2000;
+
     private boolean hasNoticedPlayer = false;
 
     private int lastHealth;
@@ -85,9 +88,10 @@ public abstract class Enemy extends EntityDynamic {
         if(planetBody != null){
             updateToPlanet();
             updatePerpen();
+            updateToPlayer();
             lookForPlayer();
-            updateWalkingDirection();
             updateEnemyState();
+            updateWalkingDirection();
         }
     }
 
@@ -112,11 +116,12 @@ public abstract class Enemy extends EntityDynamic {
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
-
-    protected void updateWalkingDirection() {
+    protected void updateToPlayer(){
         player = gameWorld.getPlayer();
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
+    }
 
+    protected void updateWalkingDirection() {
         float angle = perpen.angle(toPlayer);
 
         if (enemyState == ENEMY_STATE.IDLE) {
@@ -155,14 +160,14 @@ public abstract class Enemy extends EntityDynamic {
         entityState = ENTITY_STATE.JUMPING;
     }
     protected void lookForPlayer(){
-        if(toPlayer.len2() > 2000){
+        if(toPlayer.len2() > deAggroDistance && hasNoticedPlayer){ //set player idle if he is far away
             hasNoticedPlayer = false;
             lastHealth = health;
         }
-        else if(toPlayer.len2() < 1000){
+        else if(toPlayer.len2() < aggroDistance && !hasNoticedPlayer){
             hasNoticedPlayer = true;
         }
-        else if(health != lastHealth){
+        else if(health != lastHealth && !hasNoticedPlayer){
             hasNoticedPlayer = true;
         }
     }

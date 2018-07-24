@@ -1,7 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 public enum EnemyType {
-    CHASER (400, 8, 5, 15, 10), SHOOTER(150, 10, 50, 5, 50), FLYING_SHIP(300, 20, 200, 5, 50);
+    CHASER (400, 8, 5, 15, 10), SHOOTER(150, 10, 50, 5, 50), FLYING_SHIP(300, 20, 200, 5, 50), SPAWNER(600, 15, 100, 0, 0);
 
     private final float mass;
     private final float rad;
