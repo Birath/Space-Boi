@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public abstract class Weapon {
 
-    protected List<String> weaponAttachments = new ArrayList<String>();
+    protected List<WeaponAttachment> attachments;
 
     protected World world;
     protected GameWorld gameWorld;
@@ -56,6 +57,8 @@ public abstract class Weapon {
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
+
+        attachments = new ArrayList<>();
 
         gameWorld.addWeapon(this);
     }
@@ -212,6 +215,28 @@ public abstract class Weapon {
 
     public EntityDynamic getShooter() {
         return this.shooter;
+    }
+
+    public List<WeaponAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public boolean addAttachement(WeaponAttachment attachment) {
+        if (attachments.size() < 3) {
+            attachments.add(attachment);
+            attachment.setEquipped(true);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeAttachement(WeaponAttachment attachment) {
+        if (attachments.contains(attachment)) {
+            attachments.remove(attachment);
+            attachment.setEquipped(false);
+            return true;
+        }
+        return false;
     }
 
     public String getName() {

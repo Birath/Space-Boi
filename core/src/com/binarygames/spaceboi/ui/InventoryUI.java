@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -18,6 +17,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.GameScreen;
+
+import java.util.ArrayList;
 
 public class InventoryUI {
 
@@ -28,6 +29,7 @@ public class InventoryUI {
 
     private LabelStyle labelStyle;
     private Button.ButtonStyle buttonStyle;
+    private TextButton.TextButtonStyle textButtonStyle;
 
     private Fonts fonts;
 
@@ -36,6 +38,10 @@ public class InventoryUI {
     private Table currentInventory;
     private Table weaponsTable;
 
+    private Label helpLabel;
+
+    private WeaponAttachment selectedAttachment;
+
     public InventoryUI(GameScreen gamesScreen, GameWorld gameWorld) {
         this.gamesScreen = gamesScreen;
         this.gameWorld = gameWorld;
@@ -43,6 +49,10 @@ public class InventoryUI {
         stage = new Stage();
         fonts = new Fonts();
         loadStyles();
+
+        helpLabel = new Label("Click on an attachment", labelStyle);
+        helpLabel.setPosition(20, 20);
+        stage.addActor(helpLabel);
 
          /*
             Current inventory
@@ -62,6 +72,9 @@ public class InventoryUI {
     }
 
     private void updateInventory() {
+        /*
+            Current inventory
+          */
         currentInventory.clear();
         currentInventory.setPosition(800, 450);
         Label inventoryLabel = new Label("Inventory", labelStyle);
@@ -69,34 +82,71 @@ public class InventoryUI {
         currentInventory.row();
         // Add current inventory
         int columns = 4;
+
         for (WeaponAttachment attachment : gameWorld.getPlayer().getInventory()) {
-            currentInventory.row();
-            Button attachmentButton = new Button(new SpriteDrawable(new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_SILENCER_ICON, Texture.class)))));
-            attachmentButton.setScale(0.5f);
-            attachmentButton.setSize(75, 75);
+            if (!attachment.isEquipped()) {
+                currentInventory.row();
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                attachmentSprite.setSize(75, 75);
+                Button attachmentButton = new Button(new SpriteDrawable(attachmentSprite));
+                attachmentButton.addCaptureListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        selectedAttachment = attachment;
+                        helpLabel.setText("Click on a weapon to add attachment to weapon");
+                    }
+                });
 
-            currentInventory.add(attachmentButton);
+                currentInventory.add(attachmentButton);
 
-            //Label attachmentName = new Label(attachment.getName(), labelStyle);
-            //currentInventory.add(attachmentName);
-
-            currentInventory.row();
-            Label attachmentDesc = new Label(attachment.getDescription(), labelStyle);
-            currentInventory.add(attachmentDesc);
+                currentInventory.row();
+                Label attachmentDesc = new Label(attachment.getName() + " - " + attachment.getDescription(), labelStyle);
+                currentInventory.add(attachmentDesc);
+            }
         }
 
+        /*
+            Weapons
+          */
         weaponsTable.clear();
         weaponsTable.setPosition(300, 450);
         Label weaponsLabel = new Label("Weapons", labelStyle);
         weaponsTable.add(weaponsLabel).align(Align.left);
         for (Weapon weapon : gameWorld.getPlayer().getWeaponList()) {
-            Label weaponLabel = new Label(weapon.getName(), labelStyle);
-            Label ammoLabel = new Label(weapon.getMagSize() + "/∞", labelStyle);
+            TextButton weaponButton = new TextButton(weapon.getName(), textButtonStyle);
+            weaponButton.addCaptureListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (selectedAttachment != null) {
+                        if (weapon.addAttachement(selectedAttachment)) {
+                            helpLabel.setText(selectedAttachment.getName() + " added to weapon " + weapon.getName());
+                        } else {
+                            helpLabel.setText("NO! yuou cant have many attachments!");
+                        }
+                        selectedAttachment = null;
+                        updateInventory();
+                    }
+                }
+            });
 
             weaponsTable.row();
-            weaponsTable.add(weaponLabel);
+            weaponsTable.add(weaponButton);
             weaponsTable.row();
-            weaponsTable.add(ammoLabel);
+
+            for (WeaponAttachment attachment : weapon.getAttachments()) {
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                attachmentSprite.setSize(75, 75);
+                Button attachmentButton = new Button(new SpriteDrawable(attachmentSprite));
+                attachmentButton.addCaptureListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        // Remove attachment from weapon
+                        weapon.removeAttachement(attachment);
+                        updateInventory();
+                    }
+                });
+                weaponsTable.add(attachmentButton);
+            }
         }
     }
 
@@ -133,6 +183,9 @@ public class InventoryUI {
 
         buttonStyle = new Button.ButtonStyle();
         // TODO add TextDrawable to hover
+
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = fonts.getButtonFont();
     }
 
     public boolean isVisible() {
