@@ -70,6 +70,7 @@ public class Assets {
     public static final String UI_SILENCER_ICON = "game/ui/silencer_icon.jpg";
     public static final String UI_EXPERIENCE_ICON = "game/ui/experience_icon.jpg";
     public static final String UI_RECOIL_ICON = "game/ui/recoil_icon.jpg";
+    public static final String UI_GLASS_CANNON_ICON = "game/ui/glass_cannon_icon.png";
 
     private AssetManager assetManager;
 
@@ -136,6 +137,7 @@ public class Assets {
         assetManager.load(UI_SILENCER_ICON, Texture.class);
         assetManager.load(UI_EXPERIENCE_ICON, Texture.class);
         assetManager.load(UI_RECOIL_ICON, Texture.class);
+        assetManager.load(UI_GLASS_CANNON_ICON, Texture.class);
     }
 
     /*
