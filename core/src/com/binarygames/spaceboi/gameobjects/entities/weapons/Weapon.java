@@ -221,19 +221,21 @@ public abstract class Weapon {
         return attachments;
     }
 
-    public boolean addAttachement(WeaponAttachment attachment) {
+    public boolean addAttachment(WeaponAttachment attachment) {
         if (attachments.size() < 3) {
             attachments.add(attachment);
             attachment.setEquipped(true);
+            attachment.applyAttachment(this);
             return true;
         }
         return false;
     }
 
-    public boolean removeAttachement(WeaponAttachment attachment) {
+    public boolean removeAttachment(WeaponAttachment attachment) {
         if (attachments.contains(attachment)) {
             attachments.remove(attachment);
             attachment.setEquipped(false);
+            attachment.removeAttachment(this);
             return true;
         }
         return false;

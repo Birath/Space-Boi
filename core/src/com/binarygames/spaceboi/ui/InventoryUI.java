@@ -6,19 +6,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.GameScreen;
-
-import java.util.ArrayList;
 
 public class InventoryUI {
 
@@ -118,7 +118,7 @@ public class InventoryUI {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (selectedAttachment != null) {
-                        if (weapon.addAttachement(selectedAttachment)) {
+                        if (weapon.addAttachment(selectedAttachment)) {
                             helpLabel.setText(selectedAttachment.getName() + " added to weapon " + weapon.getName());
                         } else {
                             helpLabel.setText("NO! yuou cant have many attachments!");
@@ -141,7 +141,7 @@ public class InventoryUI {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         // Remove attachment from weapon
-                        weapon.removeAttachement(attachment);
+                        weapon.removeAttachment(attachment);
                         updateInventory();
                     }
                 });

@@ -6,12 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
-import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Silencer;
 
 import java.util.Random;
 
@@ -39,51 +35,51 @@ public class WorldGenerator {
     private float radOfWorld;
 
 
-    public WorldGenerator(GameWorld gameWorld){
+    public WorldGenerator(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
     }
 
-   public void createWorld(){
+    public void createWorld() {
         Random random = new Random();
         createPlanet(0, 0, random);
         int angleOffset = 0;
 
-        for(int circleNumber = 0; circleNumber < NumberOfCircles; circleNumber++){
-            int rad = distanceBetweenRows * (circleNumber+1) * maxRad; //Distance to circle of planets
+        for (int circleNumber = 0; circleNumber < NumberOfCircles; circleNumber++) {
+            int rad = distanceBetweenRows * (circleNumber + 1) * maxRad; //Distance to circle of planets
             double circumference = 2 * rad * Math.PI;
 
             int NumberOfPlanets;
-            if((circleNumber%2)==0){ //Number is even - every other row starting from first one
+            if ((circleNumber % 2) == 0) { //Number is even - every other row starting from first one
                 NumberOfPlanets = random.nextInt(3);
                 NumberOfPlanets = NumberOfPlanets + 1; //Prevents division by zero -- 1<=NoP<=3
+            } else {
+                NumberOfPlanets = (int) Math.floor(distanceBetweenPlanets * (circumference / (2 * maxRad))); //Circumference / diameter of largest planet and some extra space
             }
-            else{
-                NumberOfPlanets = (int) Math.floor(distanceBetweenPlanets * (circumference/(2*maxRad))); //Circumference / diameter of largest planet and some extra space
-            }
-            double angleBetweenPlanets = (2 * Math.PI)/NumberOfPlanets;
+            double angleBetweenPlanets = (2 * Math.PI) / NumberOfPlanets;
 
-            if(!((circleNumber%2)==0)){ //If multiplanetrow -> offset
+            if (!((circleNumber % 2) == 0)) { //If multiplanetrow -> offset
                 angleOffset = random.nextInt(30);
                 angleOffset = -15 + angleOffset; //  -15<=angleOffset<=15
             }
 
-            for(int j = 0; j < NumberOfPlanets; j++){
+            for (int j = 0; j < NumberOfPlanets; j++) {
                 lastX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * j) + angleOffset));
                 lastY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * j) + angleOffset));
-                boolean isLastPlanet = ((j == NumberOfPlanets-1) && (circleNumber == NumberOfCircles-1));
+                boolean isLastPlanet = ((j == NumberOfPlanets - 1) && (circleNumber == NumberOfCircles - 1));
 
                 createPlanet(lastX, lastY, random);
                 createEnemies(lastX, lastY, random, lastRad, circleNumber, isLastPlanet);
 
-                int nextX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * (j+1)) + angleOffset));
-                int nextY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * (j+1)) + angleOffset));
+                int nextX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * (j + 1)) + angleOffset));
+                int nextY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * (j + 1)) + angleOffset));
 
                 float angleToNextPlanet = MathUtils.atan2(nextY - lastY, nextX - lastX);
-                createLaunchPad(lastX, lastY, lastRad, angleToNextPlanet );
+                createLaunchPad(lastX, lastY, lastRad, angleToNextPlanet);
             }
         }
     }
-    private void createPlanet(int x, int y, Random random){
+
+    private void createPlanet(int x, int y, Random random) {
         int rad = random.nextInt(maxRad - minRad);
         rad = rad + minRad;
         int grav = random.nextInt(maxGrav - minGrav);
@@ -94,8 +90,9 @@ public class WorldGenerator {
 
         this.lastRad = rad; //rad from planet
     }
-    private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet){
-        if(isLastPlanet){
+
+    private void createEnemies(int x, int y, Random random, int rad, int circleNumber, boolean isLastPlanet) {
+        if (isLastPlanet) {
             //Last planet aka spawn planet
             int numberOfShooters = 1;
 
@@ -178,10 +175,11 @@ public class WorldGenerator {
         gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
     }
 
-    public int generatePlayerX(){
+    public int generatePlayerX() {
         return lastX + lastRad + OFFSET;
     } //TODO Might not work as inteded
-    public int generatePlayerY(){
+
+    public int generatePlayerY() {
         return lastY + OFFSET;
     }
 }

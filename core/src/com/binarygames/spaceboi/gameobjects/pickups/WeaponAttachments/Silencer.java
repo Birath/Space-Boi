@@ -21,7 +21,7 @@ public class Silencer extends WeaponAttachment {
 
 
     @Override
-    protected void applyAttachment(Weapon weapon) {
+    public void applyAttachment(Weapon weapon) {
         if (weapon.getRecoil() > recoilChange) {
             weapon.setRecoil(weapon.getRecoil() - recoilChange);
         }
@@ -29,7 +29,7 @@ public class Silencer extends WeaponAttachment {
     }
 
     @Override
-    protected void removeAttachment(Weapon weapon) {
+    public void removeAttachment(Weapon weapon) {
         weapon.setRecoil(weapon.getRecoil() + recoilChange);
 
         weapon.setBulletSpeed(weapon.getBulletSpeed() + bulletSpeedChange);
