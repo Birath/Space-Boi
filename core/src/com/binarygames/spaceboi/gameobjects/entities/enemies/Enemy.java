@@ -35,6 +35,8 @@ public abstract class Enemy extends EntityDynamic {
 
     protected ENEMY_STATE enemyState = ENEMY_STATE.HUNTING;
 
+    private Bullet lastBullet;
+
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
         super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
         switch (enemyType) {
@@ -61,17 +63,14 @@ public abstract class Enemy extends EntityDynamic {
     public void update(float delta) {
         updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
-            if(enemyState == ENEMY_STATE.IDLE){
+            if (enemyState == ENEMY_STATE.IDLE) {
                 updateIdle();
-            }
-            else if (enemyState == ENEMY_STATE.ATTACKING) {
+            } else if (enemyState == ENEMY_STATE.ATTACKING) {
                 updateAttacking();
-            }
-            else if (enemyState == ENEMY_STATE.HUNTING){
+            } else if (enemyState == ENEMY_STATE.HUNTING) {
                 updateHunting();
             }
-        }
-        else if (entityState == ENTITY_STATE.JUMPING){
+        } else if (entityState == ENTITY_STATE.JUMPING) {
             updateJumping();
         }
     }
@@ -84,8 +83,8 @@ public abstract class Enemy extends EntityDynamic {
 
     protected abstract void updateJumping();
 
-    protected void updateEnemy(){
-        if(planetBody != null){
+    protected void updateEnemy() {
+        if (planetBody != null) {
             updateToPlanet();
             updatePerpen();
             updateToPlayer();
@@ -97,7 +96,13 @@ public abstract class Enemy extends EntityDynamic {
 
     @Override
     public void onRemove() {
-        gameWorld.getXp_handler().increaseXP(enemyXP);
+        int xpIncrease;
+        if (lastBullet != null) {
+            xpIncrease = Math.round(enemyXP * lastBullet.getWeapon().getXpFactor());
+        } else {
+            xpIncrease = enemyXP;
+        }
+        gameWorld.getXp_handler().increaseXP(xpIncrease);
         /*
         System.out.println("level " + gameWorld.getXp_handler().getLevel());
         System.out.println("xp " + gameWorld.getXp_handler().getCurrentXP());
@@ -116,7 +121,8 @@ public abstract class Enemy extends EntityDynamic {
         perpen.setLength2(1);
         perpen.scl(moveSpeed);
     }
-    protected void updateToPlayer(){
+
+    protected void updateToPlayer() {
         player = gameWorld.getPlayer();
         toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
     }
@@ -146,7 +152,8 @@ public abstract class Enemy extends EntityDynamic {
             standStill();
         }
     }
-    protected void standStill(){
+
+    protected void standStill() {
         body.setLinearVelocity(0, 0);
     }
 
@@ -159,15 +166,14 @@ public abstract class Enemy extends EntityDynamic {
         body.setLinearVelocity(-toPlanet.x + body.getLinearVelocity().x, -toPlanet.y + body.getLinearVelocity().y);
         entityState = ENTITY_STATE.JUMPING;
     }
-    protected void lookForPlayer(){
-        if(toPlayer.len2() > deAggroDistance && hasNoticedPlayer){ //set player idle if he is far away
+
+    protected void lookForPlayer() {
+        if (toPlayer.len2() > deAggroDistance && hasNoticedPlayer) { //set player idle if he is far away
             hasNoticedPlayer = false;
             lastHealth = health;
-        }
-        else if(toPlayer.len2() < aggroDistance && !hasNoticedPlayer){
+        } else if (toPlayer.len2() < aggroDistance && !hasNoticedPlayer) {
             hasNoticedPlayer = true;
-        }
-        else if(health != lastHealth && !hasNoticedPlayer){
+        } else if (health != lastHealth && !hasNoticedPlayer) {
             hasNoticedPlayer = true;
         }
     }
@@ -180,6 +186,10 @@ public abstract class Enemy extends EntityDynamic {
         } else {
             enemyState = ENEMY_STATE.ATTACKING;
         }
+    }
+
+    public void setLastBullet(Bullet bullet) {
+        lastBullet = bullet;
     }
 
     @Override

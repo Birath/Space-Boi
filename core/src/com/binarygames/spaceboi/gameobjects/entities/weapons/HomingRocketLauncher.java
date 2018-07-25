@@ -27,12 +27,13 @@ public class HomingRocketLauncher extends Weapon {
         sprite.setSize(radius * 2, radius * 2);
         sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
     }
+
     @Override
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
 
-            new HomingRocket(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+            new HomingRocket(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();

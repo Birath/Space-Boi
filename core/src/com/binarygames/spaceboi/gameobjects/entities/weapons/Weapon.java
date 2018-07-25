@@ -48,6 +48,8 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
+    private float xpFactor = 1f;
+
     String name;
 
     public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
@@ -239,6 +241,14 @@ public abstract class Weapon {
             return true;
         }
         return false;
+    }
+
+    public float getXpFactor() {
+        return xpFactor;
+    }
+
+    public void setXpFactor(float factor) {
+        xpFactor = factor;
     }
 
     public String getName() {

@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -20,8 +19,8 @@ public class Grenade extends Bullet {
     private float timeSinceShot;
     private long removeDelay;
 
-    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
-        super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter);
+    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+        super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter, weapon);
         this.removeDelay = removeDelay;
     }
 
@@ -43,9 +42,8 @@ public class Grenade extends Bullet {
 
         for (int i = 0; i + 1 <= SHRAPNEL_AMOUNT; i++) {
             Vector2 shrapnelDirectionAngle = shrapnelDirectionWithSpeed.cpy().rotate(angleDiff * i);
-            Gdx.app.log("Grenade", "Shrapnel angle: " + shrapnelDirection.angle());
             new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirectionAngle.x, getBody().getPosition().y * PPM + shrapnelDirectionAngle.y,
-                    SHRAPNEL_PATH, shrapnelDirectionAngle, SHRAPNEL_MASS, SHRAPNEL_RADIUS, SHRAPNEL_REMOVE_DELAY, SHRAPNEL_DAMAGE, getShooter());
+                    SHRAPNEL_PATH, shrapnelDirectionAngle, SHRAPNEL_MASS, SHRAPNEL_RADIUS, SHRAPNEL_REMOVE_DELAY, SHRAPNEL_DAMAGE, getShooter(), getWeapon());
         }
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_EXPLOSION);
     }
@@ -53,6 +51,5 @@ public class Grenade extends Bullet {
     @Override
     public void update(float delta) {
         timeSinceShot += delta;
-        Gdx.app.log("Grenade", "Time: " + timeSinceShot);
     }
 }

@@ -34,7 +34,7 @@ public class Machinegun extends Weapon {
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+            new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
         }
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
