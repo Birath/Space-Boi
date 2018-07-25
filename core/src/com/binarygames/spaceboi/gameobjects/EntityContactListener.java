@@ -141,7 +141,7 @@ public class EntityContactListener implements ContactListener {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             bullet.setHasHit(true);
             HomingRocket homingRocket = (HomingRocket) fixtureB.getBody().getUserData();
-            if(!(bullet instanceof HomingRocket)){
+            if (!(bullet instanceof HomingRocket)) {
                 homingRocket.setHasHit(true); //Did not work
             }
         } else if (HomingRocket.class.isInstance(fixtureA.getBody().getUserData()) &&
@@ -149,12 +149,10 @@ public class EntityContactListener implements ContactListener {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             bullet.setHasHit(true);
             HomingRocket homingRocket = (HomingRocket) fixtureA.getBody().getUserData();
-            if(!(bullet instanceof HomingRocket)){
+            if (!(bullet instanceof HomingRocket)) {
                 homingRocket.setHasHit(true);
             }
-        }
-
-        else if (LaunchPad.class.isInstance(fixtureA.getBody().getUserData()) &&
+        } else if (LaunchPad.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
             LaunchPad launchPad = (LaunchPad) fixtureA.getBody().getUserData();
             Player player = (Player) fixtureB.getBody().getUserData();

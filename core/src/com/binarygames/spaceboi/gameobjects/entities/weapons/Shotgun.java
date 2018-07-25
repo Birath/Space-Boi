@@ -42,7 +42,7 @@ public class Shotgun extends Weapon {
             for (int i = 0; i < numberOfBullets; i++) {
                 int randomAngle = MathUtils.random(-spread, spread);
                 Vector2 randomShootDirection = shootDirection.rotate(randomAngle);
-                new Bullet(gameWorld, x, y, path, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+                new Bullet(gameWorld, x, y, path, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             }
             weaponMaths();
 

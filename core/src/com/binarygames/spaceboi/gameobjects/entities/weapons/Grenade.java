@@ -1,11 +1,9 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Grenade extends Bullet {
@@ -22,8 +20,8 @@ public class Grenade extends Bullet {
     private long shrapnelRemoveDelay = 0; //Increase this feels better but it is simply a workaround
     private int shrapnelDamage = 3;
 
-    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
-        super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter);
+    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+        super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter, weapon);
         this.removeDelay = removeDelay;
         timeTouched = TimeUtils.millis();
     }
@@ -46,7 +44,7 @@ public class Grenade extends Bullet {
 
         for (int i = 1; i + 1 < shrapnelAmount; i++) {
             new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirection.x, getBody().getPosition().y * PPM + shrapnelDirection.y,
-                    shrapnelPath, shrapnelDirectionWithSpeed.rotate(angleDiff * i), shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
+                    shrapnelPath, shrapnelDirectionWithSpeed.rotate(angleDiff * i), shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter(), getWeapon());
         }
 
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_EXPLOSION);

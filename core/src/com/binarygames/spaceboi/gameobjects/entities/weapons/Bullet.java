@@ -14,9 +14,10 @@ public class Bullet extends EntityDynamic {
 
     private int damage;
     private EntityDynamic shooter;
+    private Weapon weapon;
     protected boolean hasHit = false;
 
-    public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
+    public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, mass, radius);
 
         this.getBody().setLinearVelocity(speed);
@@ -24,6 +25,7 @@ public class Bullet extends EntityDynamic {
         this.damage = damage;
         this.gameWorld = gameWorld;
         this.shooter = shooter;
+        this.weapon = weapon;
 
         gameWorld.addDynamicEntity(this);
     }
@@ -45,6 +47,7 @@ public class Bullet extends EntityDynamic {
     public boolean shouldRemove(Vector2 playerPosition) {
         return (this.getBody().getPosition().dst(playerPosition) > MAXIMUM_BULLET_DISTANCE) || hasHit;
     }
+
     @Override
     public void onRemove() {
         // Runs once the bullet is removed from game
@@ -57,5 +60,9 @@ public class Bullet extends EntityDynamic {
 
     public EntityDynamic getShooter() {
         return this.shooter;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
     }
 }
