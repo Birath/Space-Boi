@@ -131,15 +131,25 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public void leftPlanet() {
         entityState = ENTITY_STATE.JUMPING;
     }
-    public boolean isAffectedByGravity(){
+
+    public boolean isAffectedByGravity() {
         return true;
     }
+
     public void setClosestPlanet(final Planet closestPlanet) {
         this.closestPlanet = closestPlanet;
         this.planetBody = closestPlanet.getBody();
     }
+
     public Planet getClosestPlanet() {
         return closestPlanet;
     }
 
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 }

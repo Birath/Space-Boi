@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
@@ -330,14 +329,14 @@ public class Player extends EntityDynamic {
     public void increaseHealth(int amount) {
         if (health + amount > START_HEALTH)
             health += amount;
-        if (health + amount >= maxHealth){
+        if (health + amount >= maxHealth) {
             health = maxHealth;
-        }
-        else{
+        } else {
             health += amount;
         }
     }
-    public void increaseMaxHealth(int amount){
+
+    public void increaseMaxHealth(int amount) {
         maxHealth += amount;
     }
 
@@ -396,6 +395,7 @@ public class Player extends EntityDynamic {
     public void setInfiniteAmmo(boolean infiniteAmmo) {
         this.infiniteAmmo = infiniteAmmo;
     }
+
 }
 
 
