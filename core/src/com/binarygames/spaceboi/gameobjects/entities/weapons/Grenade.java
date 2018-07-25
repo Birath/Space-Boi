@@ -12,18 +12,15 @@ public class Grenade extends Bullet {
     private static final int SHRAPNEL_SPEED = 30;
     private static final float SHRAPNEL_MASS = 10;
     private static final float SHRAPNEL_RADIUS = 1;
-    private static final long SHRAPNEL_REMOVE_DELAY = 0; //Increase this feels better but it is simply a workaround
+    private static final int SHRAPNEL_REMOVE_DELAY = 0; //Increase this feels better but it is simply a workaround
     private static final int SHRAPNEL_DAMAGE = 3;
     private Vector2 shrapnelDirection = new Vector2(2, 0);
 
     private float timeSinceShot;
-    private long removeDelay;
 
-    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+    public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter, weapon);
-        this.removeDelay = removeDelay;
     }
-
 
     @Override
     public boolean shouldRemove(Vector2 playerPosition) {

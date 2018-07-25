@@ -1,7 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
@@ -16,8 +16,9 @@ public class Bullet extends EntityDynamic {
     private EntityDynamic shooter;
     private Weapon weapon;
     protected boolean hasHit = false;
+    protected int removeDelay;
 
-    public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+    public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, mass, radius);
 
         this.getBody().setLinearVelocity(speed);
@@ -26,6 +27,7 @@ public class Bullet extends EntityDynamic {
         this.gameWorld = gameWorld;
         this.shooter = shooter;
         this.weapon = weapon;
+        this.removeDelay = removeDelay;
 
         gameWorld.addDynamicEntity(this);
     }
@@ -40,6 +42,7 @@ public class Bullet extends EntityDynamic {
     }
 
     public void setHasHit(boolean hasHit) {
+        Gdx.app.log("Bullet", "Has been hit");
         this.hasHit = hasHit;
     }
 

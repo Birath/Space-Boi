@@ -16,7 +16,7 @@ public class HomingRocketLauncher extends Weapon {
         this.bulletSpeed = 0.8f;
         this.path = Assets.PLAYER;
         this.recoil = 0;
-        this.removeBulletDelay = 0;
+        this.removeBulletDelay = 6;
         this.timeBetweenShots = 0.1f;
         this.magSize = this.currentMag = 8;
         this.reloadTime = 5;
