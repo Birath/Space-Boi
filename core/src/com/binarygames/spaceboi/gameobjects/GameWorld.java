@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -16,10 +15,11 @@ import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.background_functions.XP_handler;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
-import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Experience;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.GlassCannon;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Recoil;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Silencer;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
 
@@ -76,6 +76,17 @@ public class GameWorld {
         worldGenerator.createWorld();
         Player player = new Player(this, worldGenerator.generatePlayerX(),
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+
+        // TODO remove temp attachment testing
+        addDynamicEntity(new Experience(this, worldGenerator.generatePlayerX() + 50,
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+        addDynamicEntity(new GlassCannon(this, worldGenerator.generatePlayerX() + 100,
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+        addDynamicEntity(new Recoil(this, worldGenerator.generatePlayerX() + 150,
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+        addDynamicEntity(new Silencer(this, worldGenerator.generatePlayerX() + 200,
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+
         addDynamicEntity(player);
         this.player = player;
         xp_handler = new XP_handler(player);
@@ -88,8 +99,8 @@ public class GameWorld {
             applyGravity(entity);
             entity.update(delta);
         }
-        for (Weapon weapon : weaponList){
-            if (weapon.getShooter().getHealth() > 0){
+        for (Weapon weapon : weaponList) {
+            if (weapon.getShooter().getHealth() > 0) {
                 weapon.update(delta);
             }
         }
@@ -131,7 +142,7 @@ public class GameWorld {
             finalGravity.add(gravityPull);
         }
         if (game.getPreferences().isGravityEnabled()) {
-            if (entity.isAffectedByGravity()){
+            if (entity.isAffectedByGravity()) {
                 entity.getBody().applyForceToCenter(finalGravity, true);
             }
 
@@ -309,7 +320,8 @@ public class GameWorld {
         }
         return planets;
     }
-    public void addWeapon(Weapon weapon){
+
+    public void addWeapon(Weapon weapon) {
         weaponList.add(weapon);
     }
 
@@ -332,6 +344,7 @@ public class GameWorld {
     public Player getPlayer() {
         return player;
     }
+
     public XP_handler getXp_handler() {
         return xp_handler;
     }
