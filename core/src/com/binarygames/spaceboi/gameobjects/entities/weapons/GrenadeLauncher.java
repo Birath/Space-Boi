@@ -17,7 +17,7 @@ public class GrenadeLauncher extends Weapon {
         this.bulletSpeed = 2;
         this.path = Assets.PLAYER;
         this.recoil = 15;
-        this.removeBulletDelay = 2000;
+        this.removeBulletDelay = 2;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;

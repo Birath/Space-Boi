@@ -2,53 +2,57 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Grenade extends Bullet {
 
-    private int shrapnelAmount = 20;
-    private long timeTouched;
-    private long removeDelay;
-
-    private String shrapnelPath = Assets.PLAYER;
+    private static final int SHRAPNEL_AMOUNT = 40;
+    private static final String SHRAPNEL_PATH = Assets.PLAYER;
+    private static final int SHRAPNEL_SPEED = 30;
+    private static final float SHRAPNEL_MASS = 10;
+    private static final float SHRAPNEL_RADIUS = 1;
+    private static final long SHRAPNEL_REMOVE_DELAY = 0; //Increase this feels better but it is simply a workaround
+    private static final int SHRAPNEL_DAMAGE = 3;
     private Vector2 shrapnelDirection = new Vector2(2, 0);
-    private int shrapnelSpeed = 50;
-    private float shrapnelMass = 2;
-    private float shrapnelRadius = 1;
-    private long shrapnelRemoveDelay = 0; //Increase this feels better but it is simply a workaround
-    private int shrapnelDamage = 3;
+
+    private float timeSinceShot;
+    private long removeDelay;
 
     public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter) {
         super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter);
         this.removeDelay = removeDelay;
-        timeTouched = TimeUtils.millis();
     }
 
 
     @Override
     public boolean shouldRemove(Vector2 playerPosition) {
-        return hasHit && (TimeUtils.millis() - timeTouched) > removeDelay || (TimeUtils.millis() - timeTouched) > removeDelay; //???
+        return hasHit && timeSinceShot > removeDelay || timeSinceShot > removeDelay; //???
     }
 
     @Override
     public void onRemove() {
         // Grenade explosion
 
-        Vector2 shrapnelDirectionWithSpeed = new Vector2(shrapnelDirection.setLength2(1).scl(shrapnelSpeed));
+        Vector2 shrapnelDirectionWithSpeed = new Vector2(shrapnelDirection.setLength2(1).scl(SHRAPNEL_SPEED));
         shrapnelDirection.setLength2(1);
         shrapnelDirection.scl(rad * PPM);
 
-        float angleDiff = 360 / shrapnelAmount;
+        float angleDiff = 360 / SHRAPNEL_AMOUNT;
 
-        for (int i = 1; i + 1 < shrapnelAmount; i++) {
-            new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirection.x, getBody().getPosition().y * PPM + shrapnelDirection.y,
-                    shrapnelPath, shrapnelDirectionWithSpeed.rotate(angleDiff * i), shrapnelMass, shrapnelRadius, shrapnelRemoveDelay, shrapnelDamage, getShooter());
+        for (int i = 0; i + 1 <= SHRAPNEL_AMOUNT; i++) {
+            Vector2 shrapnelDirectionAngle = shrapnelDirectionWithSpeed.cpy().rotate(angleDiff * i);
+            Gdx.app.log("Grenade", "Shrapnel angle: " + shrapnelDirection.angle());
+            new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirectionAngle.x, getBody().getPosition().y * PPM + shrapnelDirectionAngle.y,
+                    SHRAPNEL_PATH, shrapnelDirectionAngle, SHRAPNEL_MASS, SHRAPNEL_RADIUS, SHRAPNEL_REMOVE_DELAY, SHRAPNEL_DAMAGE, getShooter());
         }
-
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_EXPLOSION);
+    }
+
+    @Override
+    public void update(float delta) {
+        timeSinceShot += delta;
+        Gdx.app.log("Grenade", "Time: " + timeSinceShot);
     }
 }
