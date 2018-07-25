@@ -35,7 +35,7 @@ public abstract class Weapon {
     protected float bulletSpeed;
     protected float recoil;
 
-    protected long removeBulletDelay;
+    protected int removeBulletDelay;
 
     protected boolean reloading;
     protected float reloadTime;

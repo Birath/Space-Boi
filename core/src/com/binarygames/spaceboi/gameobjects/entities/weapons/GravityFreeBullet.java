@@ -11,7 +11,7 @@ public class GravityFreeBullet extends Bullet {
     Vector2 perpen;
     private static final int MAXIMUM_DISTANCE = 2300;
 
-    public GravityFreeBullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, long removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+    public GravityFreeBullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter, weapon);
 
         Vector2 toPlayer = new Vector2(gameWorld.getPlayer().getBody().getPosition().x - this.getBody().getPosition().x,
