@@ -27,9 +27,15 @@ public abstract class WeaponAttachment extends Pickup {
         remove = true;
     }
 
-    protected abstract void applyAttachment(Weapon weapon);
+    public abstract void applyAttachment(Weapon weapon);
 
-    protected abstract void removeAttachment(Weapon weapon);
+    public abstract void removeAttachment(Weapon weapon);
+
+    public abstract boolean isEquipped();
+
+    public abstract void setEquipped(boolean equipped);
+
+    public abstract String getIcon();
 
     public abstract String getName();
 

@@ -17,7 +17,7 @@ public class GrenadeLauncher extends Weapon {
         this.bulletSpeed = 2;
         this.path = Assets.PLAYER;
         this.recoil = 15;
-        this.removeBulletDelay = 2000;
+        this.removeBulletDelay = 2;
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;
@@ -34,7 +34,7 @@ public class GrenadeLauncher extends Weapon {
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Grenade(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter);
+            new Grenade(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();
         }

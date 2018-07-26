@@ -1,4 +1,4 @@
-package com.binarygames.spaceboi.gameobjects.entities.background_functions;
+package com.binarygames.spaceboi.background_functions;
 
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 

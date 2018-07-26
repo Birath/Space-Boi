@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public abstract class Weapon {
 
-    protected List<String> weaponAttachments = new ArrayList<String>();
+    protected List<WeaponAttachment> attachments;
 
     protected World world;
     protected GameWorld gameWorld;
@@ -34,7 +35,7 @@ public abstract class Weapon {
     protected float bulletSpeed;
     protected float recoil;
 
-    protected long removeBulletDelay;
+    protected int removeBulletDelay;
 
     protected boolean reloading;
     protected float reloadTime;
@@ -47,6 +48,8 @@ public abstract class Weapon {
     protected int magSize;
     protected int currentMag = magSize;
 
+    private float xpFactor = 1f;
+
     String name;
 
     public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
@@ -56,6 +59,8 @@ public abstract class Weapon {
 
         reloading = false;
         timeBetweenShotsIsFinished = false;
+
+        attachments = new ArrayList<>();
 
         gameWorld.addWeapon(this);
     }
@@ -216,6 +221,38 @@ public abstract class Weapon {
 
     public EntityDynamic getShooter() {
         return this.shooter;
+    }
+
+    public List<WeaponAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public boolean addAttachment(WeaponAttachment attachment) {
+        if (attachments.size() < 3) {
+            attachments.add(attachment);
+            attachment.setEquipped(true);
+            attachment.applyAttachment(this);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeAttachment(WeaponAttachment attachment) {
+        if (attachments.contains(attachment)) {
+            attachments.remove(attachment);
+            attachment.setEquipped(false);
+            attachment.removeAttachment(this);
+            return true;
+        }
+        return false;
+    }
+
+    public float getXpFactor() {
+        return xpFactor;
+    }
+
+    public void setXpFactor(float factor) {
+        xpFactor = factor;
     }
 
     public String getName() {
