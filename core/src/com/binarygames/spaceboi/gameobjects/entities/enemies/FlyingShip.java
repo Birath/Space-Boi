@@ -73,17 +73,11 @@ public class FlyingShip extends Enemy {
     }
     private boolean toShootShotgun(){
         float angle = Math.abs(toPlanet.angle(toPlayer));
-        if(angle < 45){
-            return true;
-        }
-        return false;
+        return angle < 45;
     }
     private boolean toShootRockets(){
         float angle = Math.abs(toPlanet.angle(toPlayer));
-        if(45 < angle && angle < 75){
-            return true;
-        }
-        return false;
+        return 45 < angle && angle < 75;
     }
     private void ShootShotgun(){
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);

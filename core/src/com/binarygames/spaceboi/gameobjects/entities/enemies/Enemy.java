@@ -181,7 +181,7 @@ public abstract class Enemy extends EntityDynamic {
     protected void updateEnemyState() {
         if (!hasNoticedPlayer) {
             enemyState = ENEMY_STATE.IDLE;
-        } else if (player.getPlanetBody() != this.getPlanetBody()) {
+        } else if (!player.getPlanetBody().equals(this.getPlanetBody())) {
             enemyState = ENEMY_STATE.HUNTING;
         } else {
             enemyState = ENEMY_STATE.ATTACKING;
