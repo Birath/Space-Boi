@@ -17,12 +17,12 @@ public class Shooter extends Enemy {
     }
 
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
         standStill();
     }
 
     @Override
-    protected void updateHunting() {
+    protected void updateHunting(float delta) {
         if (toJump()) {
             jump();
         } else {
@@ -31,7 +31,7 @@ public class Shooter extends Enemy {
     }
 
     @Override
-    protected void updateAttacking() {
+    protected void updateAttacking(float delta) {
         Gdx.app.log("Shooter", "Angle to player: " + Math.abs(toPlanet.angle(toPlayer)));
         if (shouldShootWithNormalGun()) {
             shoot(machinegun);
@@ -43,7 +43,7 @@ public class Shooter extends Enemy {
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
         //Do nothing
     }
 

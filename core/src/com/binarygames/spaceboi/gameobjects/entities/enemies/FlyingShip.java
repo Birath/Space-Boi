@@ -17,17 +17,17 @@ public class FlyingShip extends Enemy {
         enemyXP = 100;
     }
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
         //Do nothing
     }
 
     @Override
-    protected void updateHunting() {
+    protected void updateHunting(float delta) {
         //Do nothing
     }
 
     @Override
-    protected void updateAttacking() {
+    protected void updateAttacking(float delta) {
         //Do nothing
     }
 
@@ -54,7 +54,7 @@ public class FlyingShip extends Enemy {
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
         if(this.planetBody != null){
             if(enemyState == ENEMY_STATE.IDLE){
                 updateIdleJumping();
