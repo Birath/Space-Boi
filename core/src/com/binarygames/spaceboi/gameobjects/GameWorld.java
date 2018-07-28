@@ -16,6 +16,8 @@ import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.background_functions.XP_handler;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Spawner;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Experience;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.GlassCannon;
@@ -87,6 +89,8 @@ public class GameWorld {
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new Silencer(this, worldGenerator.generatePlayerX() + 200,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+
+        addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
 
         addDynamicEntity(player);
         this.player = player;

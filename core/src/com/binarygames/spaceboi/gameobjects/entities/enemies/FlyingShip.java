@@ -17,17 +17,17 @@ public class FlyingShip extends Enemy {
         enemyXP = 100;
     }
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
         //Do nothing
     }
 
     @Override
-    protected void updateHunting() {
+    protected void updateHunting(float delta) {
         //Do nothing
     }
 
     @Override
-    protected void updateAttacking() {
+    protected void updateAttacking(float delta) {
         //Do nothing
     }
 
@@ -54,7 +54,7 @@ public class FlyingShip extends Enemy {
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
         if(this.planetBody != null){
             if(enemyState == ENEMY_STATE.IDLE){
                 updateIdleJumping();
@@ -73,17 +73,11 @@ public class FlyingShip extends Enemy {
     }
     private boolean toShootShotgun(){
         float angle = Math.abs(toPlanet.angle(toPlayer));
-        if(angle < 45){
-            return true;
-        }
-        return false;
+        return angle < 45;
     }
     private boolean toShootRockets(){
         float angle = Math.abs(toPlanet.angle(toPlayer));
-        if(45 < angle && angle < 75){
-            return true;
-        }
-        return false;
+        return 45 < angle && angle < 75;
     }
     private void ShootShotgun(){
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);

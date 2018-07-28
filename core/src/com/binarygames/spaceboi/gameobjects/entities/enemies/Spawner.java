@@ -1,50 +1,52 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
-import java.sql.Time;
-
 public class Spawner extends Enemy {
 
-    private long lastSpawn;
-    private long spawnDelay = 2000;
+    private float timeSinceLastSpawn;
+    private static final float SPAWN_DELAY = 2; // Seconds
 
     public Spawner(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
         super(gameWorld, x, y, path, enemyType);
-        lastSpawn = 0;
+        timeSinceLastSpawn = 0;
     }
 
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
         standStill();
     }
 
     @Override
-    protected void updateHunting() {
-        if(TimeUtils.millis() - lastSpawn < 2*spawnDelay){ //Spawn less often if player is on another planet
+    protected void updateHunting(float delta) {
+        if (timeSinceLastSpawn > 2 * SPAWN_DELAY) { //Spawn less often if player is on another planet
             spawnChaser();
-            lastSpawn = TimeUtils.millis();
+            timeSinceLastSpawn = 0;
+        } else {
+            timeSinceLastSpawn += delta;
         }
     }
 
     @Override
-    protected void updateAttacking() {
-        if(TimeUtils.millis() - lastSpawn < spawnDelay){
+    protected void updateAttacking(float delta) {
+        if (timeSinceLastSpawn > SPAWN_DELAY) {
             spawnChaser();
-            lastSpawn = TimeUtils.millis();
+            timeSinceLastSpawn = 0;
+        } else {
+            timeSinceLastSpawn += delta;
         }
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
         //Should not happen
     }
-    private void spawnChaser(){
+
+    private void spawnChaser() {
         float offset = this.getRad() + EnemyType.CHASER.getRad();
-        Chaser chaser = new Chaser(gameWorld, this.getBody().getPosition().x + offset,
-                this.getBody().getPosition().y, Assets.PLANET_MOON);
+        Chaser chaser = new Chaser(gameWorld, this.getBody().getPosition().x * PPM + offset,
+            this.getBody().getPosition().y * PPM, Assets.PLANET_MOON);
         gameWorld.addDynamicEntity(chaser);
     }
 }

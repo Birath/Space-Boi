@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +11,8 @@ import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.*;
+
+import java.util.Objects;
 
 public abstract class Enemy extends EntityDynamic {
 
@@ -49,6 +50,8 @@ public abstract class Enemy extends EntityDynamic {
             case FLYING_SHIP:
                 this.weapon = new HomingRocketLauncher(gameWorld, this);
                 break;
+            case SPAWNER:
+                break;
             default:
                 throw new IllegalArgumentException("Invalid enemy type");
         }
@@ -64,24 +67,24 @@ public abstract class Enemy extends EntityDynamic {
         updateEnemy();
         if (entityState == ENTITY_STATE.STANDING) {
             if (enemyState == ENEMY_STATE.IDLE) {
-                updateIdle();
+                updateIdle(delta);
             } else if (enemyState == ENEMY_STATE.ATTACKING) {
-                updateAttacking();
+                updateAttacking(delta);
             } else if (enemyState == ENEMY_STATE.HUNTING) {
-                updateHunting();
+                updateHunting(delta);
             }
         } else if (entityState == ENTITY_STATE.JUMPING) {
-            updateJumping();
+            updateJumping(delta);
         }
     }
 
-    protected abstract void updateIdle();
+    protected abstract void updateIdle(float delta);
 
-    protected abstract void updateHunting();
+    protected abstract void updateHunting(float delta);
 
-    protected abstract void updateAttacking();
+    protected abstract void updateAttacking(float delta);
 
-    protected abstract void updateJumping();
+    protected abstract void updateJumping(float delta);
 
     protected void updateEnemy() {
         if (planetBody != null) {
@@ -181,7 +184,7 @@ public abstract class Enemy extends EntityDynamic {
     protected void updateEnemyState() {
         if (!hasNoticedPlayer) {
             enemyState = ENEMY_STATE.IDLE;
-        } else if (player.getPlanetBody() != this.getPlanetBody()) {
+        } else if (!Objects.equals(player.getPlanetBody(), this.getPlanetBody())) {
             enemyState = ENEMY_STATE.HUNTING;
         } else {
             enemyState = ENEMY_STATE.ATTACKING;

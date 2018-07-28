@@ -17,12 +17,12 @@ public class Chaser extends Enemy {
     }
 
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
         standStill();
     }
 
     @Override
-    protected void updateHunting() {
+    protected void updateHunting(float delta) {
         if(toJump()){
             jump();
         }
@@ -32,7 +32,7 @@ public class Chaser extends Enemy {
     }
 
     @Override
-    protected void updateAttacking() {
+    protected void updateAttacking(float delta) {
         dealDamage();
         if(toJump()){
             jump();
@@ -43,7 +43,7 @@ public class Chaser extends Enemy {
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
         //Do nothing
     }
 

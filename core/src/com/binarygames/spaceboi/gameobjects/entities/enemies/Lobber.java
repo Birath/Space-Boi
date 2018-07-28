@@ -8,22 +8,22 @@ public class Lobber extends Enemy {
     }
 
     @Override
-    protected void updateIdle() {
+    protected void updateIdle(float delta) {
 
     }
 
     @Override
-    protected void updateHunting() {
+    protected void updateHunting(float delta) {
 
     }
 
     @Override
-    protected void updateAttacking() {
+    protected void updateAttacking(float delta) {
 
     }
 
     @Override
-    protected void updateJumping() {
+    protected void updateJumping(float delta) {
 
     }
 }
