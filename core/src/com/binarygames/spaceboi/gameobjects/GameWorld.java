@@ -185,7 +185,7 @@ public class GameWorld {
 
     private ArrayList<Planet> getPlanetsWithinGravityRange(Vector2 bodyPos) {
         ArrayList<Planet> planetsWithinRange = new ArrayList<>();
-        for (EntityStatic entityStatic : staticEntities) { //Seems like we need to have a planetList since we want to apply gravity using every object in staticEntities
+        for (EntityStatic entityStatic : staticEntities) {
             if (Planet.class.isInstance(entityStatic)) {
                 Planet planet = (Planet) entityStatic;
                 Vector2 planetPos = planet.getBody().getPosition();

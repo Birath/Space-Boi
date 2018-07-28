@@ -20,5 +20,4 @@ public class LaunchPad extends EntityStatic {
     private void getOppositePlanet() {
 
     }
-
 }

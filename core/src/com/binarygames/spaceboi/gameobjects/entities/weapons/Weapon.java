@@ -191,10 +191,6 @@ public abstract class Weapon {
         this.damage = damage;
     }
 
-    public float getBulletSpeed() {
-        return bulletSpeed;
-    }
-
     public void setBulletSpeed(float bulletSpeed) {
         this.bulletSpeed = bulletSpeed;
     }
