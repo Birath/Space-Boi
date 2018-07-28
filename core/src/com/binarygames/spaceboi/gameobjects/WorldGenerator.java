@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
+
 public class WorldGenerator {
     private static final int OFFSET = 10;
     private GameWorld gameWorld;
@@ -22,10 +24,11 @@ public class WorldGenerator {
     private final int maxRad = 300;
     private final int minRad = 250;
 
+
     private final int maxGrav = (int) (3 * Math.pow(10, 9));
     private final int minGrav = (int) (2 * Math.pow(10, 9));
 
-    private int NumberOfCircles = 2; //prev 6
+    private int NumberOfCircles = 6;
     private int distanceBetweenRows = 3;
     private double distanceBetweenPlanets = 0.7; //Smaller gives larger dist
 
@@ -39,7 +42,9 @@ public class WorldGenerator {
 
     private float radOfWorld;
 
-    private int LAUNCHPAD_RANGE = 160;
+    private int LAUNCHPAD_RANGE = (maxRad/PPM) * 4;
+
+    private float launchPadOffset = 0.2f;
 
     private List<Planet> singleRowPlanets = new ArrayList<>();
 
@@ -89,7 +94,7 @@ public class WorldGenerator {
                     int prevX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * (j - 1)) + angleOffset));
                     int prevY = (int) Math.round(rad * Math.sin((angleBetweenPlanets * (j - 1)) + angleOffset));
                     float angleToPrevPlanet = MathUtils.atan2(prevY - lastY, prevX - lastX);
-                    createLaunchPad(lastX, lastY, lastRad, angleToPrevPlanet);
+                    createLaunchPad(lastX, lastY, lastRad, angleToPrevPlanet + launchPadOffset);
 
                     //Create launchpad to prev
                     int nextX = (int) Math.round(rad * Math.cos((angleBetweenPlanets * (j + 1)) + angleOffset));
@@ -98,8 +103,6 @@ public class WorldGenerator {
                     createLaunchPad(lastX, lastY, lastRad, angleToNextPlanet);
                 }
                 else{
-                    System.out.println("adding singlerowplanet");
-                    System.out.println("circlenumber " + circleNumber + " j " + j);
                     singleRowPlanets.add(lastPlanet);
                 }
             }
@@ -200,12 +203,12 @@ public class WorldGenerator {
             Vector2 pos = singleRowPlanet.getBody().getPosition();
 
             ArrayList<Planet> planetList = getPlanetsWithinRange(pos);
-            System.out.println("planetlistlength " + planetList.size());
             for(Planet planet : planetList){
-                float angleToPlanet = MathUtils.atan2(planet.getBody().getPosition().y - pos.y, planet.getBody().getPosition().x - pos.x);
-                System.out.println("planetx " + planet.getBody().getPosition().x + " planety " +  planet.getBody().getPosition().y + " planetrad " + planet.getRad());
-                createLaunchPad((int) planet.getBody().getPosition().x, (int) planet.getBody().getPosition().y, (int) planet.getRad(), angleToPlanet);
-                //createLaunchPad((int) pos.x, (int) pos.y, (int) singleRowPlanet.getRadius(), angleToPlanet);
+                float angleToPlanet = MathUtils.atan2(pos.y - planet.getBody().getPosition().y, pos.x - planet.getBody().getPosition().x);
+                createLaunchPad((int) (PPM * planet.getBody().getPosition().x), (int) (PPM * planet.getBody().getPosition().y), (int) planet.getRadius(), angleToPlanet);
+
+                float reverseAngleToPlanet = MathUtils.atan2(planet.getBody().getPosition().y - pos.y, planet.getBody().getPosition().x - pos.x);
+                createLaunchPad((int) (PPM * pos.x), (int) (PPM * pos.y), (int) singleRowPlanet.getRadius(), reverseAngleToPlanet + launchPadOffset);
             }
         }
     }
@@ -213,9 +216,6 @@ public class WorldGenerator {
     private void createLaunchPad(int x, int y, int planetRadius, float angle) {
         int padX = x + (int) (planetRadius * Math.cos(angle));
         int padY = y + (int) (planetRadius * Math.sin(angle));
-        System.out.println("padx " + padX);
-        System.out.println("pady " + padY);
-        System.out.println("angle " + angle);
         gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
     }
 
@@ -231,9 +231,7 @@ public class WorldGenerator {
         for (Planet planet : gameWorld.getPlanets()) {
             Vector2 planetPos = planet.getBody().getPosition();
             float distance = planetPos.dst(pos);
-            System.out.println("launchpad range " + LAUNCHPAD_RANGE);
-            System.out.println("distance " + distance);
-            if (LAUNCHPAD_RANGE >= distance && LAUNCHPAD_RANGE - distance > 2) { //seem to need error margin for the second part
+            if (LAUNCHPAD_RANGE >= distance && distance > 2) { //seem to need error margin for the second part
                 planetsWithinRange.add(planet); }
             }
         return planetsWithinRange;
