@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments;
 
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
@@ -12,7 +13,7 @@ public abstract class WeaponAttachment extends Pickup {
 
     @Override
     public void onRemove() {
-
+        gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.FIRE, body.getPosition().x * PPM, body.getPosition().y * PPM);
     }
 
     @Override

@@ -61,6 +61,7 @@ public class Assets {
 
     // Blood
     public static final String PARTICLE_BLOOD = "game/particles/blood.p";
+    public static final String PARTICLE_FIRE = "game/particles/fire.p";
 
     /*
         UI
@@ -126,8 +127,8 @@ public class Assets {
 
         assetManager.load(PARTICLE_ATLAS, TextureAtlas.class);
 
-        // Blood
         assetManager.load(PARTICLE_BLOOD, ParticleEffect.class);
+        assetManager.load(PARTICLE_FIRE, ParticleEffect.class);
 
         /*
             UI
