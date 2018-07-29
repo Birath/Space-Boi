@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
@@ -38,6 +39,10 @@ public abstract class Enemy extends EntityDynamic {
 
     private Bullet lastBullet;
 
+    private EnemyKind enemyKind;
+    private static final int MINIMUM_MOVESPEED = 2;
+
+
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
         super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
         switch (enemyType) {
@@ -60,6 +65,7 @@ public abstract class Enemy extends EntityDynamic {
         Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         healthBar = new ProgressBar(0, health, 1, false, uiSkin);
         lastHealth = maxHealth;
+        this.enemyKind = enemyType.getEnemyKind();
     }
 
     @Override
@@ -202,5 +208,21 @@ public abstract class Enemy extends EntityDynamic {
         healthBar.setValue(health);
         healthBar.draw(batch, 1);
 
+    }
+    public void receiveWeaponEffects(Bullet bullet){
+        this.reduceHealth(bullet.getDamage());
+
+        if(enemyKind == EnemyKind.BIOLOGICAL){
+            this.reduceHealth(bullet.getBioDamage());
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.FIRE,
+                    this.getBody().getPosition().x, this.getBody().getPosition().y);
+        }
+        else if(enemyKind == EnemyKind.MECHANICAL){
+            this.reduceHealth(bullet.getMechDamage());
+        }
+
+        if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()){
+            this.setMoveSpeed(this.getMoveSpeed() - bullet.getSlow());
+        }
     }
 }

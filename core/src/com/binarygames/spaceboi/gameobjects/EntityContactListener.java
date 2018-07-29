@@ -98,7 +98,8 @@ public class EntityContactListener implements ContactListener {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
             if (!bullet.getShooter().equals(enemy)) {
-                enemy.reduceHealth(bullet.getDamage());
+                enemy.receiveWeaponEffects(bullet);
+                bullet.applyLifeSteal();
                 bullet.setHasHit(true);
             }
         } else if (Enemy.class.isInstance(fixtureA.getBody().getUserData()) &&
@@ -106,7 +107,8 @@ public class EntityContactListener implements ContactListener {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
             if (!bullet.getShooter().equals(enemy)) {
-                enemy.reduceHealth(bullet.getDamage());
+                enemy.receiveWeaponEffects(bullet);
+                bullet.applyLifeSteal();
                 bullet.setHasHit(true);
             }
         }

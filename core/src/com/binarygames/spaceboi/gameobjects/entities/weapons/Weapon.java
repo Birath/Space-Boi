@@ -50,6 +50,11 @@ public abstract class Weapon {
 
     private float xpFactor = 1f;
 
+    private int bioDamage = 0;
+    private int mechDamage = 0;
+    private int lifeSteal = 0;
+    private int slow = 0;
+
     String name;
 
     public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
@@ -253,5 +258,37 @@ public abstract class Weapon {
 
     public String getName() {
         return name;
+    }
+
+    public int getBioDamage() {
+        return bioDamage;
+    }
+
+    public void setBioDamage(int bioDamage) {
+        this.bioDamage = bioDamage;
+    }
+
+    public int getMechDamage() {
+        return mechDamage;
+    }
+
+    public void setMechDamage(int mechDamage) {
+        this.mechDamage = mechDamage;
+    }
+
+    public int getLifeSteal() {
+        return lifeSteal;
+    }
+
+    public void setLifeSteal(int lifeSteal) {
+        this.lifeSteal = lifeSteal;
+    }
+
+    public int getSlow() {
+        return slow;
+    }
+
+    public void setSlow(int slow) {
+        this.slow = slow;
     }
 }
