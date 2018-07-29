@@ -35,8 +35,9 @@ public class GrenadeLauncher extends Weapon {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
             new Grenade(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
-            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();
+
+            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
         }
     }
 

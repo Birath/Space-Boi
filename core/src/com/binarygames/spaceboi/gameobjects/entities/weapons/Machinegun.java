@@ -42,15 +42,18 @@ public class Machinegun extends Weapon {
             shootDirection.scl(bulletSpeed);
             new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
+
+            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
         }
 
-        if (gameWorld.getGame().getPreferences().isSoundEnabled()) {
+        /*
+        if (canShoot() && gameWorld.getGame().getPreferences().isSoundEnabled()) {
             if (shotID != 0) {
                 shot.stop(shotID);
             }
             shotID = shot.play(gameWorld.getGame().getPreferences().getSoundVolume());
         }
-        // gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
+        */
     }
 
     @Override
