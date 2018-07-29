@@ -31,6 +31,7 @@ public class Assets {
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
     public static final String LAUNCH_PAD = "game/entities/planets/launch_pad.png";
+    public static final String LAUNCH_PAD_SOUND = "game/entities/planets/launch_pad_sound.wav"; // https://freesound.org/people/Kinoton/sounds/351256/
 
     // Player
     public static final String PLAYER = "game/entities/player/norrland.jpg";
@@ -108,6 +109,7 @@ public class Assets {
         // Planets
         assetManager.load(PLANET_MOON, Texture.class);
         assetManager.load(LAUNCH_PAD, Texture.class);
+        assetManager.load(LAUNCH_PAD_SOUND, Sound.class);
 
         // Player
         assetManager.load(PLAYER, Texture.class);
