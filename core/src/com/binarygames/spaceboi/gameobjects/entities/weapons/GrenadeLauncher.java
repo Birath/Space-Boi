@@ -39,4 +39,9 @@ public class GrenadeLauncher extends Weapon {
             weaponMaths();
         }
     }
+
+    @Override
+    public void onReload() {
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_RELOAD);
+    }
 }
