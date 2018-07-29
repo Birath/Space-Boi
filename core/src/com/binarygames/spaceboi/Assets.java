@@ -24,6 +24,8 @@ public class Assets {
     // Data
     public static final String MENU_UI_SKIN = "menu/uiskin.json";
 
+    public static final String HEALTHBAR_SKIN = "menu/healthbar.json";
+
     /*
         Entity assets
      */
@@ -86,6 +88,8 @@ public class Assets {
         assetManager.load(MENU_BACKGROUND_IMAGE, Texture.class);
 
         assetManager.load(MENU_UI_SKIN, Skin.class);
+
+        assetManager.load(HEALTHBAR_SKIN, Skin.class);
 
         assetManager.load(MENU_BACKGROUND_MUSIC, Music.class);
     }

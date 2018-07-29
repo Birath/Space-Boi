@@ -2,7 +2,6 @@ package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.badlogic.gdx.Gdx;
 
 public class LaunchPad extends EntityStatic {
 

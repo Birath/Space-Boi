@@ -45,11 +45,24 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         createEntityDynamic(gameWorld, path, radius);
     }
 
+    protected EntityDynamic (GameWorld gameWorld, float x, float y, String path, float mass, float width, float height, int health, int moveSpeed, int jumpHeight) {
+        super(gameWorld, x, y, mass, width, height);
+        this.health = this.maxHealth = health;
+        this.moveSpeed = moveSpeed;
+        this.jumpHeight = jumpHeight;
+        this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
+        sprite.setOrigin(width / 2, height / 2);
+        sprite.setSize(width, height);
+        body.setUserData(this);
+
+    }
+
     private void createEntityDynamic(GameWorld gameWorld, String path, float radius) {
         this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
         sprite.setSize(radius * 2, radius * 2);
         body.setUserData(this);
     }
+
 
     public abstract void update(float delta);
 

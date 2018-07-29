@@ -14,7 +14,6 @@ public class FlyingShip extends Enemy {
         this.entityState = ENTITY_STATE.JUMPING;
 
         shotgun = new Shotgun(gameWorld, this);
-        enemyXP = 100;
     }
     @Override
     protected void updateIdle(float delta) {

@@ -17,6 +17,7 @@ import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.FinalBoss;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Spawner;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Experience;
@@ -40,6 +41,7 @@ public class GameWorld {
     private ParticleHandler particleHandler;
     private XP_handler xp_handler;
     private Player player;
+    private FinalBoss finalBoss;
     private boolean shouldLerpPlayerAngle = false;
 
     private List<EntityDynamic> dynamicEntities;
@@ -90,9 +92,10 @@ public class GameWorld {
         addDynamicEntity(new Silencer(this, worldGenerator.generatePlayerX() + 200,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
 
-        addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
-
+        //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
+        this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
         addDynamicEntity(player);
+        addDynamicEntity(finalBoss);
         this.player = player;
         xp_handler = new XP_handler(player);
 
@@ -313,6 +316,10 @@ public class GameWorld {
         //player.setPlayerAngle(lerpedAngle);
         //player.setPlayerAngle(otherInerpolation);
         player.setPlayerAngle(lerpedAngle);
+        closestPlanet = finalBoss.getClosestPlanet();
+        relativeVector = closestPlanet.getBody().getPosition().sub(finalBoss.getBody().getPosition());
+        angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        finalBoss.setAngle(MathUtils.lerpAngleDeg(finalBoss.getAngle(), angleToPlanet, delta * 5));
     }
 
     public ArrayList<Planet> getPlanets() {

@@ -21,7 +21,7 @@ public abstract class Enemy extends EntityDynamic {
     protected Vector2 perpen = new Vector2(0, 0);
     protected GameWorld gameWorld;
     protected Player player;
-    protected int enemyXP = 20;
+    protected int enemyXP;
 
     private int aggroDistance = 1000;
     private int deAggroDistance = 2000;
@@ -38,8 +38,17 @@ public abstract class Enemy extends EntityDynamic {
 
     private Bullet lastBullet;
 
+    public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType, float width, float height) {
+        super(gameWorld, x, y, path, enemyType.getMass(), width, height, enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+        createEnemy(gameWorld, enemyType);
+    }
+
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
         super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+        createEnemy(gameWorld, enemyType);
+    }
+
+    private void createEnemy(GameWorld gameWorld, EnemyType enemyType) {
         switch (enemyType) {
             case CHASER:
                 this.weapon = new Machinegun(gameWorld, this);
@@ -52,15 +61,20 @@ public abstract class Enemy extends EntityDynamic {
                 break;
             case SPAWNER:
                 break;
+            case FINAL_BOSS:
+                break;
             default:
                 throw new IllegalArgumentException("Invalid enemy type");
         }
 
+        this.enemyXP = enemyType.getExp();
         this.gameWorld = gameWorld;
+
         Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         healthBar = new ProgressBar(0, health, 1, false, uiSkin);
         lastHealth = maxHealth;
     }
+
 
     @Override
     public void update(float delta) {
