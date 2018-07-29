@@ -39,4 +39,9 @@ public class Machinegun extends Weapon {
         }
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
     }
+
+    @Override
+    public void onReload() {
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_RELOAD);
+    }
 }
