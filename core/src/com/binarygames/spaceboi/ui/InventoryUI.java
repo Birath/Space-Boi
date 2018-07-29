@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
@@ -111,7 +112,7 @@ public class InventoryUI {
         weaponsTable.clear();
         weaponsTable.setPosition(300, 450);
         Label weaponsLabel = new Label("Weapons", labelStyle);
-        weaponsTable.add(weaponsLabel).align(Align.left);
+        weaponsTable.add(weaponsLabel).align(Align.center);
         for (Weapon weapon : gameWorld.getPlayer().getWeaponList()) {
             TextButton weaponButton = new TextButton(weapon.getName(), textButtonStyle);
             weaponButton.addCaptureListener(new ChangeListener() {
@@ -133,8 +134,37 @@ public class InventoryUI {
             weaponsTable.add(weaponButton);
             weaponsTable.row();
 
+            for (int i = 0; i < 3; i++) {
+                WeaponAttachment attachment = null;
+                Sprite attachmentSprite;
+                if (weapon.getAttachments().size() > i) {
+                    attachment = weapon.getAttachments().get(i);
+                    attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                } else {
+                    attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
+                }
+                attachmentSprite.setSize(75, 75);
+                AttachmentButton attachmentButton = new AttachmentButton(gameWorld.getGame(), new SpriteDrawable(attachmentSprite));
+                if (attachment != null) {
+                    attachmentButton.setAttachment(attachment);
+                }
+                attachmentButton.addCaptureListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        // Remove attachment from weapon
+                        if (attachmentButton.getAttachment() != null) {
+                            weapon.removeAttachment(attachmentButton.getAttachment());
+                        }
+                        updateInventory();
+                    }
+                });
+                weaponsTable.add(attachmentButton);
+            }
+
+            /*
             for (WeaponAttachment attachment : weapon.getAttachments()) {
-                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                //Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
                 attachmentSprite.setSize(75, 75);
                 Button attachmentButton = new Button(new SpriteDrawable(attachmentSprite));
                 attachmentButton.addCaptureListener(new ChangeListener() {
@@ -147,6 +177,7 @@ public class InventoryUI {
                 });
                 weaponsTable.add(attachmentButton);
             }
+            */
         }
     }
 
