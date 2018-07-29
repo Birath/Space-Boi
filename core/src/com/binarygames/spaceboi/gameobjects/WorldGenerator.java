@@ -8,8 +8,11 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.EntityStatic;
 import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
+import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +144,6 @@ public class WorldGenerator {
             Vector2 toPlanet = new Vector2(x, y);
             radOfWorld = toPlanet.len() + Planet.GRAVITY_RADIUS;
         }
-        /*
         else if((circleNumber%2)==0){
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
@@ -196,7 +198,6 @@ public class WorldGenerator {
                 }
             }
         }
-        */
     }
     private void createLaunchPadBetweenRows(){
         for(Planet singleRowPlanet : singleRowPlanets){
