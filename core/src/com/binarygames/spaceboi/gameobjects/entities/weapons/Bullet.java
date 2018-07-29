@@ -42,7 +42,6 @@ public class Bullet extends EntityDynamic {
     }
 
     public void setHasHit(boolean hasHit) {
-        Gdx.app.log("Bullet", "Has been hit");
         this.hasHit = hasHit;
     }
 

@@ -32,7 +32,6 @@ public class Shooter extends Enemy {
 
     @Override
     protected void updateAttacking(float delta) {
-        Gdx.app.log("Shooter", "Angle to player: " + Math.abs(toPlanet.angle(toPlayer)));
         if (shouldShootWithNormalGun()) {
             shoot(machinegun);
         } else if (shouldShootWithNonGravityGun()) {
