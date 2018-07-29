@@ -28,6 +28,9 @@ public class Assets {
         Entity assets
      */
 
+    // Enemies
+    public static final String MISSILE_LAUNCH = "game/entities/enemies/flying_ship/missile_launch.wav"; // https://freesound.org/people/Audionautics/sounds/171655/
+
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
     public static final String LAUNCH_PAD = "game/entities/planets/launch_pad.png";
@@ -101,6 +104,9 @@ public class Assets {
         /*
             Entities
          */
+
+        // Enemies
+        assetManager.load(MISSILE_LAUNCH, Sound.class);
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class);
