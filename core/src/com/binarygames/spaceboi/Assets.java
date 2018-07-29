@@ -77,6 +77,10 @@ public class Assets {
     public static final String UI_EXPERIENCE_ICON = "game/ui/experience_icon.jpg";
     public static final String UI_RECOIL_ICON = "game/ui/recoil_icon.jpg";
     public static final String UI_GLASS_CANNON_ICON = "game/ui/glass_cannon_icon.png";
+    public static final String UI_BIO_DAMAGE_ICON = "game/ui/glass_cannon_icon.png";
+    public static final String UI_MECH_DAMAGE_ICON = "game/ui/glass_cannon_icon.png";
+    public static final String UI_LIFESTEAL_ICON = "game/ui/glass_cannon_icon.png";
+    public static final String UI_SLOW_ICON = "game/ui/glass_cannon_icon.png";
 
     private AssetManager assetManager;
 

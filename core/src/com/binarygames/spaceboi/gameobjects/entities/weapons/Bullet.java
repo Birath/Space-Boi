@@ -13,6 +13,10 @@ public class Bullet extends EntityDynamic {
     protected GameWorld gameWorld;
 
     private int damage;
+    private int bioDamage = 0;
+    private int mechDamage = 0;
+    private int lifeSteal = 0;
+    private int slow = 0;
     private EntityDynamic shooter;
     private Weapon weapon;
     protected boolean hasHit = false;
@@ -22,6 +26,11 @@ public class Bullet extends EntityDynamic {
         super(gameWorld, x, y, path, mass, radius);
 
         this.getBody().setLinearVelocity(speed);
+
+        this.bioDamage = weapon.getBioDamage();
+        this.mechDamage = weapon.getMechDamage();
+        this.lifeSteal = weapon.getLifeSteal();
+        this.slow = weapon.getSlow();
 
         this.damage = damage;
         this.gameWorld = gameWorld;
@@ -66,5 +75,30 @@ public class Bullet extends EntityDynamic {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public int getBioDamage() {
+        return bioDamage;
+    }
+
+    public int getMechDamage() {
+        return mechDamage;
+    }
+
+    public int getSlow() {
+        return slow;
+    }
+
+    public int getLifeSteal(){
+        return lifeSteal;
+    }
+
+    public void applyLifeSteal() {
+        if(this.getShooter().getHealth() + this.getLifeSteal() > this.getShooter().getMaxHealth()){
+            this.getShooter().setHealth(this.getShooter().getMaxHealth());
+        }
+        else{
+            this.getShooter().setHealth(this.getShooter().getHealth() + this.getLifeSteal());
+        }
     }
 }

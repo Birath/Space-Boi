@@ -19,10 +19,7 @@ import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Spawner;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Experience;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.GlassCannon;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Recoil;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Silencer;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.*;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
 
@@ -81,13 +78,13 @@ public class GameWorld {
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
         // TODO remove temp attachment testing
-        addDynamicEntity(new Experience(this, worldGenerator.generatePlayerX() + 50,
+        addDynamicEntity(new Slow(this, worldGenerator.generatePlayerX() + 50,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new GlassCannon(this, worldGenerator.generatePlayerX() + 100,
+        addDynamicEntity(new LifeSteal(this, worldGenerator.generatePlayerX() + 100,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new Recoil(this, worldGenerator.generatePlayerX() + 150,
+        addDynamicEntity(new MechDamage(this, worldGenerator.generatePlayerX() + 150,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new Silencer(this, worldGenerator.generatePlayerX() + 200,
+        addDynamicEntity(new BioDamage(this, worldGenerator.generatePlayerX() + 200,
                 worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
 
         addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));

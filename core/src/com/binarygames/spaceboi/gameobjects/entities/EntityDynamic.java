@@ -152,4 +152,12 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public int getMaxHealth() {
         return maxHealth;
     }
+
+    public int getMoveSpeed() {
+        return moveSpeed;
+    }
+
+    public void setMoveSpeed(int moveSpeed) {
+        this.moveSpeed = moveSpeed;
+    }
 }
