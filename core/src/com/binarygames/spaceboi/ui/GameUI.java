@@ -113,6 +113,7 @@ public class GameUI {
 
         Button button = new TextButton("Hej", textButtonStyle);
         button.setBounds(300, 300, 300, 300);
+        button.setPosition(300, 300);
 
         button.addListener(new ClickListener() {
             @Override
