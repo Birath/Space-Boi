@@ -193,7 +193,7 @@ public class WorldGenerator {
                 for (int healthPacks = 0; healthPacks < numberOfHealthPacks; healthPacks++) {
                     HealthPickup pickup = new HealthPickup(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * healthPacks))),
                             (int) (y + Math.round(r * Math.sin(angleDiff * healthPacks))),
-                            Assets.UI_HEALTH_ICON, 300, 5);
+                            Assets.PICKUP_HEALTH, 300, 7);
                     gameWorld.addDynamicEntity(pickup);
                 }
             }
@@ -236,5 +236,9 @@ public class WorldGenerator {
                 planetsWithinRange.add(planet); }
             }
         return planetsWithinRange;
+    }
+
+    public float getRadOfWorld() {
+        return radOfWorld;
     }
 }

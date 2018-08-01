@@ -29,7 +29,28 @@ public class Assets {
      */
 
     // Enemies
+
+    // Flyging ship
     public static final String MISSILE_LAUNCH = "game/entities/enemies/flying_ship/missile_launch.wav"; // https://freesound.org/people/Audionautics/sounds/171655/
+
+    // Pirate
+    public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
+    public static final String PIRATE_ATTACK2 = "game/entities/enemies/pirate/attack/Get_em.wav";
+    public static final String PIRATE_ATTACK3 = "game/entities/enemies/pirate/attack/Plunder.wav";
+    public static final String PIRATE_ATTACK4 = "game/entities/enemies/pirate/attack/Walk_the_plank.wav";
+    public static final String PIRATE_OUCH1 = "game/entities/enemies/pirate/damage_taken/Ouch1.wav";
+    public static final String PIRATE_OUCH2 = "game/entities/enemies/pirate/damage_taken/Ouch2.wav";
+    public static final String PIRATE_OUCH3 = "game/entities/enemies/pirate/damage_taken/Ouch3.wav";
+    public static final String PIRATE_OUCH4 = "game/entities/enemies/pirate/damage_taken/Ouch4.wav";
+    public static final String PIRATE_DEATH = "game/entities/enemies/pirate/death/Parleyyy.wav";
+
+    // End boss
+    public static final String END_BOSS1 = "game/entities/enemies/end_boss/Bring_me_his_corpse.wav";
+
+    // Dog
+    public static final String DOG1 = "game/entities/enemies/dog/dog4.wav"; // https://www.freesoundeffects.com/free-track/dog4-89462/
+    public static final String DOG2 = "game/entities/enemies/dog/dog2_weird.wav"; // https://www.freesoundeffects.com/free-track/dog2-89460/
+    public static final String DOG3 = "game/entities/enemies/dog/dog-2.wav"; // https://www.freesoundeffects.com/free-track/dog-2-89458/
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
@@ -59,6 +80,8 @@ public class Assets {
     /*
         Environment
      */
+    public static final String ATTACHMENT_PICK_1 = "game/enviroment/attachmentpickup1.wav"; // https://freesound.org/people/rhodesmas/sounds/320654/
+    public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
 
     // TODO
 
@@ -87,6 +110,12 @@ public class Assets {
     public static final String UI_LIFESTEAL_ICON = "game/ui/glass_cannon_icon.png";
     public static final String UI_SLOW_ICON = "game/ui/glass_cannon_icon.png";
 
+    // PICKUPS
+    public static final String PICKUP_HEALTH = "game/entities/pickups/norrlands_health.png";
+
+    // Minimap markers
+    public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
+
     private AssetManager assetManager;
 
     public Assets(AssetManager assetManager) {
@@ -111,7 +140,28 @@ public class Assets {
          */
 
         // Enemies
+
+        // Flyging ship
         assetManager.load(MISSILE_LAUNCH, Sound.class);
+
+        // Pirate
+        assetManager.load(PIRATE_ATTACK1, Sound.class);
+        assetManager.load(PIRATE_ATTACK2, Sound.class);
+        assetManager.load(PIRATE_ATTACK3, Sound.class);
+        assetManager.load(PIRATE_ATTACK4, Sound.class);
+        assetManager.load(PIRATE_OUCH1, Sound.class);
+        assetManager.load(PIRATE_OUCH2, Sound.class);
+        assetManager.load(PIRATE_OUCH3, Sound.class);
+        assetManager.load(PIRATE_OUCH4, Sound.class);
+        assetManager.load(PIRATE_DEATH, Sound.class);
+
+        //End boss
+        assetManager.load(END_BOSS1, Sound.class);
+
+        // Dog
+        assetManager.load(DOG1, Sound.class);
+        assetManager.load(DOG2, Sound.class);
+        assetManager.load(DOG3, Sound.class);
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class);
@@ -141,6 +191,9 @@ public class Assets {
             Environment
          */
 
+        assetManager.load(ATTACHMENT_PICK_1, Sound.class);
+        assetManager.load(ATTACHMENT_PICK_2, Sound.class);
+
         // TODO
 
         /*
@@ -162,6 +215,14 @@ public class Assets {
         assetManager.load(UI_EXPERIENCE_ICON, Texture.class);
         assetManager.load(UI_RECOIL_ICON, Texture.class);
         assetManager.load(UI_GLASS_CANNON_ICON, Texture.class);
+
+        /*
+            PICKUPS
+        */
+        assetManager.load(PICKUP_HEALTH, Texture.class);
+
+        // Minimap markers
+        assetManager.load(MARKER_PLANET, Texture.class);
     }
 
     /*

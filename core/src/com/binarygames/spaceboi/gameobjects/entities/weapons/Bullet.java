@@ -62,7 +62,6 @@ public class Bullet extends EntityDynamic {
     @Override
     public void onRemove() {
         // Runs once the bullet is removed from game
-        gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD, getBody().getPosition().x * PPM, getBody().getPosition().y * PPM);
     }
 
     public int getDamage() {

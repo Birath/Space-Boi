@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -14,6 +15,21 @@ public class Shooter extends Enemy {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
 
         this.machinegun = new Machinegun(gameWorld, this);
+    }
+
+    @Override
+    protected void getSounds() {
+        attackSounds.add(Assets.PIRATE_ATTACK1);
+        attackSounds.add(Assets.PIRATE_ATTACK2);
+        attackSounds.add(Assets.PIRATE_ATTACK3);
+        attackSounds.add(Assets.PIRATE_ATTACK4);
+
+        deathSounds.add(Assets.PIRATE_DEATH);
+
+        damagedSounds.add(Assets.PIRATE_OUCH1);
+        damagedSounds.add(Assets.PIRATE_OUCH2);
+        damagedSounds.add(Assets.PIRATE_OUCH3);
+        damagedSounds.add(Assets.PIRATE_OUCH4);
     }
 
     @Override
@@ -44,13 +60,6 @@ public class Shooter extends Enemy {
     @Override
     protected void updateJumping(float delta) {
         //Do nothing
-    }
-
-    private boolean toShoot() {
-        //Calculating if shooting is to happen
-        Vector2 awayFromPlanet = new Vector2(-toPlanet.x, -toPlanet.y);
-        float angle = awayFromPlanet.angle(toPlayer);
-        return (Math.abs(angle) < 110); //110 should be calculated mathematically
     }
 
     private boolean shouldShootWithNormalGun() {
