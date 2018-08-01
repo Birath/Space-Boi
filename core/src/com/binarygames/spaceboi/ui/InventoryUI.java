@@ -118,15 +118,7 @@ public class InventoryUI {
             weaponButton.addCaptureListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if (selectedAttachment != null) {
-                        if (weapon.addAttachment(selectedAttachment)) {
-                            helpLabel.setText(selectedAttachment.getName() + " added to weapon " + weapon.getName());
-                        } else {
-                            helpLabel.setText("NO! yuou cant have many attachments!");
-                        }
-                        selectedAttachment = null;
-                        updateInventory();
-                    }
+
                 }
             });
 
@@ -152,6 +144,20 @@ public class InventoryUI {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         // Remove attachment from weapon
+                        if (selectedAttachment != null) {
+                            // TODO FIX ALL THIS SHIT
+                            if (weapon.addAttachment(selectedAttachment)) {
+                                helpLabel.setText(selectedAttachment.getName() + " added to weapon " + weapon.getName());
+                            } else {
+                                helpLabel.setText("NO! yuou cant have many attachments!");
+                            }
+                            selectedAttachment = null;
+                            updateInventory();
+                        } else {
+                            weapon.removeAttachment(attachmentButton.getAttachment());
+                            attachmentButton.setAttachment(null);
+                        }
+
                         if (attachmentButton.getAttachment() != null) {
                             weapon.removeAttachment(attachmentButton.getAttachment());
                         }
