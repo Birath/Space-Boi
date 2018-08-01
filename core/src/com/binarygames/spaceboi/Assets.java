@@ -28,6 +28,9 @@ public class Assets {
         Entity assets
      */
 
+    // Enemies
+    public static final String MISSILE_LAUNCH = "game/entities/enemies/flying_ship/missile_launch.wav"; // https://freesound.org/people/Audionautics/sounds/171655/
+
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
     public static final String LAUNCH_PAD = "game/entities/planets/launch_pad.png";
@@ -75,6 +78,7 @@ public class Assets {
         UI
      */
 
+    public static final String UI_EMPTY_ATTACHMENT = "game/ui/empty_attachment.png";
     public static final String UI_HEALTH_ICON = "game/ui/health_icon.png";
     public static final String UI_SILENCER_ICON = "game/ui/silencer_icon.jpg";
     public static final String UI_EXPERIENCE_ICON = "game/ui/experience_icon.jpg";
@@ -107,6 +111,9 @@ public class Assets {
         /*
             Entities
          */
+
+        // Enemies
+        assetManager.load(MISSILE_LAUNCH, Sound.class);
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class);
@@ -154,6 +161,7 @@ public class Assets {
             UI
          */
 
+        assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class);
         assetManager.load(UI_HEALTH_ICON, Texture.class);
         assetManager.load(UI_SILENCER_ICON, Texture.class);
         assetManager.load(UI_EXPERIENCE_ICON, Texture.class);
