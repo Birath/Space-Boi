@@ -87,6 +87,12 @@ public class Assets {
     public static final String UI_LIFESTEAL_ICON = "game/ui/glass_cannon_icon.png";
     public static final String UI_SLOW_ICON = "game/ui/glass_cannon_icon.png";
 
+    // PICKUPS
+    public static final String PICKUP_HEALTH = "game/entities/pickups/norrlands_health.png";
+
+    // Minimap markers
+    public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
+
     private AssetManager assetManager;
 
     public Assets(AssetManager assetManager) {
@@ -162,6 +168,14 @@ public class Assets {
         assetManager.load(UI_EXPERIENCE_ICON, Texture.class);
         assetManager.load(UI_RECOIL_ICON, Texture.class);
         assetManager.load(UI_GLASS_CANNON_ICON, Texture.class);
+
+        /*
+            PICKUPS
+        */
+        assetManager.load(PICKUP_HEALTH, Texture.class);
+
+        // Minimap markers
+        assetManager.load(MARKER_PLANET, Texture.class);
     }
 
     /*

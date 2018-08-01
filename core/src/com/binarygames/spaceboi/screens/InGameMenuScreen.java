@@ -56,8 +56,6 @@ public class InGameMenuScreen {
         stage.addActor(image);
 
         createButtons();
-
-
     }
 
     private void createButtons() {
@@ -88,8 +86,8 @@ public class InGameMenuScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenuScreen(game));
-                //gameScreen.dispose();
-                dispose();
+                gameScreen.dispose();
+                //dispose();
             }
         });
         stage.addActor(quitButton);
@@ -109,5 +107,11 @@ public class InGameMenuScreen {
 
     public void dispose() {
         stage.dispose();
+        if (frameTex != null) { frameTex.dispose(); }
+    }
+
+    public void reset(){
+        stage.clear();
+        frameTex.dispose();
     }
 }

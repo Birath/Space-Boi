@@ -4,16 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.screens.Fonts;
 
@@ -38,6 +41,15 @@ public class GameUI {
     private ProgressBar healthBar;
     private ProgressBar.ProgressBarStyle healthBarStyle;
 
+    private ProgressBar xpBar;
+    private ProgressBar.ProgressBarStyle xpBarStyle;
+    private Label currentLevel;
+    private Label nextLevel;
+
+    private XP_handler xpHandler;
+
+    private ClickListener clickListener;
+
     private WeaponStats weaponStats1;
     private WeaponStats weaponStats2;
     private WeaponStats weaponStats3;
@@ -47,8 +59,9 @@ public class GameUI {
     private Fonts fonts;
 
 
-    public GameUI(SpaceBoi game, Player player) {
+    public GameUI(SpaceBoi game, Player player, XP_handler xpHandler) {
         this.player = player;
+        this.xpHandler = xpHandler;
         stage = new Stage();
         fonts = new Fonts();
 
@@ -82,11 +95,58 @@ public class GameUI {
         healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2, 100, 20);
         stage.addActor(healthBar);
 
+        // XP bar
+        xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
+        xpBar.setValue(0);
+        xpBar.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 50);
 
-        weaponStats1 = new WeaponStats(stage,stage.getWidth()/20, stage.getHeight()*9/10, player.getWeaponList().get(0).getMagSize());
-        weaponStats2 = new WeaponStats(stage,stage.getWidth()*3/20, stage.getHeight()*9/10, player.getWeaponList().get(1).getMagSize());
-        weaponStats3 = new WeaponStats(stage,stage.getWidth()*5/20, stage.getHeight()*9/10, player.getWeaponList().get(2).getMagSize());
+        currentLevel = new Label(String.valueOf(xpHandler.getLevel()), labelStyle);
+        nextLevel = new Label(String.valueOf(xpHandler.getNextLevel()), labelStyle);
+        currentLevel.setBounds(0,0, currentLevel.getWidth(), currentLevel.getHeight());
+        nextLevel.setFontScale(0.6f);
+        nextLevel.setBounds(Gdx.graphics.getWidth()/2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), nextLevel.getHeight());
+        nextLevel.setVisible(false);
 
+        Fonts fonts = new Fonts();
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
+        textButtonStyle.font = fonts.getButtonFont();
+
+        Button button = new TextButton("Hej", textButtonStyle);
+        button.setBounds(300, 300, 300, 300);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                Gdx.app.log("debug", "hej");
+                nextLevel.setVisible(true);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                Gdx.app.log("debug", "då");
+                nextLevel.setVisible(false);
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.app.log("debug", "clicked");
+            }
+        });
+
+        stage.addActor(button);
+        stage.addActor(xpBar);
+        stage.addActor(currentLevel);
+        stage.addActor(nextLevel);
+
+
+
+        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
+        weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
+        weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
+
+        stage.setDebugAll(true);
     }
 
     public void act(float delta) {
@@ -94,8 +154,12 @@ public class GameUI {
         updateWeaponStats(weaponStats1, 0);
         updateWeaponStats(weaponStats2, 1);
         updateWeaponStats(weaponStats3, 2);
+        currentLevel.setText(String.valueOf(xpHandler.getLevel()));
+        nextLevel.setText(String.valueOf(xpHandler.getNextLevel()));
 
-        stage.act();
+        xpBar.setValue(xpHandler.getCurrentXP());
+
+        stage.act(delta);
     }
 
     public void draw() {
@@ -159,6 +223,30 @@ public class GameUI {
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
         healthBarStyle.knobBefore = drawable;
+
+        // xpBarStyle
+
+        pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 50, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0,0);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        xpBarStyle = new ProgressBar.ProgressBarStyle();
+        xpBarStyle.background = drawable;
+
+        pixmap = new Pixmap(0, Gdx.graphics.getHeight() / 50, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.ORANGE);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        xpBarStyle.knob = drawable;
+
+        pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/50, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.ORANGE);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        xpBarStyle.knobBefore = drawable;
     }
 
     private void updateHealth(Integer health) {
@@ -168,15 +256,24 @@ public class GameUI {
     }
 
     private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex) {
-            if(player.getWeaponList().get(weaponIndex).getCurrentReloadTime() == 0) weaponStats.getWeaponSlot().setValue(100);
-            else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime()/
-                    player.getWeaponList().get(weaponIndex).getReloadTime())*100);
+        if (player.getWeaponList().get(weaponIndex).getCurrentReloadTime() == 0)
+            weaponStats.getWeaponSlot().setValue(100);
+        else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime() /
+                player.getWeaponList().get(weaponIndex).getReloadTime()) * 100);
 
-            weaponStats.getAmmoBar().setValue(player.getWeaponList().get(weaponIndex).getCurrentMag());
+        weaponStats.getAmmoBar().setValue(player.getWeaponList().get(weaponIndex).getCurrentMag());
     }
 
     public void dispose() {
         stage.dispose();
+    }
+
+    public void debugMinimap(Sprite minimap) {
+        Image image1 = new Image(minimap);
+        //image1.setSize(1000, 500);
+        image1.setPosition(0, 0);
+        image1.setOrigin(950, 500);
+        stage.addActor(image1);
     }
 
 }
