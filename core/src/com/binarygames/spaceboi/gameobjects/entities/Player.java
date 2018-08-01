@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
@@ -323,6 +324,8 @@ public class Player extends EntityDynamic {
     public void reduceHealth(int amount) {
         if (!god) {
             health -= amount;
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
+                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
         }
     }
 
