@@ -233,6 +233,8 @@ public abstract class Enemy extends EntityDynamic {
         playRandomSound(damagedSounds);
 
         if(enemyKind == EnemyKind.BIOLOGICAL){
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
+                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
             this.reduceHealth(bullet.getBioDamage());
             if(bullet.getBioDamage() > 0){
                 gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.FIRE,
@@ -244,10 +246,6 @@ public abstract class Enemy extends EntityDynamic {
             if(bullet.getMechDamage() > 0){
                 //apply mechdamage graphical effect
             }
-        }
-        else{
-            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
-                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
         }
 
         if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()){
