@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -47,8 +45,6 @@ public class GameUI {
     private Label nextLevel;
 
     private XP_handler xpHandler;
-
-    private ClickListener clickListener;
 
     private WeaponStats weaponStats1;
     private WeaponStats weaponStats2;
@@ -96,58 +92,39 @@ public class GameUI {
         stage.addActor(healthBar);
 
         // XP bar
-        xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
-        xpBar.setValue(0);
-        xpBar.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 50);
-
         currentLevel = new Label(String.valueOf(xpHandler.getLevel()), labelStyle);
-        nextLevel = new Label(String.valueOf(xpHandler.getNextLevel()), labelStyle);
+        nextLevel = new Label(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()), labelStyle);
         currentLevel.setBounds(0,0, currentLevel.getWidth(), currentLevel.getHeight());
         nextLevel.setFontScale(0.6f);
         nextLevel.setBounds(Gdx.graphics.getWidth()/2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), nextLevel.getHeight());
         nextLevel.setVisible(false);
 
-        Fonts fonts = new Fonts();
-        TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = fonts.getButtonFont();
+        xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
+        xpBar.setValue(0);
+        xpBar.setBounds(0 + currentLevel.getWidth(), 0, Gdx.graphics.getWidth() - currentLevel.getWidth(), Gdx.graphics.getHeight() / 50);
 
-        Button button = new TextButton("Hej", textButtonStyle);
-        button.setBounds(300, 300, 300, 300);
-        button.setPosition(300, 300);
-
-        button.addListener(new ClickListener() {
+        xpBar.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
-                Gdx.app.log("debug", "hej");
                 nextLevel.setVisible(true);
             }
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 super.exit(event, x, y, pointer, toActor);
-                Gdx.app.log("debug", "då");
                 nextLevel.setVisible(false);
-            }
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                Gdx.app.log("debug", "clicked");
             }
         });
 
-        stage.addActor(button);
         stage.addActor(xpBar);
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
-
-
 
         weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
         weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
         weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
 
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
     }
 
     public void act(float delta) {
@@ -156,9 +133,9 @@ public class GameUI {
         updateWeaponStats(weaponStats2, 1);
         updateWeaponStats(weaponStats3, 2);
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
-        nextLevel.setText(String.valueOf(xpHandler.getNextLevel()));
+        nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
 
-        xpBar.setValue(xpHandler.getCurrentXP());
+        xpBar.setValue((xpHandler.getCurrentXP() / xpHandler.getNextLevel()) * 100);
 
         stage.act(delta);
     }
