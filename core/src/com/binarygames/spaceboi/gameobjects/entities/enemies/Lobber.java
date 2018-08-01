@@ -8,6 +8,11 @@ public class Lobber extends Enemy {
     }
 
     @Override
+    protected void getSounds() {
+
+    }
+
+    @Override
     protected void updateIdle(float delta) {
 
     }
