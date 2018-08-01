@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.lang.reflect.Method;
-
-import static com.badlogic.gdx.math.MathUtils.random;
 
 public abstract class Enemy extends EntityDynamic {
 
@@ -247,6 +244,10 @@ public abstract class Enemy extends EntityDynamic {
             if(bullet.getMechDamage() > 0){
                 //apply mechdamage graphical effect
             }
+        }
+        else{
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
+                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
         }
 
         if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()){
