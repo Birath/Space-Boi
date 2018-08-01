@@ -96,8 +96,9 @@ public class GameScreen implements Screen {
         player = gameWorld.getPlayer();
 
         //UI
-        gameUI = new GameUI(game, player);
+        gameUI = new GameUI(game, player, gameWorld.getXp_handler());
         miniMap = new MiniMap(game.getBatch(), gameWorld);
+        //gameUI.debugMinimap(miniMap.getMinimap());
 
         console = new Console(game, this, gameWorld);
         inventoryUI = new InventoryUI(this, gameWorld);
@@ -216,7 +217,7 @@ public class GameScreen implements Screen {
     private void draw() {
         switch (state) {
             case GAME_RUNNING:
-                miniMap.render();
+                //miniMap.render();
                 gameUI.draw();
                 break;
             case GAME_PAUSED:
@@ -291,6 +292,7 @@ public class GameScreen implements Screen {
         if (state == GAME_PAUSED) {
             Gdx.input.setInputProcessor(multiplexer);
             state = GAME_RUNNING;
+            inGameMenuScreen.reset();
         }
     }
 

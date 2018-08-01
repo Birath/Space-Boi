@@ -367,6 +367,10 @@ public class GameWorld {
         return camera;
     }
 
+    public WorldGenerator getWorldGenerator() {
+        return worldGenerator;
+    }
+
     private void dispose() {
         world.dispose();
         game.getScreen().dispose();
