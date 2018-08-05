@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
         multiplexer.addProcessor(gameUI.getStage());
         multiplexer.addProcessor(inputProcessor);
 
-        debugRenderer = new Box2DDebugRenderer();
+        debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
         state = GAME_RUNNING;
     }

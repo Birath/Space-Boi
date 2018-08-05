@@ -9,10 +9,26 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
-public class FinalBoss extends Enemy {
+public class FinalBoss extends Enemy implements MeleeEnemy {
     public static final int MINIMUM_CANNON_DISTANCE = 500;
+
+    private static final float CHARGE_ATTACK_COOLDOWN = 10.0f;
+    private static final float MINIMUM_CHARGE_DISTANCE = 700;
+    private static final float CHARGE_CHANNEL_TIME = 2.0f;
+    private static final float CHARGE_SPEED = 30;
+
+    private float timeSinceLastCharge = 0;
+    private float timeSinceChannelStarted = 0;
     private float angle;
     private Cannon cannon;
+
+    private enum ChargeState {
+        CHANNELING, CHARGING, COOLDOWN
+    }
+    private ChargeState chargeState = ChargeState.COOLDOWN;
+    private boolean channelingCharge = false;
+    private boolean charging = false;
+
 
     public FinalBoss(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FINAL_BOSS, EnemyType.FINAL_BOSS.getWidth(), EnemyType.FINAL_BOSS.getHeight());
@@ -23,6 +39,11 @@ public class FinalBoss extends Enemy {
     @Override
     public void update(float delta) {
         super.update(delta);
+        if (chargeState == ChargeState.CHANNELING) {
+            timeSinceChannelStarted += delta;
+        } else if (chargeState == ChargeState.COOLDOWN) {
+            timeSinceLastCharge += delta;
+        }
         body.setTransform(body.getPosition(), angle * MathUtils.degreesToRadians + MathUtils.PI / 2);
     }
 
@@ -45,14 +66,47 @@ public class FinalBoss extends Enemy {
 
     @Override
     protected void updateAttacking(float delta) {
-        if (shouldShootCannon()) {
+        if (shouldStartCharging()) {
+            chargeState = ChargeState.CHANNELING;
+            Gdx.app.log("FinalBoss", "Starting channel");
+            standStill();
+        }
+        else if (shouldCharge()) {
+            charge();
+        }
+        else if (chargeState == ChargeState.CHANNELING) {
+           Gdx.app.log("FinalBoss", "Channeling charge");
+            standStill();
+        }
+
+        else if (shouldShootCannon()) {
             shoot(cannon);
             standStill();
         } else {
             moveAlongPlanet();
             //standStill();
         }
+    }
 
+    private void charge() {
+        if (chargeState == ChargeState.CHANNELING) {
+            chargeState = ChargeState.CHARGING;
+        }
+        Vector2 chargeVector = perpen.cpy();
+        chargeVector.scl(CHARGE_SPEED);
+        if (moveRight) {
+            body.applyForceToCenter(chargeVector, true);
+        } else if (moveLeft) {
+            body.applyForceToCenter(chargeVector.scl(-1), true);
+        }
+    }
+
+    private boolean shouldCharge() {
+        return timeSinceChannelStarted > CHARGE_CHANNEL_TIME;
+    }
+
+    private boolean shouldStartCharging() {
+        return chargeState == ChargeState.COOLDOWN && timeSinceLastCharge > CHARGE_ATTACK_COOLDOWN && MINIMUM_CHARGE_DISTANCE > body.getPosition().dst2(player.getBody().getPosition());
     }
 
     private boolean shouldShootCannon() {
@@ -63,6 +117,7 @@ public class FinalBoss extends Enemy {
     protected void updateJumping(float delta) {
         //moveAlongPlanet();
     }
+
 
     private void shoot(Weapon shootWeapon) {
         if (!shootWeapon.canShoot()) {
@@ -84,5 +139,16 @@ public class FinalBoss extends Enemy {
 
     public float getAngle() {
         return angle;
+    }
+
+    @Override
+    public void touchedPlayer() {
+        if (chargeState == ChargeState.CHARGING) {
+            timeSinceLastCharge = 0;
+            timeSinceChannelStarted = 0;
+            chargeState = ChargeState.COOLDOWN;
+            Gdx.app.log("FinalBoss", "Should stop charge");
+            // Play melee animation
+        }
     }
 }

@@ -3,7 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
-public class Chaser extends Enemy {
+public class Chaser extends Enemy implements MeleeEnemy {
 
     private int damage = 30;
 
@@ -48,7 +48,7 @@ public class Chaser extends Enemy {
     }
 
     private void dealDamage(){
-        if ((TimeUtils.millis() - timeLastTouched > damageDelay) && touchingPlayer){
+        if ((TimeUtils.millis() - timeLastTouched > damageDelay) && touchingPlayer) {
             gameWorld.getPlayer().reduceHealth(damage);
             //Play bleed animation
             timeLastTouched = TimeUtils.millis();

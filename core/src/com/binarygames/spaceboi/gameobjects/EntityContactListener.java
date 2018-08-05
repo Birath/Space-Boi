@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.MeleeEnemy;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Bullet;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
@@ -70,15 +71,15 @@ public class EntityContactListener implements ContactListener {
                 bullet.setHasHit(true);
             }
         }
-        //Player x Chaser
-        else if (Chaser.class.isInstance(fixtureA.getBody().getUserData()) &&
+        //Player x Melee enemy
+        else if (MeleeEnemy.class.isInstance(fixtureA.getBody().getUserData()) &&
                 Player.class.isInstance(fixtureB.getBody().getUserData())) {
-            Chaser chaser = (Chaser) fixtureA.getBody().getUserData();
-            chaser.touchedPlayer();
+            MeleeEnemy meleeEnemy = (MeleeEnemy) fixtureA.getBody().getUserData();
+            meleeEnemy.touchedPlayer();
         } else if (Player.class.isInstance(fixtureA.getBody().getUserData()) &&
-                Chaser.class.isInstance(fixtureB.getBody().getUserData())) {
-            Chaser chaser = (Chaser) fixtureB.getBody().getUserData();
-            chaser.touchedPlayer();
+                MeleeEnemy.class.isInstance(fixtureB.getBody().getUserData())) {
+            MeleeEnemy meleeEnemy = (MeleeEnemy) fixtureB.getBody().getUserData();
+            meleeEnemy.touchedPlayer();
         }
 
 
