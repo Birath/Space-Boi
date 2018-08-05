@@ -123,8 +123,6 @@ public class GameUI {
         weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
         weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
         weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
-
-        //stage.setDebugAll(true);
     }
 
     public void act(float delta) {
@@ -135,7 +133,8 @@ public class GameUI {
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
         nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
 
-        xpBar.setValue((xpHandler.getCurrentXP() / xpHandler.getNextLevel()) * 100);
+        xpBar.setRange(0, xpHandler.getNextLevel());
+        xpBar.setValue(xpHandler.getCurrentXP());
 
         stage.act(delta);
     }
