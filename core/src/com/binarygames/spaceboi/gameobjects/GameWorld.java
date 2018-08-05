@@ -319,7 +319,7 @@ public class GameWorld {
         closestPlanet = finalBoss.getClosestPlanet();
         relativeVector = closestPlanet.getBody().getPosition().sub(finalBoss.getBody().getPosition());
         angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
-        finalBoss.setAngle(MathUtils.lerpAngleDeg(finalBoss.getAngle(), angleToPlanet, delta * 5));
+        finalBoss.setAngle(MathUtils.lerpAngleDeg(finalBoss.getAngle(), angleToPlanet, delta * 15));
     }
 
     public ArrayList<Planet> getPlanets() {
