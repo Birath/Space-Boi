@@ -7,12 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public abstract class Enemy extends EntityDynamic {
 
@@ -38,6 +42,15 @@ public abstract class Enemy extends EntityDynamic {
 
     private Bullet lastBullet;
 
+    private EnemyKind enemyKind;
+    private static final int MINIMUM_MOVESPEED = 2;
+
+    protected List<String> attackSounds = new ArrayList();
+    protected List<String> damagedSounds = new ArrayList();
+    protected List<String> deathSounds = new ArrayList();
+
+
+
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType, float width, float height) {
         super(gameWorld, x, y, path, enemyType.getMass(), width, height, enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
         createEnemy(gameWorld, enemyType);
@@ -45,6 +58,7 @@ public abstract class Enemy extends EntityDynamic {
 
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType) {
         super(gameWorld, x, y, path, enemyType.getMass(), enemyType.getRad(), enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+        getSounds();
         createEnemy(gameWorld, enemyType);
     }
 
@@ -73,7 +87,11 @@ public abstract class Enemy extends EntityDynamic {
         Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         healthBar = new ProgressBar(0, health, 1, false, uiSkin);
         lastHealth = maxHealth;
+        this.enemyKind = enemyType.getEnemyKind();
     }
+
+    protected abstract void getSounds();
+
 
 
     @Override
@@ -119,12 +137,18 @@ public abstract class Enemy extends EntityDynamic {
         } else {
             xpIncrease = enemyXP;
         }
+
+        playRandomSound(deathSounds);
         gameWorld.getXp_handler().increaseXP(xpIncrease);
-        /*
-        System.out.println("level " + gameWorld.getXp_handler().getLevel());
-        System.out.println("xp " + gameWorld.getXp_handler().getCurrentXP());
-        System.out.println("nextlevel " + gameWorld.getXp_handler().getNextLevel());
-        */
+    }
+
+    private void playRandomSound(List<String> soundList){
+        if(soundList.size() < 1){
+            return;
+        }
+        Random random = new Random();
+        int selectedSound = random.nextInt(soundList.size());
+        gameWorld.getGame().getSoundManager().play(soundList.get(selectedSound));
     }
 
     protected void updateToPlanet() {
@@ -190,6 +214,7 @@ public abstract class Enemy extends EntityDynamic {
             lastHealth = health;
         } else if (toPlayer.len2() < aggroDistance && !hasNoticedPlayer) {
             hasNoticedPlayer = true;
+            playRandomSound(attackSounds);
         } else if (health != lastHealth && !hasNoticedPlayer) {
             hasNoticedPlayer = true;
         }
@@ -216,5 +241,32 @@ public abstract class Enemy extends EntityDynamic {
         healthBar.setValue(health);
         healthBar.draw(batch, 1);
 
+    }
+    public void receiveWeaponEffects(Bullet bullet){
+        this.reduceHealth(bullet.getDamage());
+        playRandomSound(damagedSounds);
+
+        if(enemyKind == EnemyKind.BIOLOGICAL){
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
+                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
+            this.reduceHealth(bullet.getBioDamage());
+            if(bullet.getBioDamage() > 0){
+                gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.FIRE,
+                        this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
+            }
+        }
+        else if(enemyKind == EnemyKind.MECHANICAL){
+            this.reduceHealth(bullet.getMechDamage());
+            if(bullet.getMechDamage() > 0){
+                //apply mechdamage graphical effect
+            }
+        }
+
+        if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()){
+            this.setMoveSpeed(this.getMoveSpeed() - bullet.getSlow());
+            if(bullet.getMechDamage() > 0){
+                //Apply slow particle
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
@@ -309,7 +310,6 @@ public class Player extends EntityDynamic {
     }
 
     public void hitLauchPad(LaunchPad launchPad) {
-        // TODO: 2018-07-21 implement
         if (getClosestPlanet() != null) {
             launchPlanet = getClosestPlanet();
             entityState = ENTITY_STATE.JUMPING;
@@ -317,12 +317,15 @@ public class Player extends EntityDynamic {
             removeJoints();
             isChained = false;
         }
+        gameWorld.getGame().getSoundManager().play(Assets.LAUNCH_PAD_SOUND);
     }
 
     @Override
     public void reduceHealth(int amount) {
         if (!god) {
             health -= amount;
+            gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
+                    this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
         }
     }
 

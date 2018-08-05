@@ -37,6 +37,8 @@ public class HomingRocketLauncher extends Weapon {
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();
+
+            gameWorld.getGame().getSoundManager().play(Assets.MISSILE_LAUNCH);
         }
     }
 }

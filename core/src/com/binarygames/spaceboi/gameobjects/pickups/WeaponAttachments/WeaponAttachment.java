@@ -1,6 +1,8 @@
 package com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments;
 
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
@@ -12,7 +14,7 @@ public abstract class WeaponAttachment extends Pickup {
 
     @Override
     public void onRemove() {
-
+        
     }
 
     @Override
@@ -22,8 +24,9 @@ public abstract class WeaponAttachment extends Pickup {
 
     @Override
     public void onHit(Player player) {
-        //applyAttachment(gameWorld.getPlayer().getWeapon());
         player.addToInventory(this);
+        gameWorld.getGame().getSoundManager().play(Assets.ATTACHMENT_PICK_1);
+        //gameWorld.getGame().getSoundManager().play(Assets.ATTACHMENT_PICK_2);
         remove = true;
     }
 

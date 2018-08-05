@@ -1,6 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.utils.TimeUtils;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class Chaser extends Enemy implements MeleeEnemy {
@@ -14,6 +15,13 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     public Chaser(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.CHASER);
+    }
+
+    @Override
+    protected void getSounds() {
+        attackSounds.add(Assets.DOG1);
+        attackSounds.add(Assets.DOG2);
+        attackSounds.add(Assets.DOG3);
     }
 
     @Override

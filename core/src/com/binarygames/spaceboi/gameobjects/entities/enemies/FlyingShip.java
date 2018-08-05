@@ -15,6 +15,12 @@ public class FlyingShip extends Enemy {
 
         shotgun = new Shotgun(gameWorld, this);
     }
+
+    @Override
+    protected void getSounds() {
+
+    }
+
     @Override
     protected void updateIdle(float delta) {
         //Do nothing

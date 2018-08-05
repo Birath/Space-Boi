@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.effects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +13,7 @@ public class ParticleHandler {
     private SpaceBoi game;
 
     private ParticleEffectPool bloodEffectPool;
+    private ParticleEffectPool fireEffectPool;
     private Array<ParticleEffectPool.PooledEffect> effects;
 
     public ParticleHandler(SpaceBoi game) {
@@ -29,6 +29,11 @@ public class ParticleHandler {
         bloodEffect.loadEmitterImages(effectsAtlas);
         bloodEffect.scaleEffect(0.1f);
         bloodEffectPool = new ParticleEffectPool(bloodEffect, 1, 50);
+
+        ParticleEffect fireEffect = game.getAssetManager().get(Assets.PARTICLE_FIRE, ParticleEffect.class);
+        fireEffect.loadEmitterImages(effectsAtlas);
+        fireEffect.scaleEffect(0.1f);
+        fireEffectPool = new ParticleEffectPool(fireEffect, 1, 50);
     }
 
     public void updateAndDrawEffects(SpriteBatch batch, float delta) {
@@ -48,13 +53,16 @@ public class ParticleHandler {
             case BLOOD:
                 effect = bloodEffectPool.obtain();
                 break;
+            case FIRE:
+                effect = fireEffectPool.obtain();
+                break;
         }
         effect.setPosition(x, y);
         effects.add(effect);
     }
 
     public enum EffectType {
-        BLOOD
+        BLOOD, FIRE
     }
 
 }

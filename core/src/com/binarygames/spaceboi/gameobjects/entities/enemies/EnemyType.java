@@ -1,35 +1,37 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 public enum EnemyType {
-    CHASER (400, 8, 5, 15, 10, 20),
-    SHOOTER(150, 10, 50, 5, 50, 50),
-    FLYING_SHIP(300, 20, 200, 5, 50, 100),
-    SPAWNER(600, 15, 100, 0, 0, 80),
-    FINAL_BOSS(100000, 50, 200, 1000, 5, 2, 10000);
+    CHASER (400, 8, 5, 15, 10, 20, EnemyKind.BIOLOGICAL),
+    SHOOTER(150, 10, 50, 5, 50, 50, EnemyKind.BIOLOGICAL),
+    FLYING_SHIP(300, 20, 200, 5, 50, 100,  EnemyKind.MECHANICAL),
+    SPAWNER(600, 15, 100, 0, 0, 80, EnemyKind.MECHANICAL),
+    FINAL_BOSS(100000, 50, 200, 1000, 5, 2, 10000, EnemyKind.MECHANICAL);
 
     private final float mass;
     private final float rad;
     private final int health;
     private final int moveSpeed;
     private final int jumpHeight;
+    private final EnemyKind enemyKind;
     private final int exp;
 
     private final int width;
     private final int height;
 
-    private EnemyType(float mass, float rad, int health, int moveSpeed, int jumpHeight, int exp) {
+    private EnemyType(float mass, float rad, int health, int moveSpeed, int jumpHeight, int exp, EnemyKind enemyKind) {
         this.mass = mass;
         this.rad = rad;
         this.health = health;
         this.moveSpeed = moveSpeed;
         this.jumpHeight = jumpHeight;
         this.exp = exp;
+        this.enemyKind = enemyKind;
 
         this.width = 0;
         this.height = 0;
     }
 
-    EnemyType(int mass, int width, int height, int health, int moveSpeed, int jumpHeight, int exp) {
+    EnemyType(int mass, int width, int height, int health, int moveSpeed, int jumpHeight, int exp,  EnemyKind enemyKind) {
         this.mass = mass;
         this.width = width;
         this.height = height;
@@ -39,6 +41,7 @@ public enum EnemyType {
         this.exp = exp;
 
         this.rad = 0;
+        this.enemyKind = enemyKind;
     }
 
     public float getMass(){
@@ -59,6 +62,10 @@ public enum EnemyType {
 
     public int getJumpHeight() {
         return jumpHeight;
+    }
+
+    public EnemyKind getEnemyKind() {
+        return enemyKind;
     }
 
     public int getExp() {

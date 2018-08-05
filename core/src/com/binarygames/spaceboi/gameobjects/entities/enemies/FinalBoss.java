@@ -48,6 +48,11 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     }
 
     @Override
+    protected void getSounds() {
+
+    }
+
+    @Override
     public void update(float delta) {
         super.update(delta);
 

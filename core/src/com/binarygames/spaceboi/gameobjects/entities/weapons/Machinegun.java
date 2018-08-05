@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -8,6 +9,9 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Machinegun extends Weapon {
+
+    private Sound shot;
+    private long shotID = 0;
 
     public Machinegun(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
@@ -28,6 +32,8 @@ public class Machinegun extends Weapon {
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
         sprite.setSize(radius * 2, radius * 2);
         sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+
+        shot = gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MACHINEGUN_SHOT, Sound.class);
     }
 
     @Override
@@ -36,7 +42,22 @@ public class Machinegun extends Weapon {
             shootDirection.scl(bulletSpeed);
             new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
+
+            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
         }
-        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
+
+        /*
+        if (canShoot() && gameWorld.getGame().getPreferences().isSoundEnabled()) {
+            if (shotID != 0) {
+                shot.stop(shotID);
+            }
+            shotID = shot.play(gameWorld.getGame().getPreferences().getSoundVolume());
+        }
+        */
+    }
+
+    @Override
+    public void onReload() {
+        gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_RELOAD);
     }
 }
