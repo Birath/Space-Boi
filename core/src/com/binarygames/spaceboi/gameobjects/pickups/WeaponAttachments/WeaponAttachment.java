@@ -2,12 +2,27 @@ package com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments;
 
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class WeaponAttachment extends Pickup {
+
+    public static final List<Class<? extends WeaponAttachment>> WEAPON_ATTACHMENTS = Arrays.asList(
+        BioDamage.class,
+        Experience.class,
+        GlassCannon.class,
+        LifeSteal.class,
+        MechDamage.class,
+        Recoil.class,
+        Silencer.class,
+        Slow.class
+    );
+
+
     public WeaponAttachment(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
     }
@@ -43,4 +58,5 @@ public abstract class WeaponAttachment extends Pickup {
     public abstract String getName();
 
     public abstract String getDescription();
+
 }

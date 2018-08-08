@@ -11,7 +11,10 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +23,7 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public class WorldGenerator {
     private static final int OFFSET = 10;
+    public static final int ATTACHMENT_MASS = 300;
     private GameWorld gameWorld;
 
     private static final int MAX_RAD = 450;
@@ -83,16 +87,19 @@ public class WorldGenerator {
                 angleOffset = random.nextInt(30);
                 angleOffset = -15 + angleOffset; //  -15<=planetOffset<=15
             }
-
+            int attachmentPlanetNumber = random.nextInt(numberOfPlanetsInRow);
             for (int planetNumber = 0; planetNumber < numberOfPlanetsInRow; planetNumber++) {
+
+                boolean shouldSpawnAttachment = planetNumber == attachmentPlanetNumber;
                 boolean isLastPlanet = (planetNumber == numberOfPlanetsInRow - 1) && (circleNumber == NUMBER_OF_CIRCLES - 1);
-                spawnPlanetAndEntities(angleOffset, isMultiPlanetRow, circleNumber, rowRadius, isLastPlanet, angleBetweenPlanets, planetNumber);
+
+                spawnPlanetAndEntities(angleOffset, isMultiPlanetRow, circleNumber, rowRadius, isLastPlanet, angleBetweenPlanets, planetNumber, shouldSpawnAttachment);
             }
         }
         createLaunchPadBetweenRows();
     }
 
-    private void spawnPlanetAndEntities(int angleOffset, boolean isMultiPlanetRow, int circleNumber, float rowRadius, boolean isLastPlanet, float angleBetweenPlanets, int planetNumber) {
+    private void spawnPlanetAndEntities(int angleOffset, boolean isMultiPlanetRow, int circleNumber, float rowRadius, boolean isLastPlanet, float angleBetweenPlanets, int planetNumber, boolean shouldSpawnAttachment) {
         int currentX = (int) Math.round(rowRadius * Math.cos((angleBetweenPlanets * planetNumber) + angleOffset));
         int currentY = (int) Math.round(rowRadius * Math.sin((angleBetweenPlanets * planetNumber) + angleOffset));
 
@@ -101,6 +108,13 @@ public class WorldGenerator {
         createEnemies(currentX, currentY, planetRadius, circleNumber, isLastPlanet);
 
         if (isMultiPlanetRow) { //If multiplanetrow -> spawn ordinary launchpads
+
+            try {
+                spawnAttachment(new Vector2(currentX, currentY), planetRadius);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+                Gdx.app.error("WorldGenerator", "Failed to spawnAttachment", e);
+            }
+
             //Create launchpad to next
             int prevX = (int) Math.round(rowRadius * Math.cos((angleBetweenPlanets * (planetNumber - 1)) + angleOffset));
             int prevY = (int) Math.round(rowRadius * Math.sin((angleBetweenPlanets * (planetNumber - 1)) + angleOffset));
@@ -132,6 +146,14 @@ public class WorldGenerator {
         gameWorld.addStaticEntity(planet);
 
         return planet;
+    }
+
+    private void spawnAttachment(Vector2 planetPosition, float planetRadius) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
+        // TODO Add picture based on class name
+        WeaponAttachment attachment = attachementConstructor.newInstance(gameWorld, planetPosition.x + planetRadius, planetPosition.y + planetRadius, Assets.PLANET_MOON, ATTACHMENT_MASS, 7);
+        gameWorld.addDynamicEntity(attachment);
     }
 
     private void createEnemies(int x, int y, int rad, int circleNumber, boolean isLastPlanet) {
@@ -240,9 +262,6 @@ public class WorldGenerator {
         for (Planet planet : gameWorld.getPlanets()) {
             Vector2 planetPos = planet.getBody().getPosition();
             float distance = planetPos.dst(pos);
-            Gdx.app.log("WorldGenerator", "Range" + LAUNCHPAD_RANGE);
-            Gdx.app.log("WorldGenerator", "distance: " + distance);
-
             if (LAUNCHPAD_RANGE >= distance && distance > 2) { //seem to need error margin for the second part
                 planetsWithinRange.add(planet);
             }
