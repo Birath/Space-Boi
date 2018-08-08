@@ -92,7 +92,7 @@ public class GameUI {
         // Health bar
         healthBar = new ProgressBar(0, 100, 1, false, healthBarStyle);
         healthBar.setValue(health);
-        healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2, 100, 20);
+        healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2 + (Gdx.graphics.getHeight() / 40), 100, 20);
         stage.addActor(healthBar);
 
         // XP bar
@@ -100,12 +100,12 @@ public class GameUI {
         nextLevel = new Label(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()), labelStyle);
         currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
         nextLevel.setFontScale(0.6f);
-        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), nextLevel.getHeight());
         nextLevel.setVisible(false);
 
         xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
         xpBar.setValue(0);
         xpBar.setBounds(0 + currentLevel.getWidth(), 0, Gdx.graphics.getWidth() - currentLevel.getWidth(), Gdx.graphics.getHeight() / 50);
+        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), xpBar.getHeight());
 
         xpBar.addListener(new ClickListener() {
             @Override
@@ -138,6 +138,13 @@ public class GameUI {
         updateWeaponStats(weaponStats3, 2);
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
         nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
+
+        if ((xpBar.getValue() * (Gdx.graphics.getWidth() / xpBar.getMaxValue())) < nextLevel.getWidth()) {
+            nextLevel.setPosition(Gdx.graphics.getWidth()/2 - nextLevel.getWidth(), 0);
+        }
+        else {
+            nextLevel.setPosition(((Gdx.graphics.getWidth() / xpBar.getMaxValue()) * xpBar.getValue()) / 2, 0);
+        }
 
         xpBar.setRange(0, xpHandler.getNextLevel());
         xpBar.setValue(xpHandler.getCurrentXP());
