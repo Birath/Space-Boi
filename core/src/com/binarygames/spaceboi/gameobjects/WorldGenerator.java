@@ -217,7 +217,7 @@ public class WorldGenerator {
     private void createLaunchPad(int x, int y, int planetRadius, float angle) {
         int padX = x + (int) (planetRadius * Math.cos(angle));
         int padY = y + (int) (planetRadius * Math.sin(angle));
-        //gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
+        gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
     }
 
     public int generatePlayerX() {
