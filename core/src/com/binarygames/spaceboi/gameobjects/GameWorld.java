@@ -12,15 +12,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
+import com.binarygames.spaceboi.background_functions.XP_handler;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
-import com.binarygames.spaceboi.background_functions.XP_handler;
-import com.binarygames.spaceboi.background_functions.XP_handler;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FinalBoss;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Spawner;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.*;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.BioDamage;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.LifeSteal;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.MechDamage;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Slow;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
 
@@ -169,6 +169,15 @@ public class GameWorld {
         if (closestPlanet != null) {
             // TODO Change to toPlanet vector instead
             entity.setClosestPlanet(closestPlanet);
+        }
+
+        // Check if player is affected by gravity
+        if (entity instanceof Player) {
+            if (planetsWithinRange.size() == 0) {
+                ((Player) entity).setInAtmosphere(false);
+            } else {
+                ((Player) entity).setInAtmosphere(true);
+            }
         }
     }
 

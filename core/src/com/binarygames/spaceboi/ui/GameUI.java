@@ -6,9 +6,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -80,8 +84,8 @@ public class GameUI {
 
         // Jet pack fuel bar
         oxygen = 75; //
-        oxygenBar = new ProgressBar(0, 100, 1, true, oxygenBarStyle);
-        oxygenBar.setValue(oxygen);
+        oxygenBar = new ProgressBar(0, player.MAX_OXYGEN_LEVEL, 1, true, oxygenBarStyle);
+        oxygenBar.setValue(player.MAX_OXYGEN_LEVEL);
         oxygenBar.setBounds(Gdx.graphics.getWidth() * 39 / 40, Gdx.graphics.getHeight() / 10, 20, 100);
         stage.addActor(oxygenBar);
 
@@ -94,9 +98,9 @@ public class GameUI {
         // XP bar
         currentLevel = new Label(String.valueOf(xpHandler.getLevel()), labelStyle);
         nextLevel = new Label(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()), labelStyle);
-        currentLevel.setBounds(0,0, currentLevel.getWidth(), currentLevel.getHeight());
+        currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
         nextLevel.setFontScale(0.6f);
-        nextLevel.setBounds(Gdx.graphics.getWidth()/2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), nextLevel.getHeight());
+        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), nextLevel.getHeight());
         nextLevel.setVisible(false);
 
         xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
@@ -109,6 +113,7 @@ public class GameUI {
                 super.enter(event, x, y, pointer, fromActor);
                 nextLevel.setVisible(true);
             }
+
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 super.exit(event, x, y, pointer, toActor);
@@ -127,6 +132,7 @@ public class GameUI {
 
     public void act(float delta) {
         updateHealth(player.getHealth());
+        updateOxygenLevel();
         updateWeaponStats(weaponStats1, 0);
         updateWeaponStats(weaponStats2, 1);
         updateWeaponStats(weaponStats3, 2);
@@ -204,7 +210,7 @@ public class GameUI {
         // xpBarStyle
 
         pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 50, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0,0);
+        pixmap.setColor(0, 0, 0, 0);
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
@@ -218,7 +224,7 @@ public class GameUI {
         pixmap.dispose();
         xpBarStyle.knob = drawable;
 
-        pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/50, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 50, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.ORANGE);
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -230,6 +236,10 @@ public class GameUI {
         // TODO update health render
         healthBar.setValue(health);
         label.setText(health.toString());
+    }
+
+    private void updateOxygenLevel() {
+        oxygenBar.setValue(player.getOxygenLevel());
     }
 
     private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex) {
