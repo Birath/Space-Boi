@@ -72,6 +72,14 @@ public class Player extends EntityDynamic {
     private Sound walkingSound;
     private Planet launchPlanet;
 
+    public static final int MAX_OXYGEN_LEVEL = 100;
+    private float oxygenLevel = MAX_OXYGEN_LEVEL;
+    private float oxygenIncreaseRate = 75;
+    private float oxygenDecreaseRate = 55;
+    private int oxygenDeathRate = 85;
+    private float oxygenDeathRateDelta;
+    private boolean inAtmosphere;
+
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
@@ -106,6 +114,7 @@ public class Player extends EntityDynamic {
     public void update(float delta) {
         updateToPlanet();
         updatePerpen();
+        updateOxygenLevel(delta);
         // http://www.iforce2d.net/b2dtut/constant-speed
         // TODO Check above site about movement
         if (entityState == ENTITY_STATE.STANDING) {
@@ -284,6 +293,27 @@ public class Player extends EntityDynamic {
         perpen.scl(moveSpeed);
     }
 
+    private void updateOxygenLevel(float delta) {
+        if (inAtmosphere && oxygenLevel < MAX_OXYGEN_LEVEL) {
+            // Increase oxygen
+            oxygenLevel += oxygenIncreaseRate * delta;
+        } else if (!inAtmosphere && oxygenLevel > 0) {
+            // Decrease oxygen
+            oxygenLevel -= oxygenDecreaseRate * delta;
+        }
+
+        if (oxygenLevel <= 0) {
+            // Here is death
+            // decrease health every second
+            if (oxygenDeathRateDelta * oxygenDeathRate >= 1) {
+                reduceHealth(1);
+                oxygenDeathRateDelta = 0;
+            } else {
+                oxygenDeathRateDelta += delta;
+            }
+        }
+    }
+
     public float getPlayerAngle() {
         return playerAngle; // TODO fix magic number
     }
@@ -377,6 +407,18 @@ public class Player extends EntityDynamic {
 
     public void addToInventory(WeaponAttachment attachment) {
         inventory.add(attachment);
+    }
+
+    public float getOxygenLevel() {
+        return oxygenLevel;
+    }
+
+    public boolean isInAtmosphere() {
+        return inAtmosphere;
+    }
+
+    public void setInAtmosphere(boolean inAtmosphere) {
+        this.inAtmosphere = inAtmosphere;
     }
 
     public boolean isChained() {
