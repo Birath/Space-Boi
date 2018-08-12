@@ -90,7 +90,7 @@ public class GameUI {
         stage.addActor(oxygenBar);
 
         // Health bar
-        healthBar = new ProgressBar(0, 100, 1, false, healthBarStyle);
+        healthBar = new ProgressBar(0, player.getMaxHealth(), 1, false, healthBarStyle);
         healthBar.setValue(health);
         healthBar.setBounds(Gdx.graphics.getWidth() * 17 / 20, image.getOriginY() - healthBar.getHeight() / 2 + (Gdx.graphics.getHeight() / 40), 100, 20);
         stage.addActor(healthBar);
@@ -121,6 +121,20 @@ public class GameUI {
             }
         });
 
+        nextLevel.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                nextLevel.setVisible(true);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                nextLevel.setVisible(false);
+            }
+        });
+
         stage.addActor(xpBar);
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
@@ -131,6 +145,7 @@ public class GameUI {
     }
 
     public void act(float delta) {
+        healthBar.setRange(0, player.getMaxHealth());
         updateHealth(player.getHealth());
         updateOxygenLevel();
         updateWeaponStats(weaponStats1, 0);
