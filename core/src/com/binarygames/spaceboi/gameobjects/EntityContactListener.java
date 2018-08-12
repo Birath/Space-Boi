@@ -214,13 +214,13 @@ public class EntityContactListener implements ContactListener {
     public void preSolve(Contact contact, Manifold oldManifold) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        if (HealthPickup.class.isInstance(fixtureA.getBody().getUserData())) {
+        if (Pickup.class.isInstance(fixtureA.getBody().getUserData())) {
             if (!Planet.class.isInstance(fixtureB.getBody().getUserData())) {
                 contact.setEnabled(false);
             } else {
                 contact.setEnabled(true);
             }
-        } else if (HealthPickup.class.isInstance(fixtureB.getBody().getUserData())) {
+        } else if (Pickup.class.isInstance(fixtureB.getBody().getUserData())) {
             if (!Planet.class.isInstance(fixtureA.getBody().getUserData())) {
                 contact.setEnabled(false);
             } else {
