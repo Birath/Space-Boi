@@ -226,7 +226,7 @@ public class Player extends EntityDynamic {
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
 
-        if (isChained && Math.abs(toPlanet.angle(recoil)) < MAX_RECOIL_ANGLE) {
+        if (isChained && (Math.abs(toPlanet.angle(recoil)) < MAX_RECOIL_ANGLE || weapon instanceof Machinegun )) {
             shouldApplyRecoil = false;
         } else if (isChained) {
             storedRecoil = recoil.cpy();
@@ -328,9 +328,9 @@ public class Player extends EntityDynamic {
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
         // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
-        if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished() || weapon instanceof Machinegun)) {
+        if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished())) {
             // Nothing happens
-            // Don't chain the player if they are holding the jump button
+        // Don't chain the player if they are holding the jump button
         } else if (moveUp) {
             // Nothing happens
         } else {
