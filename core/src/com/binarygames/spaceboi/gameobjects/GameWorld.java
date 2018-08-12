@@ -13,10 +13,13 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.background_functions.XP_handler;
+import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FinalBoss;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.BioDamage;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.LifeSteal;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.MechDamage;
@@ -27,6 +30,7 @@ import com.binarygames.spaceboi.screens.DeathScreen;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class GameWorld {
 
@@ -34,6 +38,7 @@ public class GameWorld {
     private OrthographicCamera camera;
     private World world;
     private WorldGenerator worldGenerator;
+    private Random random = new Random();
 
     private ParticleHandler particleHandler;
     private XP_handler xp_handler;
@@ -59,7 +64,10 @@ public class GameWorld {
     private float toDegrees;
     private float timeSinceStart;
     private static final float LERP_TIME = 0.1f;
-    private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -10);
+
+    private static final double GRAVITY_CONSTANT = 6.674 * Math.pow(10, -11.5);
+    private static final int HEALTH_DROP_CHANCE = 2;
+
 
     public GameWorld(SpaceBoi game, World world, OrthographicCamera camera) {
         this.game = game;
@@ -77,17 +85,17 @@ public class GameWorld {
         worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
         Player player = new Player(this, worldGenerator.generatePlayerX(),
-                worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+            worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
         // TODO remove temp attachment testing
         addDynamicEntity(new Slow(this, worldGenerator.generatePlayerX() + 50,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new LifeSteal(this, worldGenerator.generatePlayerX() + 100,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new MechDamage(this, worldGenerator.generatePlayerX() + 150,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new BioDamage(this, worldGenerator.generatePlayerX() + 200,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
 
         //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
         this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
@@ -140,10 +148,10 @@ public class GameWorld {
         Vector2 finalGravity = new Vector2();
         for (Planet planet : planetsWithinRange) {
             float angle = MathUtils
-                    .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
+                .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
             Vector2 gravityPull = new Vector2(
-                    (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad()),
-                    (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass() / planet.getRad()));
+                (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()),
+                (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()));
             finalGravity.add(gravityPull);
         }
         if (game.getPreferences().isGravityEnabled()) {
@@ -173,6 +181,7 @@ public class GameWorld {
 
         // Check if player is affected by gravity
         if (entity instanceof Player) {
+
             if (planetsWithinRange.size() == 0) {
                 ((Player) entity).setInAtmosphere(false);
             } else {
@@ -247,7 +256,6 @@ public class GameWorld {
         }
         jointsToDestroy.clear();
     }
-
 
     public void respawnPlayer() {
         game.setScreen(new DeathScreen(game, game.getScreen()));
@@ -326,6 +334,12 @@ public class GameWorld {
         relativeVector = closestPlanet.getBody().getPosition().sub(finalBoss.getBody().getPosition());
         angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
         finalBoss.setAngle(MathUtils.lerpAngleDeg(finalBoss.getAngle(), angleToPlanet, delta * 15));
+    }
+
+    public void spawnHealthPack(Enemy enemy) {
+        if (random.nextInt(10) < HEALTH_DROP_CHANCE) {
+            addDynamicEntity(new HealthPickup(this, enemy.getBody().getPosition().x * BaseBody.PPM, enemy.getBody().getPosition().y * BaseBody.PPM, Assets.PICKUP_HEALTH, 300, 7));
+        }
     }
 
     public ArrayList<Planet> getPlanets() {

@@ -137,7 +137,7 @@ public abstract class Enemy extends EntityDynamic {
         } else {
             xpIncrease = enemyXP;
         }
-
+        gameWorld.spawnHealthPack(this);
         playRandomSound(deathSounds);
         gameWorld.getXp_handler().increaseXP(xpIncrease);
     }

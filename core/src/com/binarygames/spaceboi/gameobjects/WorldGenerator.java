@@ -108,11 +108,12 @@ public class WorldGenerator {
         createEnemies(currentX, currentY, planetRadius, circleNumber, isLastPlanet);
 
         if (isMultiPlanetRow) { //If multiplanetrow -> spawn ordinary launchpads
-
-            try {
-                spawnAttachment(new Vector2(currentX, currentY), planetRadius);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                Gdx.app.error("WorldGenerator", "Failed to spawnAttachment", e);
+            if (shouldSpawnAttachment) {
+                try {
+                    spawnAttachment(new Vector2(currentX, currentY), planetRadius);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+                    Gdx.app.error("WorldGenerator", "Failed to spawnAttachment", e);
+                }
             }
 
             //Create launchpad to next
@@ -150,6 +151,7 @@ public class WorldGenerator {
 
     private void spawnAttachment(Vector2 planetPosition, float planetRadius) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        // Gets the weapon attachment constructor
         Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
         // TODO Add picture based on class name
         WeaponAttachment attachment = attachementConstructor.newInstance(gameWorld, planetPosition.x + planetRadius, planetPosition.y + planetRadius, Assets.PLANET_MOON, ATTACHMENT_MASS, 7);
