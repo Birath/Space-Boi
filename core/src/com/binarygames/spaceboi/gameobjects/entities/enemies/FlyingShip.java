@@ -82,6 +82,7 @@ public class FlyingShip extends Enemy {
     @Override
     public void onRemove() {
         super.onRemove();
+        getClosestPlanet().setLaunchPadActive(true);
         try {
             gameWorld.addDynamicEntity(WeaponAttachment.getRandomAttachment(gameWorld, getBody().getPosition().x * PPM, getBody().getPosition().y * PPM));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {

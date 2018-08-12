@@ -340,7 +340,7 @@ public class Player extends EntityDynamic {
     }
 
     public void hitLauchPad(LaunchPad launchPad) {
-        if (getClosestPlanet() != null) {
+        if (getClosestPlanet() != null && launchPad.isActive()) {
             launchPlanet = getClosestPlanet();
             entityState = ENTITY_STATE.JUMPING;
             isLaunching = true;

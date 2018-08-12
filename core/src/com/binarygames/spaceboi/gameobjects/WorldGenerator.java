@@ -234,15 +234,18 @@ public class WorldGenerator {
                 createLaunchPad((int) (PPM * planet.getBody().getPosition().x), (int) (PPM * planet.getBody().getPosition().y), (int) planet.getRadius(), angleToPlanet);
 
                 float reverseAngleToPlanet = MathUtils.atan2(planet.getBody().getPosition().y - pos.y, planet.getBody().getPosition().x - pos.x);
-                createLaunchPad((int) (PPM * pos.x), (int) (PPM * pos.y), (int) singleRowPlanet.getRadius(), reverseAngleToPlanet + LAUNCH_PAD_OFFSET);
+                singleRowPlanet.addLaunchPad(createLaunchPad((int) (PPM * pos.x), (int) (PPM * pos.y), (int) singleRowPlanet.getRadius(), reverseAngleToPlanet + LAUNCH_PAD_OFFSET));
             }
+            singleRowPlanet.setLaunchPadActive(false);
         }
     }
 
-    private void createLaunchPad(int x, int y, int planetRadius, float angle) {
+    private LaunchPad createLaunchPad(int x, int y, int planetRadius, float angle) {
         int padX = x + (int) (planetRadius * Math.cos(angle));
         int padY = y + (int) (planetRadius * Math.sin(angle));
-        gameWorld.addStaticEntity(new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle));
+        LaunchPad launchPad = new LaunchPad(gameWorld, padX, padY, Assets.LAUNCH_PAD, 0, 20, 4, angle);
+        gameWorld.addStaticEntity(launchPad);
+        return launchPad;
     }
 
     public int generatePlayerX() {

@@ -7,10 +7,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Planet extends EntityStatic {
 
     private float radius;
+    private List<LaunchPad> launchPads = new ArrayList<>();
+    private boolean launchPadActive = true;
 
     private ShapeRenderer shapeRenderer;
     public static final int GRAVITY_RADIUS = 2;
@@ -41,4 +46,16 @@ public class Planet extends EntityStatic {
         return radius;
     }
 
+    public void addLaunchPad(LaunchPad launchPad) {
+        launchPads.add(launchPad);
+    }
+
+    public void setLaunchPadActive(boolean launchPadsActive) {
+        if (this.launchPadActive != launchPadsActive) {
+            for (LaunchPad launchPad : launchPads) {
+                launchPad.setActive(launchPadsActive);
+            }
+        }
+        this.launchPadActive = launchPadsActive;
+    }
 }

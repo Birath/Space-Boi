@@ -7,6 +7,8 @@ public class LaunchPad extends EntityStatic {
 
     public static final int LAUNCH_PAD_SPEED = 60;
 
+    private boolean active = true;
+
     public LaunchPad(GameWorld gameWorld, float x, float y, String path, float mass, float width, float height, float angle) {
         super(gameWorld, x, y, path, mass, width, height);
         body.setTransform(body.getPosition(), angle + MathUtils.PI / 2);
@@ -19,5 +21,13 @@ public class LaunchPad extends EntityStatic {
 
     private void getOppositePlanet() {
 
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
