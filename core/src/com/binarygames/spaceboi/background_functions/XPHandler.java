@@ -2,7 +2,7 @@ package com.binarygames.spaceboi.background_functions;
 
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
-public class XP_handler {
+public class XPHandler {
 
     private Player player;
     private int currentXP = 0;
@@ -11,7 +11,7 @@ public class XP_handler {
     private int nextLevel = 100;
     private int x = 0;
 
-    public XP_handler(Player player){
+    public XPHandler(Player player){
         this.player = player;
 
     }
@@ -19,17 +19,17 @@ public class XP_handler {
         player.increaseMaxHealth(healthOnLevelUp);
         level += 1;
     }
-    public void increaseXP(int XP){
-        currentXP += XP;
-        if(currentXP >= nextLevel){
-            currentXP = currentXP - nextLevel;
+    public void increaseXP(int xp){
+        currentXP += xp;
+        while (currentXP >= nextLevel) {
+            currentXP -= nextLevel;
             calcNextLevel();
             levelUp();
         }
     }
     private void calcNextLevel(){
         x += 1;
-        nextLevel = 100 + (int) Math.exp(x/2);
+        nextLevel = 100 + (int) Math.exp(x/2) + 3*x;
     }
     public int getLevel(){
         return level;

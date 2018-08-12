@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.background_functions.XP_handler;
+import com.binarygames.spaceboi.background_functions.XPHandler;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
@@ -41,7 +41,7 @@ public class GameWorld {
     private Random random = new Random();
 
     private ParticleHandler particleHandler;
-    private XP_handler xp_handler;
+    private XPHandler xp_handler;
     private Player player;
     private FinalBoss finalBoss;
     private boolean shouldLerpPlayerAngle = false;
@@ -102,7 +102,7 @@ public class GameWorld {
         addDynamicEntity(player);
         addDynamicEntity(finalBoss);
         this.player = player;
-        xp_handler = new XP_handler(player);
+        xp_handler = new XPHandler(player);
 
         world.setContactListener(new EntityContactListener(this));
     }
@@ -377,7 +377,7 @@ public class GameWorld {
         return player;
     }
 
-    public XP_handler getXp_handler() {
+    public XPHandler getXp_handler() {
         return xp_handler;
     }
 

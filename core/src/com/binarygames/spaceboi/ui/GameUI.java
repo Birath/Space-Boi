@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.background_functions.XP_handler;
+import com.binarygames.spaceboi.background_functions.XPHandler;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.screens.Fonts;
 
@@ -48,7 +48,7 @@ public class GameUI {
     private Label currentLevel;
     private Label nextLevel;
 
-    private XP_handler xpHandler;
+    private XPHandler xpHandler;
 
     private WeaponStats weaponStats1;
     private WeaponStats weaponStats2;
@@ -59,7 +59,7 @@ public class GameUI {
     private Fonts fonts;
 
 
-    public GameUI(SpaceBoi game, Player player, XP_handler xpHandler) {
+    public GameUI(SpaceBoi game, Player player, XPHandler xpHandler) {
         this.player = player;
         this.xpHandler = xpHandler;
         stage = new Stage();
