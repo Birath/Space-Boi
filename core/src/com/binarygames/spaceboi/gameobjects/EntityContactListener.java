@@ -1,7 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.physics.box2d.*;
 import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.MeleeEnemy;
@@ -11,7 +10,6 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.HomingRocket;
-import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 
 public class EntityContactListener implements ContactListener {
@@ -218,12 +216,14 @@ public class EntityContactListener implements ContactListener {
             if (!Planet.class.isInstance(fixtureB.getBody().getUserData())) {
                 contact.setEnabled(false);
             } else {
+                ((Pickup)fixtureA.getBody().getUserData()).setHitPlane(true);
                 contact.setEnabled(true);
             }
         } else if (Pickup.class.isInstance(fixtureB.getBody().getUserData())) {
             if (!Planet.class.isInstance(fixtureA.getBody().getUserData())) {
                 contact.setEnabled(false);
             } else {
+                ((Pickup)fixtureB.getBody().getUserData()).setHitPlane(true);
                 contact.setEnabled(true);
             }
 

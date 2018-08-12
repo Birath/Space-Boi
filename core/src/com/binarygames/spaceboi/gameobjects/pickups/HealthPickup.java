@@ -25,11 +25,6 @@ public class HealthPickup extends Pickup {
     }
 
     @Override
-    public void update(float delta) {
-
-    }
-
-    @Override
     public void onRemove() {
         // OnRemove
     }

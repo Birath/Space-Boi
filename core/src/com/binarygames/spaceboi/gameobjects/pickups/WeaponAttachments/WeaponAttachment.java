@@ -48,11 +48,6 @@ public abstract class WeaponAttachment extends Pickup {
     }
 
     @Override
-    public void update(float delta) {
-
-    }
-
-    @Override
     public void onHit(Player player) {
         player.addToInventory(this);
         gameWorld.getGame().getSoundManager().play(Assets.ATTACHMENT_PICK_1);
