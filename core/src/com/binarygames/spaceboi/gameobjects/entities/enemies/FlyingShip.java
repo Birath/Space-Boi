@@ -2,8 +2,12 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class FlyingShip extends Enemy {
 
@@ -37,69 +41,81 @@ public class FlyingShip extends Enemy {
     }
 
     @Override
-    public boolean isAffectedByGravity(){
+    public boolean isAffectedByGravity() {
         return false;
     }
-    private void updateIdleJumping(){
+
+    private void updateIdleJumping() {
         moveAlongPlanet();
     }
-    private void updateHuntingJumping(){
+
+    private void updateHuntingJumping() {
         standStill();
     }
-    private void updateAttackingJumping(){
-        if(toShootRockets() && weapon.canShoot()){
+
+    private void updateAttackingJumping() {
+        if (toShootRockets() && weapon.canShoot()) {
             ShootRockets();
-        }
-        else if(toShootShotgun() && shotgun.canShoot()){
+        } else if (toShootShotgun() && shotgun.canShoot()) {
             ShootShotgun();
-        }
-        else{
+        } else {
             moveAlongPlanet();
         }
     }
 
     @Override
     protected void updateJumping(float delta) {
-        if(this.planetBody != null){
-            if(enemyState == ENEMY_STATE.IDLE){
+        if (this.planetBody != null) {
+            if (enemyState == ENEMY_STATE.IDLE) {
                 updateIdleJumping();
-            }
-            else if(enemyState == ENEMY_STATE.HUNTING){
+            } else if (enemyState == ENEMY_STATE.HUNTING) {
                 updateHuntingJumping();
-            }
-            else if(enemyState == ENEMY_STATE.ATTACKING){
+            } else if (enemyState == ENEMY_STATE.ATTACKING) {
                 updateAttackingJumping();
             }
+        } else {
+            this.getBody().setLinearVelocity(0, 0);
         }
-        else{
-            this.getBody().setLinearVelocity(0,0);
-        }
-
     }
-    private boolean toShootShotgun(){
+
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        try {
+            gameWorld.addDynamicEntity(WeaponAttachment.getRandomAttachment(gameWorld, getBody().getPosition().x * PPM, getBody().getPosition().y * PPM));
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean toShootShotgun() {
         float angle = Math.abs(toPlanet.angle(toPlayer));
         return angle < 45;
     }
-    private boolean toShootRockets(){
+
+    private boolean toShootRockets() {
         float angle = Math.abs(toPlanet.angle(toPlayer));
         return 45 < angle && angle < 75;
     }
-    private void ShootShotgun(){
+
+    private void ShootShotgun() {
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
-                body.getPosition().y * PPM + shootDirection.y);
+            body.getPosition().y * PPM + shootDirection.y);
 
         shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
     }
-    private void ShootRockets(){
+
+    private void ShootRockets() {
         perpen = new Vector2(-toPlanet.y, toPlanet.x);
         perpen.setLength2(1).scl(rad * PPM);
-        if(Math.abs(perpen.angle(toPlayer)) > 90){
+        if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
-                body.getPosition().y * PPM + perpen.y);
+            body.getPosition().y * PPM + perpen.y);
 
         weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
     }

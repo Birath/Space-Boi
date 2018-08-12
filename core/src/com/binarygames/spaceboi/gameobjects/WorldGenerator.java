@@ -23,7 +23,6 @@ import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public class WorldGenerator {
     private static final int OFFSET = 10;
-    public static final int ATTACHMENT_MASS = 300;
     private GameWorld gameWorld;
 
     private static final int MAX_RAD = 450;
@@ -150,12 +149,7 @@ public class WorldGenerator {
     }
 
     private void spawnAttachment(Vector2 planetPosition, float planetRadius) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
-        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
-        // Gets the weapon attachment constructor
-        Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
-        // TODO Add picture based on class name
-        WeaponAttachment attachment = attachementConstructor.newInstance(gameWorld, planetPosition.x + planetRadius, planetPosition.y + planetRadius, Assets.PLANET_MOON, ATTACHMENT_MASS, 7);
-        gameWorld.addDynamicEntity(attachment);
+        gameWorld.addDynamicEntity(WeaponAttachment.getRandomAttachment(gameWorld, planetPosition.x + planetRadius, planetPosition.y + planetRadius));
     }
 
     private void createEnemies(int x, int y, int rad, int circleNumber, boolean isLastPlanet) {

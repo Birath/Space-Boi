@@ -6,12 +6,19 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.Pickup;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public abstract class WeaponAttachment extends Pickup {
 
-    public static final List<Class<? extends WeaponAttachment>> WEAPON_ATTACHMENTS = Arrays.asList(
+    private static final float ATTACHMENT_MASS = 300;
+    private static final float ATTACHMENT_RADIUS = 7;
+    private static Random random = new Random();
+
+    private static final List<Class<? extends WeaponAttachment>> WEAPON_ATTACHMENTS = Arrays.asList(
         BioDamage.class,
         Experience.class,
         GlassCannon.class,
@@ -25,6 +32,14 @@ public abstract class WeaponAttachment extends Pickup {
 
     public WeaponAttachment(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
+    }
+
+    public static WeaponAttachment getRandomAttachment(GameWorld gameWorld, float x ,float y) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        // Gets the weapon attachment constructor
+        Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
+        // TODO Add picture based on class name
+        return attachementConstructor.newInstance(gameWorld, x, y, Assets.PLANET_MOON, ATTACHMENT_MASS, ATTACHMENT_RADIUS);
     }
 
     @Override
