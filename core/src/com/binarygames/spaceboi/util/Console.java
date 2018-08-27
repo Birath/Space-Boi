@@ -97,6 +97,7 @@ public class Console {
         commands.put("infiniteammo", new InfiniteAmmo());
         commands.put("debug", new DebugRenderer());
         commands.put("randomattachment", new SpawnRandomAttachment());
+        commands.put("attachment", new SpawnAttachment());
     }
 
     public void update(float delta) {

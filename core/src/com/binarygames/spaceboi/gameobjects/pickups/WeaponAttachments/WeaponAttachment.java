@@ -53,6 +53,22 @@ public abstract class WeaponAttachment extends Pickup {
         return attachementConstructor.newInstance(gameWorld, x, y, asset, ATTACHMENT_MASS, ATTACHMENT_RADIUS);
     }
 
+    public static WeaponAttachment getAttachment(GameWorld gameWorld, float x ,float y, int attachmentIndex) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(attachmentIndex);
+        String asset;
+        try {
+            Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
+            asset = WeaponAttachmentAsset.valueOf(attachmentClass.getSimpleName()).getAsset();
+        } catch (IllegalArgumentException e) {
+            Gdx.app.error("RandomAttachment", "Erroer when spawing random attachment", e);
+            asset = Assets.PLANET_MOON;
+        }
+        // Gets the weapon attachment constructor
+        Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
+        // TODO Add picture based on class name
+        return attachementConstructor.newInstance(gameWorld, x, y, asset, ATTACHMENT_MASS, ATTACHMENT_RADIUS);
+    }
+
     @Override
     public void onRemove() {
         
