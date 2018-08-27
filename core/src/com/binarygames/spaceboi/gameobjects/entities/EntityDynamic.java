@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -50,7 +51,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         this.health = this.maxHealth = health;
         this.moveSpeed = moveSpeed;
         this.jumpHeight = jumpHeight;
-        this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
+        Texture texture = gameWorld.getGame().getAssetManager().get(path, Texture.class);
+        texture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.Nearest);
+        this.sprite = new Sprite(texture);
         sprite.setOrigin(width / 2, height / 2);
         sprite.setSize(width, height);
         body.setUserData(this);
@@ -58,7 +61,9 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     }
 
     private void createEntityDynamic(GameWorld gameWorld, String path, float radius) {
-        this.sprite = new Sprite(gameWorld.getGame().getAssetManager().get(path, Texture.class));
+        Texture texture = gameWorld.getGame().getAssetManager().get(path, Texture.class);
+        texture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.Linear);
+        this.sprite = new Sprite(texture);
         sprite.setSize(radius * 2, radius * 2);
         body.setUserData(this);
     }

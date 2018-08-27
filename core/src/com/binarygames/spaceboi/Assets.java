@@ -1,6 +1,8 @@
 package com.binarygames.spaceboi;
 
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -114,6 +116,9 @@ public class Assets {
 
     // PICKUPS
     public static final String PICKUP_HEALTH = "game/entities/pickups/norrlands_health.png";
+    public static final String ARMOR_PIERCING = "game/entities/pickups/armor_piercing.png";
+    public static final String BIO_DAMAGE_ICON = "game/entities/pickups/bio_damage_icon.png";
+    public static final String XP_BOOST_ICON = "game/entities/pickups/xp_boost_icon.png";
 
     // Minimap markers
     public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
@@ -139,6 +144,9 @@ public class Assets {
     }
 
     public void loadGameAssets() {
+        TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+        textureParameter.genMipMaps = true;
+
         /*
             Entities
          */
@@ -168,13 +176,13 @@ public class Assets {
         assetManager.load(DOG3, Sound.class);
 
         // Planets
-        assetManager.load(PLANET_MOON, Texture.class);
-        assetManager.load(LAUNCH_PAD, Texture.class);
+        assetManager.load(PLANET_MOON, Texture.class, textureParameter);
+        assetManager.load(LAUNCH_PAD, Texture.class, textureParameter);
         assetManager.load(LAUNCH_PAD_SOUND, Sound.class);
 
         // Player
-        assetManager.load(PLAYER, Texture.class);
-        assetManager.load(PLAYER_WALK_ANIMATION, Texture.class);
+        assetManager.load(PLAYER, Texture.class, textureParameter);
+        assetManager.load(PLAYER_WALK_ANIMATION, Texture.class, textureParameter);
         assetManager.load(PLAYER_PICKUP_HEALTH, Sound.class);
         assetManager.load(PLAYER_FOOTSTEP, Sound.class);
 
@@ -203,7 +211,6 @@ public class Assets {
         /*
             Particles
          */
-
         assetManager.load(PARTICLE_ATLAS, TextureAtlas.class);
 
         assetManager.load(PARTICLE_BLOOD, ParticleEffect.class);
@@ -213,20 +220,23 @@ public class Assets {
             UI
          */
 
-        assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class);
-        assetManager.load(UI_HEALTH_ICON, Texture.class);
-        assetManager.load(UI_SILENCER_ICON, Texture.class);
-        assetManager.load(UI_EXPERIENCE_ICON, Texture.class);
-        assetManager.load(UI_RECOIL_ICON, Texture.class);
-        assetManager.load(UI_GLASS_CANNON_ICON, Texture.class);
+        assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
+        assetManager.load(UI_HEALTH_ICON, Texture.class, textureParameter);
+        assetManager.load(UI_SILENCER_ICON, Texture.class, textureParameter);
+        assetManager.load(UI_EXPERIENCE_ICON, Texture.class, textureParameter);
+        assetManager.load(UI_RECOIL_ICON, Texture.class, textureParameter);
+        assetManager.load(UI_GLASS_CANNON_ICON, Texture.class, textureParameter);
 
         /*
             PICKUPS
         */
-        assetManager.load(PICKUP_HEALTH, Texture.class);
+        assetManager.load(PICKUP_HEALTH, Texture.class, textureParameter);
+        assetManager.load(ARMOR_PIERCING, Texture.class, textureParameter);
+        assetManager.load(BIO_DAMAGE_ICON, Texture.class, textureParameter);
+        assetManager.load(XP_BOOST_ICON, Texture.class, textureParameter);
 
         // Minimap markers
-        assetManager.load(MARKER_PLANET, Texture.class);
+        assetManager.load(MARKER_PLANET, Texture.class, textureParameter);
     }
 
     /*
@@ -236,7 +246,7 @@ public class Assets {
         fileHandle = Gdx.files.internal("game/entities/planets/");
         for (FileHandle entry : fileHandle.list()) {
             if (entry.name().endsWith(".png")) {
-                assetManager.load(fileHandle.path() + "/" + entry.name(), Texture.class);
+                assetManager.load(fileHandle.path() + "/" + entry.name(), Texture.class, textureParameter);
             }
         }
      */

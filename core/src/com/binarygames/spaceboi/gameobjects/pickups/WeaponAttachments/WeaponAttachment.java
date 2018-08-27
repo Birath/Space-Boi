@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments;
 
+import com.badlogic.gdx.Gdx;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
@@ -35,11 +36,21 @@ public abstract class WeaponAttachment extends Pickup {
     }
 
     public static WeaponAttachment getRandomAttachment(GameWorld gameWorld, float x ,float y) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        // TODO create sprits for all pickups
+        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(0);
+        // Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        String asset;
+        try {
+            Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
+            asset = WeaponAttachmentAsset.valueOf(attachmentClass.getSimpleName()).getAsset();
+        } catch (IllegalArgumentException e) {
+            Gdx.app.error("RandomAttachment", "Erroer when spawing random attachment", e);
+            asset = Assets.PLANET_MOON;
+        }
         // Gets the weapon attachment constructor
         Constructor<? extends WeaponAttachment> attachementConstructor = attachmentClass.getConstructor(GameWorld.class, float.class, float.class, String.class, float.class, float.class);// GameWorld, x, y, path, mass, radius
         // TODO Add picture based on class name
-        return attachementConstructor.newInstance(gameWorld, x, y, Assets.PLANET_MOON, ATTACHMENT_MASS, ATTACHMENT_RADIUS);
+        return attachementConstructor.newInstance(gameWorld, x, y, asset, ATTACHMENT_MASS, ATTACHMENT_RADIUS);
     }
 
     @Override
