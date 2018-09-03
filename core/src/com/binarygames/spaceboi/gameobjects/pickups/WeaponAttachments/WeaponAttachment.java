@@ -36,9 +36,7 @@ public abstract class WeaponAttachment extends Pickup {
     }
 
     public static WeaponAttachment getRandomAttachment(GameWorld gameWorld, float x ,float y) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        // TODO create sprits for all pickups
-        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(0);
-        // Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
+        Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
         String asset;
         try {
             Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
