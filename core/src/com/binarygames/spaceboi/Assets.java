@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi;
 
-import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.audio.Music;
@@ -116,9 +115,11 @@ public class Assets {
 
     // PICKUPS
     public static final String PICKUP_HEALTH = "game/entities/pickups/norrlands_health.png";
-    public static final String ARMOR_PIERCING = "game/entities/pickups/armor_piercing.png";
+    public static final String ARMOR_PIERCING = "game/entities/pickups/armor_piercing_icon.png";
     public static final String BIO_DAMAGE_ICON = "game/entities/pickups/bio_damage_icon.png";
     public static final String XP_BOOST_ICON = "game/entities/pickups/xp_boost_icon.png";
+    public static final String SLOW_ICON = "game/entities/pickups/slow_icon.png";
+    public static final String GLASS_CANNON_ICON = "game/entities/pickups/glass_cannon_icon.png";
 
     // Minimap markers
     public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
@@ -234,6 +235,8 @@ public class Assets {
         assetManager.load(ARMOR_PIERCING, Texture.class, textureParameter);
         assetManager.load(BIO_DAMAGE_ICON, Texture.class, textureParameter);
         assetManager.load(XP_BOOST_ICON, Texture.class, textureParameter);
+        assetManager.load(SLOW_ICON, Texture.class, textureParameter);
+        assetManager.load(GLASS_CANNON_ICON, Texture.class, textureParameter);
 
         // Minimap markers
         assetManager.load(MARKER_PLANET, Texture.class, textureParameter);

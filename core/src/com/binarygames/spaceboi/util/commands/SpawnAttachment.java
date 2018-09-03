@@ -10,6 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 public class SpawnAttachment implements Command {
     @Override
     public void run(Console console, String[] args) {
+        if (args == null || args.length == 0) {
+            console.echo("Invalid amount of arguments. ");
+            return;
+        }
         if (args.length == 1){
             int index = Integer.valueOf(args[0]);
             try {
