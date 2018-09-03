@@ -182,7 +182,7 @@ public class GameWorld {
         // Check if player is affected by gravity
         if (entity instanceof Player) {
 
-            if (planetsWithinRange.size() == 0) {
+            if (planetsWithinRange.isEmpty()) {
                 ((Player) entity).setInAtmosphere(false);
             } else {
                 ((Player) entity).setInAtmosphere(true);
@@ -207,20 +207,18 @@ public class GameWorld {
 
     private ArrayList<Planet> getPlanetsWithinGravityRange(Vector2 bodyPos) {
         ArrayList<Planet> planetsWithinRange = new ArrayList<>();
-        for (EntityStatic entityStatic : staticEntities) {
-            if (Planet.class.isInstance(entityStatic)) {
-                Planet planet = (Planet) entityStatic;
-                Vector2 planetPos = planet.getBody().getPosition();
-                float distance = planetPos.dst(bodyPos);
-                if (planet.getRad() * Planet.GRAVITY_RADIUS >= distance) {
-                    planetsWithinRange.add(planet);
-                }
+
+        for (Planet planet : getPlanets()) {
+            Vector2 planetPos = planet.getBody().getPosition();
+            float distance = planetPos.dst(bodyPos);
+            if (planet.getRad() * Planet.GRAVITY_RADIUS >= distance) {
+                planetsWithinRange.add(planet);
             }
         }
         return planetsWithinRange;
     }
 
-    private Planet getClosestPlanet(ArrayList<Planet> planets, Vector2 entityPos) {
+    private Planet getClosestPlanet(Iterable<Planet> planets, Vector2 entityPos) {
         float closestDistance = -1.0f;
         Planet closestPlanet = null;
         for (Planet planet : planets) {
@@ -342,8 +340,8 @@ public class GameWorld {
         }
     }
 
-    public ArrayList<Planet> getPlanets() {
-        ArrayList<Planet> planets = new ArrayList<>();
+    public Iterable<Planet> getPlanets() {
+        List<Planet> planets = new ArrayList<>();
         for (EntityStatic entityStatic : staticEntities) {
             if (Planet.class.isInstance(entityStatic)) {
                 Planet planet = (Planet) entityStatic;

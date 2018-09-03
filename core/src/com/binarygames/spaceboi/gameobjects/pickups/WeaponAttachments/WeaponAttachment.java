@@ -42,7 +42,7 @@ public abstract class WeaponAttachment extends Pickup {
             Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
             asset = WeaponAttachmentAsset.valueOf(attachmentClass.getSimpleName()).getAsset();
         } catch (IllegalArgumentException e) {
-            Gdx.app.error("RandomAttachment", "Erroer when spawing random attachment", e);
+            Gdx.app.error("RandomAttachment", "Error when spawing random attachment", e);
             asset = Assets.PLANET_MOON;
         }
         // Gets the weapon attachment constructor

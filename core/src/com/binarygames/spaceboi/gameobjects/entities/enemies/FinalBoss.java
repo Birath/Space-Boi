@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.screens.VictoryScreen;
 
 public class FinalBoss extends Enemy implements MeleeEnemy {
     // Cannon values
@@ -107,6 +108,12 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
             moveAlongPlanet();
             //standStill();
         }
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        gameWorld.getGame().setScreen(new VictoryScreen(gameWorld.getGame(), gameWorld.getGame().getScreen()));
     }
 
     private void updateChargeTimers(float delta) {
