@@ -18,6 +18,8 @@ public final class GamePreferences {
     private static final String PREF_KEY_SHOOT = "key.shoot";
     private static final String PREF_KEY_SHOOT_IS_KEYBOARD = "key.shoot";
 
+    private static final String PREF_SHOW_INTRO_TEXT = "tutorial.enabled";
+
     private static final String PREF_NAME = "spaceboi";
     private static final float DEFAULT_VOLUME = 0.5f;
 
@@ -108,6 +110,15 @@ public final class GamePreferences {
 
     public void setKeyShootKeyboard(boolean isKeyboard) {
         getPreferences().putBoolean(PREF_KEY_SHOOT_IS_KEYBOARD, isKeyboard);
+        getPreferences().flush();
+    }
+
+    public boolean isTutorialEnabled() {
+        return getPreferences().getBoolean(PREF_SHOW_INTRO_TEXT, true);
+    }
+
+    public void setTutorialEnabled(boolean tutorialEnabled) {
+        getPreferences().putBoolean(PREF_SHOW_INTRO_TEXT, tutorialEnabled);
         getPreferences().flush();
     }
 

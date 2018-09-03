@@ -48,7 +48,11 @@ public class LoadingScreen extends BaseScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                if (game.getPreferences().isTutorialEnabled()) {
+                    game.setScreen(new IntroScreen(game, LoadingScreen.this));
+                } else {
+                    game.setScreen(new GameScreen(game));
+                }
                 dispose();
             }
         });
