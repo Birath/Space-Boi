@@ -4,7 +4,8 @@ import com.binarygames.spaceboi.Assets;
 
 public enum WeaponAttachmentAsset {
     MechDamage(Assets.ARMOR_PIERCING), BioDamage(Assets.BIO_DAMAGE_ICON), Experience(Assets.XP_BOOST_ICON),
-    Slow(Assets.SLOW_ICON), GlassCannon(Assets.GLASS_CANNON_ICON);
+    Slow(Assets.SLOW_ICON), GlassCannon(Assets.GLASS_CANNON_ICON), Silencer(Assets.SILENCER_ICON),
+    Recoil(Assets.RECOIL_ICON);
 
     private final String asset;
 

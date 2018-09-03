@@ -120,6 +120,8 @@ public class Assets {
     public static final String XP_BOOST_ICON = "game/entities/pickups/xp_boost_icon.png";
     public static final String SLOW_ICON = "game/entities/pickups/slow_icon.png";
     public static final String GLASS_CANNON_ICON = "game/entities/pickups/glass_cannon_icon.png";
+    public static final String SILENCER_ICON = "game/entities/pickups/silencer_icon.png";
+    public static final String RECOIL_ICON = "game/entities/pickups/recoil_icon.png";
 
     // Minimap markers
     public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
@@ -237,6 +239,8 @@ public class Assets {
         assetManager.load(XP_BOOST_ICON, Texture.class, textureParameter);
         assetManager.load(SLOW_ICON, Texture.class, textureParameter);
         assetManager.load(GLASS_CANNON_ICON, Texture.class, textureParameter);
+        assetManager.load(SILENCER_ICON, Texture.class, textureParameter);
+        assetManager.load(RECOIL_ICON, Texture.class, textureParameter);
 
         // Minimap markers
         assetManager.load(MARKER_PLANET, Texture.class, textureParameter);
