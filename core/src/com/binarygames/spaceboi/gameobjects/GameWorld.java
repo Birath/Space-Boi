@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.background_functions.XPHandler;
-import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
@@ -32,6 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
+
 public class GameWorld {
 
     private SpaceBoi game;
@@ -43,6 +44,7 @@ public class GameWorld {
     private ParticleHandler particleHandler;
     private XPHandler xp_handler;
     private Player player;
+    private Background background;
     private FinalBoss finalBoss;
     private boolean shouldLerpPlayerAngle = false;
 
@@ -85,17 +87,17 @@ public class GameWorld {
         worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
         Player player = new Player(this, worldGenerator.generatePlayerX(),
-            worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+                worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
         // TODO remove temp attachment testing
         addDynamicEntity(new Slow(this, worldGenerator.generatePlayerX() + 50,
-            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new LifeSteal(this, worldGenerator.generatePlayerX() + 100,
-            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new MechDamage(this, worldGenerator.generatePlayerX() + 150,
-            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
         addDynamicEntity(new BioDamage(this, worldGenerator.generatePlayerX() + 200,
-            worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
+                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
 
         //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
         this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
@@ -103,6 +105,7 @@ public class GameWorld {
         addDynamicEntity(finalBoss);
         this.player = player;
         xp_handler = new XPHandler(player);
+        background = new Background(game, player);
 
         world.setContactListener(new EntityContactListener(this));
     }
@@ -129,6 +132,8 @@ public class GameWorld {
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
+        background.render(batch);
+
         for (EntityStatic entity : staticEntities) {
             entity.render(batch, camera);
         }
@@ -148,10 +153,10 @@ public class GameWorld {
         Vector2 finalGravity = new Vector2();
         for (Planet planet : planetsWithinRange) {
             float angle = MathUtils
-                .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
+                    .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
             Vector2 gravityPull = new Vector2(
-                (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()),
-                (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()));
+                    (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()),
+                    (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()));
             finalGravity.add(gravityPull);
         }
         if (game.getPreferences().isGravityEnabled()) {
@@ -336,7 +341,7 @@ public class GameWorld {
 
     public void spawnHealthPack(Enemy enemy) {
         if (random.nextInt(10) < HEALTH_DROP_CHANCE) {
-            addDynamicEntity(new HealthPickup(this, enemy.getBody().getPosition().x * BaseBody.PPM, enemy.getBody().getPosition().y * BaseBody.PPM, Assets.PICKUP_HEALTH, 300, 7));
+            addDynamicEntity(new HealthPickup(this, enemy.getBody().getPosition().x * PPM, enemy.getBody().getPosition().y * PPM, Assets.PICKUP_HEALTH, 300, 7));
         }
     }
 
