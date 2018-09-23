@@ -57,7 +57,7 @@ public class IntroScreen extends BaseScreen {
             "R - Reload your current weapon\n" +
             "I - Open weapon attachment menu\n" +
             "\n" +
-            "Space pirates have just stolen beloved your dog and brought him\n" +
+            "Space pirates have just stolen your beloved dog and brought him\n" +
             "to the middle of the galaxy. Make your way there by slaying enemies\n" +
             "and jumping off the launchpads that are located on each planet.\n" +
             "Hurry up before they eat him!", infoStyle);
