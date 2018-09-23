@@ -85,6 +85,7 @@ public class Assets {
      */
     public static final String ATTACHMENT_PICK_1 = "game/enviroment/attachmentpickup1.wav"; // https://freesound.org/people/rhodesmas/sounds/320654/
     public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
+    public static final String WORLD_BACKGROUND = "game/enviroment/world_background.png"; // http://wwwtyro.github.io/procedural.js/space/
 
     // TODO
 
@@ -122,6 +123,7 @@ public class Assets {
     public static final String GLASS_CANNON_ICON = "game/entities/pickups/glass_cannon_icon.png";
     public static final String SILENCER_ICON = "game/entities/pickups/silencer_icon.png";
     public static final String RECOIL_ICON = "game/entities/pickups/recoil_icon.png";
+    public static final String LIFE_STEAL_ICON = "game/entities/pickups/life_steal_icon.png";
 
     // Minimap markers
     public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
@@ -208,6 +210,7 @@ public class Assets {
 
         assetManager.load(ATTACHMENT_PICK_1, Sound.class);
         assetManager.load(ATTACHMENT_PICK_2, Sound.class);
+        assetManager.load(WORLD_BACKGROUND, Texture.class);
 
         // TODO
 
@@ -241,6 +244,7 @@ public class Assets {
         assetManager.load(GLASS_CANNON_ICON, Texture.class, textureParameter);
         assetManager.load(SILENCER_ICON, Texture.class, textureParameter);
         assetManager.load(RECOIL_ICON, Texture.class, textureParameter);
+        assetManager.load(LIFE_STEAL_ICON, Texture.class, textureParameter);
 
         // Minimap markers
         assetManager.load(MARKER_PLANET, Texture.class, textureParameter);
