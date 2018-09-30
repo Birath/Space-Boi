@@ -105,7 +105,7 @@ public class GameWorld {
         addDynamicEntity(finalBoss);
         this.player = player;
         xp_handler = new XPHandler(player);
-        background = new Background(game, player);
+        background = new Background(game, player, camera);
 
         world.setContactListener(new EntityContactListener(this));
     }
@@ -132,7 +132,7 @@ public class GameWorld {
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        background.render(batch);
+        background.render(batch, camera);
 
         for (EntityStatic entity : staticEntities) {
             entity.render(batch, camera);

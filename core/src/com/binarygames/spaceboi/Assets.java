@@ -85,7 +85,7 @@ public class Assets {
      */
     public static final String ATTACHMENT_PICK_1 = "game/enviroment/attachmentpickup1.wav"; // https://freesound.org/people/rhodesmas/sounds/320654/
     public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
-    public static final String WORLD_BACKGROUND = "game/enviroment/world_background.png"; // http://wwwtyro.github.io/procedural.js/space/
+    public static final String WORLD_BACKGROUND = "game/enviroment/world_background2.png"; // http://wwwtyro.github.io/procedural.js/space/
 
     // TODO
 
