@@ -6,8 +6,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class BioDamage extends WeaponAttachment {
     private String name = "Bio Damage";
-    private String description = "Deals extra damage to biological enemies";
-    private String icon = Assets.UI_BIO_DAMAGE_ICON;
+    private String description = "Deal extra damage to biological enemies";
+    private String icon = Assets.BIO_DAMAGE_ICON;
 
     private boolean isEquipped;
 

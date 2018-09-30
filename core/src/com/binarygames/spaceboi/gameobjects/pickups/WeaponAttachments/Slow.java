@@ -6,8 +6,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class Slow extends WeaponAttachment {
     private String name = "Slow";
-    private String description = "Slows enemies when you shoot them";
-    private String icon = Assets.UI_SLOW_ICON;
+    private String description = "Slow enemies when you shoot them";
+    private String icon = Assets.SLOW_ICON;
 
     private boolean isEquipped;
 

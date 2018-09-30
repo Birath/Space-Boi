@@ -8,8 +8,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 public class GlassCannon extends WeaponAttachment {
 
     private String name = "Glass Cannon";
-    private String description = "Low life but really high damage";
-    private String icon = Assets.UI_GLASS_CANNON_ICON;
+    private String description = "Lower player max health and increase damage dealt dramatically";
+    private String icon = Assets.GLASS_CANNON_ICON;
 
     private boolean isEquipped;
 

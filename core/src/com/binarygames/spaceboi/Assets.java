@@ -104,18 +104,9 @@ public class Assets {
      */
 
     public static final String UI_EMPTY_ATTACHMENT = "game/ui/empty_attachment.png";
-    public static final String UI_HEALTH_ICON = "game/ui/health_icon.png";
-    public static final String UI_SILENCER_ICON = "game/ui/silencer_icon.jpg";
-    public static final String UI_EXPERIENCE_ICON = "game/ui/experience_icon.jpg";
-    public static final String UI_RECOIL_ICON = "game/ui/recoil_icon.jpg";
-    public static final String UI_GLASS_CANNON_ICON = "game/ui/glass_cannon_icon.png";
-    public static final String UI_BIO_DAMAGE_ICON = "game/ui/glass_cannon_icon.png";
-    public static final String UI_MECH_DAMAGE_ICON = "game/ui/glass_cannon_icon.png";
-    public static final String UI_LIFESTEAL_ICON = "game/ui/glass_cannon_icon.png";
-    public static final String UI_SLOW_ICON = "game/ui/glass_cannon_icon.png";
 
     // PICKUPS
-    public static final String PICKUP_HEALTH = "game/entities/pickups/norrlands_health.png";
+    public static final String PICKUP_HEALTH = "game/entities/pickups/beercanhealth.png";
     public static final String ARMOR_PIERCING = "game/entities/pickups/armor_piercing_icon.png";
     public static final String BIO_DAMAGE_ICON = "game/entities/pickups/bio_damage_icon.png";
     public static final String XP_BOOST_ICON = "game/entities/pickups/xp_boost_icon.png";
@@ -227,11 +218,6 @@ public class Assets {
          */
 
         assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
-        assetManager.load(UI_HEALTH_ICON, Texture.class, textureParameter);
-        assetManager.load(UI_SILENCER_ICON, Texture.class, textureParameter);
-        assetManager.load(UI_EXPERIENCE_ICON, Texture.class, textureParameter);
-        assetManager.load(UI_RECOIL_ICON, Texture.class, textureParameter);
-        assetManager.load(UI_GLASS_CANNON_ICON, Texture.class, textureParameter);
 
         /*
             PICKUPS

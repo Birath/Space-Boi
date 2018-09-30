@@ -7,8 +7,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 public class Experience extends WeaponAttachment {
 
     private String name = "Experience";
-    private String description = "Increases XP gains";
-    private String icon = Assets.UI_EXPERIENCE_ICON;
+    private String description = "Gain more XP";
+    private String icon = Assets.XP_BOOST_ICON;
 
     private boolean isEquipped;
 

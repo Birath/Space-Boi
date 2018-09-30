@@ -70,7 +70,7 @@ public class GameUI {
         health = 5;
 
         // Health icon
-        texture = game.getAssetManager().get(Assets.UI_HEALTH_ICON, Texture.class);
+        texture = game.getAssetManager().get(Assets.PICKUP_HEALTH, Texture.class);
         image = new Image(texture);
         image.setSize(50, 50);
         image.setPosition(Gdx.graphics.getWidth() * 16 / 20 - image.getImageWidth(), Gdx.graphics.getHeight() / 20 - image.getImageHeight());

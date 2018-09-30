@@ -7,8 +7,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 public class Recoil extends WeaponAttachment {
 
     private String name = "Recoil";
-    private String description = "Makes you go fly fly";
-    private String icon = Assets.UI_RECOIL_ICON;
+    private String description = "Increase weapon recoil";
+    private String icon = Assets.RECOIL_ICON;
 
     private boolean isEquipped;
 

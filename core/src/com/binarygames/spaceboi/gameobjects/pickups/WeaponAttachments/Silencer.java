@@ -7,8 +7,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 public class Silencer extends WeaponAttachment {
 
     private String name = "Silencer";
-    private String description = "Makes things go pew pew";
-    private String icon = Assets.UI_SILENCER_ICON;
+    private String description = "Decrease weapon recoil";
+    private String icon = Assets.SILENCER_ICON;
 
     private boolean isEquipped;
 

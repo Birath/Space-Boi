@@ -6,8 +6,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class LifeSteal extends WeaponAttachment {
     private String name = "Lifesteal";
-    private String description = "Heals you when you damage enemies";
-    private String icon = Assets.UI_LIFESTEAL_ICON;
+    private String description = "Heal when you damage enemies";
+    private String icon = Assets.LIFE_STEAL_ICON;
 
     private boolean isEquipped;
 

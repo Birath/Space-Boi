@@ -6,8 +6,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
 public class MechDamage extends WeaponAttachment {
     private String name = "Mech Damage";
-    private String description = "Deals extra damage to mechanical enemies";
-    private String icon = Assets.UI_MECH_DAMAGE_ICON;
+    private String description = "Deal extra damage to mechanical enemies";
+    private String icon = Assets.ARMOR_PIERCING;
 
     private boolean isEquipped;
 
