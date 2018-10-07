@@ -50,7 +50,6 @@ public abstract class Enemy extends EntityDynamic {
     protected List<String> deathSounds = new ArrayList();
 
 
-
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType, float width, float height) {
         super(gameWorld, x, y, path, enemyType.getMass(), width, height, enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
         createEnemy(gameWorld, enemyType);
@@ -91,7 +90,6 @@ public abstract class Enemy extends EntityDynamic {
     }
 
     protected abstract void getSounds();
-
 
 
     @Override
@@ -142,8 +140,8 @@ public abstract class Enemy extends EntityDynamic {
         gameWorld.getXp_handler().increaseXP(xpIncrease);
     }
 
-    private void playRandomSound(List<String> soundList){
-        if(soundList.size() < 1){
+    private void playRandomSound(List<String> soundList) {
+        if (soundList.size() < 1) {
             return;
         }
         Random random = new Random();
@@ -242,29 +240,29 @@ public abstract class Enemy extends EntityDynamic {
         healthBar.draw(batch, 1);
 
     }
-    public void receiveWeaponEffects(Bullet bullet){
+
+    public void receiveWeaponEffects(Bullet bullet) {
         this.reduceHealth(bullet.getDamage());
         playRandomSound(damagedSounds);
 
-        if(enemyKind == EnemyKind.BIOLOGICAL){
+        if (enemyKind == EnemyKind.BIOLOGICAL) {
             gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
                     this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
             this.reduceHealth(bullet.getBioDamage());
-            if(bullet.getBioDamage() > 0){
+            if (bullet.getBioDamage() > 0) {
                 gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.FIRE,
                         this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
             }
-        }
-        else if(enemyKind == EnemyKind.MECHANICAL){
+        } else if (enemyKind == EnemyKind.MECHANICAL) {
             this.reduceHealth(bullet.getMechDamage());
-            if(bullet.getMechDamage() > 0){
+            if (bullet.getMechDamage() > 0) {
                 //apply mechdamage graphical effect
             }
         }
 
-        if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()){
+        if (MINIMUM_MOVESPEED < this.getMoveSpeed() - bullet.getSlow()) {
             this.setMoveSpeed(this.getMoveSpeed() - bullet.getSlow());
-            if(bullet.getMechDamage() > 0){
+            if (bullet.getMechDamage() > 0) {
                 //Apply slow particle
             }
         }

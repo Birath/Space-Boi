@@ -1,8 +1,8 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.math.Vector2;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.bodies.BaseBody;
 import com.binarygames.spaceboi.gameobjects.entities.ENTITY_STATE;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
@@ -18,6 +18,11 @@ public class FlyingShip extends Enemy {
         this.entityState = ENTITY_STATE.JUMPING;
 
         shotgun = new Shotgun(gameWorld, this);
+
+        damagedSounds.add(Assets.RICOCHET1);
+        damagedSounds.add(Assets.RICOCHET2);
+        damagedSounds.add(Assets.RICOCHET3);
+        damagedSounds.add(Assets.RICOCHET4);
     }
 
     @Override
@@ -103,7 +108,7 @@ public class FlyingShip extends Enemy {
     private void ShootShotgun() {
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
-            body.getPosition().y * PPM + shootDirection.y);
+                body.getPosition().y * PPM + shootDirection.y);
 
         shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
     }
@@ -116,7 +121,7 @@ public class FlyingShip extends Enemy {
         }
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
-            body.getPosition().y * PPM + perpen.y);
+                body.getPosition().y * PPM + perpen.y);
 
         weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
     }
