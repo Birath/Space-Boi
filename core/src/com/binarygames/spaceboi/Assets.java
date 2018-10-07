@@ -20,7 +20,7 @@ public class Assets {
     public static final String MENU_BACKGROUND_IMAGE = "menu/space_boi_menu_placeholder.jpg";
 
     // Audio
-    public static final String MENU_BACKGROUND_MUSIC = "menu/Flume - Helix.mp3";
+
 
     // Data
     public static final String MENU_UI_SKIN = "menu/uiskin.json";
@@ -84,6 +84,9 @@ public class Assets {
     /*
         Environment
      */
+    //Audio
+    public static final String BACKGROUND_MUSIC = "game/enviroment/sound_track.mp3";
+
     public static final String ATTACHMENT_PICK_1 = "game/enviroment/attachmentpickup1.wav"; // https://freesound.org/people/rhodesmas/sounds/320654/
     public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
     public static final String WORLD_BACKGROUND = "game/enviroment/world_background2.png"; // http://wwwtyro.github.io/procedural.js/space/
@@ -136,8 +139,6 @@ public class Assets {
         assetManager.load(MENU_UI_SKIN, Skin.class);
 
         assetManager.load(HEALTHBAR_SKIN, Skin.class);
-
-        assetManager.load(MENU_BACKGROUND_MUSIC, Music.class);
     }
 
     public void loadGameAssets() {
@@ -200,6 +201,8 @@ public class Assets {
         /*
             Environment
          */
+        //Audio
+        assetManager.load(BACKGROUND_MUSIC, Music.class);
 
         assetManager.load(ATTACHMENT_PICK_1, Sound.class);
         assetManager.load(ATTACHMENT_PICK_2, Sound.class);

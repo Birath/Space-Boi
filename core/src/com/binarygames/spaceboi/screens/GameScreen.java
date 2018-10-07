@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
@@ -73,6 +74,10 @@ public class GameScreen implements Screen {
         frameRate = new FrameRate();
 
         this.game = game;
+
+        //Music
+        game.getMusicManager().play(Assets.BACKGROUND_MUSIC);
+
         // Mysko skit för att få scalingen av debuggkameran rätt
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);

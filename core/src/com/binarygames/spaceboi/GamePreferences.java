@@ -53,7 +53,7 @@ public final class GamePreferences {
         getPreferences().flush();
 
         if (musicEnabled) {
-            game.getMusicManager().play(Assets.MENU_BACKGROUND_MUSIC);
+            game.getMusicManager().play(Assets.BACKGROUND_MUSIC);
         } else {
             game.getMusicManager().stop();
         }
