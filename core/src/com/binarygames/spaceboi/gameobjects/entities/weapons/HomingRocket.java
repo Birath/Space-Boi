@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
@@ -28,6 +29,11 @@ public class HomingRocket extends Bullet {
         toPlayer.setLength2(1).scl(this.getBody().getLinearVelocity().len());
         this.getBody().setLinearVelocity(toPlayer);
 
+    }
+
+    @Override
+    public void onRemove() {
+        gameWorld.getGame().getSoundManager().play(Assets.MISSILE_HIT);
     }
 
 }

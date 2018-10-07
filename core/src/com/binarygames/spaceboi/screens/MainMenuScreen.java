@@ -46,7 +46,7 @@ public class MainMenuScreen implements Screen {
         this.game = game;
 
         // Menu music
-        game.getMusicManager().play(Assets.MENU_BACKGROUND_MUSIC);
+
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);

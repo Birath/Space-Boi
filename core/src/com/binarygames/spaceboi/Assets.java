@@ -20,7 +20,7 @@ public class Assets {
     public static final String MENU_BACKGROUND_IMAGE = "menu/space_boi_menu_placeholder.jpg";
 
     // Audio
-    public static final String MENU_BACKGROUND_MUSIC = "menu/Flume - Helix.mp3";
+
 
     // Data
     public static final String MENU_UI_SKIN = "menu/uiskin.json";
@@ -35,6 +35,11 @@ public class Assets {
 
     // Flyging ship
     public static final String MISSILE_LAUNCH = "game/entities/enemies/flying_ship/missile_launch.wav"; // https://freesound.org/people/Audionautics/sounds/171655/
+    public static final String MISSILE_HIT = "game/entities/enemies/flying_ship/missile_hit.wav"; // https://freesound.org/people/studiomandragore/sounds/401628/
+    public static final String RICOCHET1 = "game/entities/enemies/flying_ship/ricochet1.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
+    public static final String RICOCHET2 = "game/entities/enemies/flying_ship/ricochet2.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
+    public static final String RICOCHET3 = "game/entities/enemies/flying_ship/ricochet3.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
+    public static final String RICOCHET4 = "game/entities/enemies/flying_ship/ricochet4.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
 
     // Pirate
     public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
@@ -83,6 +88,9 @@ public class Assets {
     /*
         Environment
      */
+    //Audio
+    public static final String BACKGROUND_MUSIC = "game/enviroment/sound_track.mp3";
+
     public static final String ATTACHMENT_PICK_1 = "game/enviroment/attachmentpickup1.wav"; // https://freesound.org/people/rhodesmas/sounds/320654/
     public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
     public static final String WORLD_BACKGROUND = "game/enviroment/world_background2.png"; // http://wwwtyro.github.io/procedural.js/space/
@@ -135,8 +143,6 @@ public class Assets {
         assetManager.load(MENU_UI_SKIN, Skin.class);
 
         assetManager.load(HEALTHBAR_SKIN, Skin.class);
-
-        assetManager.load(MENU_BACKGROUND_MUSIC, Music.class);
     }
 
     public void loadGameAssets() {
@@ -151,6 +157,11 @@ public class Assets {
 
         // Flyging ship
         assetManager.load(MISSILE_LAUNCH, Sound.class);
+        assetManager.load(MISSILE_HIT, Sound.class);
+        assetManager.load(RICOCHET1, Sound.class);
+        assetManager.load(RICOCHET2, Sound.class);
+        assetManager.load(RICOCHET3, Sound.class);
+        assetManager.load(RICOCHET4, Sound.class);
 
         // Pirate
         assetManager.load(PIRATE_ATTACK1, Sound.class);
@@ -198,6 +209,8 @@ public class Assets {
         /*
             Environment
          */
+        //Audio
+        assetManager.load(BACKGROUND_MUSIC, Music.class);
 
         assetManager.load(ATTACHMENT_PICK_1, Sound.class);
         assetManager.load(ATTACHMENT_PICK_2, Sound.class);
