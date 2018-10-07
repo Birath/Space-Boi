@@ -72,6 +72,7 @@ public class Assets {
     public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_SHOT_PUMP = "game/entities/weapons/shotgun/shot_pump.wav"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_RELOAD = "game/entities/weapons/shotgun/reload.wav"; // https://freesound.org/people/lensflare8642/sounds/145209/
+    public static final String WEAPON_BULLET = "game/entities/weapons/bullet.png";
 
     // public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/Ratatata.mp3";
     public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/shot.wav";
@@ -190,6 +191,7 @@ public class Assets {
         assetManager.load(WEAPON_SHOTGUN_PUMP, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_SHOT_PUMP, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_RELOAD, Sound.class);
+        assetManager.load(WEAPON_BULLET, Texture.class, textureParameter);
 
         assetManager.load(WEAPON_MACHINEGUN_SHOT, Sound.class);
         assetManager.load(WEAPON_MACHINEGUN_RELOAD, Sound.class);

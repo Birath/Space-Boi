@@ -8,7 +8,7 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 public class Grenade extends Bullet {
 
     private static final int SHRAPNEL_AMOUNT = 40;
-    private static final String SHRAPNEL_PATH = Assets.PLAYER;
+    private static final String SHRAPNEL_PATH = Assets.WEAPON_BULLET;
     private static final int SHRAPNEL_SPEED = 30;
     private static final float SHRAPNEL_MASS = 10;
     private static final float SHRAPNEL_RADIUS = 1;
