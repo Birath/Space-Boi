@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.ui;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
@@ -53,16 +52,16 @@ public class AudioSettingsTab extends SettingsTab {
         final Label soundCheckBoxLabel = new Label("Sound enabled", uiSkin);
 
         table.add(soundVolumeLabel).left();
-        table.add(soundVolumeSlider);
+        table.add(soundVolumeSlider).center();
         table.row().pad(10, 0, 10, 0);
         table.add(soundCheckBoxLabel).left();
-        table.add(soundEnabledCheckBox);
+        table.add(soundEnabledCheckBox).center();
         table.row().pad(10, 0, 10, 0);
         table.add(musicVolumeLabel).left();
-        table.add(musicVolumeSlider);
+        table.add(musicVolumeSlider).center();
         table.row().pad(10, 0, 10, 0);
         table.add(musicCheckBoxLabel).left();
-        table.add(musicEnabledCheckBox);
+        table.add(musicEnabledCheckBox).center();
     }
 
 }
