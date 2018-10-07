@@ -1,10 +1,11 @@
 package com.binarygames.spaceboi.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
@@ -23,7 +24,7 @@ public class ControlSettingsTab extends SettingsTab {
 
         Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
 
-        TextButton shootKey = new TextButton("Shoot", settingsScreen.buttonStyle);
+        TextButton shootKey = new TextButton("Shoot", uiSkin);
         shootKey.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -32,7 +33,7 @@ public class ControlSettingsTab extends SettingsTab {
         });
 
         String keyName = getKeyName(game.getPreferences().getKeyShoot(), game.getPreferences().isKeyShootKeyboard());
-        final Label shootKeyLabel = new Label(keyName, settingsScreen.titleStyle);
+        final Label shootKeyLabel = new Label(keyName, uiSkin);
 
         table.add(shootKey).left();
         table.add(shootKeyLabel).right();

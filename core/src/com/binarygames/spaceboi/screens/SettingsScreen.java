@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.ui.AudioSettingsTab;
 import com.binarygames.spaceboi.ui.ControlSettingsTab;
 import com.binarygames.spaceboi.ui.SettingsTab;
 import com.binarygames.spaceboi.ui.VideoSettingsTab;
+import javafx.scene.control.Tab;
 
 public class SettingsScreen extends BaseScreen {
 
@@ -27,7 +29,7 @@ public class SettingsScreen extends BaseScreen {
         super(game, previousScreen);
 
         stage.clear();
-
+        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
@@ -46,7 +48,7 @@ public class SettingsScreen extends BaseScreen {
         ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
         controlSettingsTab.hide();
 
-        final TextButton audioButton = new TextButton("Audio", buttonStyle);
+        final TextButton audioButton = new TextButton("Audio", uiSkin);
         audioButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
@@ -54,7 +56,7 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final TextButton videoButton = new TextButton("Video", buttonStyle);
+        final TextButton videoButton = new TextButton("Video", uiSkin);
         videoButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
@@ -62,7 +64,7 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final TextButton controlsButton = new TextButton("Controls", buttonStyle);
+        final TextButton controlsButton = new TextButton("Controls", uiSkin);
         controlsButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
@@ -70,7 +72,7 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final TextButton backButton = new TextButton("Back", buttonStyle);
+        final TextButton backButton = new TextButton("Back", uiSkin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
@@ -79,7 +81,7 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final TextButton applyButton = new TextButton("Apply", buttonStyle);
+        final TextButton applyButton = new TextButton("Apply", uiSkin);
         applyButton.setVisible(false); // Is shown when settings which need to be applied are changed, ie resolution
         applyButton.addListener(new ChangeListener() {
             @Override
@@ -88,21 +90,25 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final Label title = new Label("Settings", titleStyle);
+        final Label title = new Label("Settings", uiSkin);
 
+        Table buttonTable = new Table();
+        buttonTable.add(audioButton).expand().left();
+        buttonTable.add(videoButton).center().expand();
+        buttonTable.add(controlsButton).right().expand();
         setCurrentTab(audioSettingsTab);
 
-        table.add(title).left();
-        table.row();
-        table.add(audioButton).left();
-        table.add(videoButton).center();
-        table.add(controlsButton).right();
+        table.add(title).align(Align.center).colspan(3).growY();
+        table.row().pad(10, 0, 10,0);
+
+        table.add(buttonTable).fill().colspan(3).align(Align.center);
         table.row();
         settingsCell = table.add(currentSettingsTab.getTable());
-        // TODO settingsCell size
-        table.row();
-        table.add(backButton).left();
-        table.add(applyButton).right();
+
+        table.row().pad(10, 0, 10, 0);
+        table.add(backButton).left().top();
+        table.add(applyButton).right().growY().top();
+        table.row().growY();
 
         stage.addActor(table);
     }

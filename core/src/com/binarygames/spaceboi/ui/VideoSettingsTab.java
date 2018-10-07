@@ -44,10 +44,10 @@ public class VideoSettingsTab extends SettingsTab {
             }
         });
 
-        final Label fullscreenLabel = new Label("Fullscreen", settingsScreen.titleStyle);
-
+        final Label fullscreenLabel = new Label("Fullscreen", uiSkin);
+        table.debug();
         table.add(fullscreenLabel).left();
-        table.add(fullscreenCheckBox);
+        table.add(fullscreenCheckBox).right();
     }
 
 }

@@ -46,22 +46,22 @@ public class AudioSettingsTab extends SettingsTab {
             return false;
         });
 
-        final Label musicVolumeLabel = new Label("Music volume", settingsScreen.titleStyle);
-        final Label soundVolumeLabel = new Label("Sound volume", settingsScreen.titleStyle);
-        final Label musicCheckBoxLabel = new Label("Music enabled", settingsScreen.titleStyle);
-        final Label soundCheckBoxLabel = new Label("Sound enabled", settingsScreen.titleStyle);
+        final Label musicVolumeLabel = new Label("Music volume", uiSkin);
+        final Label soundVolumeLabel = new Label("Sound volume", uiSkin);
+        final Label musicCheckBoxLabel = new Label("Music enabled", uiSkin);
+        final Label soundCheckBoxLabel = new Label("Sound enabled", uiSkin);
 
         table.add(soundVolumeLabel).left();
-        table.add(soundVolumeSlider);
+        table.add(soundVolumeSlider).center();
         table.row().pad(10, 0, 10, 0);
         table.add(soundCheckBoxLabel).left();
-        table.add(soundEnabledCheckBox);
+        table.add(soundEnabledCheckBox).center();
         table.row().pad(10, 0, 10, 0);
         table.add(musicVolumeLabel).left();
-        table.add(musicVolumeSlider);
+        table.add(musicVolumeSlider).center();
         table.row().pad(10, 0, 10, 0);
         table.add(musicCheckBoxLabel).left();
-        table.add(musicEnabledCheckBox);
+        table.add(musicEnabledCheckBox).center();
     }
 
 }
