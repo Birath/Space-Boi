@@ -17,7 +17,7 @@ public class Machinegun extends Weapon {
         super(aGameWorld, shooter);
 
         this.bulletMass = 10;
-        this.bulletRadius = 2f;
+        this.bulletRadius = 1.5f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
         this.bulletPath = Assets.WEAPON_BULLET;
