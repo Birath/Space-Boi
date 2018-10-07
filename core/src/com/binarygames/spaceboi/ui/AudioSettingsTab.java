@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.ui;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
@@ -46,10 +47,10 @@ public class AudioSettingsTab extends SettingsTab {
             return false;
         });
 
-        final Label musicVolumeLabel = new Label("Music volume", settingsScreen.titleStyle);
-        final Label soundVolumeLabel = new Label("Sound volume", settingsScreen.titleStyle);
-        final Label musicCheckBoxLabel = new Label("Music enabled", settingsScreen.titleStyle);
-        final Label soundCheckBoxLabel = new Label("Sound enabled", settingsScreen.titleStyle);
+        final Label musicVolumeLabel = new Label("Music volume", uiSkin);
+        final Label soundVolumeLabel = new Label("Sound volume", uiSkin);
+        final Label musicCheckBoxLabel = new Label("Music enabled", uiSkin);
+        final Label soundCheckBoxLabel = new Label("Sound enabled", uiSkin);
 
         table.add(soundVolumeLabel).left();
         table.add(soundVolumeSlider);
