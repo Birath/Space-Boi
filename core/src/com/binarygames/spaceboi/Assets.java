@@ -81,9 +81,12 @@ public class Assets {
     public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/shot.wav";
     public static final String WEAPON_MACHINEGUN_RELOAD = "game/entities/weapons/machinegun/reload.wav"; // https://freesound.org/people/davdud101/sounds/145475/
 
+    public static final String WEAPON_BULLET = "game/entities/weapons/bullet.png";
+
     public static final String WEAPON_GRENADELAUNCHER_EXPLOSION = "game/entities/weapons/grenadelauncher/explosion.wav"; // https://freesound.org/people/eardeer/sounds/390182/
     public static final String WEAPON_GRENADELAUNCHER_SHOT = "game/entities/weapons/grenadelauncher/shot.mp3"; // https://freesound.org/people/LeMudCrab/sounds/163458/
     public static final String WEAPON_GRENADELAUNCHER_RELOAD = "game/entities/weapons/grenadelauncher/reload.wav"; // https://freesound.org/people/JacquelineKohrs150067/sounds/326677/
+    public static final String WEAPON_GRENADE = "game/entities/weapons/grenadelauncher/grenade.png";
 
     /*
         Environment
@@ -202,9 +205,12 @@ public class Assets {
         assetManager.load(WEAPON_MACHINEGUN_SHOT, Sound.class);
         assetManager.load(WEAPON_MACHINEGUN_RELOAD, Sound.class);
 
+        assetManager.load(WEAPON_BULLET, Texture.class, textureParameter);
+
         assetManager.load(WEAPON_GRENADELAUNCHER_EXPLOSION, Sound.class);
         assetManager.load(WEAPON_GRENADELAUNCHER_SHOT, Sound.class);
         assetManager.load(WEAPON_GRENADELAUNCHER_RELOAD, Sound.class);
+        assetManager.load(WEAPON_GRENADE, Texture.class, textureParameter);
 
         /*
             Environment

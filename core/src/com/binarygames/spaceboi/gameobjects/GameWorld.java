@@ -89,16 +89,6 @@ public class GameWorld {
         Player player = new Player(this, worldGenerator.generatePlayerX(),
                 worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
-        // TODO remove temp attachment testing
-        addDynamicEntity(new Slow(this, worldGenerator.generatePlayerX() + 50,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new LifeSteal(this, worldGenerator.generatePlayerX() + 100,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new MechDamage(this, worldGenerator.generatePlayerX() + 150,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-        addDynamicEntity(new BioDamage(this, worldGenerator.generatePlayerX() + 200,
-                worldGenerator.generatePlayerY(), Assets.PLANET_MOON, 500, 5));
-
         //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
         this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
         addDynamicEntity(player);

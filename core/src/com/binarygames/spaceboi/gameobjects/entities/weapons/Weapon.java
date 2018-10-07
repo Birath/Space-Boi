@@ -24,6 +24,7 @@ public abstract class Weapon {
     protected GameWorld gameWorld;
     protected Sprite sprite;
     protected String path;
+    protected String bulletPath;
     protected float radius;
 
     protected EntityDynamic shooter;

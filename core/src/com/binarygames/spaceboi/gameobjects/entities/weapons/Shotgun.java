@@ -20,6 +20,7 @@ public class Shotgun extends Weapon {
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
+        this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 20;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 1;
@@ -42,7 +43,7 @@ public class Shotgun extends Weapon {
             for (int i = 0; i < numberOfBullets; i++) {
                 int randomAngle = MathUtils.random(-spread, spread);
                 Vector2 randomShootDirection = shootDirection.rotate(randomAngle);
-                new Bullet(gameWorld, x, y, path, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+                new Bullet(gameWorld, x, y, bulletPath, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             }
             weaponMaths();
 

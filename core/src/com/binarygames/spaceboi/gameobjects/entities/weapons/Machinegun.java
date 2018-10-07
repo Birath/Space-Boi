@@ -20,6 +20,7 @@ public class Machinegun extends Weapon {
         this.bulletRadius = 2f;
         this.bulletSpeed = 5;
         this.path = Assets.PLAYER;
+        this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 1;
         this.removeBulletDelay = 0;
         this.timeBetweenShots = 0.1f;
@@ -40,7 +41,7 @@ public class Machinegun extends Weapon {
     public void Shoot(float x, float y, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new Bullet(gameWorld, x, y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
