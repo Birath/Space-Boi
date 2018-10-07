@@ -14,11 +14,10 @@ public class Background {
     private SpaceBoi game;
     private Player player;
 
-    private float movePercentage = 0.2f;
+    private float movePercentage = 1f;
 
     private float startX;
     private float startY;
-
 
     private float currentX;
     private float currentY;

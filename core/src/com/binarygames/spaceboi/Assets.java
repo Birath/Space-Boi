@@ -35,6 +35,7 @@ public class Assets {
 
     // Flyging ship
     public static final String MISSILE_LAUNCH = "game/entities/enemies/flying_ship/missile_launch.wav"; // https://freesound.org/people/Audionautics/sounds/171655/
+    public static final String MISSILE_HIT = "game/entities/enemies/flying_ship/missile_hit.wav"; // https://freesound.org/people/studiomandragore/sounds/401628/
 
     // Pirate
     public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
@@ -151,6 +152,7 @@ public class Assets {
 
         // Flyging ship
         assetManager.load(MISSILE_LAUNCH, Sound.class);
+        assetManager.load(MISSILE_HIT, Sound.class);
 
         // Pirate
         assetManager.load(PIRATE_ATTACK1, Sound.class);
