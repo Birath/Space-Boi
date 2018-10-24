@@ -43,6 +43,12 @@ public class InventoryUI {
 
     private WeaponAttachment selectedAttachment;
 
+    /*
+        Hovra över vapen, attachements för att visa info
+        markera blir gul, alla ställen den passar i blir gröna
+        andra blir röda
+     */
+
     public InventoryUI(GameScreen gamesScreen, GameWorld gameWorld) {
         this.gamesScreen = gamesScreen;
         this.gameWorld = gameWorld;
