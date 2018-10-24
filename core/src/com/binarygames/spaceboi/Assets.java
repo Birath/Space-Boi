@@ -63,6 +63,12 @@ public class Assets {
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
+    public static final String PLANET1 = "game/entities/planets/planet1.png";
+    public static final String PLANET2 = "game/entities/planets/planet2.png";
+    public static final String PLANET3 = "game/entities/planets/planet3.png";
+    public static final String PLANET4 = "game/entities/planets/planet4.png";
+    public static final String PLANET5 = "game/entities/planets/planet5.png";
+    public static final String PLANET6 = "game/entities/planets/planet6.png";
     public static final String LAUNCH_PAD = "game/entities/planets/launch_pad.png";
     public static final String LAUNCH_PAD_SOUND = "game/entities/planets/launch_pad_sound.wav"; // https://freesound.org/people/Kinoton/sounds/351256/
 
@@ -189,6 +195,12 @@ public class Assets {
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class, textureParameter);
+        assetManager.load(PLANET1, Texture.class, textureParameter);
+        assetManager.load(PLANET2, Texture.class, textureParameter);
+        assetManager.load(PLANET3, Texture.class, textureParameter);
+        assetManager.load(PLANET4, Texture.class, textureParameter);
+        assetManager.load(PLANET5, Texture.class, textureParameter);
+        assetManager.load(PLANET6, Texture.class, textureParameter);
         assetManager.load(LAUNCH_PAD, Texture.class, textureParameter);
         assetManager.load(LAUNCH_PAD_SOUND, Sound.class);
 

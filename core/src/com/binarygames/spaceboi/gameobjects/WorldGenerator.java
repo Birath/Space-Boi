@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.badlogic.gdx.math.MathUtils.random;
 import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
 
 public class WorldGenerator {
@@ -50,6 +51,7 @@ public class WorldGenerator {
     private static final float LAUNCH_PAD_OFFSET = 0.2f;
 
     private List<Planet> singleRowPlanets = new ArrayList<>();
+    private List<String> planetSprites = new ArrayList();
     private final Random random = new Random();
 
 
@@ -58,6 +60,7 @@ public class WorldGenerator {
     }
 
     public void createWorld() {
+        loadPlanetSprites();
         //Create middle planet
         createPlanet(0, 0);
 
@@ -142,7 +145,7 @@ public class WorldGenerator {
         int grav = random.nextInt(MAX_GRAV - MIN_GRAV);
         grav += MIN_GRAV;
 
-        Planet planet = new Planet(gameWorld, x, y, Assets.PLANET_MOON, grav, planetRadius); //TODO Add different sprites depending on gravity and size of planet
+        Planet planet = new Planet(gameWorld, x, y, getRandomSprite(), grav, planetRadius);
         gameWorld.addStaticEntity(planet);
 
         return planet;
@@ -266,6 +269,18 @@ public class WorldGenerator {
             }
         }
         return planetsWithinRange;
+    }
+    private String getRandomSprite(){
+        int planetType = random.nextInt(planetSprites.size());
+        return planetSprites.get(planetType);
+    }
+    private void loadPlanetSprites(){
+        planetSprites.add(Assets.PLANET1);
+        planetSprites.add(Assets.PLANET2);
+        planetSprites.add(Assets.PLANET3);
+        planetSprites.add(Assets.PLANET4);
+        planetSprites.add(Assets.PLANET5);
+        planetSprites.add(Assets.PLANET6);
     }
 
     public float getRadOfWorld() {
