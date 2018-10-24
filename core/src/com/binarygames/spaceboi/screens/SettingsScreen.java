@@ -20,10 +20,9 @@ import com.binarygames.spaceboi.ui.VideoSettingsTab;
 
 public class SettingsScreen extends BaseScreen {
 
-    private SettingsTab currentSettingsTab;
-    private Cell settingsCell;
+    private SettingsTab currentSettingsTab = null;
+    private Cell settingsCell = null;
 
-    private Table table;
     private Screen previousScreen;
 
     public SettingsScreen(SpaceBoi game, Screen previousScreen) {
@@ -48,7 +47,7 @@ public class SettingsScreen extends BaseScreen {
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
 
         uiSkin.get("default", Label.LabelStyle.class).font = labelFont;
@@ -109,9 +108,7 @@ public class SettingsScreen extends BaseScreen {
         });
 
         Label.LabelStyle labelStyle = uiSkin.get("title-1", Label.LabelStyle.class);
-
         labelStyle.font = titleFont;
-
         final Label title = new Label("Settings", labelStyle);
 
         Table tabButtons = new Table();
