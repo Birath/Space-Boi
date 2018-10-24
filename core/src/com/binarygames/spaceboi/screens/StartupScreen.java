@@ -41,6 +41,11 @@ public class StartupScreen extends BaseScreen {
     }
 
     @Override
+    void loadScreen() {
+
+    }
+
+    @Override
     public void show() {
 
     }

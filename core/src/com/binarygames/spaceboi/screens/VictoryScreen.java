@@ -56,4 +56,9 @@ public class VictoryScreen extends BaseScreen {
         table.add(quitButton);
 
     }
+
+    @Override
+    void loadScreen() {
+
+    }
 }

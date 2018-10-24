@@ -70,6 +70,11 @@ public class LoadingScreen extends BaseScreen {
     }
 
     @Override
+    void loadScreen() {
+
+    }
+
+    @Override
     public void show() {
 
     }

@@ -54,4 +54,9 @@ public class DeathScreen extends BaseScreen {
         table.add(quitButton);
 
     }
+
+    @Override
+    void loadScreen() {
+
+    }
 }

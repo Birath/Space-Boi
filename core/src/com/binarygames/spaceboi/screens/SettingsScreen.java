@@ -5,8 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -16,7 +17,6 @@ import com.binarygames.spaceboi.ui.AudioSettingsTab;
 import com.binarygames.spaceboi.ui.ControlSettingsTab;
 import com.binarygames.spaceboi.ui.SettingsTab;
 import com.binarygames.spaceboi.ui.VideoSettingsTab;
-import javafx.scene.control.Tab;
 
 public class SettingsScreen extends BaseScreen {
 
@@ -24,12 +24,24 @@ public class SettingsScreen extends BaseScreen {
     private Cell settingsCell;
 
     private Table table;
+    private Screen previousScreen;
 
     public SettingsScreen(SpaceBoi game, Screen previousScreen) {
         super(game, previousScreen);
+        this.previousScreen = previousScreen;
 
+
+    }
+
+    @Override
+    void loadScreen() {
+        Gdx.app.log("SettingsScreen", "Loading settings screen");
+        Gdx.app.log("SettingsScreen", "Viewport height: " + stage.getViewport().getWorldHeight() + "Viewport width: " + stage.getViewport().getWorldWidth());
         stage.clear();
         Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
+        // Get fonts
+        BitmapFont titleFont = game.getAssetManager().get(Assets.TITLE_FONT, BitmapFont.class);
+        BitmapFont labelFont = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
@@ -39,6 +51,11 @@ public class SettingsScreen extends BaseScreen {
         table = new Table();
         table.setFillParent(true);
 
+        uiSkin.get("default", Label.LabelStyle.class).font = labelFont;
+        uiSkin.get(TextButton.TextButtonStyle.class).font = labelFont;
+
+
+
         AudioSettingsTab audioSettingsTab = new AudioSettingsTab(game, this);
         audioSettingsTab.hide();
 
@@ -47,6 +64,7 @@ public class SettingsScreen extends BaseScreen {
 
         ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
         controlSettingsTab.hide();
+
 
         final TextButton audioButton = new TextButton("Audio", uiSkin);
         audioButton.addListener(new ChangeListener() {
@@ -90,25 +108,30 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final Label title = new Label("Settings", uiSkin);
+        Label.LabelStyle labelStyle = uiSkin.get("title-1", Label.LabelStyle.class);
 
-        Table buttonTable = new Table();
-        buttonTable.add(audioButton).expand().left();
-        buttonTable.add(videoButton).center().expand();
-        buttonTable.add(controlsButton).right().expand();
+        labelStyle.font = titleFont;
+
+        final Label title = new Label("Settings", labelStyle);
+
+        Table tabButtons = new Table();
+        tabButtons.add(audioButton).expand().left();
+        tabButtons.add(videoButton).center().expand();
+        tabButtons.add(controlsButton).right().expand();
         setCurrentTab(audioSettingsTab);
 
         table.add(title).align(Align.center).colspan(3).growY();
         table.row().pad(10, 0, 10,0);
 
-        table.add(buttonTable).fill().colspan(3).align(Align.center);
+        table.add(tabButtons).fill(0.5f, 1f).colspan(3).align(Align.center).expandX();
         table.row();
-        settingsCell = table.add(currentSettingsTab.getTable());
+        settingsCell = table.add(currentSettingsTab.getTable()).colspan(3);
 
+        Table bottomButtons = new Table();
         table.row().pad(10, 0, 10, 0);
-        table.add(backButton).left().top();
-        table.add(applyButton).right().growY().top();
-        table.row().growY();
+        bottomButtons.add(backButton).left().expand().top();
+        bottomButtons.add(applyButton).right().expand().top();
+        table.add(bottomButtons).fill(0.5f, 1f).colspan(3).align(Align.center).expandX().growY();
 
         stage.addActor(table);
     }

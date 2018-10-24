@@ -77,4 +77,9 @@ public class IntroScreen extends BaseScreen {
 
 
     }
+
+    @Override
+    void loadScreen() {
+
+    }
 }

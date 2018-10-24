@@ -39,6 +39,11 @@ public class CreditsScreen extends BaseScreen implements Screen {
         stage.addActor(creditsLabel);
     }
 
+    @Override
+    void loadScreen() {
+
+    }
+
     private void update(float delta) {
         // Continue credits crawl
         creditsLabel.setY(creditsLabel.getY() + crawlSpeed * delta);

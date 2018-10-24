@@ -11,17 +11,20 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.SpaceBoi;
 
 public abstract class BaseScreen implements Screen {
 
+    public static final int WORLD_WIDTH = 1280;
+    public static final int WORLD_HEIGHT = 720;
     protected SpaceBoi game;
 
     protected OrthographicCamera camera;
 
-    private Viewport viewport;
+    protected Viewport viewport;
 
     protected Stage stage;
 
@@ -47,6 +50,8 @@ public abstract class BaseScreen implements Screen {
         loadFonts();
         loadStyles();
     }
+
+    abstract void loadScreen();
 
     private void loadFonts() {
         // Title font
@@ -95,7 +100,14 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        Gdx.app.log("BaseScreen", "Width: " + width + "Height: " + height);
+
+        stage.getViewport().setWorldSize(width, height);
         stage.getViewport().update(width, height, true);
+        stage.getCamera().update();
+        stage.getViewport().apply();
+        loadScreen();
+
     }
 
     @Override
