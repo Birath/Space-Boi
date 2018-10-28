@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -34,13 +32,9 @@ public class SettingsScreen extends BaseScreen {
 
     @Override
     void loadScreen() {
-        Gdx.app.log("SettingsScreen", "Loading settings screen");
-        Gdx.app.log("SettingsScreen", "Viewport height: " + stage.getViewport().getWorldHeight() + "Viewport width: " + stage.getViewport().getWorldWidth());
         stage.clear();
-        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
-        // Get fonts
-        BitmapFont titleFont = game.getAssetManager().get(Assets.TITLE_FONT, BitmapFont.class);
-        BitmapFont labelFont = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
+
+        Skin uiSkin = getUiSkin();
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
@@ -49,10 +43,6 @@ public class SettingsScreen extends BaseScreen {
 
         Table table = new Table();
         table.setFillParent(true);
-
-        uiSkin.get("default", Label.LabelStyle.class).font = labelFont;
-        uiSkin.get(TextButton.TextButtonStyle.class).font = labelFont;
-
 
 
         AudioSettingsTab audioSettingsTab = new AudioSettingsTab(game, this);
@@ -107,9 +97,8 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        Label.LabelStyle labelStyle = uiSkin.get("title-1", Label.LabelStyle.class);
-        labelStyle.font = titleFont;
-        final Label title = new Label("Settings", labelStyle);
+
+        final Label title = new Label("Settings", getTitleStyle());
 
         Table tabButtons = new Table();
         tabButtons.add(audioButton).expand().left();

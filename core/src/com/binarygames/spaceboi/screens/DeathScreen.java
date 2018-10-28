@@ -2,10 +2,12 @@ package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
@@ -27,9 +29,9 @@ public class DeathScreen extends BaseScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label deathLabel = new Label("You have died", titleStyle);
+        Label deathLabel = new Label("You have died", getTitleStyle());
 
-        TextButton restartButton = new TextButton("Restart", buttonStyle);
+        TextButton restartButton = new TextButton("Restart", getUiSkin());
         restartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -39,7 +41,7 @@ public class DeathScreen extends BaseScreen {
         });
 
 
-        TextButton quitButton = new TextButton("Quit", buttonStyle);
+        TextButton quitButton = new TextButton("Quit", getUiSkin());
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

@@ -3,7 +3,6 @@ package com.binarygames.spaceboi.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -21,11 +20,8 @@ public class MainMenuScreen extends BaseScreen {
     void loadScreen() {
         stage.clear();
 
-        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
+        Skin uiSkin = getUiSkin();
 
-        // Get fonts
-        BitmapFont titleFont = game.getAssetManager().get(Assets.TITLE_FONT, BitmapFont.class);
-        BitmapFont labelFont = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
@@ -35,13 +31,8 @@ public class MainMenuScreen extends BaseScreen {
         Table table = new Table();
         table.setFillParent(true);
 
-        uiSkin.get("default", Label.LabelStyle.class).font = labelFont;
-        uiSkin.get(TextButton.TextButtonStyle.class).font = labelFont;
-
         // Game title
-        Label.LabelStyle labelStyle = uiSkin.get("title-1", Label.LabelStyle.class);
-        labelStyle.font = titleFont;
-        final Label title = new Label("SpaceBoi", labelStyle);
+        final Label title = new Label("SpaceBoi", getTitleStyle());
 
 
         // Play Button
@@ -108,10 +99,6 @@ public class MainMenuScreen extends BaseScreen {
         stage.act(delta);
 
         stage.draw();
-
-        //game.getBatch().begin();
-        //game.debugFont.draw(game.getBatch(), "MAIN_MENU", 5, 20);
-        //game.getBatch().end();
     }
 
 

@@ -1,7 +1,6 @@
 package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -36,12 +35,12 @@ public class LoadingScreen extends BaseScreen {
         stage.addActor(backgroundImage);
 
         // Loading label
-        progressLabel = new Label("Loading stuff: 0%", titleStyle);
+        progressLabel = new Label("Loading stuff: 0%", getTitleStyle());
         progressLabel.setPosition(stage.getWidth() / 2 - progressLabel.getWidth() / 2, stage.getHeight() / 2);
         stage.addActor(progressLabel);
 
         // Play button
-        playButton = new TextButton("Play!", buttonStyle);
+        playButton = new TextButton("Play!", getUiSkin());
         playButton.setX(stage.getWidth() / 2 - playButton.getWidth() / 2);
         playButton.setY(stage.getHeight() / 8);
         playButton.setVisible(false);

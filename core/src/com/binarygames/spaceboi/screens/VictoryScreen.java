@@ -29,9 +29,9 @@ public class VictoryScreen extends BaseScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label infoLabel = new Label("You won!", titleStyle);
+        Label infoLabel = new Label("You won!", getTitleStyle());
 
-        TextButton restartButton = new TextButton("Restart", buttonStyle);
+        TextButton restartButton = new TextButton("Restart", getUiSkin());
         restartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -41,7 +41,7 @@ public class VictoryScreen extends BaseScreen {
         });
 
 
-        TextButton quitButton = new TextButton("Quit", buttonStyle);
+        TextButton quitButton = new TextButton("Quit", getUiSkin());
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

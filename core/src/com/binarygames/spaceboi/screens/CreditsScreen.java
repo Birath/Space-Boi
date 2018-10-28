@@ -33,7 +33,7 @@ public class CreditsScreen extends BaseScreen implements Screen {
         String creditText = textHandler.readString();
 
         // Credits label
-        creditsLabel = new Label(creditText, titleStyle);
+        creditsLabel = new Label(creditText, getUiSkin());
         creditsLabel.setPosition(stage.getWidth() / 2 - creditsLabel.getWidth() / 2, -creditsLabel.getHeight());
         creditsLabel.setAlignment(Align.center);
         stage.addActor(creditsLabel);
