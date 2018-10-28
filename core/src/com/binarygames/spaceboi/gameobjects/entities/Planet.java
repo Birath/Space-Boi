@@ -1,10 +1,11 @@
 package com.binarygames.spaceboi.gameobjects.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 import java.util.ArrayList;
@@ -33,12 +34,27 @@ public class Planet extends EntityStatic {
         getSprite().draw(batch);
 
         shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setColor(Color.LIGHT_GRAY);
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.end();
         shapeRenderer.begin();
-        shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, GRAVITY_RADIUS * rad * PPM);
+
+        Color fadeColor = new Color(0, 102, 204, 0);
+        int lineWidth = 2;
+        Gdx.gl.glLineWidth(lineWidth);
+        int planetBarrierTransitions = 8;
+        float currentRad = GRAVITY_RADIUS * rad * PPM;
+        shapeRenderer.setColor(fadeColor);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        for (int i = 0; i < planetBarrierTransitions; i++) {
+            shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, currentRad, (int) (32 * (float) Math.cbrt(radius)));
+            currentRad -= lineWidth / 2;
+            fadeColor.a += 255 / planetBarrierTransitions;
+            shapeRenderer.setColor(fadeColor);
+        }
+
         shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.begin();
     }
 

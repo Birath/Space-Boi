@@ -12,9 +12,10 @@ public class HomingRocketLauncher extends Weapon {
         super(aGameWorld, shooter);
 
         this.bulletMass = 10;
-        this.bulletRadius = 2f;
+        this.bulletRadius = 6f;
         this.bulletSpeed = 0.8f;
         this.path = Assets.PLAYER;
+        this.bulletPath = Assets.WEAPON_MISSILE;
         this.recoil = 0;
         this.removeBulletDelay = 6;
         this.timeBetweenShots = 0.1f;
@@ -33,7 +34,7 @@ public class HomingRocketLauncher extends Weapon {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
 
-            new HomingRocket(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new HomingRocket(gameWorld, x, y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();
