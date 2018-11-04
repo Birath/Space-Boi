@@ -1,12 +1,19 @@
 package com.binarygames.spaceboi;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
@@ -25,7 +32,16 @@ public class Assets {
     // Data
     public static final String MENU_UI_SKIN = "menu/uiskin.json";
 
+
     public static final String HEALTHBAR_SKIN = "menu/healthbar.json";
+
+    // Fonts
+    public static final String MAIN_FONT = "menu/JosefinSans-SemiBold.ttf";
+    public static final String TITLE_FONT = "title-font.ttf";
+    public static final String LABEL_FONT = "label-font.ttf";
+
+    // Font parameters
+
 
     /*
         Entity assets
@@ -137,6 +153,7 @@ public class Assets {
     // Minimap markers
     public static final String MARKER_PLANET = "game/ui/minimap_markers/planet_marker.png";
 
+
     private AssetManager assetManager;
 
     public Assets(AssetManager assetManager) {
@@ -153,9 +170,27 @@ public class Assets {
         assetManager.load(MENU_UI_SKIN, Skin.class);
 
         assetManager.load(HEALTHBAR_SKIN, Skin.class);
+
+        // Load fonts
+        FileHandleResolver resolver = new InternalFileHandleResolver();
+        assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+
+        FreeTypeFontLoaderParameter titleFontParams = new FreeTypeFontLoaderParameter();
+
+        titleFontParams.fontFileName = MAIN_FONT;
+        titleFontParams.fontParameters.size = 50;
+        assetManager.load(TITLE_FONT, BitmapFont.class, titleFontParams);
+        FreeTypeFontLoaderParameter labelFontParams = new FreeTypeFontLoaderParameter();
+
+        labelFontParams.fontFileName = MAIN_FONT;
+        labelFontParams.fontParameters.size = 35;
+        assetManager.load(LABEL_FONT, BitmapFont.class, labelFontParams);
     }
 
     public void loadGameAssets() {
+
+
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.genMipMaps = true;
 

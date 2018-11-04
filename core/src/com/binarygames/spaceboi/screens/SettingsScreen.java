@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -16,28 +15,35 @@ import com.binarygames.spaceboi.ui.AudioSettingsTab;
 import com.binarygames.spaceboi.ui.ControlSettingsTab;
 import com.binarygames.spaceboi.ui.SettingsTab;
 import com.binarygames.spaceboi.ui.VideoSettingsTab;
-import javafx.scene.control.Tab;
 
 public class SettingsScreen extends BaseScreen {
 
-    private SettingsTab currentSettingsTab;
-    private Cell settingsCell;
+    private SettingsTab currentSettingsTab = null;
+    private Cell settingsCell = null;
 
-    private Table table;
+    private Screen previousScreen;
 
     public SettingsScreen(SpaceBoi game, Screen previousScreen) {
         super(game, previousScreen);
+        this.previousScreen = previousScreen;
 
+
+    }
+
+    @Override
+    void loadScreen() {
         stage.clear();
-        Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
+
+        Skin uiSkin = getUiSkin();
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
+
 
         AudioSettingsTab audioSettingsTab = new AudioSettingsTab(game, this);
         audioSettingsTab.hide();
@@ -47,6 +53,7 @@ public class SettingsScreen extends BaseScreen {
 
         ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
         controlSettingsTab.hide();
+
 
         final TextButton audioButton = new TextButton("Audio", uiSkin);
         audioButton.addListener(new ChangeListener() {
@@ -90,25 +97,27 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final Label title = new Label("Settings", uiSkin);
 
-        Table buttonTable = new Table();
-        buttonTable.add(audioButton).expand().left();
-        buttonTable.add(videoButton).center().expand();
-        buttonTable.add(controlsButton).right().expand();
+        final Label title = new Label("Settings", getTitleStyle());
+
+        Table tabButtons = new Table();
+        tabButtons.add(audioButton).expand().left();
+        tabButtons.add(videoButton).center().expand();
+        tabButtons.add(controlsButton).right().expand();
         setCurrentTab(audioSettingsTab);
 
         table.add(title).align(Align.center).colspan(3).growY();
         table.row().pad(10, 0, 10,0);
 
-        table.add(buttonTable).fill().colspan(3).align(Align.center);
+        table.add(tabButtons).fill(0.5f, 1f).colspan(3).align(Align.center).expandX();
         table.row();
-        settingsCell = table.add(currentSettingsTab.getTable());
+        settingsCell = table.add(currentSettingsTab.getTable()).colspan(3);
 
+        Table bottomButtons = new Table();
         table.row().pad(10, 0, 10, 0);
-        table.add(backButton).left().top();
-        table.add(applyButton).right().growY().top();
-        table.row().growY();
+        bottomButtons.add(backButton).left().expand().top();
+        bottomButtons.add(applyButton).right().expand().top();
+        table.add(bottomButtons).fill(0.5f, 1f).colspan(3).align(Align.center).expandX().growY();
 
         stage.addActor(table);
     }

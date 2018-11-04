@@ -2,17 +2,16 @@ package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
 public abstract class BaseScreen implements Screen {
@@ -21,68 +20,46 @@ public abstract class BaseScreen implements Screen {
 
     protected OrthographicCamera camera;
 
-    private Viewport viewport;
+    protected Viewport viewport;
 
     protected Stage stage;
 
-    BitmapFont titleFont;
-    public Label.LabelStyle titleStyle;
+    private BitmapFont titleFont;
+    private BitmapFont labelFont;
 
-    private BitmapFont buttonFont;
-    public TextButton.TextButtonStyle buttonStyle;
+    private LabelStyle titleStyle;
 
     private Screen previousScreen;
+
+    private Skin uiSkin;
 
     BaseScreen(SpaceBoi game, Screen previousScreen) {
         this.game = game;
         this.previousScreen = previousScreen;
 
         camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        viewport = new FitViewport(SpaceBoi.VIRTUAL_WIDTH, SpaceBoi.VIRTUAL_HEIGHT, camera);
         viewport.apply();
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
-        loadFonts();
-        loadStyles();
-    }
+        uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
 
-    private void loadFonts() {
-        // Title font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        titleFont = game.getAssetManager().get(Assets.TITLE_FONT, BitmapFont.class);
+        labelFont = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
 
-        parameter.size = 72;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-
-        titleFont = generator.generateFont(parameter);
-        titleFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Button font
-        parameter.size = 46;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-
-        this.buttonFont = generator.generateFont(parameter);
-        buttonFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Dispose of FontGenerator
-        generator.dispose();
-    }
-
-    private void loadStyles() {
-        // Title style
-        titleStyle = new Label.LabelStyle();
+        titleStyle = uiSkin.get("title-1", LabelStyle.class);
         titleStyle.font = titleFont;
 
-        // Button style
-        buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = buttonFont;
+        // Changes the font for the default label style
+        uiSkin.get("default", LabelStyle.class).font = labelFont;
+        uiSkin.get(TextButtonStyle.class).font = labelFont;
+
     }
+
+    abstract void loadScreen();
+
 
     public Screen getPreviousScreen() {
         return previousScreen;
@@ -95,14 +72,17 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().setWorldSize(width, height);
         stage.getViewport().update(width, height, true);
+        stage.getCamera().update();
+        stage.getViewport().apply();
+        loadScreen();
+
     }
 
     @Override
     public void dispose() {
         stage.dispose();
-        titleFont.dispose();
-        buttonFont.dispose();
     }
 
     @Override
@@ -128,4 +108,19 @@ public abstract class BaseScreen implements Screen {
         Gdx.app.log("BaseScreen", "Hiding screen");
     }
 
+    public Skin getUiSkin() {
+        return uiSkin;
+    }
+
+    public BitmapFont getLabelFont() {
+        return labelFont;
+    }
+
+    public BitmapFont getTitleFont() {
+        return titleFont;
+    }
+
+    public LabelStyle getTitleStyle() {
+        return titleStyle;
+    }
 }

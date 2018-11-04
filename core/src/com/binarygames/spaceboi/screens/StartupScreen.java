@@ -1,7 +1,6 @@
 package com.binarygames.spaceboi.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -24,7 +23,7 @@ public class StartupScreen extends BaseScreen {
         stage.addActor(startupImage);
 
         // Loading label // TODO add text similar to loading screen?
-        Label startupLabel = new Label("Launching SpaceBoi,\nplease fasten your seatbelts...", titleStyle);
+        Label startupLabel = new Label("Launching SpaceBoi,\nplease fasten your seatbelts...", getTitleStyle());
         startupLabel.setX(stage.getWidth() / 2 - startupLabel.getWidth() / 2);
         startupLabel.setY(stage.getHeight() / 2 + startupLabel.getHeight() / 2);
         stage.addActor(startupLabel);
@@ -38,6 +37,11 @@ public class StartupScreen extends BaseScreen {
         }
 
         stage.act(delta);
+    }
+
+    @Override
+    void loadScreen() {
+
     }
 
     @Override
