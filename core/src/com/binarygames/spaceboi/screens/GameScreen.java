@@ -263,8 +263,6 @@ public class GameScreen implements Screen {
         } else {
             Gdx.input.setInputProcessor(inGameMenuScreen.getStage());
         }
-
-
     }
 
 
