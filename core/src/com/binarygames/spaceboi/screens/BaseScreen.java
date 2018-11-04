@@ -16,8 +16,6 @@ import com.binarygames.spaceboi.SpaceBoi;
 
 public abstract class BaseScreen implements Screen {
 
-    public static final int WORLD_WIDTH = 1280;
-    public static final int WORLD_HEIGHT = 720;
     protected SpaceBoi game;
 
     protected OrthographicCamera camera;
