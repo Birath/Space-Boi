@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -36,6 +37,8 @@ public class GameWorld {
     private World world;
     private WorldGenerator worldGenerator;
     private Random random = new Random();
+    private boolean shouldDispose = false;
+    private Screen disposeScreen = null;
 
     private ParticleHandler particleHandler;
     private XPHandler xp_handler;
@@ -97,6 +100,9 @@ public class GameWorld {
     }
 
     public void update(float delta) {
+        if (shouldDispose) {
+            dispose();
+        }
         for (EntityDynamic entity : dynamicEntities) {
             applyGravity(entity);
             entity.update(delta);
@@ -244,8 +250,10 @@ public class GameWorld {
         jointsToDestroy.clear();
     }
 
-    public void respawnPlayer() {
-        game.setScreen(new DeathScreen(game, game.getScreen()));
+    public void endGame() {
+        disposeScreen = game.getScreen();
+        game.setScreen(new DeathScreen(game, null));
+        shouldDispose = true;
     }
 
     private void rotatePlayer(float delta) {
@@ -390,7 +398,7 @@ public class GameWorld {
 
     private void dispose() {
         world.dispose();
-        game.getScreen().dispose();
+        disposeScreen.dispose();
     }
 
 }
