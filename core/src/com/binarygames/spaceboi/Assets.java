@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Assets {
 
@@ -136,6 +138,14 @@ public class Assets {
     /*
         UI
      */
+    public static final String UI_ASSAULT_RIFLE = "game/ui/assault.png";
+    public static final String UI_ASSAULT_RIFLE_AMMO = "game/ui/assault_ammo.png";
+    public static final String UI_GRENADE_LAUNCHER = "game/ui/grenade_launcher.png";
+    public static final String UI_GRENADE_LAUNCHER_AMMO = "game/ui/grenade_launcher_ammo.png";
+    public static final String UI_HEALTH_BAR = "game/ui/health.png";
+    public static final String UI_OXYGEN_BAR = "game/ui/oxygen.png";
+    public static final String UI_SHOTGUN = "game/ui/shotgun.png";
+    public static final String UI_SHOTGUN_AMMO = "game/ui/shotgun_ammo.png";
 
     public static final String UI_EMPTY_ATTACHMENT = "game/ui/empty_attachment.png";
 
@@ -193,6 +203,9 @@ public class Assets {
 
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.genMipMaps = true;
+        textureParameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        textureParameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
+        //textureParameter.minFilter = Texture.TextureFilter.Linear;
 
         /*
             Entities
@@ -284,6 +297,14 @@ public class Assets {
         /*
             UI
          */
+        assetManager.load(UI_ASSAULT_RIFLE ,Texture.class, textureParameter);
+        assetManager.load(UI_ASSAULT_RIFLE_AMMO ,Texture.class, textureParameter);
+        assetManager.load(UI_GRENADE_LAUNCHER ,Texture.class, textureParameter);
+        assetManager.load(UI_GRENADE_LAUNCHER_AMMO ,Texture.class, textureParameter);
+        assetManager.load(UI_HEALTH_BAR ,Texture.class, textureParameter);
+        assetManager.load(UI_OXYGEN_BAR ,Texture.class, textureParameter);
+        assetManager.load(UI_SHOTGUN ,Texture.class, textureParameter);
+        assetManager.load(UI_SHOTGUN_AMMO ,Texture.class, textureParameter);
 
         assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
 
