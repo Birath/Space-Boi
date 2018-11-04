@@ -90,14 +90,12 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         }
         else if (shouldStartChanneling()) {
             chargeState = ChargeState.CHANNELING;
-            Gdx.app.log("FinalBoss", "Starting channel");
             standStill();
         }
         else if (shouldCharge()) {
             charge();
         }
         else if (chargeState == ChargeState.CHANNELING) {
-            Gdx.app.log("FinalBoss", "Channeling charge");
             standStill();
         }
 
