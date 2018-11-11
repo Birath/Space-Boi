@@ -242,9 +242,12 @@ public class GameUI {
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
 
-        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
-        weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
-        weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
+        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
+                game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class), scaling_factor);
+        weaponStats2 = new WeaponStats(stage, stage.getWidth() * 13 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(1).getMagSize(),
+                game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE, Texture.class), scaling_factor);
+        weaponStats3 = new WeaponStats(stage, stage.getWidth() * 25 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(2).getMagSize(),
+                game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER, Texture.class), scaling_factor);
     }
 
     public void act(float delta) {
