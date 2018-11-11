@@ -235,9 +235,9 @@ public abstract class Enemy extends EntityDynamic {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
-        healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
-        healthBar.setValue(health);
-        healthBar.draw(batch, 1);
+        //healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+        //healthBar.setValue(health);
+        //healthBar.draw(batch, 1);
 
     }
 
