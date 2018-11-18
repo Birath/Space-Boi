@@ -216,7 +216,7 @@ public class Player extends EntityDynamic {
 
     @Override
     public void onRemove() {
-        gameWorld.respawnPlayer();
+        gameWorld.endGame();
     }
 
     private void Shoot() {
