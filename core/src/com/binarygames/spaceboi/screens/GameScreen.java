@@ -143,34 +143,11 @@ public class GameScreen implements Screen {
                         currentInterpolateCount++;
                     }
                 } else {
-                    // float angleDiff = lastAngle - player.getPlayerAngle();
-                    // System.out.println("Player angle: " + player.getPlayerAngle());
-                    // System.out.println("Camera angle " + getCameraRotation());
-                    // System.out.println("Angle diff: " + MathUtils.ceil(player.getPlayerAngle() - getCameraRotation()));
-                    // System.out.println();
 
-                    float angleDiff = angleDifference(player.getPlayerAngle(), lastAngle);
                     float rotationAmount = getCameraRotation() - player.getPlayerAngle() + 90;
-                    //float angleDiff = player.getPlayerAngle() - getCameraRotation();
-                    //Gdx.app.log("GameScreen", "Camera angle: " + getCameraRotation());
-                    //Gdx.app.log("GameScreen", "Player angle: " + player.getPlayerAngle() + 270);
-
-                    //Gdx.app.log("GameScreen", "Target Angle: " + (getCameraRotation() + rotationAmount));
-                    float lerpedAngle = MathUtils.lerpAngleDeg(getCameraRotation(), getCameraRotation() + rotationAmount, delta * 10);
-                    //Gdx.app.log("GameScreen", "Lerped angle: " + lerpedAngle);
-                    //System.out.println();
-                    //if (Math.abs(rotationAmount) >= whenToInterpolate) {
-                    //    cameraRotator.startRotation(getCameraRotation(), rotationAmount, 0.5f);
-                    //}
-                    float lerpedAmount = MathUtils.lerp(getCameraRotation(), getCameraRotation() + rotationAmount, delta);
-                    //Gdx.app.log("GameScreen", "Rotate amnt:  " + rotationAmount);
-                    //Gdx.app.log("GameScreen", "Lerped amnt:  " + lerpedAmount);
-                    //camera.rotate(lerpedAmount);
-                    // TODO: 2018-07-10 Clean up this mess
                     if (!debugRendererIsEnabled) {
                         camera.rotate(rotationAmount);
                     }
-
 
                     if (Math.abs(rotationAmount) >= whenToInterpolate) {
                         //angleToInterpolate = (Math.abs(player.getPlayerAngle() - getCameraRotation()) + 180);
@@ -182,12 +159,6 @@ public class GameScreen implements Screen {
                         //cameraRotator.startRotation(rotationAmount, 0.5f);
                     } else {
                         lastAngle = player.getPlayerAngle();
-
-
-                        //camera.rotate(angleDiff);
-                        //Gdx.app.log("GameScreen", "AngleDiff: " + angleDiff);
-                        //camera.rotate((Math.abs(angleDiff) + 180));
-                        //Gdx.app.log("GameScreen", "CameraAngle: " + getCameraRotation());
                     }
                 }
 
