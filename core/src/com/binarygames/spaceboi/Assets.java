@@ -59,6 +59,7 @@ public class Assets {
     public static final String RICOCHET3 = "game/entities/enemies/flying_ship/ricochet3.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
     public static final String RICOCHET4 = "game/entities/enemies/flying_ship/ricochet4.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
     public static final String WEAPON_MISSILE = "game/entities/enemies/flying_ship/missile.png";
+    public static final String FLYINGSHIP = "game/entities/enemies/flying_ship/flyingship.png";
 
     // Pirate
     public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
@@ -70,6 +71,7 @@ public class Assets {
     public static final String PIRATE_OUCH3 = "game/entities/enemies/pirate/damage_taken/Ouch3.wav";
     public static final String PIRATE_OUCH4 = "game/entities/enemies/pirate/damage_taken/Ouch4.wav";
     public static final String PIRATE_DEATH = "game/entities/enemies/pirate/death/Parleyyy.wav";
+    public static final String PIRATE = "game/entities/enemies/pirate/pirate.png";
 
     // End boss
     public static final String END_BOSS1 = "game/entities/enemies/end_boss/Bring_me_his_corpse.wav";
@@ -221,6 +223,7 @@ public class Assets {
         assetManager.load(RICOCHET3, Sound.class);
         assetManager.load(RICOCHET4, Sound.class);
         assetManager.load(WEAPON_MISSILE, Texture.class, textureParameter);
+        assetManager.load(FLYINGSHIP, Texture.class, textureParameter);
 
         // Pirate
         assetManager.load(PIRATE_ATTACK1, Sound.class);
@@ -232,6 +235,7 @@ public class Assets {
         assetManager.load(PIRATE_OUCH3, Sound.class);
         assetManager.load(PIRATE_OUCH4, Sound.class);
         assetManager.load(PIRATE_DEATH, Sound.class);
+        assetManager.load(PIRATE, Texture.class, textureParameter);
 
         //End boss
         assetManager.load(END_BOSS1, Sound.class);

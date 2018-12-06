@@ -167,7 +167,7 @@ public class WorldGenerator {
             double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
             for (int shooters = 0; shooters < numberOfShooters; shooters++) {
                 Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters + 30))),
-                    (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PLANET_MOON);
+                    (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PIRATE);
                 gameWorld.addDynamicEntity(shooter);
             }
 
@@ -178,7 +178,7 @@ public class WorldGenerator {
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
             y += (int) EnemyType.FLYING_SHIP.getRad();
-            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.PLANET_MOON);
+            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.FLYINGSHIP);
             gameWorld.addDynamicEntity(flyingship);
         } else {
             //If we are on one of the big circles of planets
@@ -208,7 +208,7 @@ public class WorldGenerator {
 
                 for (int shooters = 0; shooters < numberOfShooters; shooters++) {
                     Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PLANET_MOON);
+                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PIRATE);
                     gameWorld.addDynamicEntity(shooter);
                 }
             } else if (planetType == 5) {
