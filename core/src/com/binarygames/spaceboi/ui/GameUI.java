@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -24,6 +27,7 @@ import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
 
+    public static final int MAX_WIDTH = 3840;
     private Stage stage;
 
     private LabelStyle labelStyle;
@@ -78,7 +82,7 @@ public class GameUI {
 
         stage.setDebugAll(false);
 
-        scaling_factor = (stage.getWidth() / 3840);
+        scaling_factor = (stage.getWidth() / MAX_WIDTH);
         Gdx.app.log("debug scaling", String.valueOf(scaling_factor));
         int health = 5;
 
@@ -241,6 +245,25 @@ public class GameUI {
         stage.addActor(xpBar);
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
+
+        //weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
+        //weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
+        //weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
+
+        // Compass stuff
+        Image compassOutline = new Image(game.getAssetManager().get(Assets.UI_COMPASS_OUTLINE, Texture.class));
+        // Upper right corner
+        //TODO add padding maybe?
+        compassOutline.setPosition(stage.getWidth() - compassOutline.getWidth(), stage.getHeight() - compassOutline.getHeight());
+        stage.addActor(compassOutline);
+        Image arrowSize = new Image(game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class));
+        CompassArrow arrow = new CompassArrow(
+            game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class),
+            player,
+            compassOutline.getX() + compassOutline.getWidth() / 2 - arrowSize.getWidth() / 2,
+            compassOutline.getY() + compassOutline.getHeight() / 2 - arrowSize.getHeight() / 2
+        );
+        stage.addActor(arrow);
 
         weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
                 game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class), scaling_factor);

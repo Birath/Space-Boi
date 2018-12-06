@@ -3,11 +3,12 @@ package com.binarygames.spaceboi;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Assets {
 
@@ -150,6 +150,8 @@ public class Assets {
     public static final String UI_SHOTGUN_AMMO = "game/ui/shotgun_ammo.png";
 
     public static final String UI_EMPTY_ATTACHMENT = "game/ui/empty_attachment.png";
+    public static final String UI_COMPASS_ARROW = "game/ui/compass_arrow.png";
+    public static final String UI_COMPASS_OUTLINE = "game/ui/compass_outline.png";
 
     // PICKUPS
     public static final String PICKUP_HEALTH = "game/entities/pickups/beercanhealth.png";
@@ -311,6 +313,13 @@ public class Assets {
         assetManager.load(UI_SHOTGUN_AMMO ,Texture.class, textureParameter);
 
         assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
+
+        TextureParameter compassArrowParamter = new TextureParameter();
+        compassArrowParamter.minFilter = TextureFilter.Linear;
+        compassArrowParamter.magFilter = TextureFilter.Linear;
+        assetManager.load(UI_COMPASS_ARROW, Texture.class, compassArrowParamter);
+
+        assetManager.load(UI_COMPASS_OUTLINE, Texture.class, textureParameter);
 
         /*
             PICKUPS
