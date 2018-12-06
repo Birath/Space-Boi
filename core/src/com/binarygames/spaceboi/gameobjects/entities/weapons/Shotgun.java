@@ -10,6 +10,7 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Shotgun extends Weapon {
 
+    public static final float SPRITE_SCALING = 0.1f;
     private int spread = 10;
     private int numberOfBullets = 7;
 
@@ -19,7 +20,7 @@ public class Shotgun extends Weapon {
         this.bulletMass = 10;
         this.bulletRadius = 1.5f;
         this.bulletSpeed = 5;
-        this.path = Assets.PLAYER;
+        this.path = Assets.WEAPON_SHOTGUN;
         this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 20;
         this.removeBulletDelay = 0;
@@ -29,11 +30,10 @@ public class Shotgun extends Weapon {
         this.damage = 10;
         this.name = "Shotgun";
 
-        //Sprite setup:
-        this.radius = 5;
+        //Sprite setup
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        sprite.setSize(radius * 2, radius * 2);
-        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        sprite.setSize(sprite.getWidth() * SPRITE_SCALING, sprite.getHeight() * SPRITE_SCALING);
+        sprite.setOriginCenter();
     }
 
     @Override

@@ -4,12 +4,16 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Machinegun extends Weapon {
 
+    private static final float WEAPON_WIDTH = 30;
+    private static final float WEAPON_HEIGHT = 20;
     private Sound shot;
     private long shotID = 0;
 
@@ -19,7 +23,7 @@ public class Machinegun extends Weapon {
         this.bulletMass = 10;
         this.bulletRadius = 1.5f;
         this.bulletSpeed = 5;
-        this.path = Assets.PLAYER;
+        this.path = Assets.WEAPON_MACHINEGUN;
         this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 1;
         this.removeBulletDelay = 0;
@@ -29,11 +33,9 @@ public class Machinegun extends Weapon {
         this.damage = 5;
         this.name = "Machine gun";
 
-        this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        sprite.setSize(radius * 2, radius * 2);
-        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-
+        sprite.setSize(sprite.getWidth() * 0.1f, sprite.getHeight() * 0.1f);
+        sprite.setOriginCenter();
         shot = gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MACHINEGUN_SHOT, Sound.class);
     }
 
