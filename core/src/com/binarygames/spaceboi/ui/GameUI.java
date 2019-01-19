@@ -265,21 +265,24 @@ public class GameUI {
         );
         stage.addActor(arrow);
 
-        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
-                game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class), scaling_factor);
+        weaponStats1 = new WeaponStats(stage,stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
+                game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class),
+                game.getAssetManager().get(Assets.UI_SHOTGUN_AMMO, Texture.class), scaling_factor);
         weaponStats2 = new WeaponStats(stage, stage.getWidth() * 13 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(1).getMagSize(),
-                game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE, Texture.class), scaling_factor);
+                game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE, Texture.class),
+                game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE_AMMO, Texture.class), scaling_factor);
         weaponStats3 = new WeaponStats(stage, stage.getWidth() * 25 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(2).getMagSize(),
-                game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER, Texture.class), scaling_factor);
+                game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER, Texture.class),
+                game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class), scaling_factor);
     }
 
     public void act(float delta) {
         healthBar.setRange(0, player.getMaxHealth());
         updateHealth(player.getHealth());
         updateOxygenLevel();
-        updateWeaponStats(weaponStats1, 0);
-        updateWeaponStats(weaponStats2, 1);
-        updateWeaponStats(weaponStats3, 2);
+        updateWeaponStats(weaponStats1, 0, delta);
+        updateWeaponStats(weaponStats2, 1, delta);
+        updateWeaponStats(weaponStats3, 2, delta);
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
         nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
 
@@ -395,13 +398,13 @@ public class GameUI {
         oxygen_status.setText((int)player.getOxygenLevel() + " / " + Player.MAX_OXYGEN_LEVEL);
     }
 
-    private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex) {
+    private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex, float delta) {
         if (player.getWeaponList().get(weaponIndex).getCurrentReloadTime() == 0)
             weaponStats.getWeaponSlot().setValue(100);
         else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime() /
                 player.getWeaponList().get(weaponIndex).getReloadTime()) * 100);
 
-        weaponStats.getAmmoBar().setValue(player.getWeaponList().get(weaponIndex).getCurrentMag());
+        weaponStats.act(delta, player.getWeaponList().get(weaponIndex).getCurrentMag());
     }
 
     public void dispose() {

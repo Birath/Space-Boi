@@ -440,7 +440,6 @@ public class Player extends EntityDynamic {
     public void setInfiniteAmmo(boolean infiniteAmmo) {
         this.infiniteAmmo = infiniteAmmo;
     }
-
 }
 
 

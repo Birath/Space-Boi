@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -19,16 +21,18 @@ public class WeaponStats {
     private ProgressBar weaponSlot;
     private ProgressBar.ProgressBarStyle weaponSlotStyle;
 
-    private ProgressBar ammoBar;
-    private ProgressBar.ProgressBarStyle ammoBarStyle;
+    private Texture ammoIconTex;
 
-    //private Array<Image> ammunition;
+    private int ammo;
+    private Table table;
 
-    public WeaponStats(Stage stage, float x, float y, int ammo, Texture weaponIconTex, float scaling) {
+    public WeaponStats(Stage stage, float x, float y, int ammo, Texture weaponIconTex, Texture ammoIconTex, float scaling) {
         this.stage = stage;
+        this.ammo = ammo;
+        this.table = new Table();
+        this.ammoIconTex = ammoIconTex;
 
         weaponSlotStyle = new ProgressBar.ProgressBarStyle();
-        ammoBarStyle = new ProgressBar.ProgressBarStyle();
 
         Image weaponIcon = new Image(weaponIconTex);
         weaponIcon.setScaling(Scaling.fill);
@@ -41,21 +45,22 @@ public class WeaponStats {
         int weaponReloadHeight = (int) (weaponIcon.getHeight() - (100 * scaling));
 
         loadWeaponSlotStyle(weaponReloadWidth, weaponReloadHeight);
-        loadAmmoBarStyle();
 
         weaponSlot = new ProgressBar(0, 100, 0.1f, false, weaponSlotStyle);
         weaponSlot.setValue(100);
         weaponSlot.setBounds(x + (weaponIcon.getWidth() - weaponReloadWidth) / 2, y + (weaponIcon.getHeight() - weaponReloadHeight) / 2, weaponReloadWidth, weaponReloadHeight);
 
-        //ammunition = new Array<Image>(ammoIconTex);
+        //table.setDebug(true);
+        //table.setFillParent(true);
+        table.setHeight(weaponIcon.getHeight() / 5);
+        table.setWidth(weaponIcon.getWidth());
+        table.setX(weaponIcon.getX());
+        table.setY(weaponIcon.getY() - (float)(table.getHeight() * 1.2));
+        fillAmmoBar(ammo);
 
-        ammoBar = new ProgressBar(0, ammo, 1, false, ammoBarStyle);
-        ammoBar.setValue(ammo);
-        ammoBar.setBounds(x, y - ammoBar.getHeight() * 2, weaponIcon.getWidth(), 20);
-
+        stage.addActor(table);
         stage.addActor(weaponSlot);
         stage.addActor(weaponIcon);
-        stage.addActor(ammoBar);
     }
 
     private void loadWeaponSlotStyle(int width, int height) {
@@ -82,34 +87,28 @@ public class WeaponStats {
         weaponSlotStyle.knobBefore = drawable;
     }
 
-    private void loadAmmoBarStyle() {
-        Pixmap pixmap = new Pixmap(75, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        ammoBarStyle.background = drawable;
+    public void act(float delta, int currentAmmo) {
+        if (currentAmmo < table.getCells().size) {
+            table.removeActor(table.getCells().get(currentAmmo).getActor());
+            table.getCells().removeIndex(currentAmmo);
+        }
+        if (currentAmmo == 0) {
+            table.row();
+        }
+        if (currentAmmo > table.getCells().size) {
+            fillAmmoBar(currentAmmo - table.getCells().size);
+        }
+    }
 
-        pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(1, 1, 1, 0.5f);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        ammoBarStyle.knob = drawable;
-
-        pixmap = new Pixmap(75, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(1, 1, 1, 0.5f);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        ammoBarStyle.knobBefore = drawable;
+    private void fillAmmoBar(int amount) {
+        for (int i = 0; i <= amount - 1; i++) {
+            Image ammoIcon = new Image(ammoIconTex);
+            ammoIcon.setScaling(Scaling.fill);
+            table.add(ammoIcon).maxSize(table.getHeight() / (ammoIcon.getHeight() / ammoIcon.getWidth()), table.getHeight()).left().fill(false).pad(0f, ammoIcon.getWidth() / 20, 0f, ammoIcon.getWidth() / 20) ;
+        }
     }
 
     public ProgressBar getWeaponSlot() {
         return weaponSlot;
-    }
-
-    public ProgressBar getAmmoBar() {
-        return ammoBar;
     }
 }
