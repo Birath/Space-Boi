@@ -50,12 +50,12 @@ public class WeaponStats {
         weaponSlot.setValue(100);
         weaponSlot.setBounds(x + (weaponIcon.getWidth() - weaponReloadWidth) / 2, y + (weaponIcon.getHeight() - weaponReloadHeight) / 2, weaponReloadWidth, weaponReloadHeight);
 
-        //table.setDebug(true);
         //table.setFillParent(true);
         table.setHeight(weaponIcon.getHeight() / 5);
         table.setWidth(weaponIcon.getWidth());
         table.setX(weaponIcon.getX());
         table.setY(weaponIcon.getY() - (float)(table.getHeight() * 1.2));
+        table.align(Align.left);
         fillAmmoBar(ammo);
 
         stage.addActor(table);
@@ -104,7 +104,7 @@ public class WeaponStats {
         for (int i = 0; i <= amount - 1; i++) {
             Image ammoIcon = new Image(ammoIconTex);
             ammoIcon.setScaling(Scaling.fill);
-            table.add(ammoIcon).maxSize(table.getHeight() / (ammoIcon.getHeight() / ammoIcon.getWidth()), table.getHeight()).left().fill(false).pad(0f, ammoIcon.getWidth() / 20, 0f, ammoIcon.getWidth() / 20) ;
+            table.add(ammoIcon).maxSize(table.getHeight() / (ammoIcon.getHeight() / ammoIcon.getWidth()), table.getHeight()).fill(false).pad(0f, ammoIcon.getWidth() / 20, 0f, ammoIcon.getWidth() / 20).left();
         }
     }
 
