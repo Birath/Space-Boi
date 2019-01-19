@@ -195,7 +195,7 @@ public class WorldGenerator {
                 for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
                     Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * enemies))),
                         (int) (y + Math.round(r * Math.sin(angleDiff * enemies))),
-                        Assets.PLANET_MOON);
+                        Assets.DOG);
                     gameWorld.addDynamicEntity(chaser);
                 }
             } else if (planetType < 5) {
