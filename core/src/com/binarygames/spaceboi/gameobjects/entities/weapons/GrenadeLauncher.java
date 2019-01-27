@@ -15,7 +15,7 @@ public class GrenadeLauncher extends Weapon {
         this.bulletMass = 40;
         this.bulletRadius = 4f;
         this.bulletSpeed = 2;
-        this.path = Assets.PLAYER;
+        this.path = Assets.WEAPON_GRENADELAUNCHER;
         this.bulletPath = Assets.WEAPON_GRENADE;
         this.recoil = 15;
         this.removeBulletDelay = 2;
