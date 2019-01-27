@@ -98,6 +98,7 @@ public class Console {
         commands.put("debug", new DebugRenderer());
         commands.put("randomattachment", new SpawnRandomAttachment());
         commands.put("attachment", new SpawnAttachment());
+        commands.put("me_irl", new Suicide());
     }
 
     public void update(float delta) {

@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -149,11 +150,10 @@ public abstract class Weapon {
 
         sprite.setPosition(player.getBody().getPosition().x * PPM - sprite.getWidth() / 2 + weaponPosition.x,
                 player.getBody().getPosition().y * PPM - sprite.getHeight() / 2 + weaponPosition.y);
-
-        Vector2 relativeVector = player.getMouseCoords().sub(sprite.getX(), sprite.getY());
+        Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
         float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
-        sprite.setRotation(angleToMouse - 90);
-
+        //sprite.setRotation(angleToMouse - 90);
+        sprite.setRotation(angleToMouse); // TODO fix image flipping
         sprite.draw(batch);
     }
 

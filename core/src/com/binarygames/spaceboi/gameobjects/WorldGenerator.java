@@ -29,7 +29,6 @@ public class WorldGenerator {
     private static final int MAX_RAD = 450;
     private static final int MIN_RAD = 375;
 
-
     private static final int MAX_GRAV = (int) (3 * Math.pow(10, 9));
     private static final int MIN_GRAV = (int) (2 * Math.pow(10, 9));
 
@@ -51,7 +50,9 @@ public class WorldGenerator {
     private static final float LAUNCH_PAD_OFFSET = 0.2f;
 
     private List<Planet> singleRowPlanets = new ArrayList<>();
-    private List<String> planetSprites = new ArrayList();
+    private List<String> piratePlanetSprites = new ArrayList();
+    private List<String> normalPlanetSprites = new ArrayList();
+    private List<String> finalBossPlanetSprites = new ArrayList();
     private final Random random = new Random();
 
 
@@ -62,7 +63,7 @@ public class WorldGenerator {
     public void createWorld() {
         loadPlanetSprites();
         //Create middle planet
-        createPlanet(0, 0);
+        createPlanet(0, 0, finalBossPlanetSprites.get(random.nextInt(finalBossPlanetSprites.size())));
 
         int angleOffset = 0;
 
@@ -105,7 +106,8 @@ public class WorldGenerator {
         int currentX = (int) Math.round(rowRadius * Math.cos((angleBetweenPlanets * planetNumber) + angleOffset));
         int currentY = (int) Math.round(rowRadius * Math.sin((angleBetweenPlanets * planetNumber) + angleOffset));
 
-        Planet planet = createPlanet(currentX, currentY);
+        String planetSprite = getPlanetType(isMultiPlanetRow, shouldSpawnAttachment);
+        Planet planet = createPlanet(currentX, currentY, planetSprite);
         int planetRadius = (int) planet.getRadius();
         createEnemies(currentX, currentY, planetRadius, circleNumber, isLastPlanet);
 
@@ -139,13 +141,13 @@ public class WorldGenerator {
         }
     }
 
-    private Planet createPlanet(int x, int y) {
+    private Planet createPlanet(int x, int y, String planetSprite) {
         int planetRadius = random.nextInt(MAX_RAD - MIN_RAD);
         planetRadius += MIN_RAD;
         int grav = random.nextInt(MAX_GRAV - MIN_GRAV);
         grav += MIN_GRAV;
 
-        Planet planet = new Planet(gameWorld, x, y, getRandomSprite(), grav, planetRadius);
+        Planet planet = new Planet(gameWorld, x, y, planetSprite, grav, planetRadius);
         gameWorld.addStaticEntity(planet);
 
         return planet;
@@ -165,7 +167,7 @@ public class WorldGenerator {
             double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
             for (int shooters = 0; shooters < numberOfShooters; shooters++) {
                 Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters + 30))),
-                    (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PLANET_MOON);
+                    (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PIRATE);
                 gameWorld.addDynamicEntity(shooter);
             }
 
@@ -176,7 +178,7 @@ public class WorldGenerator {
             //Spawn spaceship
             x = (int) (x + rad * 1.3 + EnemyType.FLYING_SHIP.getRad());
             y += (int) EnemyType.FLYING_SHIP.getRad();
-            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.PLANET_MOON);
+            FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.FLYINGSHIP);
             gameWorld.addDynamicEntity(flyingship);
         } else {
             //If we are on one of the big circles of planets
@@ -193,7 +195,7 @@ public class WorldGenerator {
                 for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
                     Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * enemies))),
                         (int) (y + Math.round(r * Math.sin(angleDiff * enemies))),
-                        Assets.PLANET_MOON);
+                        Assets.DOG);
                     gameWorld.addDynamicEntity(chaser);
                 }
             } else if (planetType < 5) {
@@ -206,7 +208,7 @@ public class WorldGenerator {
 
                 for (int shooters = 0; shooters < numberOfShooters; shooters++) {
                     Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PLANET_MOON);
+                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PIRATE);
                     gameWorld.addDynamicEntity(shooter);
                 }
             } else if (planetType == 5) {
@@ -270,17 +272,25 @@ public class WorldGenerator {
         }
         return planetsWithinRange;
     }
-    private String getRandomSprite(){
-        int planetType = random.nextInt(planetSprites.size());
-        return planetSprites.get(planetType);
+    private String getPlanetType(boolean isMultiPlanetRow, boolean shouldSpawnAttachment){
+        int planetType;
+        if (!isMultiPlanetRow) { //Flyingship-planet
+            planetType = random.nextInt(piratePlanetSprites.size());
+            return piratePlanetSprites.get(planetType);
+        }
+        else{
+            planetType = random.nextInt(normalPlanetSprites.size());
+            return normalPlanetSprites.get(planetType);
+        }
     }
+
     private void loadPlanetSprites(){
-        planetSprites.add(Assets.PLANET1);
-        planetSprites.add(Assets.PLANET2);
-        planetSprites.add(Assets.PLANET3);
-        planetSprites.add(Assets.PLANET4);
-        planetSprites.add(Assets.PLANET5);
-        planetSprites.add(Assets.PLANET6);
+        normalPlanetSprites.add(Assets.PLANET1); //Green planet
+        normalPlanetSprites.add(Assets.PLANET2); //Water planet
+        normalPlanetSprites.add(Assets.PLANET3); //Ice planet
+        finalBossPlanetSprites.add(Assets.PLANET4); //Lava Planet
+        piratePlanetSprites.add(Assets.PLANET5); //Brown planet
+        piratePlanetSprites.add(Assets.PLANET6); //Brown planet
     }
 
     public float getRadOfWorld() {

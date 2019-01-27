@@ -216,7 +216,7 @@ public class Player extends EntityDynamic {
 
     @Override
     public void onRemove() {
-        gameWorld.respawnPlayer();
+        gameWorld.endGame();
     }
 
     private void Shoot() {
@@ -440,7 +440,6 @@ public class Player extends EntityDynamic {
     public void setInfiniteAmmo(boolean infiniteAmmo) {
         this.infiniteAmmo = infiniteAmmo;
     }
-
 }
 
 

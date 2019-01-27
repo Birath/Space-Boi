@@ -3,11 +3,12 @@ package com.binarygames.spaceboi;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Assets {
 
@@ -59,6 +59,7 @@ public class Assets {
     public static final String RICOCHET3 = "game/entities/enemies/flying_ship/ricochet3.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
     public static final String RICOCHET4 = "game/entities/enemies/flying_ship/ricochet4.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
     public static final String WEAPON_MISSILE = "game/entities/enemies/flying_ship/missile.png";
+    public static final String FLYINGSHIP = "game/entities/enemies/flying_ship/flyingship.png";
 
     // Pirate
     public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
@@ -70,6 +71,7 @@ public class Assets {
     public static final String PIRATE_OUCH3 = "game/entities/enemies/pirate/damage_taken/Ouch3.wav";
     public static final String PIRATE_OUCH4 = "game/entities/enemies/pirate/damage_taken/Ouch4.wav";
     public static final String PIRATE_DEATH = "game/entities/enemies/pirate/death/Parleyyy.wav";
+    public static final String PIRATE = "game/entities/enemies/pirate/pirate.png";
 
     // End boss
     public static final String END_BOSS1 = "game/entities/enemies/end_boss/Bring_me_his_corpse.wav";
@@ -78,6 +80,7 @@ public class Assets {
     public static final String DOG1 = "game/entities/enemies/dog/dog4.wav"; // https://www.freesoundeffects.com/free-track/dog4-89462/
     public static final String DOG2 = "game/entities/enemies/dog/dog2_weird.wav"; // https://www.freesoundeffects.com/free-track/dog2-89460/
     public static final String DOG3 = "game/entities/enemies/dog/dog-2.wav"; // https://www.freesoundeffects.com/free-track/dog-2-89458/
+    public static final String DOG = "game/entities/enemies/dog/enemy_dog.png";
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
@@ -101,10 +104,11 @@ public class Assets {
     public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_SHOT_PUMP = "game/entities/weapons/shotgun/shot_pump.wav"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_RELOAD = "game/entities/weapons/shotgun/reload.wav"; // https://freesound.org/people/lensflare8642/sounds/145209/
-
+    public static final String WEAPON_SHOTGUN = "game/entities/weapons/shotgun/shotgun.png"; //https://pixabay.com/en/shotgun-gun-rifle-weapon-hunter-48282/
     // public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/Ratatata.mp3";
     public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/shot.wav";
     public static final String WEAPON_MACHINEGUN_RELOAD = "game/entities/weapons/machinegun/reload.wav"; // https://freesound.org/people/davdud101/sounds/145475/
+    public static final String WEAPON_MACHINEGUN = "game/entities/weapons/machinegun/ak-47.png"; // https://vector.me/browse/282635/ak47_assault_rifle
 
     public static final String WEAPON_BULLET = "game/entities/weapons/bullet.png";
 
@@ -148,6 +152,8 @@ public class Assets {
     public static final String UI_SHOTGUN_AMMO = "game/ui/shotgun_ammo.png";
 
     public static final String UI_EMPTY_ATTACHMENT = "game/ui/empty_attachment.png";
+    public static final String UI_COMPASS_ARROW = "game/ui/compass_arrow.png";
+    public static final String UI_COMPASS_OUTLINE = "game/ui/compass_outline.png";
 
     // PICKUPS
     public static final String PICKUP_HEALTH = "game/entities/pickups/beercanhealth.png";
@@ -221,6 +227,7 @@ public class Assets {
         assetManager.load(RICOCHET3, Sound.class);
         assetManager.load(RICOCHET4, Sound.class);
         assetManager.load(WEAPON_MISSILE, Texture.class, textureParameter);
+        assetManager.load(FLYINGSHIP, Texture.class, textureParameter);
 
         // Pirate
         assetManager.load(PIRATE_ATTACK1, Sound.class);
@@ -232,6 +239,7 @@ public class Assets {
         assetManager.load(PIRATE_OUCH3, Sound.class);
         assetManager.load(PIRATE_OUCH4, Sound.class);
         assetManager.load(PIRATE_DEATH, Sound.class);
+        assetManager.load(PIRATE, Texture.class, textureParameter);
 
         //End boss
         assetManager.load(END_BOSS1, Sound.class);
@@ -240,6 +248,7 @@ public class Assets {
         assetManager.load(DOG1, Sound.class);
         assetManager.load(DOG2, Sound.class);
         assetManager.load(DOG3, Sound.class);
+        assetManager.load(DOG, Texture.class, textureParameter);
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class, textureParameter);
@@ -263,9 +272,11 @@ public class Assets {
         assetManager.load(WEAPON_SHOTGUN_PUMP, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_SHOT_PUMP, Sound.class);
         assetManager.load(WEAPON_SHOTGUN_RELOAD, Sound.class);
+        assetManager.load(WEAPON_SHOTGUN, Texture.class);
 
         assetManager.load(WEAPON_MACHINEGUN_SHOT, Sound.class);
         assetManager.load(WEAPON_MACHINEGUN_RELOAD, Sound.class);
+        assetManager.load(WEAPON_MACHINEGUN, Texture.class);
 
         assetManager.load(WEAPON_BULLET, Texture.class, textureParameter);
 
@@ -307,6 +318,13 @@ public class Assets {
         assetManager.load(UI_SHOTGUN_AMMO ,Texture.class, textureParameter);
 
         assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
+
+        TextureParameter compassArrowParamter = new TextureParameter();
+        compassArrowParamter.minFilter = TextureFilter.Linear;
+        compassArrowParamter.magFilter = TextureFilter.Linear;
+        assetManager.load(UI_COMPASS_ARROW, Texture.class, compassArrowParamter);
+
+        assetManager.load(UI_COMPASS_OUTLINE, Texture.class, textureParameter);
 
         /*
             PICKUPS

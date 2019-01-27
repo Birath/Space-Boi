@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -19,10 +20,6 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FinalBoss;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.BioDamage;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.LifeSteal;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.MechDamage;
-import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.Slow;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
 
@@ -40,6 +37,8 @@ public class GameWorld {
     private World world;
     private WorldGenerator worldGenerator;
     private Random random = new Random();
+    private boolean shouldDispose = false;
+    private Screen disposeScreen = null;
 
     private ParticleHandler particleHandler;
     private XPHandler xp_handler;
@@ -87,7 +86,7 @@ public class GameWorld {
         worldGenerator = new WorldGenerator(this);
         worldGenerator.createWorld();
         Player player = new Player(this, worldGenerator.generatePlayerX(),
-                worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
+            worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
         //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
         this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
@@ -101,6 +100,9 @@ public class GameWorld {
     }
 
     public void update(float delta) {
+        if (shouldDispose) {
+            dispose();
+        }
         for (EntityDynamic entity : dynamicEntities) {
             applyGravity(entity);
             entity.update(delta);
@@ -143,10 +145,10 @@ public class GameWorld {
         Vector2 finalGravity = new Vector2();
         for (Planet planet : planetsWithinRange) {
             float angle = MathUtils
-                    .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
+                .atan2(planet.getBody().getPosition().y - entityPos.y, planet.getBody().getPosition().x - entityPos.x);
             Vector2 gravityPull = new Vector2(
-                    (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()),
-                    (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()));
+                (float) (MathUtils.cos(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()),
+                (float) (MathUtils.sin(angle) * GRAVITY_CONSTANT * planet.getMass() * entity.getMass()));
             finalGravity.add(gravityPull);
         }
         if (game.getPreferences().isGravityEnabled()) {
@@ -192,10 +194,8 @@ public class GameWorld {
             EntityDynamic entity = itr.next();
             if (entity.shouldRemove(player.getBody().getPosition())) {
                 entity.onRemove();
-                if (!(entity instanceof Player)) {
-                    world.destroyBody(entity.getBody());
-                    itr.remove();
-                }
+                world.destroyBody(entity.getBody());
+                itr.remove();
             }
         }
     }
@@ -250,8 +250,10 @@ public class GameWorld {
         jointsToDestroy.clear();
     }
 
-    public void respawnPlayer() {
-        game.setScreen(new DeathScreen(game, game.getScreen()));
+    public void endGame() {
+        disposeScreen = game.getScreen();
+        game.setScreen(new DeathScreen(game, null));
+        shouldDispose = true;
     }
 
     private void rotatePlayer(float delta) {
@@ -396,7 +398,7 @@ public class GameWorld {
 
     private void dispose() {
         world.dispose();
-        game.getScreen().dispose();
+        disposeScreen.dispose();
     }
 
 }
