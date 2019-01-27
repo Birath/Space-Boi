@@ -6,6 +6,8 @@ KodSquad
 
 Certain weapon icons made by Freepik.com from Flaticon.com.
 Flaticon is licensed by Creative Commons BY 3.0.
+
 The menu ui is a modfied version of Level Plane UI by Raymond "Raeleus" Buckley
 
 AK-47 Assault Rifle from Vector.me (by gnokii)
+>>>>>>> origin/master

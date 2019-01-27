@@ -2,24 +2,27 @@ package com.binarygames.spaceboi.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
-import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.GameScreen;
+
+import java.util.ArrayList;
 
 public class InventoryUI {
 
@@ -28,11 +31,10 @@ public class InventoryUI {
     private GameScreen gamesScreen;
     private GameWorld gameWorld;
 
-    private LabelStyle labelStyle;
-    private Button.ButtonStyle buttonStyle;
-    private TextButton.TextButtonStyle textButtonStyle;
+    private Skin uiSkin;
 
-    private Fonts fonts;
+    private BitmapFont labelFont;
+    private LabelStyle labelStyle;
 
     private boolean isVisible;
 
@@ -43,23 +45,35 @@ public class InventoryUI {
 
     private WeaponAttachment selectedAttachment;
 
+    private ArrayList<AttachmentActor> weaponAttachmentSlots;
+
     /*
-        Hovra över vapen, attachements för att visa info
+        Hovra över vapen, attachments för att visa info
         markera blir gul, alla ställen den passar i blir gröna
         andra blir röda
      */
 
-    public InventoryUI(GameScreen gamesScreen, GameWorld gameWorld) {
-        this.gamesScreen = gamesScreen;
+    public InventoryUI(GameScreen gameScreen, GameWorld gameWorld) {
+        this.gamesScreen = gameScreen;
         this.gameWorld = gameWorld;
 
         stage = new Stage();
-        fonts = new Fonts();
-        loadStyles();
 
-        helpLabel = new Label("Click on an attachment", labelStyle);
+        weaponAttachmentSlots = new ArrayList<>();
+
+        uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
+        labelFont = gameWorld.getGame().getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
+        uiSkin.get("default", LabelStyle.class).font = labelFont;
+
+        labelStyle = uiSkin.get("title-1", LabelStyle.class);
+
+        // Advices
+        helpLabel = new Label("Click and hold to drag an attachment", uiSkin);
         helpLabel.setPosition(20, 20);
         stage.addActor(helpLabel);
+
+        DragAndDrop dragAndDrop = new DragAndDrop();
+        //dragAndDrop.addTarget(DragAndDrop.Target);
 
          /*
             Current inventory
@@ -68,12 +82,43 @@ public class InventoryUI {
         currentInventory.setPosition(800, 450);
         stage.addActor(currentInventory);
 
+        Label inventoryLabel = new Label("Inventory", uiSkin);
+        currentInventory.add(inventoryLabel);
+
          /*
             Weapons
           */
         weaponsTable = new Table();
         weaponsTable.setPosition(300, 450);
         stage.addActor(weaponsTable);
+
+        for (Weapon weapon : gameWorld.getPlayer().getWeaponList()) {
+            Label weaponLabel = new Label(weapon.getName(), uiSkin);
+            weaponsTable.add(weaponLabel).colspan(3);
+            weaponsTable.row();
+
+            // Add attachment
+            for (int i = 0; i < 3; i++) {
+                //Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class)));
+                AttachmentActor attachmentActor = new AttachmentActor(new SpriteDrawable(attachmentSprite));
+                attachmentActor.setWeapon(weapon);
+                attachmentActor.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (attachmentActor.hasAttachment()) {
+                            weapon.removeAttachment(attachmentActor.getAttachment());
+                            attachmentActor.setAttachment(null);
+
+                            updateInventory();
+                        }
+                    }
+                });
+                weaponAttachmentSlots.add(attachmentActor);
+                weaponsTable.add(attachmentActor);
+            }
+            weaponsTable.row();
+        }
 
         stage.setDebugAll(true);
     }
@@ -82,115 +127,104 @@ public class InventoryUI {
         /*
             Current inventory
           */
-        currentInventory.clear();
+        int columns = 3;
+
+        currentInventory = new Table();
         currentInventory.setPosition(800, 450);
-        Label inventoryLabel = new Label("Inventory", labelStyle);
-        currentInventory.add(inventoryLabel).align(Align.left);
-        currentInventory.row();
-        // Add current inventory
-        int columns = 4;
+        stage.addActor(currentInventory);
+
+        Label inventoryLabel = new Label("Inventory", uiSkin);
+        currentInventory.add(inventoryLabel).colspan(columns);
 
         for (WeaponAttachment attachment : gameWorld.getPlayer().getInventory()) {
             if (!attachment.isEquipped()) {
                 currentInventory.row();
-                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
-                attachmentSprite.setSize(75, 75);
-                Button attachmentButton = new Button(new SpriteDrawable(attachmentSprite));
-                attachmentButton.addCaptureListener(new ChangeListener() {
+
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class)));
+                AttachmentActor attachmentActor = new AttachmentActor(new SpriteDrawable(attachmentSprite));
+                currentInventory.add(attachmentActor);
+
+                DragAndDrop dragAndDrop = new DragAndDrop();
+                dragAndDrop.addSource(new DragAndDrop.Source(attachmentActor) {
                     @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        selectedAttachment = attachment;
-                        helpLabel.setText("Click on a weapon to add attachment to weapon");
+                    public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
+                        DragAndDrop.Payload payload = new DragAndDrop.Payload();
+                        payload.setObject("Some payload!");
+
+                        payload.setDragActor(new Label("Some payload!", uiSkin));
+
+                        Label validLabel = new Label("Some payload!", uiSkin);
+                        validLabel.setColor(0, 1, 0, 1);
+                        payload.setValidDragActor(validLabel);
+
+                        Label invalidLabel = new Label("Some payload!", uiSkin);
+                        invalidLabel.setColor(1, 0, 0, 1);
+                        payload.setInvalidDragActor(invalidLabel);
+
+                        return payload;
                     }
                 });
 
-                currentInventory.add(attachmentButton);
+                for (AttachmentActor validTarget : getValidTargets()) {
+                    dragAndDrop.addTarget(new DragAndDrop.Target(validTarget) {
+                        public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                            getActor().setColor(Color.GREEN);
+                            return true;
+                        }
+
+                        public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                            getActor().setColor(Color.WHITE);
+                        }
+
+                        public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                            System.out.println("Accepted: " + payload.getObject() + " " + x + ", " + y);
+                            attachment.setEquipped(true);
+                            attachment.applyAttachment(validTarget.getWeapon());
+                        }
+                    });
+                }
+
+                for (AttachmentActor invalidTarget : getInvalidTargets()) {
+                    dragAndDrop.addTarget(new DragAndDrop.Target(invalidTarget) {
+                        public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                            getActor().setColor(Color.RED);
+                            return false;
+                        }
+
+                        public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                            getActor().setColor(Color.WHITE);
+                        }
+
+                        public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                        }
+                    });
+                }
 
                 currentInventory.row();
-                Label attachmentDesc = new Label(attachment.getName() + " - " + attachment.getDescription(), labelStyle);
+                Label attachmentDesc = new Label(attachment.getName() + " - " + attachment.getDescription(), uiSkin);
                 currentInventory.add(attachmentDesc);
             }
         }
+    }
 
-        /*
-            Weapons
-          */
-        weaponsTable.clear();
-        weaponsTable.setPosition(300, 450);
-        Label weaponsLabel = new Label("Weapons", labelStyle);
-        weaponsTable.add(weaponsLabel).align(Align.center);
-        for (Weapon weapon : gameWorld.getPlayer().getWeaponList()) {
-            TextButton weaponButton = new TextButton(weapon.getName(), textButtonStyle);
-            weaponButton.addCaptureListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-
-                }
-            });
-
-            weaponsTable.row();
-            weaponsTable.add(weaponButton);
-            weaponsTable.row();
-
-            for (int i = 0; i < 3; i++) {
-                WeaponAttachment attachment = null;
-                Sprite attachmentSprite;
-                if (weapon.getAttachments().size() > i) {
-                    attachment = weapon.getAttachments().get(i);
-                    attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
-                } else {
-                    attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
-                }
-                attachmentSprite.setSize(75, 75);
-                AttachmentButton attachmentButton = new AttachmentButton(gameWorld.getGame(), new SpriteDrawable(attachmentSprite));
-                if (attachment != null) {
-                    attachmentButton.setAttachment(attachment);
-                }
-                attachmentButton.addCaptureListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        // Remove attachment from weapon
-                        if (selectedAttachment != null) {
-                            // TODO FIX ALL THIS SHIT
-                            if (weapon.addAttachment(selectedAttachment)) {
-                                helpLabel.setText(selectedAttachment.getName() + " added to weapon " + weapon.getName());
-                            } else {
-                                helpLabel.setText("NO! yuou cant have many attachments!");
-                            }
-                            selectedAttachment = null;
-                            updateInventory();
-                        } else {
-                            weapon.removeAttachment(attachmentButton.getAttachment());
-                            attachmentButton.setAttachment(null);
-                        }
-
-                        if (attachmentButton.getAttachment() != null) {
-                            weapon.removeAttachment(attachmentButton.getAttachment());
-                        }
-                        updateInventory();
-                    }
-                });
-                weaponsTable.add(attachmentButton);
+    private ArrayList<AttachmentActor> getValidTargets() {
+        ArrayList<AttachmentActor> validTargets = new ArrayList<>();
+        for (AttachmentActor target : weaponAttachmentSlots) {
+            if (!target.hasAttachment()) {
+                validTargets.add(target);
             }
-
-            /*
-            for (WeaponAttachment attachment : weapon.getAttachments()) {
-                //Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
-                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
-                attachmentSprite.setSize(75, 75);
-                Button attachmentButton = new Button(new SpriteDrawable(attachmentSprite));
-                attachmentButton.addCaptureListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        // Remove attachment from weapon
-                        weapon.removeAttachment(attachment);
-                        updateInventory();
-                    }
-                });
-                weaponsTable.add(attachmentButton);
-            }
-            */
         }
+        return validTargets;
+    }
+
+    private ArrayList<AttachmentActor> getInvalidTargets() {
+        ArrayList<AttachmentActor> invalidTargets = new ArrayList<>();
+        for (AttachmentActor target : weaponAttachmentSlots) {
+            if (target.hasAttachment()) {
+                invalidTargets.add(target);
+            }
+        }
+        return invalidTargets;
     }
 
     public void update(float delta) {
@@ -218,17 +252,6 @@ public class InventoryUI {
 
     public void dispose() {
         stage.dispose();
-    }
-
-    private void loadStyles() {
-        labelStyle = new LabelStyle();
-        labelStyle.font = fonts.getLabelFont();
-
-        buttonStyle = new Button.ButtonStyle();
-        // TODO add TextDrawable to hover
-
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = fonts.getButtonFont();
     }
 
     public boolean isVisible() {
