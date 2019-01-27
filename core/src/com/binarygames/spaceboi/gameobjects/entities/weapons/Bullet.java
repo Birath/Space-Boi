@@ -1,6 +1,8 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
@@ -38,12 +40,22 @@ public class Bullet extends EntityDynamic {
         this.weapon = weapon;
         this.removeDelay = removeDelay;
 
+        getSprite().setOrigin(width / 2, height / 2);
+
         gameWorld.addDynamicEntity(this);
     }
 
     @Override
     public void update(float delta) {
         //Do nothing
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
+        float angle = body.getLinearVelocity().angle();
+        getSprite().setRotation(angle - 90);
+        getSprite().draw(batch);
     }
 
     @Override

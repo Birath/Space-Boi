@@ -1,6 +1,8 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -28,7 +30,6 @@ public class HomingRocket extends Bullet {
 
         toPlayer.setLength2(1).scl(this.getBody().getLinearVelocity().len());
         this.getBody().setLinearVelocity(toPlayer);
-
     }
 
     @Override
