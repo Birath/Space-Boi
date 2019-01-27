@@ -68,7 +68,7 @@ public class InventoryUI {
         labelStyle = uiSkin.get("title-1", LabelStyle.class);
 
         // Advices
-        helpLabel = new Label("Click on an attachment", uiSkin);
+        helpLabel = new Label("Click and hold to drag an attachment", uiSkin);
         helpLabel.setPosition(20, 20);
         stage.addActor(helpLabel);
 
@@ -178,6 +178,8 @@ public class InventoryUI {
 
                         public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
                             System.out.println("Accepted: " + payload.getObject() + " " + x + ", " + y);
+                            attachment.setEquipped(true);
+                            attachment.applyAttachment(validTarget.getWeapon());
                         }
                     });
                 }
