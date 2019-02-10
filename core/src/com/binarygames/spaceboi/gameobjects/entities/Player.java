@@ -203,7 +203,7 @@ public class Player extends EntityDynamic {
         weapon.render(batch, camera, this);
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
         getSprite().setRotation(playerAngle + 90);
-        getSprite().draw(batch);
+        //getSprite().draw(batch); TODO remove temp for testing
 
         if (spriteIsFlipped) {
             currentFrame.flip(true, false);
