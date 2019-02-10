@@ -1,7 +1,7 @@
 package com.binarygames.spaceboi.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,13 +9,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -99,8 +102,10 @@ public class InventoryUI {
 
             // Add attachment
             for (int i = 0; i < 3; i++) {
-                //Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
-                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class)));
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_EMPTY_ATTACHMENT, Texture.class)));
+                //Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class)));
+                attachmentSprite.setSize(50, 50);
+
                 AttachmentActor attachmentActor = new AttachmentActor(new SpriteDrawable(attachmentSprite));
                 attachmentActor.setWeapon(weapon);
                 attachmentActor.addListener(new ChangeListener() {
@@ -109,7 +114,7 @@ public class InventoryUI {
                         if (attachmentActor.hasAttachment()) {
                             weapon.removeAttachment(attachmentActor.getAttachment());
                             attachmentActor.setAttachment(null);
-
+                            attachmentActor.setSprite(new SpriteDrawable(attachmentSprite));
                             updateInventory();
                         }
                     }
@@ -140,69 +145,85 @@ public class InventoryUI {
             if (!attachment.isEquipped()) {
                 currentInventory.row();
 
-                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class)));
+                Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                attachmentSprite.setSize(50, 50);
                 AttachmentActor attachmentActor = new AttachmentActor(new SpriteDrawable(attachmentSprite));
+                attachmentActor.setAttachment(attachment);
                 currentInventory.add(attachmentActor);
 
                 DragAndDrop dragAndDrop = new DragAndDrop();
-                dragAndDrop.addSource(new DragAndDrop.Source(attachmentActor) {
+                dragAndDrop.addSource(new Source(attachmentActor) {
                     @Override
-                    public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
-                        DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                        payload.setObject("Some payload!");
-
-                        payload.setDragActor(new Label("Some payload!", uiSkin));
+                    public Payload dragStart(InputEvent event, float x, float y, int pointer) {
+                        Payload payload = new Payload();
+                        payload.setObject(attachmentActor);
+                        payload.setDragActor(attachmentActor);
 
                         Label validLabel = new Label("Some payload!", uiSkin);
                         validLabel.setColor(0, 1, 0, 1);
-                        payload.setValidDragActor(validLabel);
+                        payload.setValidDragActor(attachmentActor);
 
                         Label invalidLabel = new Label("Some payload!", uiSkin);
                         invalidLabel.setColor(1, 0, 0, 1);
-                        payload.setInvalidDragActor(invalidLabel);
+                        payload.setInvalidDragActor(attachmentActor);
 
                         return payload;
+                    }
+
+                    @Override
+                    public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
+                        if (target == null) {
+
+                        }
                     }
                 });
 
                 for (AttachmentActor validTarget : getValidTargets()) {
-                    dragAndDrop.addTarget(new DragAndDrop.Target(validTarget) {
-                        public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                    dragAndDrop.addTarget(new Target(validTarget) {
+                        public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
                             getActor().setColor(Color.GREEN);
                             return true;
                         }
 
-                        public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                        public void reset(Source source, Payload payload) {
                             getActor().setColor(Color.WHITE);
                         }
 
-                        public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                            System.out.println("Accepted: " + payload.getObject() + " " + x + ", " + y);
+                        public void drop(Source source, Payload payload, float x, float y, int pointer) {
+                            //System.out.println("Accepted: " + payload.getObject() + " " + x + ", " + y);
+                            Gdx.app.log("InventoryUI", "Payload " + payload.getObject());
+
+                            WeaponAttachment attachment = ((AttachmentActor) payload.getObject()).getAttachment();
+                            validTarget.setAttachment(attachment);
+                            Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
+                            attachmentSprite.setSize(50, 50);
+                            validTarget.setSprite(new SpriteDrawable(attachmentSprite));
+
                             attachment.setEquipped(true);
-                            attachment.applyAttachment(validTarget.getWeapon());
+                            validTarget.getWeapon().addAttachment(attachment);
                         }
                     });
                 }
 
                 for (AttachmentActor invalidTarget : getInvalidTargets()) {
-                    dragAndDrop.addTarget(new DragAndDrop.Target(invalidTarget) {
-                        public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                    dragAndDrop.addTarget(new Target(invalidTarget) {
+                        public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
                             getActor().setColor(Color.RED);
                             return false;
                         }
 
-                        public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                        public void reset(Source source, Payload payload) {
                             getActor().setColor(Color.WHITE);
                         }
 
-                        public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                        public void drop(Source source, Payload payload, float x, float y, int pointer) {
                         }
                     });
                 }
 
                 currentInventory.row();
                 Label attachmentDesc = new Label(attachment.getName() + " - " + attachment.getDescription(), uiSkin);
-                currentInventory.add(attachmentDesc);
+                //currentInventory.add(attachmentDesc);
             }
         }
     }
@@ -230,7 +251,7 @@ public class InventoryUI {
     public void update(float delta) {
         stage.act(delta);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
             hide();
         }
     }
@@ -258,4 +279,7 @@ public class InventoryUI {
         return isVisible;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
 }

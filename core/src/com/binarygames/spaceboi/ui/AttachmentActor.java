@@ -1,8 +1,8 @@
 package com.binarygames.spaceboi.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 
@@ -24,6 +24,16 @@ public class AttachmentActor extends Button {
 
     public void setAttachment(WeaponAttachment attachment) {
         this.attachment = attachment;
+    }
+
+    public void setSprite(SpriteDrawable sprite) {
+        this.setStyle(new ButtonStyle(sprite, null, null));
+    }
+
+
+    public void reset() {
+        attachment = null;
+        weapon = null;
     }
 
     public WeaponAttachment getAttachment() {

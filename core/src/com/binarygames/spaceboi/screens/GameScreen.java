@@ -248,6 +248,10 @@ public class GameScreen implements Screen {
         gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         inGameMenuScreen.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         camera.setToOrtho(false, width / 2, height / 2);
+        inventoryUI.getStage().getViewport().setWorldSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        inventoryUI.getStage().getViewport().update(width, height, true);
+        inventoryUI.getStage().getCamera().update();
+        inventoryUI.getStage().getViewport().apply();
         //viewport.update();
     }
 
