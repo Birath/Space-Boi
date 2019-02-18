@@ -65,7 +65,6 @@ public class GameScreen implements Screen {
     private final float whenToInterpolate = 30;
     private float angleToInterpolate;
 
-
     private boolean debugRendererIsEnabled = false;
     private float startCameraAngle = 0;
 
@@ -245,10 +244,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        gameUI.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-        inGameMenuScreen.getStage().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-        camera.setToOrtho(false, width / 2, height / 2);
-        //viewport.update();
+        gameUI.getStage().getViewport().update(width, height, true);
+        inGameMenuScreen.getStage().getViewport().setWorldSize(width, height);
+        inGameMenuScreen.getStage().getViewport().update(width, height, true);
+        camera.setToOrtho(false, width / 2f, height / 2f);
+
+        if (state == GAME_PAUSED) {
+            inGameMenuScreen.getStage().getViewport().setWorldSize(width, height);
+            inGameMenuScreen.getStage().getViewport().update(width, height, true);
+            inGameMenuScreen.getStage().getViewport().apply(true);
+            inGameMenuScreen.resize(width, height);
+        }
     }
 
     @Override
