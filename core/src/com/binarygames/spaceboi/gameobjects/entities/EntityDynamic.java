@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.bodies.BaseDynamicBody;
 
@@ -17,7 +18,8 @@ public abstract class EntityDynamic extends BaseDynamicBody {
     public Body planetBody;
     private Planet closestPlanet;
 
-    private Sprite sprite;
+    public Sprite sprite;
+    protected AnimationHandler animationHandler;
 
     protected int maxHealth;
     protected int health;

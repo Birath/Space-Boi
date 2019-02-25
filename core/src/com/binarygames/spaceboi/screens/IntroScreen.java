@@ -24,7 +24,7 @@ public class IntroScreen extends BaseScreen {
         // Menu background
         Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
-        //backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundImage.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(backgroundImage);
 
         Table table = new Table();
@@ -32,19 +32,19 @@ public class IntroScreen extends BaseScreen {
         stage.addActor(table);
 
         Label infoLabel = new Label("A - Move left\n" +
-            "D - Move right\n" +
-            "Space - Jump\n" +
-            "Left Mouse - Shoot\n" +
-            "1 - Equip Shotgun\n" +
-            "2 - Equip Machinegun\n" +
-            "3 - Equip Grenade launcher\n" +
-            "R - Reload your current weapon\n" +
-            "I - Open weapon attachment menu\n" +
-            "\n" +
-            "Space pirates have just stolen your beloved dog and brought him\n" +
-            "to the middle of the galaxy. Make your way there by slaying enemies\n" +
-            "and jumping off the launchpads that are located on each planet.\n" +
-            "Hurry up before they eat him!", getUiSkin());
+                "D - Move right\n" +
+                "Space - Jump\n" +
+                "Left Mouse - Shoot\n" +
+                "1 - Equip Shotgun\n" +
+                "2 - Equip Machinegun\n" +
+                "3 - Equip Grenade launcher\n" +
+                "R - Reload your current weapon\n" +
+                "I - Open weapon attachment menu\n" +
+                "\n" +
+                "Space pirates have just stolen your beloved dog and brought him\n" +
+                "to the middle of the galaxy. Make your way there by slaying enemies\n" +
+                "and jumping off the launchpads that are located on each planet.\n" +
+                "Hurry up before they eat him!", getUiSkin());
 
         TextButton playButton = new TextButton("Start", getUiSkin());
         playButton.addListener(new ChangeListener() {

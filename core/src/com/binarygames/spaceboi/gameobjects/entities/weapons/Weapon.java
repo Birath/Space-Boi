@@ -28,6 +28,8 @@ public abstract class Weapon {
     protected String bulletPath;
     protected float radius;
 
+    private boolean spriteFlip;
+
     protected EntityDynamic shooter;
 
     protected int damage;
@@ -153,7 +155,15 @@ public abstract class Weapon {
         Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
         float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
         //sprite.setRotation(angleToMouse - 90);
-        sprite.setRotation(angleToMouse); // TODO fix image flipping
+        sprite.setRotation(angleToMouse);
+
+        // Image flipping for player
+        boolean shouldFlip = Gdx.input.getX() < Gdx.graphics.getWidth() / 2;
+        if(shouldFlip != spriteFlip) {
+            spriteFlip = shouldFlip;
+            sprite.flip(false, true);
+        }
+
         sprite.draw(batch);
     }
 
