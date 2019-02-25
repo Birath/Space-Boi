@@ -99,6 +99,7 @@ public class Console {
         commands.put("randomattachment", new SpawnRandomAttachment());
         commands.put("attachment", new SpawnAttachment());
         commands.put("me_irl", new Suicide());
+        commands.put("fillinventory", new FillInventory());
     }
 
     public void update(float delta) {
@@ -207,5 +208,9 @@ public class Console {
 
     public enum ArgumentType {
         REQUIRED, OPTIONAL, NONE
+    }
+
+    public void runCommand(String command, String[] args) {
+        commands.get(command).run(this, args);
     }
 }
