@@ -82,6 +82,7 @@ public class Assets {
     public static final String DOG3 = "game/entities/enemies/dog/dog-2.wav"; // https://www.freesoundeffects.com/free-track/dog-2-89458/
     public static final String DOG = "game/entities/enemies/dog/enemy_dog.png";
     public static final String DOG_RUNNING_ANIMATION = "game/entities/enemies/dog/dog_running_spritesheet.png";
+    public static final String DOG_ATTACKING_ANIMATION = "game/entities/enemies/dog/dog_attacking_spritesheet.png";
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";
@@ -252,6 +253,7 @@ public class Assets {
         assetManager.load(DOG3, Sound.class);
         assetManager.load(DOG, Texture.class, textureParameter);
         assetManager.load(DOG_RUNNING_ANIMATION, Texture.class, textureParameter);
+        assetManager.load(DOG_ATTACKING_ANIMATION, Texture.class, textureParameter);
 
         // Planets
         assetManager.load(PLANET_MOON, Texture.class, textureParameter);
