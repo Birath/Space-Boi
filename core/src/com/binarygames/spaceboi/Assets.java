@@ -81,7 +81,8 @@ public class Assets {
     public static final String DOG2 = "game/entities/enemies/dog/dog2_weird.wav"; // https://www.freesoundeffects.com/free-track/dog2-89460/
     public static final String DOG3 = "game/entities/enemies/dog/dog-2.wav"; // https://www.freesoundeffects.com/free-track/dog-2-89458/
     public static final String DOG = "game/entities/enemies/dog/enemy_dog.png";
-    public static final String DOG_RUNNING_ANIMATION = "game/entities/enemies/dog/dog_running_spritesheet.png";
+    //public static final String DOG_RUNNING_ANIMATION = "game/entities/enemies/dog/dog_running_spritesheet.png"; TODO update
+    public static final String DOG_RUNNING_ANIMATION = "game/entities/enemies/dog/different_size_dog_spritesheet.png";
 
     // Planets
     public static final String PLANET_MOON = "game/entities/planets/moon.png";

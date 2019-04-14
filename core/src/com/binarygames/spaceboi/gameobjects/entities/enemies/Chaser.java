@@ -21,8 +21,8 @@ public class Chaser extends Enemy implements MeleeEnemy {
     private static final int RUN_FRAME_ROWS = 2;
     private static final float runFrameDuration = 0.05f;
 
-    private static final int dog_width = 2419;
-    private static final int dog_height = 1747;
+    private static final int dog_width = 2048;
+    private static final int dog_height = 2048;
 
     public Chaser(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.CHASER);
@@ -70,7 +70,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
         super.render(batch, camera);
         //sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         //batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
-        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - dog_width / 2, body.getPosition().y * PPM - dog_height / 2, dog_width / 2, dog_height / 2, dog_width, dog_height, 0.05f, 0.05f, body.getAngle() + 90);
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - dog_width / 2, body.getPosition().y * PPM - dog_height / 2, dog_width / 2, dog_height / 2, dog_width, dog_height, 0.05f, 0.05f, body.getAngle() - 90);
     }
 
     @Override

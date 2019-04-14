@@ -2,12 +2,15 @@ package com.binarygames.spaceboi.gameobjects.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.binarygames.spaceboi.Assets;
+import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
@@ -16,8 +19,8 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
-import com.binarygames.spaceboi.animation.AnimationHandler;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +86,11 @@ public class Player extends EntityDynamic {
         super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
         this.gameWorld = gameWorld;
+
+        IntBuffer buffer16 = BufferUtils.newIntBuffer(16);
+
+        Gdx.gl.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, buffer16);
+        System.out.println(buffer16.get(0));
 
         weaponList = new ArrayList<>();
         weaponList.add(new Shotgun(gameWorld, this));
