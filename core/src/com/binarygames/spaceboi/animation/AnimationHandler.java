@@ -1,11 +1,8 @@
 package com.binarygames.spaceboi.animation;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.binarygames.spaceboi.Assets;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class AnimationHandler {
@@ -23,7 +20,7 @@ public class AnimationHandler {
 
     String path;
 
-    public AnimationHandler(GameWorld gameWorld, int frameColumns, int frameRows, float frameDuration, String path){
+    public AnimationHandler(GameWorld gameWorld, int frameColumns, int frameRows, float frameDuration, String path) {
         // A class that handles animation
         this.gameWorld = gameWorld;
         this.frameColumns = frameColumns;
@@ -55,7 +52,7 @@ public class AnimationHandler {
         currentFrame = (TextureRegion) animation.getKeyFrame(animationTime, true);
     }
 
-    public void dispose(){
+    public void dispose() {
 
     }
 }
