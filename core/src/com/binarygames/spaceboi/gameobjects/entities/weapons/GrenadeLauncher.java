@@ -2,12 +2,16 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class GrenadeLauncher extends Weapon {
+
+    public static final int WIDTH = 30;
+    public static final int HEIGHT = 25;
 
     public GrenadeLauncher(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
@@ -27,8 +31,10 @@ public class GrenadeLauncher extends Weapon {
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        sprite.setSize(radius * 2, radius * 2);
-        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        float scale = Math.min(WIDTH /sprite.getWidth(), HEIGHT /sprite.getHeight());
+        sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
+        sprite.setOriginCenter();
+        //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
     }
 
     @Override
