@@ -89,9 +89,10 @@ public class GameWorld {
             worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
         //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
-        this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
+        //this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
+
         addDynamicEntity(player);
-        addDynamicEntity(finalBoss);
+        //addDynamicEntity(finalBoss);
         this.player = player;
         xp_handler = new XPHandler(player);
         background = new Background(game, player, camera);
@@ -325,10 +326,11 @@ public class GameWorld {
         //player.setPlayerAngle(lerpedAngle);
         //player.setPlayerAngle(otherInerpolation);
         player.setPlayerAngle(lerpedAngle);
-        closestPlanet = finalBoss.getClosestPlanet();
+        /*closestPlanet = finalBoss.getClosestPlanet();
         relativeVector = closestPlanet.getBody().getPosition().sub(finalBoss.getBody().getPosition());
         angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
         finalBoss.setAngle(MathUtils.lerpAngleDeg(finalBoss.getAngle(), angleToPlanet, delta * 15));
+        */
     }
 
     public void spawnHealthPack(Enemy enemy) {

@@ -16,7 +16,6 @@ public class FlyingShip extends Enemy {
     public FlyingShip(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
-
         shotgun = new Shotgun(gameWorld, this);
 
         damagedSounds.add(Assets.RICOCHET1);
@@ -83,7 +82,6 @@ public class FlyingShip extends Enemy {
         }
     }
 
-
     @Override
     public void onRemove() {
         super.onRemove();
@@ -108,7 +106,7 @@ public class FlyingShip extends Enemy {
     private void ShootShotgun() {
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
-                body.getPosition().y * PPM + shootDirection.y);
+            body.getPosition().y * PPM + shootDirection.y);
 
         shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
     }
@@ -121,7 +119,7 @@ public class FlyingShip extends Enemy {
         }
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
-                body.getPosition().y * PPM + perpen.y);
+            body.getPosition().y * PPM + perpen.y);
 
         weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
     }
