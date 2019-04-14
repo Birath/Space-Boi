@@ -13,6 +13,8 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     private long timeLastTouched;
     private boolean touchingPlayer = false;
+    private static final int DOG_WIDTH = 2419;
+    private static final int DOG_HEIGHT = 1747;
 
     private final int damageDelay = 700;
 
@@ -64,9 +66,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        super.render(batch, camera);
-        //sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
-        //batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.05f, 0.05f, body.getAngle() + 90);
 
     }
 
