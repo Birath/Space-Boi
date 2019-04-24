@@ -26,7 +26,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
     private AnimationHandler attackAnimationHandler;
     private static final int ATTACK_FRAME_COLUMNS = 7;
     private static final int ATTACK_FRAME_ROWS = 1;
-    private static final float attackFrameDuration = 0.05f;
+    private static final float attackFrameDuration = 0.08f;
 
     public Chaser(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.CHASER);
@@ -73,10 +73,10 @@ public class Chaser extends Enemy implements MeleeEnemy {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         if (touchingPlayer) {
-            batch.draw(attackAnimationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.05f, 0.05f, body.getAngle() + 90);
+            batch.draw(attackAnimationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
         }
         else{
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.05f, 0.05f, body.getAngle() + 90);
+            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
         }
     }
 
