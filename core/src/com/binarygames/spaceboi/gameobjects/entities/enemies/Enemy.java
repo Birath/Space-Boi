@@ -2,6 +2,7 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,6 +30,7 @@ public abstract class Enemy extends EntityDynamic {
 
     private int aggroDistance = 1000;
     private int deAggroDistance = 2000;
+    private float targetAngle = 0;
 
     private boolean hasNoticedPlayer = false;
 
@@ -82,6 +84,9 @@ public abstract class Enemy extends EntityDynamic {
 
         this.enemyXP = enemyType.getExp();
         this.gameWorld = gameWorld;
+        sprite.setOriginCenter();
+        sprite.rotate90(false);
+
 
         Skin uiSkin = gameWorld.getGame().getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
         healthBar = new ProgressBar(0, health, 1, false, uiSkin);
@@ -94,7 +99,7 @@ public abstract class Enemy extends EntityDynamic {
 
     @Override
     public void update(float delta) {
-        updateEnemy();
+        updateEnemy(delta);
         if (entityState == ENTITY_STATE.STANDING) {
             if (enemyState == ENEMY_STATE.IDLE) {
                 updateIdle(delta);
@@ -116,7 +121,7 @@ public abstract class Enemy extends EntityDynamic {
 
     protected abstract void updateJumping(float delta);
 
-    protected void updateEnemy() {
+    protected void updateEnemy(float delta) {
         if (planetBody != null) {
             updateToPlanet();
             updatePerpen();
@@ -124,6 +129,7 @@ public abstract class Enemy extends EntityDynamic {
             lookForPlayer();
             updateEnemyState();
             updateWalkingDirection();
+            rotateToPlanet(delta);
         }
     }
 
@@ -180,6 +186,12 @@ public abstract class Enemy extends EntityDynamic {
             moveLeft = true;
         }
     }
+    private void rotateToPlanet(float delta) {
+        Vector2 relativeVector = getClosestPlanet().getBody().getPosition().sub(getBody().getPosition());
+        float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        targetAngle = MathUtils.lerpAngleDeg(targetAngle, angleToPlanet, delta * 15);
+        body.setTransform(body.getPosition(), targetAngle * MathUtils.degreesToRadians + MathUtils.PI / 2);
+    }
 
     protected void moveAlongPlanet() {
         //MOVE
@@ -235,6 +247,7 @@ public abstract class Enemy extends EntityDynamic {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
+        sprite.setRotation(targetAngle);
         //healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
         //healthBar.setValue(health);
         //healthBar.draw(batch, 1);

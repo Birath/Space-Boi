@@ -33,29 +33,53 @@ public class Planet extends EntityStatic {
         getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
         getSprite().draw(batch);
 
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        batch.end();
-        shapeRenderer.begin();
+        if (isVisible(camera)) {
+            shapeRenderer.setAutoShapeType(true);
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-        Color fadeColor = new Color(0, 102, 204, 0);
-        int lineWidth = 2;
-        Gdx.gl.glLineWidth(lineWidth);
-        int planetBarrierTransitions = 8;
-        float currentRad = GRAVITY_RADIUS * rad * PPM;
-        shapeRenderer.setColor(fadeColor);
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        for (int i = 0; i < planetBarrierTransitions; i++) {
-            shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, currentRad, (int) (32 * (float) Math.cbrt(radius)));
-            currentRad -= lineWidth / 2;
-            fadeColor.a += 255 / planetBarrierTransitions;
+            float startAlpha = 0.4f;
+            float endAlpha = 0.05f;
+            Color fadeColor = new Color(36 / 255f, 124 / 255f, 182 / 255f, startAlpha);
+            //Color fadeColor = new Color(Color.TEAL);
+            int lineWidth = 4;
+            Gdx.gl.glLineWidth(lineWidth);
+            int planetBarrierTransitions = 100;
+            float currentRad = GRAVITY_RADIUS * rad * PPM;
             shapeRenderer.setColor(fadeColor);
-        }
 
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-        batch.begin();
+            float alphaDecrease = (startAlpha - endAlpha) / (planetBarrierTransitions); // TODO check black clircle line
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            for (int i = 0; i < planetBarrierTransitions; i++) {
+                shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, currentRad, (int) (20 * (float) Math.cbrt(radius)));
+                currentRad -= lineWidth / 2;
+                fadeColor.a -= alphaDecrease; // TODO FINISH
+                shapeRenderer.setColor(fadeColor);
+            }
+
+            shapeRenderer.end();
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(fadeColor);
+            shapeRenderer.circle(body.getPosition().x * PPM, body.getPosition().y * PPM, currentRad);
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            batch.begin();
+        }
+    }
+
+    /**
+     * Returns whether planet is visible or not. kinda
+     *
+     * @param camera
+     * @return Whether planet is visible to camera
+     */
+    private boolean isVisible(OrthographicCamera camera) {
+        //return gameWorld.getPlayer().getBody().getPosition().dst(body.getPosition()) < GRAVITY_RADIUS * rad * 2 * (camera.zoom / 2);
+        return gameWorld.getPlayer().getBody().getPosition().dst(body.getPosition()) < GRAVITY_RADIUS * rad * 2;
     }
 
     public float getRadius() {
