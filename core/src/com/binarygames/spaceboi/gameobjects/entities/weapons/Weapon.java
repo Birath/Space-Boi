@@ -115,7 +115,9 @@ public abstract class Weapon {
     }
 
     public void weaponMaths() {
-        currentMag--;
+        if (!(shooter instanceof Player && gameWorld.getPlayer().hasInfiniteAmmo())) {
+            currentMag--;
+        }
 
         if (currentMag == 0) {
             // Do reload
