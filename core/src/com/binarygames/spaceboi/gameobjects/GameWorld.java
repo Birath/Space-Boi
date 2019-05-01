@@ -320,11 +320,7 @@ public class GameWorld {
             lerpSpeed = 25;
         }
         lerpedAngle = MathUtils.lerpAngleDeg(player.getPlayerAngle(), angleToPlanet, delta * lerpSpeed);
-        //Gdx.app.log("GameWorld", "Lerped angle:        " + lerpedAngle);
-        //Gdx.app.log("GameWorld", "Linear interpolation: " + otherInterpolation);
-        //Gdx.app.log("GameWorld", "Target Angle:        " + angleToPlanet);
-        //player.setPlayerAngle(lerpedAngle);
-        //player.setPlayerAngle(otherInerpolation);
+
         player.setPlayerAngle(lerpedAngle);
         /*closestPlanet = finalBoss.getClosestPlanet();
         relativeVector = closestPlanet.getBody().getPosition().sub(finalBoss.getBody().getPosition());

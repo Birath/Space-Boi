@@ -45,7 +45,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     public FinalBoss(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FINAL_BOSS, EnemyType.FINAL_BOSS.getWidth(), EnemyType.FINAL_BOSS.getHeight());
         this.cannon = new Cannon(gameWorld, this);
-
+        sprite.rotate90(false);
     }
 
     @Override
@@ -56,15 +56,12 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     @Override
     public void update(float delta) {
         super.update(delta);
-
-        // Rotate boss to stand on planet
-        body.setTransform(body.getPosition(), angle * MathUtils.degreesToRadians + MathUtils.PI / 2);
     }
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
-        getSprite().setRotation(angle + 90);
+        sprite.rotate(-90);
     }
 
 
@@ -154,7 +151,6 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         timeSinceChargeStart = 0;
         stunTime = 0;
         chargeState = ChargeState.COOLDOWN;
-        Gdx.app.log("FinalBoss", "Should stop charge");
     }
 
     private boolean shouldCharge() {

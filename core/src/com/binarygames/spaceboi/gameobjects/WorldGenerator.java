@@ -6,10 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.entities.LaunchPad;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Chaser;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.EnemyType;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
-import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.*;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 
@@ -63,7 +60,9 @@ public class WorldGenerator {
     public void createWorld() {
         loadPlanetSprites();
         //Create middle planet
-        createPlanet(0, 0, finalBossPlanetSprites.get(random.nextInt(finalBossPlanetSprites.size())));
+        Planet finalPlanet = createPlanet(0, 0, finalBossPlanetSprites.get(random.nextInt(finalBossPlanetSprites.size())));
+        FinalBoss finalBoss = new FinalBoss(gameWorld, finalPlanet.getBody().getPosition().x, finalPlanet.getBody().getPosition().y + finalPlanet.getRad(), Assets.PLAYER);
+        gameWorld.addDynamicEntity(finalBoss);
 
         int angleOffset = 0;
 

@@ -23,9 +23,15 @@ public class Chaser extends Enemy implements MeleeEnemy {
     private static final int RUN_FRAME_ROWS = 2;
     private static final float runFrameDuration = 0.05f;
 
+    private AnimationHandler attackAnimationHandler;
+    private static final int ATTACK_FRAME_COLUMNS = 7;
+    private static final int ATTACK_FRAME_ROWS = 1;
+    private static final float attackFrameDuration = 0.08f;
+
     public Chaser(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.CHASER);
         animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.DOG_RUNNING_ANIMATION);
+        attackAnimationHandler = new AnimationHandler(gameWorld, ATTACK_FRAME_COLUMNS, ATTACK_FRAME_ROWS, attackFrameDuration, Assets.DOG_ATTACKING_ANIMATION);
     }
 
     @Override
@@ -53,7 +59,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     @Override
     protected void updateAttacking(float delta) {
-        dealDamage();
+        dealDamage(delta);
         if(toJump()){
             jump();
         }
@@ -66,8 +72,12 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.05f, 0.05f, body.getAngle() + 90);
-
+        if (touchingPlayer) {
+            batch.draw(attackAnimationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
+        }
+        else{
+            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
+        }
     }
 
     @Override
@@ -75,11 +85,14 @@ public class Chaser extends Enemy implements MeleeEnemy {
         //Do nothing
     }
 
-    private void dealDamage(){
-        if ((TimeUtils.millis() - timeLastTouched > damageDelay) && touchingPlayer) {
-            gameWorld.getPlayer().reduceHealth(damage);
-            //Play bleed animation
-            timeLastTouched = TimeUtils.millis();
+    private void dealDamage(float delta){
+        if (touchingPlayer){
+            attackAnimationHandler.updateAnimation(delta);
+            if (TimeUtils.millis() - timeLastTouched > damageDelay) {
+                gameWorld.getPlayer().reduceHealth(damage);
+                //Play bleed animation
+                timeLastTouched = TimeUtils.millis();
+            }
         }
     }
     public void touchedPlayer(){
