@@ -105,7 +105,6 @@ public class GameScreen implements Screen {
         //gameUI.debugMinimap(miniMap.getMinimap());
 
         console = new Console(game, this, gameWorld);
-        console.runCommand("fillinventory", null);
         inventoryUI = new InventoryUI(this, gameWorld);
 
         PlayerInputProcessor inputProcessor = new PlayerInputProcessor(player, camera, world, gameWorld, this);
