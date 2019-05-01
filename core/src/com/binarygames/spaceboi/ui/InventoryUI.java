@@ -7,19 +7,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
+import com.badlogic.gdx.utils.Align;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -34,6 +33,7 @@ public class InventoryUI {
     public static final int ATTACHMENT_HEIGHT = 50;
     public static final int LABEL_PADDING = 10;
     public static final int CELL_PADDING = 5;
+    public static final int HELP_LABEL_WIDTH = 700;
     private Stage stage;
 
     private GameScreen gamesScreen;
@@ -85,6 +85,8 @@ public class InventoryUI {
         // Advices
         helpLabel = new Label("Click and hold to drag an attachment", uiSkin);
         helpLabel.setPosition(20, 20);
+        helpLabel.setWrap(true);
+        helpLabel.setWidth(HELP_LABEL_WIDTH);
         stage.addActor(helpLabel);
 
         DragAndDrop dragAndDrop = new DragAndDrop();
@@ -95,8 +97,6 @@ public class InventoryUI {
           */
         currentInventory = new Table();
         currentInventory.setPosition(800, 450);
-        NinePatch patch = new NinePatch(new Texture(Assets.MENU_BACKGROUND_IMAGE), 3, 3, 3, 3);
-        currentInventory.background(new NinePatchDrawable(patch));
         stage.addActor(currentInventory);
 
         Label inventoryLabel = new Label("Inventory", uiSkin);
@@ -153,7 +153,6 @@ public class InventoryUI {
             }
             weaponsTable.row();
         }
-        stage.setDebugAll(true);
     }
 
     private void updateInventory() {
@@ -162,10 +161,6 @@ public class InventoryUI {
           */
 
         currentInventory.reset();
-        NinePatch patch = new NinePatch(new Texture(Assets.MENU_BACKGROUND_IMAGE), 3, 3, 3, 3);
-        currentInventory.background(new NinePatchDrawable(patch));
-        //currentInventory.setPosition(800, 450);
-        //stage.addActor(currentInventory);
         // TODO Fix borders and padding to all cells
         Label inventoryLabel = new Label("Inventory", uiSkin);
         currentInventory.padBottom(LABEL_PADDING);
@@ -226,6 +221,7 @@ public class InventoryUI {
 
                     @Override
                     public void dragStop(InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
+                        // Dropped on invalid target - Reset the original cell
                         if (target == null) {
                             sourceCell.setActor(payload.getDragActor());
                         }
@@ -247,11 +243,12 @@ public class InventoryUI {
                             WeaponAttachment attachment = ((AttachmentActor) payload.getObject()).getAttachment();
                             validTarget.setAttachment(attachment);
                             Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
-                            attachmentSprite.setSize(50, 50);
+                            attachmentSprite.setSize(ATTACHMENT_WIDTH, ATTACHMENT_HEIGHT);
                             validTarget.setDrawable(new SpriteDrawable(attachmentSprite));
 
                             attachment.setEquipped(true);
                             validTarget.getWeapon().addAttachment(attachment);
+                            updateInventory();
                         }
                     });
                 }
