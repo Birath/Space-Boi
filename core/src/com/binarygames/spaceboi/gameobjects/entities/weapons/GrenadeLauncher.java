@@ -2,7 +2,6 @@ package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -38,10 +37,10 @@ public class GrenadeLauncher extends Weapon {
     }
 
     @Override
-    public void Shoot(float x, float y, Vector2 shootDirection) {
+    public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Grenade(gameWorld, x, y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new Grenade(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);

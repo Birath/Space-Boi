@@ -28,10 +28,10 @@ public class Cannon extends Weapon {
     }
 
     @Override
-    public void Shoot(float x, float y, Vector2 shootDirection) {
+    public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Bullet(gameWorld, x, y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new Bullet(gameWorld, pos.x, pos.y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
 

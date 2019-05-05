@@ -37,13 +37,13 @@ public class Shotgun extends Weapon {
     }
 
     @Override
-    public void Shoot(float x, float y, Vector2 shootDirection) {
+    public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
             for (int i = 0; i < numberOfBullets; i++) {
                 int randomAngle = MathUtils.random(-spread, spread);
                 Vector2 randomShootDirection = shootDirection.rotate(randomAngle);
-                new Bullet(gameWorld, x, y, bulletPath, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+                new Bullet(gameWorld, pos.x, pos.y, bulletPath, randomShootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             }
             weaponMaths();
 

@@ -108,7 +108,7 @@ public class FlyingShip extends Enemy {
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
             body.getPosition().y * PPM + shootDirection.y);
 
-        shotgun.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+        shotgun.shoot(shootFrom, shootDirection);
     }
 
     private void ShootRockets() {
@@ -121,6 +121,6 @@ public class FlyingShip extends Enemy {
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
             body.getPosition().y * PPM + perpen.y);
 
-        weapon.Shoot(shootFrom.x, shootFrom.y, perpen);
+        weapon.shoot(shootFrom, perpen);
     }
 }

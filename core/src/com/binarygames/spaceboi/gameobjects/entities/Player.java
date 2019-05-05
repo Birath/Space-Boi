@@ -234,7 +234,7 @@ public class Player extends EntityDynamic {
         recoil.setLength2(1);
         recoil.scl(-(rad * PPM));
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-        weapon.Shoot(shootFrom.x, shootFrom.y, recoil);
+        weapon.shoot(shootFrom, recoil);
     }
 
     private void updateWeapons(float delta) {

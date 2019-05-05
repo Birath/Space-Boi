@@ -97,7 +97,7 @@ public abstract class Weapon {
         }
     }
 
-    public abstract void Shoot(float x, float y, Vector2 shootDirection);
+    public abstract void shoot(Vector2 pos, Vector2 shootDirection);
 
     public void timeBetweenShotsStart() {
 

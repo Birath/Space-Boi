@@ -24,7 +24,7 @@ public class ControlSettingsTab extends SettingsTab {
 
         Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
 
-        TextButton shootKey = new TextButton("Shoot", uiSkin);
+        TextButton shootKey = new TextButton("shoot", uiSkin);
         shootKey.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

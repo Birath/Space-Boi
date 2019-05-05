@@ -4,8 +4,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
@@ -14,6 +12,7 @@ public class Machinegun extends Weapon {
 
     private static final float WEAPON_WIDTH = 30;
     private static final float WEAPON_HEIGHT = 20;
+    private static final Vector2 MUZZLE_POS = new Vector2(WEAPON_WIDTH * 0.99f, WEAPON_HEIGHT * 0.8f);
     private Sound shot;
     private long shotID = 0;
 
@@ -40,10 +39,10 @@ public class Machinegun extends Weapon {
     }
 
     @Override
-    public void Shoot(float x, float y, Vector2 shootDirection) {
+    public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            new Bullet(gameWorld, x, y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new Bullet(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);

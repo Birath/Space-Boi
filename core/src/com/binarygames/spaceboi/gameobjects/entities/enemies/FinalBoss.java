@@ -1,9 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
@@ -189,7 +187,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         Vector2 shootDirection = new Vector2(tempToPlayer).setLength2(1).scl(width  * PPM);
         Vector2 shootFrom = new Vector2(worldTopCenter.x * PPM + shootDirection.x, worldTopCenter.y * PPM + shootDirection.y);
 
-        shootWeapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+        shootWeapon.shoot(shootFrom, shootDirection);
     }
 
 

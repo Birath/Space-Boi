@@ -34,7 +34,7 @@ public class IntroScreen extends BaseScreen {
         Label infoLabel = new Label("A - Move left\n" +
                 "D - Move right\n" +
                 "Space - Jump\n" +
-                "Left Mouse - Shoot\n" +
+                "Left Mouse - shoot\n" +
                 "1 - Equip Shotgun\n" +
                 "2 - Equip Machinegun\n" +
                 "3 - Equip Grenade launcher\n" +

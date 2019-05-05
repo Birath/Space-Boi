@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -89,9 +88,9 @@ public class Shooter extends Enemy {
             body.getPosition().y * PPM + perpen.y);
         if (shootWeapon.getClass().getName().equals(Machinegun.class.getName())) {
             Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-            shootWeapon.Shoot(shootFrom.x, shootFrom.y, shootDirection);
+            shootWeapon.shoot(shootFrom, shootDirection);
         } else {
-            shootWeapon.Shoot(shootFrom.x, shootFrom.y, perpen);
+            shootWeapon.shoot(shootFrom, perpen);
         }
     }
 }
