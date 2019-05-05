@@ -251,21 +251,29 @@ public class GameUI {
         //weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
 
         // Compass stuff
-        Image compassOutline = new Image(game.getAssetManager().get(Assets.UI_COMPASS_OUTLINE, Texture.class));
+
+        // some filters for scaling
+        Texture compassOutlineTexture = game.getAssetManager().get(Assets.UI_COMPASS_OUTLINE, Texture.class);
+        compassOutlineTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        Texture compassArrowTexture = game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class);
+        compassArrowTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Image compassOutline = new Image(compassOutlineTexture);
+        compassOutline.setScale(0.2f); // scale to match original 133x133px image
         // Upper right corner
         //TODO add padding maybe?
-        compassOutline.setPosition(stage.getWidth() - compassOutline.getWidth(), stage.getHeight() - compassOutline.getHeight());
+        compassOutline.setPosition(stage.getWidth() - compassOutline.getWidth() * 0.2f, stage.getHeight() - compassOutline.getHeight() * 0.2f);
         stage.addActor(compassOutline);
-        Image arrowSize = new Image(game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class));
+        Image arrowSize = new Image(compassArrowTexture);
         CompassArrow arrow = new CompassArrow(
-            game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class),
-            player,
-            compassOutline.getX() + compassOutline.getWidth() / 2 - arrowSize.getWidth() / 2,
-            compassOutline.getY() + compassOutline.getHeight() / 2 - arrowSize.getHeight() / 2
+                game.getAssetManager().get(Assets.UI_COMPASS_ARROW, Texture.class),
+                player,
+                compassOutline.getX() + 0.2f * compassOutline.getWidth() / 2 - arrowSize.getWidth() / 2,
+                compassOutline.getY() + 0.2f * compassOutline.getHeight() / 2 - arrowSize.getHeight() / 2
         );
         stage.addActor(arrow);
 
-        weaponStats1 = new WeaponStats(stage,stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
+        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
                 game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class),
                 game.getAssetManager().get(Assets.UI_SHOTGUN_AMMO, Texture.class), scaling_factor);
         weaponStats2 = new WeaponStats(stage, stage.getWidth() * 13 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(1).getMagSize(),
@@ -395,7 +403,7 @@ public class GameUI {
 
     private void updateOxygenLevel() {
         oxygenBar.setValue(player.getOxygenLevel());
-        oxygen_status.setText((int)player.getOxygenLevel() + " / " + Player.MAX_OXYGEN_LEVEL);
+        oxygen_status.setText((int) player.getOxygenLevel() + " / " + Player.MAX_OXYGEN_LEVEL);
     }
 
     private void updateWeaponStats(WeaponStats weaponStats, int weaponIndex, float delta) {

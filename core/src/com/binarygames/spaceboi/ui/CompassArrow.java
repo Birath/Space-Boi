@@ -14,6 +14,8 @@ public class CompassArrow extends Image {
         this.setPosition(x, y);
         this.setOrigin(Align.center);
         this.player = player;
+
+        setScale(0.1f);
     }
 
     @Override
