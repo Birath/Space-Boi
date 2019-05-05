@@ -170,8 +170,9 @@ public class InventoryUI {
             if (i % COLUMN_COUNT == 0) {
                 currentInventory.row();
             }
-            WeaponAttachment attachment = gameWorld.getPlayer().getInventory().get(i);
-            if (!attachment.isEquipped()) {
+            WeaponAttachment attachment = gameWorld.getPlayer().getInventory().size() > i ? gameWorld.getPlayer().getInventory().get(i) : null;
+
+            if (attachment != null && !attachment.isEquipped()) {
                 Sprite attachmentSprite = new Sprite((gameWorld.getGame().getAssetManager().get(attachment.getIcon(), Texture.class)));
                 attachmentSprite.setSize(ATTACHMENT_WIDTH, ATTACHMENT_HEIGHT);
                 AttachmentActor attachmentActor = new AttachmentActor(new SpriteDrawable(attachmentSprite));
