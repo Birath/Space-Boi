@@ -3,7 +3,7 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 public enum EnemyType {
     CHASER (400, 8, 5, 15, 3, 20, EnemyKind.BIOLOGICAL),
     SHOOTER(150, 10, 50, 5, 50, 50, EnemyKind.BIOLOGICAL),
-    FLYING_SHIP(300, 20, 200, 5, 50, 100,  EnemyKind.MECHANICAL),
+    FLYING_SHIP(300, 40, 200, 5, 50, 100,  EnemyKind.MECHANICAL),
     SPAWNER(600, 15, 100, 0, 0, 80, EnemyKind.MECHANICAL),
     FINAL_BOSS(100000, 50, 200, 1000, 5, 2, 10000, EnemyKind.MECHANICAL);
 

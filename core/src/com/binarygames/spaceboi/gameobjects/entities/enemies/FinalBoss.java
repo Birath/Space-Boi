@@ -3,6 +3,8 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.binarygames.spaceboi.Assets;
+import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -11,7 +13,7 @@ import com.binarygames.spaceboi.screens.VictoryScreen;
 public class FinalBoss extends Enemy implements MeleeEnemy {
     // Cannon values
     public static final int MINIMUM_CANNON_DISTANCE = 500;
-    private static final float MINIMUM_TIME_SINCE_CHARGE = 0.5f;
+    private static final float MINIMUM_TIME_SINCE_LAST_SHOT = 5f;
 
     // Charge values
     private static final float MINIMUM_CHARGE_DISTANCE = 700;
@@ -24,31 +26,74 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private static final float CHARGE_SPEED = 40;
     private static final int CHARGE_DAMANGE = 100;
 
+    //Animation
+    private static final int BOSS_WIDTH = 577; //From the size of the spritesheet
+    private static final int BOSS_HEIGHT = 1400;
+
+    private AnimationHandler walkAnimationHandler;
+    private static final int WALK_FRAME_COLUMNS = 7;
+    private static final int WALK_FRAME_ROWS = 2;
+    private static final float runFrameDuration = 0.05f;
+
+    private AnimationHandler chargeAnimationHandler;
+    private static final int CHARGE_FRAME_COLUMNS = 2;
+    private static final int CHARGE_FRAME_ROWS = 1;
+    private static final float chargeFrameDuration = 0.05f;
+
+    private AnimationHandler prepchargeAnimationHandler;
+    private static final int PREPCHARGE_FRAME_COLUMNS = 12;
+    private static final int PREPCHARGE_FRAME_ROWS = 1;
+    private static final float prepchargeFrameDuration = 0.5f;
+    private float channelAnimationTime = PREPCHARGE_FRAME_COLUMNS * PREPCHARGE_FRAME_ROWS * prepchargeFrameDuration;  // Time to play channel/chargeprep animation
+
+    private AnimationHandler shootAnimationHandler;
+    private static final int SHOOT_FRAME_COLUMNS = 6;
+    private static final int SHOOT_FRAME_ROWS = 1;
+    private static final float shootFrameDuration = 0.5f;
+    private float shootAnimationTime = SHOOT_FRAME_COLUMNS * SHOOT_FRAME_ROWS * shootFrameDuration;  // Time to play shoot animation
+
 
     // Clocks
     private float timeSinceLastCharge = 0;
     private float timeSinceChannelStarted = 0;
     private float timeSinceChargeStart = 0;
+    private float timeSinceShootStarted = 0;
+    private float timeSinceLastShot = 0;
     private float stunTime = 0;
     private float angle;
     private Cannon cannon;
     private boolean stunned;
 
-    private enum ChargeState {
-        CHANNELING, CHARGING, COOLDOWN
+    private enum BossState {
+        CHANNELING, CHARGING, SHOOTING, WALKING
     }
-    private ChargeState chargeState = ChargeState.COOLDOWN;
+    private BossState bossState = BossState.WALKING;
 
 
     public FinalBoss(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FINAL_BOSS, EnemyType.FINAL_BOSS.getWidth(), EnemyType.FINAL_BOSS.getHeight());
         this.cannon = new Cannon(gameWorld, this);
         sprite.rotate90(false);
+        loadAnimations();
     }
 
     @Override
     protected void getSounds() {
 
+    }
+
+    private void loadAnimations(){
+        walkAnimationHandler = new AnimationHandler(gameWorld, WALK_FRAME_COLUMNS, WALK_FRAME_ROWS,
+                runFrameDuration, Assets.END_BOSS_WALK_ANIMATION);
+
+        chargeAnimationHandler = new AnimationHandler(gameWorld, CHARGE_FRAME_COLUMNS, CHARGE_FRAME_ROWS,
+                chargeFrameDuration, Assets.END_BOSS_CHARGE_ANIMATION);
+
+        prepchargeAnimationHandler = new AnimationHandler(gameWorld, PREPCHARGE_FRAME_COLUMNS,
+                PREPCHARGE_FRAME_ROWS, prepchargeFrameDuration, Assets.END_BOSS_PREPCHARGE_ANIMATION);
+
+        shootAnimationHandler = new AnimationHandler(gameWorld, SHOOT_FRAME_COLUMNS, SHOOT_FRAME_ROWS,
+                shootFrameDuration, Assets.END_BOSS_SHOOT_ANIMATION);
     }
 
     @Override
@@ -59,7 +104,23 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
-        sprite.rotate(-90);
+        switch (bossState) {
+            case CHANNELING:
+                animationHandler = prepchargeAnimationHandler;
+                break;
+            case CHARGING:
+                animationHandler = chargeAnimationHandler;
+                break;
+            case WALKING:
+                animationHandler = walkAnimationHandler;
+                break;
+            case SHOOTING:
+                animationHandler = shootAnimationHandler;
+                break;
+        }
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - BOSS_WIDTH / 2,
+                body.getPosition().y * PPM - BOSS_HEIGHT / 2, BOSS_WIDTH / 2, BOSS_HEIGHT / 2,
+                BOSS_WIDTH, BOSS_HEIGHT, 1, 1, body.getAngle() + 90);
     }
 
 
@@ -75,7 +136,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
 
     @Override
     protected void updateAttacking(float delta) {
-        updateChargeTimers(delta);
+        updateTimers(delta);
 
         if (stunned) {
             // Play stun animation...
@@ -83,23 +144,27 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
             standStill();
             stunned = stunTime < MISSED_CHARGE_STUN;
         }
-        else if (shouldStartChanneling()) {
-            chargeState = ChargeState.CHANNELING;
+        else if(bossState == BossState.SHOOTING){
+            updateShooting();
             standStill();
         }
-        else if (shouldCharge()) {
+        else if (bossState == BossState.CHANNELING) {
+            updateChannel();  //Sets stage to charge after the animation has been played
+            standStill();
+        }
+        else if (shouldStartChanneling()) {
+            bossState = BossState.CHANNELING;
+            standStill();
+        }
+        else if (bossState == BossState.CHARGING) {
             charge();
         }
-        else if (chargeState == ChargeState.CHANNELING) {
-            standStill();
-        }
-
         else if (shouldShootCannon()) {
-            shoot(cannon);
+            bossState = BossState.SHOOTING;
             standStill();
         } else {
             moveAlongPlanet();
-            //standStill();
+            bossState = BossState.WALKING;
         }
     }
 
@@ -109,23 +174,31 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         gameWorld.getGame().setScreen(new VictoryScreen(gameWorld.getGame(), gameWorld.getGame().getScreen()));
     }
 
-    private void updateChargeTimers(float delta) {
-        switch (chargeState) {
+    private void updateTimers(float delta) {
+        switch (bossState) {
             case CHANNELING:
                 timeSinceChannelStarted += delta;
-                break;
-            case COOLDOWN:
-                timeSinceLastCharge += delta;
+                prepchargeAnimationHandler.updateAnimation(delta);
                 break;
             case CHARGING:
                 timeSinceChargeStart += delta;
+                chargeAnimationHandler.updateAnimation(delta);
+                break;
+            case WALKING:
+                timeSinceLastShot += delta;  //we can only shoot if we have walked for a while
+                timeSinceLastCharge += delta;
+                animationHandler.updateAnimation(delta);
+                break;
+            case SHOOTING:
+                timeSinceShootStarted += delta;
+                shootAnimationHandler.updateAnimation(delta);
                 break;
         }
     }
 
     private void charge() {
-        if (chargeState == ChargeState.CHANNELING) {
-            chargeState = ChargeState.CHARGING;
+        if (bossState == BossState.CHANNELING) {
+            bossState = BossState.CHARGING;
         }
         if (timeSinceChargeStart > MAXIMUM_CHARGE_TIME) {
             stopCharge(false);
@@ -145,22 +218,17 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
             stunned = true;
         }
         timeSinceLastCharge = 0;
-        timeSinceChannelStarted = 0;
         timeSinceChargeStart = 0;
         stunTime = 0;
-        chargeState = ChargeState.COOLDOWN;
-    }
-
-    private boolean shouldCharge() {
-        return timeSinceChannelStarted > CHARGE_CHANNEL_TIME;
+        bossState = BossState.WALKING;
     }
 
     private boolean shouldStartChanneling() {
-        return chargeState == ChargeState.COOLDOWN && timeSinceLastCharge > CHARGE_ATTACK_COOLDOWN && MINIMUM_CHARGE_DISTANCE > body.getPosition().dst2(player.getBody().getPosition());
+        return bossState == BossState.WALKING && timeSinceLastCharge > CHARGE_ATTACK_COOLDOWN && MINIMUM_CHARGE_DISTANCE > body.getPosition().dst2(player.getBody().getPosition());
     }
 
     private boolean shouldShootCannon() {
-        return MINIMUM_CANNON_DISTANCE > body.getPosition().dst2(player.getBody().getPosition()) && timeSinceLastCharge > MINIMUM_TIME_SINCE_CHARGE;
+        return MINIMUM_CANNON_DISTANCE > body.getPosition().dst2(player.getBody().getPosition()) && timeSinceLastShot > MINIMUM_TIME_SINCE_LAST_SHOT;
     }
 
     @Override
@@ -170,7 +238,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
 
     @Override
     public void touchedPlayer() {
-        if (chargeState == ChargeState.CHARGING) {
+        if (bossState == BossState.CHARGING) {
             stopCharge(true);
             gameWorld.getPlayer().reduceHealth(CHARGE_DAMANGE);
             // Play melee animation
@@ -190,6 +258,23 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         shootWeapon.shoot(shootFrom, shootDirection);
     }
 
+    private void updateShooting(){
+        if (timeSinceShootStarted > shootAnimationTime){
+            bossState = BossState.WALKING;
+            timeSinceShootStarted = 0;
+            shoot(cannon);
+            timeSinceLastShot = 0;
+        }
+    }
+
+    private void updateChannel(){
+        if (timeSinceChannelStarted > channelAnimationTime){
+            bossState = BossState.CHARGING;
+            timeSinceChannelStarted = 0;
+
+        }
+
+    }
 
     public void setAngle(float angle) {
         this.angle = angle;

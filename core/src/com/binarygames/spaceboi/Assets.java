@@ -75,6 +75,10 @@ public class Assets {
 
     // End boss
     public static final String END_BOSS1 = "game/entities/enemies/end_boss/Bring_me_his_corpse.wav";
+    public static final String END_BOSS_WALK_ANIMATION = "game/entities/enemies/end_boss/finalboss_spritesheet.png";
+    public static final String END_BOSS_CHARGE_ANIMATION = "game/entities/enemies/end_boss/finalboss_charge_spritesheet.png";
+    public static final String END_BOSS_PREPCHARGE_ANIMATION = "game/entities/enemies/end_boss/finalboss_preparecharge_spritesheet.png";
+    public static final String END_BOSS_SHOOT_ANIMATION = "game/entities/enemies/end_boss/finalboss_shooting_spritesheet.png";
 
     // Dog
     public static final String DOG1 = "game/entities/enemies/dog/dog4.wav"; // https://www.freesoundeffects.com/free-track/dog4-89462/
@@ -247,6 +251,10 @@ public class Assets {
 
         //End boss
         assetManager.load(END_BOSS1, Sound.class);
+        assetManager.load(END_BOSS_WALK_ANIMATION, Texture.class, textureParameter);
+        assetManager.load(END_BOSS_CHARGE_ANIMATION, Texture.class, textureParameter);
+        assetManager.load(END_BOSS_PREPCHARGE_ANIMATION, Texture.class, textureParameter);
+        assetManager.load(END_BOSS_SHOOT_ANIMATION, Texture.class, textureParameter);
 
         // Dog
         assetManager.load(DOG1, Sound.class);

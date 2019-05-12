@@ -13,8 +13,6 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     private long timeLastTouched;
     private boolean touchingPlayer = false;
-    private static final int DOG_WIDTH = 2419;
-    private static final int DOG_HEIGHT = 1747;
 
     private final int damageDelay = 700;
 
@@ -22,6 +20,9 @@ public class Chaser extends Enemy implements MeleeEnemy {
     private static final int RUN_FRAME_COLUMNS = 7;
     private static final int RUN_FRAME_ROWS = 2;
     private static final float runFrameDuration = 0.05f;
+
+    private static final int DOG_WIDTH = 2419; //From the size of the spritesheet
+    private static final int DOG_HEIGHT = 1747;
 
     private AnimationHandler attackAnimationHandler;
     private static final int ATTACK_FRAME_COLUMNS = 7;
@@ -77,7 +78,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
         }
         else{
             batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
-        }
+        }  //Scale is set based on in-game look
     }
 
     @Override

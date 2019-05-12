@@ -156,7 +156,6 @@ public class GameWorld {
             if (entity.isAffectedByGravity()) {
                 entity.getBody().applyForceToCenter(finalGravity, true);
             }
-
         }
         /*
         Vector2 closestPlanetPos = closestPlanet.getBody().getPosition();
