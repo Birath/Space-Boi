@@ -27,6 +27,7 @@ public abstract class Weapon {
     protected String path;
     protected String bulletPath;
     protected float radius;
+    protected float rotation;
 
     private boolean spriteFlip;
 
@@ -156,6 +157,7 @@ public abstract class Weapon {
                 player.getBody().getPosition().y * PPM - sprite.getHeight() / 2 + weaponPosition.y);
         Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
         float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
+        this.rotation = angleToMouse;
         //sprite.setRotation(angleToMouse - 90);
         sprite.setRotation(angleToMouse);
 
