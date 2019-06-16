@@ -234,8 +234,10 @@ public class WorldGenerator {
 
             ArrayList<Planet> planetList = getPlanetsWithinRange(pos);
             for (Planet planet : planetList) {
-                float angleToPlanet = MathUtils.atan2(pos.y - planet.getBody().getPosition().y, pos.x - planet.getBody().getPosition().x);
-                createLaunchPad((int) (PPM * planet.getBody().getPosition().x), (int) (PPM * planet.getBody().getPosition().y), (int) planet.getRadius(), angleToPlanet);
+                if(planet.getBody().getPosition().x != 0 || planet.getBody().getPosition().y != 0){  //Do not add launchpads on the boss planet, which has coords (x,y) = (0,0)
+                    float angleToPlanet = MathUtils.atan2(pos.y - planet.getBody().getPosition().y, pos.x - planet.getBody().getPosition().x);
+                    createLaunchPad((int) (PPM * planet.getBody().getPosition().x), (int) (PPM * planet.getBody().getPosition().y), (int) planet.getRadius(), angleToPlanet);
+                }
 
                 float reverseAngleToPlanet = MathUtils.atan2(planet.getBody().getPosition().y - pos.y, planet.getBody().getPosition().x - pos.x);
                 singleRowPlanet.addLaunchPad(createLaunchPad((int) (PPM * pos.x), (int) (PPM * pos.y), (int) singleRowPlanet.getRadius(), reverseAngleToPlanet + LAUNCH_PAD_OFFSET));

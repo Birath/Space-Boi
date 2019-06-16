@@ -2,12 +2,33 @@ SpaceBoi
 
 a game by
 
-KodSquad
+TheKodSquad:
 
-Certain weapon icons made by Freepik.com from Flaticon.com.
-Flaticon is licensed by Creative Commons BY 3.0.
+Kevin "TheMooseIsLoose" Arnmark
+Björn "Fuddu" Birath
+Johannes "Kronofogden" Kettu
+Albin "Alter Ego" Mosskull
 
-The menu ui is a modfied version of Level Plane UI by Raymond "Raeleus" Buckley
 
-AK-47 Assault Rifle from Vector.me (by gnokii)
->>>>>>> origin/master
+Special thanks to:
+Lukas "Liito" Mosskull
+
+
+Visual assets:
+- Certain weapon icons made by Freepik.com from Flaticon.com
+  Flaticon is licensed by Creative Commons BY 3.0
+
+- The menu UI is a modified version of Level Plane UI by Raymond "Raeleus" Buckley
+
+- AK-47 Assault Rifle from Vector.me by gnokii
+
+- Space background from wwwtyro.github.io/procedural.js/space/ by Rye "wwwtyro" Terell
+
+
+Audio assets:
+- Ricochet sounds by aust_paul
+
+- Explosion sounds by studiomandragore
+
+- Rocket shots sounds by Audionautics
+https://freesound.org/people/Audionautics/sounds/171655/
