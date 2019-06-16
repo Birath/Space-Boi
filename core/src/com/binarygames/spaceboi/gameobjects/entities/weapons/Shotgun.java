@@ -7,10 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 public class Shotgun extends Weapon {
 
     public static final float SPRITE_SCALING = 0.1f;
+    private static final int WEAPON_WIDTH = 15;
+    private static final int WEAPON_HEIGHT = 5;
+
     private int spread = 10;
     private int numberOfBullets = 7;
 
@@ -40,6 +44,15 @@ public class Shotgun extends Weapon {
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
+            if (this.shooter instanceof Player) {
+                Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
+                if  (sprite.isFlipY()) {
+                    muzzle.scl(1, -1);
+                }
+                muzzle.rotate(this.rotation);
+
+                pos.add(muzzle);
+            }
             for (int i = 0; i < numberOfBullets; i++) {
                 int randomAngle = MathUtils.random(-spread, spread);
                 Vector2 randomShootDirection = shootDirection.rotate(randomAngle);
