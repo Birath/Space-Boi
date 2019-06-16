@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
+import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 public class Machinegun extends Weapon {
 
-    private static final float WEAPON_WIDTH = 30;
-    private static final float WEAPON_HEIGHT = 20;
-    private static final Vector2 MUZZLE_POS = new Vector2(WEAPON_WIDTH * 0.99f, WEAPON_HEIGHT * 0.8f);
+    private static final float WEAPON_WIDTH = 14;
+    private static final float WEAPON_HEIGHT = 3;
     private Sound shot;
     private long shotID = 0;
 
@@ -42,6 +42,15 @@ public class Machinegun extends Weapon {
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
+            if (this.shooter instanceof Player) {
+                Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
+                if  (sprite.isFlipY()) {
+                    muzzle.scl(1, -1);
+                }
+                muzzle.rotate(this.rotation);
+
+                pos.add(muzzle);
+            }
             new Bullet(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
 
