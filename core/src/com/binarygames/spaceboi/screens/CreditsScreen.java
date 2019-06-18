@@ -16,7 +16,7 @@ public class CreditsScreen extends BaseScreen implements Screen {
 
     private Label creditsLabel;
 
-    private int crawlSpeed = 150;
+    private int crawlSpeed = 100;
 
     protected CreditsScreen(SpaceBoi game, Screen previousScreen) {
         super(game, previousScreen);

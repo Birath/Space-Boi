@@ -4,31 +4,78 @@ a game by
 
 TheKodSquad:
 
-Kevin "TheMooseIsLoose" Arnmark
-Björn "Fuddu" Birath
-Johannes "Kronofogden" Kettu
-Albin "Alter Ego" Mosskull
+
+Kevin 'TheMooseIsLoose' Arnmark
+
+Björn 'Fuddu' Birath
+
+Johannes 'Kronofogden' Kettu
+
+Albin 'Alter Ego' Mosskull
+
 
 
 Special thanks to:
-Lukas "Liito" Mosskull
+
+Lukas 'Liito' Mosskull
+
+for concept art
+
 
 
 Visual assets:
 - Certain weapon icons made by Freepik.com from Flaticon.com
   Flaticon is licensed by Creative Commons BY 3.0
 
-- The menu UI is a modified version of Level Plane UI by Raymond "Raeleus" Buckley
+- The menu UI is a modified version of Level
+ Plane UI by Raymond "Raeleus" Buckley
 
-- AK-47 Assault Rifle from Vector.me by gnokii
+- AK-47 Assault Rifle by gnokii
+https://vector.me/browse/282635/ak47_assault_rifle
 
-- Space background from wwwtyro.github.io/procedural.js/space/ by Rye "wwwtyro" Terell
+- Space background from by Rye "wwwtyro" Terell
+wwwtyro.github.io/procedural.js/space/
+
 
 
 Audio assets:
 - Ricochet sounds by aust_paul
+https://freesound.org/people/aust_paul/sounds/30932/
 
 - Explosion sounds by studiomandragore
+https://freesound.org/people/studiomandragore/sounds/401628/
 
 - Rocket shots sounds by Audionautics
 https://freesound.org/people/Audionautics/sounds/171655/
+
+- Launch pad sounds by Kinoton
+https://freesound.org/people/Kinoton/sounds/351256/
+
+- Health pickup sounds by SilverIllusionist
+https://freesound.org/people/SilverIllusionist/sounds/411172/
+
+- Footstep sounds by Yoyodaman234
+https://freesound.org/people/Yoyodaman234/sounds/166507/
+
+- Certain gun sounds from Free Firearms library
+
+- Shotgun reload sounds by lensflare8642
+https://freesound.org/people/lensflare8642/sounds/145209/
+
+- Machinegun sounds by davdud101
+https://freesound.org/people/davdud101/sounds/145475/
+
+- Grenade expolosion by eardeer
+https://freesound.org/people/eardeer/sounds/390182/
+
+- Grenadelauncher shoot sound by LeMudCrab
+https://freesound.org/people/LeMudCrab/sounds/163458/
+
+- Grenadelauncher reolad by JacquelineKohrs150067
+https://freesound.org/people/JacquelineKohrs150067/sounds/326677/
+
+Attachment pickup sounds by rhodemas and Dpoggioli
+https://freesound.org/people/rhodesmas/sounds/320654/
+https://freesound.org/people/Dpoggioli/sounds/213607/
+
+Background music by BoxCat Games, Broke For Free, DL Sounds, Tours
