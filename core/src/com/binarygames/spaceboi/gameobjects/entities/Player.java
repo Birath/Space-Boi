@@ -26,7 +26,7 @@ public class Player extends EntityDynamic {
 
     //Stats
     private static final int START_HEALTH = 200;
-    private static final int MOVE_SPEED = 20;
+    private static final int MOVE_SPEED = 15;
     private static final int JUMP_HEIGHT = 20;
     private static final float MAX_SPEED = 6000;
 

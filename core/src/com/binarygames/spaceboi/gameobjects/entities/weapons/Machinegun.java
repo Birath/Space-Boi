@@ -26,10 +26,10 @@ public class Machinegun extends Weapon {
         this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 1;
         this.removeBulletDelay = 0;
-        this.timeBetweenShots = 0.1f;
-        this.magSize = this.currentMag = 25;
+        this.timeBetweenShots = 0.12f;
+        this.magSize = this.currentMag = 20;
         this.reloadTime = 2;
-        this.damage = 5;
+        this.damage = 4;
         this.name = "Machine gun";
 
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));

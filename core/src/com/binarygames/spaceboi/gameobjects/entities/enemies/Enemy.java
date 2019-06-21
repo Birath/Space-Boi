@@ -29,7 +29,7 @@ public abstract class Enemy extends EntityDynamic {
     protected int enemyXP;
 
     private int aggroDistance = 1000;
-    private int deAggroDistance = 2000;
+    private int deAggroDistance = 3000;
     private float targetAngle = 0;
 
     private boolean hasNoticedPlayer = false;

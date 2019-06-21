@@ -12,11 +12,17 @@ import java.lang.reflect.InvocationTargetException;
 public class FlyingShip extends Enemy {
 
     private Shotgun shotgun;
+    private int bulletSpeed = 1;
+    private int shotgunDamage = 15;
+    private int shotgunMagsize = 1;
 
     public FlyingShip(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
         shotgun = new Shotgun(gameWorld, this);
+        shotgun.setBulletSpeed(bulletSpeed);
+        shotgun.setDamage(shotgunDamage);
+        shotgun.setMagSize(1);
 
         damagedSounds.add(Assets.RICOCHET1);
         damagedSounds.add(Assets.RICOCHET2);

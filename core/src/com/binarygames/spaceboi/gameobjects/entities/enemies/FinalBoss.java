@@ -171,7 +171,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     @Override
     public void onRemove() {
         super.onRemove();
-        gameWorld.getGame().setScreen(new VictoryScreen(gameWorld.getGame(), gameWorld.getGame().getScreen()));
+        gameWorld.getGame().setScreen(new VictoryScreen(gameWorld.getGame(), gameWorld.getGame().getScreen(), gameWorld.getXp_handler().getCurrentXP()));
     }
 
     private void updateTimers(float delta) {

@@ -14,13 +14,13 @@ import com.binarygames.spaceboi.SpaceBoi;
 
 
 public class VictoryScreen extends BaseScreen {
-    public VictoryScreen(SpaceBoi game, Screen previousScreen) {
+    public VictoryScreen(SpaceBoi game, Screen previousScreen, int playerXP) {
         super(game, previousScreen);
 
         stage.clear();
 
         // Menu background
-        Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class));
+        Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class)); //Update acessed image to new one
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);
@@ -30,6 +30,8 @@ public class VictoryScreen extends BaseScreen {
         stage.addActor(table);
 
         Label infoLabel = new Label("You won!", getTitleStyle());
+        Label xpLabel = new Label(Integer.toString(playerXP), getTitleStyle());  //TODO WIP
+
 
         TextButton restartButton = new TextButton("Restart", getUiSkin());
         restartButton.addListener(new ChangeListener() {

@@ -180,37 +180,11 @@ public class WorldGenerator {
             FlyingShip flyingship = new FlyingShip(gameWorld, x, y, Assets.FLYINGSHIP);
             gameWorld.addDynamicEntity(flyingship);
         } else {
-            //If we are on one of the big circles of planets
-            int planetType = random.nextInt(6); //from 0 to bound-1
-            if (planetType < 3) {
-                //Spawn Chasers
-                int numberOfEnemies = random.nextInt(MAX_ENEMIES - MIN_ENEMIES);
-                numberOfEnemies += MIN_ENEMIES;
+            //If we are on one of the big circles of planets - spawn random enemies
+            int planetType = random.nextInt(7); //from 0 to bound-1
+            double angleOffSet = 2 * Math.PI * random.nextDouble();
 
-                int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
-                double angleBetweenEnemies = 10;
-                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
-
-                for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
-                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * enemies))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * enemies))),
-                        Assets.DOG);
-                    gameWorld.addDynamicEntity(chaser);
-                }
-            } else if (planetType < 5) {
-                //Spawn Shooters
-                int numberOfShooters = 2;
-
-                int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
-                double angleBetweenEnemies = 5;
-                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
-
-                for (int shooters = 0; shooters < numberOfShooters; shooters++) {
-                    Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * shooters))), Assets.PIRATE);
-                    gameWorld.addDynamicEntity(shooter);
-                }
-            } else if (planetType == 5) {
+            if (planetType == 0 && circleNumber == NUMBER_OF_CIRCLES-1) {  //only spawn healthpacks on the outermost row
                 //Spawn healtpacks
                 int numberOfHealthPacks = random.nextInt(4);
                 numberOfHealthPacks += 4;
@@ -220,10 +194,112 @@ public class WorldGenerator {
 
                 for (int healthPacks = 0; healthPacks < numberOfHealthPacks; healthPacks++) {
                     HealthPickup pickup = new HealthPickup(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * healthPacks))),
-                        (int) (y + Math.round(r * Math.sin(angleDiff * healthPacks))),
-                        Assets.PICKUP_HEALTH, 300, 7);
+                            (int) (y + Math.round(r * Math.sin(angleDiff * healthPacks))),
+                            Assets.PICKUP_HEALTH, 300, 7);
                     gameWorld.addDynamicEntity(pickup);
                 }
+            }
+            else if (planetType <= 1) { //covers the planettype == 0 as well
+                //Spawn 1-5 Chasers
+                int numberOfEnemies = random.nextInt(MAX_ENEMIES - MIN_ENEMIES);
+                numberOfEnemies += MIN_ENEMIES;
+
+                int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 10;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
+                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleOffSet + angleDiff * enemies))),
+                        (int) (y + Math.round(r * Math.sin(angleOffSet + angleDiff * enemies))),
+                        Assets.DOG);
+                    gameWorld.addDynamicEntity(chaser);
+                }
+            } else if (planetType == 2) {
+                //Spawn 1 Shooter and some chasers
+                int numberOfChasers = random.nextInt(3 - 1);
+                numberOfChasers += 1;
+
+                int r_shooter = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
+                int r_chaser = rad + (int) EnemyType.CHASER.getRad();
+                double angleBetweenEnemies = 5;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int chasers = 0; chasers < numberOfChasers; chasers++) {
+                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r_chaser * Math.cos(angleDiff * chasers))),
+                        (int) (y + Math.round(r_chaser * Math.sin(angleDiff * chasers))), Assets.DOG);
+                    gameWorld.addDynamicEntity(chaser);
+                }
+                Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r_shooter * Math.cos(angleDiff * numberOfChasers))), //Number of chasers * angle will position it at one anglediff further away
+                        (int) (y + Math.round(r_shooter * Math.sin(angleDiff * numberOfChasers))), Assets.PIRATE);
+                gameWorld.addDynamicEntity(shooter);
+            } else if (planetType == 3){
+                //Spawn 2 Shooters
+                int numberOfShooters = 2;
+
+                int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 5;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int shooters = 0; shooters < numberOfShooters; shooters++) {
+                    Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleOffSet + angleDiff * shooters))),
+                            (int) (y + Math.round(r * Math.sin(angleOffSet + angleDiff * shooters))), Assets.PIRATE);
+                    gameWorld.addDynamicEntity(shooter);
+                }
+            } else if(planetType == 4){
+                //Spawn 10 chasers
+                int numberOfEnemies = 10;
+
+                int r = rad + (int) EnemyType.CHASER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 5;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int enemies = 0; enemies < numberOfEnemies; enemies++) {
+                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r * Math.cos(angleOffSet + angleDiff * enemies))),
+                            (int) (y + Math.round(r * Math.sin(angleOffSet + angleDiff * enemies))),
+                            Assets.DOG);
+                    gameWorld.addDynamicEntity(chaser);
+                }
+
+            } else if(planetType == 5){
+                //Spawn 3 Shooters
+                int numberOfShooters = 3;
+
+                int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
+                double angleBetweenEnemies = 60;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int shooters = 0; shooters < numberOfShooters; shooters++) {
+                    Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleOffSet + angleDiff * shooters))),
+                            (int) (y + Math.round(r * Math.sin(angleOffSet + angleDiff * shooters))), Assets.PIRATE);
+                    gameWorld.addDynamicEntity(shooter);
+                }
+            } else if(planetType == 6){
+                //Spawn 3 shooters, 10 dogs, guaranteed attachment
+                int numberOfShooters = 3;
+                int numberOfChasers = 10;
+
+                int r_shooter = rad + (int) EnemyType.SHOOTER.getRad();
+                int r_chaser = rad + (int) EnemyType.CHASER.getRad();
+                double angleBetweenEnemies = 8;
+                double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
+
+                for (int shooters = 0; shooters < numberOfShooters; shooters++) {
+                    Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r_shooter * Math.cos(angleOffSet + angleDiff * shooters))),
+                            (int) (y + Math.round(r_shooter * Math.sin(angleOffSet + angleDiff * shooters))), Assets.PIRATE);
+                    gameWorld.addDynamicEntity(shooter);
+                }
+                for (int enemies = 0; enemies < numberOfChasers; enemies++) {
+                    Chaser chaser = new Chaser(gameWorld, (int) (x + Math.round(r_chaser * Math.cos(angleOffSet + angleDiff * (enemies + numberOfShooters)))),
+                            (int) (y + Math.round(r_chaser * Math.sin(angleOffSet + angleDiff * (enemies + numberOfShooters)))),
+                            Assets.DOG);
+                    gameWorld.addDynamicEntity(chaser);
+                }
+                try {
+                    spawnAttachment(new Vector2(x, y), rad);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+                    Gdx.app.error("WorldGenerator", "Failed to spawnAttachment", e);
+                }
+
             }
         }
     }

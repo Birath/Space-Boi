@@ -20,7 +20,7 @@ public class GrenadeLauncher extends Weapon {
 
         this.bulletMass = 40;
         this.bulletRadius = 4f;
-        this.bulletSpeed = 2;
+        this.bulletSpeed = 3;
         this.path = Assets.WEAPON_GRENADELAUNCHER;
         this.bulletPath = Assets.WEAPON_GRENADE;
         this.recoil = 15;
@@ -28,7 +28,7 @@ public class GrenadeLauncher extends Weapon {
         this.timeBetweenShots = 1;
         this.magSize = this.currentMag = 4;
         this.reloadTime = 4;
-        this.damage = 0;
+        this.damage = 1;
         this.name = "Grenade launcher";
 
         this.radius = 5;

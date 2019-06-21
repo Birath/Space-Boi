@@ -7,13 +7,13 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class Grenade extends Bullet {
 
-    private static final int SHRAPNEL_AMOUNT = 40;
+    private static final int SHRAPNEL_AMOUNT = 90;
     private static final String SHRAPNEL_PATH = Assets.WEAPON_BULLET;
-    private static final int SHRAPNEL_SPEED = 30;
+    private static final int SHRAPNEL_SPEED = 35;
     private static final float SHRAPNEL_MASS = 10;
     private static final float SHRAPNEL_RADIUS = 1;
     private static final int SHRAPNEL_REMOVE_DELAY = 0; //Increase this feels better but it is simply a workaround
-    private static final int SHRAPNEL_DAMAGE = 3;
+    private static final int SHRAPNEL_DAMAGE = 6;
     private Vector2 shrapnelDirection = new Vector2(2, 0);
 
     private float timeSinceShot;
