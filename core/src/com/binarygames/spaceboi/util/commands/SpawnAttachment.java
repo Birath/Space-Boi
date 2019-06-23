@@ -6,6 +6,7 @@ import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAtta
 import com.binarygames.spaceboi.util.Console;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 public class SpawnAttachment implements Command {
     @Override
@@ -13,6 +14,14 @@ public class SpawnAttachment implements Command {
         if (args == null || args.length == 0) {
             console.echo("Invalid amount of arguments. ");
             return;
+        }
+        for (String argument : args) {
+            try {
+                Integer.valueOf(argument);
+            } catch (NumberFormatException e) {
+                console.echo("Non integer argument");
+                return;
+            }
         }
         if (args.length == 1){
             int index = Integer.valueOf(args[0]);
