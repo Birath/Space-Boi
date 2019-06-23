@@ -30,8 +30,7 @@ public class VictoryScreen extends BaseScreen {
         stage.addActor(table);
 
         Label infoLabel = new Label("You won!", getTitleStyle());
-        Label xpLabel = new Label(Integer.toString(playerXP), getTitleStyle());  //TODO WIP
-
+        Label xpLabel = new Label("Final XP: " + Integer.toString(playerXP), getTitleStyle());  //TODO WIP
 
         TextButton restartButton = new TextButton("Restart", getUiSkin());
         restartButton.addListener(new ChangeListener() {
@@ -52,9 +51,11 @@ public class VictoryScreen extends BaseScreen {
         });
 
         table.add(infoLabel);
-        table.row().pad(10, 0, 0, 10);
+        table.row().pad(10, 0, 10, 0);
+        table.add(xpLabel);
+        table.row().pad(10, 0, 10, 0);
         table.add(restartButton);
-        table.row().pad(10, 0, 0, 10);
+        table.row().pad(10, 0, 10, 0);
         table.add(quitButton);
 
     }
