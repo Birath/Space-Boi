@@ -30,7 +30,11 @@ public abstract class Enemy extends EntityDynamic {
 
     private int aggroDistance = 1000;
     private int deAggroDistance = 3000;
-    private float targetAngle = 0;
+
+    /**
+     * Angle to planet in degrees
+     */
+    protected float targetAngle = 0;
 
     private boolean hasNoticedPlayer = false;
 
@@ -248,6 +252,11 @@ public abstract class Enemy extends EntityDynamic {
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         super.render(batch, camera);
         sprite.setRotation(targetAngle);
+        if (moveLeft && !sprite.isFlipX()) {
+            sprite.flip(true, false);
+        } else  if (moveRight && sprite.isFlipX()){
+            sprite.flip(true, false);
+        }
         //healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
         //healthBar.setValue(health);
         //healthBar.draw(batch, 1);

@@ -17,6 +17,8 @@ public class AnimationHandler {
 
     private float frameDuration;
 
+    private boolean flipped = true;
+
     private GameWorld gameWorld;
     int frameColumns;
     int frameRows;
@@ -46,6 +48,7 @@ public class AnimationHandler {
     }
 
     public TextureRegion getCurrentFrame() {
+
         return currentFrame;
     }
 
@@ -53,9 +56,20 @@ public class AnimationHandler {
         //Uppdates the animation if the passed in time delta makes the animationtime long enough
         animationTime += delta;
         currentFrame = (TextureRegion) animation.getKeyFrame(animationTime, true);
+        if (flipped && !currentFrame.isFlipX() || !flipped && currentFrame.isFlipX()) {
+            currentFrame.flip(true, false);
+        }
     }
 
     public void dispose(){
 
+    }
+
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
     }
 }

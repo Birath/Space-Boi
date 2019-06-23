@@ -74,10 +74,18 @@ public class Chaser extends Enemy implements MeleeEnemy {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         if (touchingPlayer) {
-            batch.draw(attackAnimationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
+            if (moveLeft && attackAnimationHandler.isFlipped() || moveRight && !attackAnimationHandler.isFlipped()) {
+                attackAnimationHandler.setFlipped(!attackAnimationHandler.isFlipped());
+                //attackAnimationHandler.getCurrentFrame().flip(true, false);
+            }
+            batch.draw(attackAnimationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, targetAngle + 90);
         }
         else{
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, body.getAngle() + 90);
+            if (moveLeft && animationHandler.isFlipped() || moveRight && !animationHandler.isFlipped()) {
+                animationHandler.setFlipped(!animationHandler.isFlipped());
+                //animationHandler.getCurrentFrame().flip(true, false);
+            }
+            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - DOG_WIDTH / 2, body.getPosition().y * PPM - DOG_HEIGHT / 2, DOG_WIDTH / 2, DOG_HEIGHT / 2, DOG_WIDTH, DOG_HEIGHT, 0.015f, 0.015f, targetAngle + 90);
         }  //Scale is set based on in-game look
     }
 

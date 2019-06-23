@@ -22,6 +22,7 @@ import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
 import com.binarygames.spaceboi.screens.DeathScreen;
+import com.binarygames.spaceboi.screens.VictoryScreen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -88,7 +89,7 @@ public class GameWorld {
         Player player = new Player(this, worldGenerator.generatePlayerX(),
             worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
-        //addDynamicEntity(new Spawner(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLANET_MOON, EnemyType.SPAWNER));
+        //addDynamicEntity(new FlyingShip(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.FLYINGSHIP));
         //this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
 
         addDynamicEntity(player);
@@ -253,6 +254,12 @@ public class GameWorld {
     public void endGame() {
         disposeScreen = game.getScreen();
         game.setScreen(new DeathScreen(game, null));
+        shouldDispose = true;
+    }
+
+    public void winGame() {
+        disposeScreen = game.getScreen();
+        game.setScreen(new VictoryScreen(game, null, getXp_handler().getCurrentXP()));
         shouldDispose = true;
     }
 
