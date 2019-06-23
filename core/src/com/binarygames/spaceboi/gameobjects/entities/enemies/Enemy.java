@@ -30,7 +30,11 @@ public abstract class Enemy extends EntityDynamic {
 
     private int aggroDistance = 1000;
     private int deAggroDistance = 3000;
-    private float targetAngle = 0;
+
+    /**
+     * Angle to planet in degrees
+     */
+    protected float targetAngle = 0;
 
     private boolean hasNoticedPlayer = false;
 
