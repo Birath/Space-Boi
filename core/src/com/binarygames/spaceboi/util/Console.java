@@ -100,6 +100,8 @@ public class Console {
         commands.put("attachment", new SpawnAttachment());
         commands.put("me_irl", new Suicide());
         commands.put("fillinventory", new FillInventory());
+        commands.put("wingame", new WinGame());
+        commands.put("losegame", new LoseGame());
     }
 
     public void update(float delta) {
