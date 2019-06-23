@@ -25,15 +25,15 @@ for concept art
 
 Visual assets:
 - Certain weapon icons made by Freepik.com from Flaticon.com
-  Flaticon is licensed by Creative Commons BY 3.0
+
 
 - The menu UI is a modified version of Level
- Plane UI by Raymond "Raeleus" Buckley
+ Plane UI by Raymond 'Raeleus' Buckley
 
 - AK-47 Assault Rifle by gnokii
 https://vector.me/browse/282635/ak47_assault_rifle
 
-- Space background from by Rye "wwwtyro" Terell
+- Space background from by Rye 'wwwtyro' Terell
 wwwtyro.github.io/procedural.js/space/
 
 
@@ -78,4 +78,19 @@ Attachment pickup sounds by rhodemas and Dpoggioli
 https://freesound.org/people/rhodesmas/sounds/320654/
 https://freesound.org/people/Dpoggioli/sounds/213607/
 
-Background music by BoxCat Games, Broke For Free, DL Sounds, Tours
+Background music:
+Epic Song by BoxCat Games
+http://freemusicarchive.org/music/BoxCat_Games/Nameless_the_Hackers_RPG
+_Soundtrack/BoxCat_Games_-_Nameless-_the_Hackers_RPG_Soundtrack_-_10_Epic_Song
+
+Battle (Boss) by BoxCat Games
+http://freemusicarchive.org/music/BoxCat_Games/Nameless_the_Hackers_RPG
+_Soundtrack/BoxCat_Games_-_Nameless-_the_Hackers_RPG_Soundtrack_-_05_Battle_Boss
+
+Night Owl by Broke For Free
+http://freemusicarchive.org/music/Broke_For_Free/Directionless_EP
+/Broke_For_Free_-_Directionless_EP_-_01_Night_Owl
+
+Enthusiast by Tours
+http://freemusicarchive.org/music/Tours/Enthusiast/Tours_-_Enthusiast
+

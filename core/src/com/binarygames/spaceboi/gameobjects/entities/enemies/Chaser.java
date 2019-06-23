@@ -83,7 +83,7 @@ public class Chaser extends Enemy implements MeleeEnemy {
 
     @Override
     protected void updateJumping(float delta) {
-        //Do nothing
+        dealDamage(delta);
     }
 
     private void dealDamage(float delta){

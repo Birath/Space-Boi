@@ -159,16 +159,7 @@ public class WorldGenerator {
     private void createEnemies(int x, int y, int rad, int circleNumber, boolean isLastPlanet) {
         if (isLastPlanet) {
             //Last planet aka spawn planet
-            int numberOfShooters = 1;
-
-            int r = rad + (int) EnemyType.SHOOTER.getRad(); //Poolära koordinater
-            double angleBetweenEnemies = 5;
-            double angleDiff = (2 * Math.PI) * (angleBetweenEnemies / 360);
-            for (int shooters = 0; shooters < numberOfShooters; shooters++) {
-                Shooter shooter = new Shooter(gameWorld, (int) (x + Math.round(r * Math.cos(angleDiff * shooters + 30))),
-                    (int) (y + Math.round(r * Math.sin(angleDiff * shooters + 30))), Assets.PIRATE);
-                gameWorld.addDynamicEntity(shooter);
-            }
+            // No enemies here
 
             //Calculating for other parts of the code
             Vector2 toPlanet = new Vector2(x, y);

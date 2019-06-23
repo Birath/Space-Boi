@@ -22,7 +22,7 @@ public class FlyingShip extends Enemy {
         shotgun = new Shotgun(gameWorld, this);
         shotgun.setBulletSpeed(bulletSpeed);
         shotgun.setDamage(shotgunDamage);
-        shotgun.setMagSize(1);
+        shotgun.setMagSize(shotgunMagsize);
 
         damagedSounds.add(Assets.RICOCHET1);
         damagedSounds.add(Assets.RICOCHET2);
