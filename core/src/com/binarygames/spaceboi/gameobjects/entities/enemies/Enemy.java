@@ -210,7 +210,7 @@ public abstract class Enemy extends EntityDynamic {
 
     protected boolean toJump() {
         float angle = toPlanet.angle(toPlayer);
-        return (Math.abs(angle) > 150);
+        return (Math.abs(angle) > 160);
     }
 
     protected void jump() {
