@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class FlyingShip extends Enemy {
 
+    private static final float MIN_ANGLE = 0.5f;
     private Shotgun shotgun;
     private int bulletSpeed = 1;
     private int shotgunDamage = 15;
@@ -86,6 +87,17 @@ public class FlyingShip extends Enemy {
         } else {
             this.getBody().setLinearVelocity(0, 0);
         }
+    }
+
+    @Override
+    public void updateWalkingDirection() {
+        if (Math.abs(Math.abs(perpen.angle(toPlayer)) - 90) < MIN_ANGLE) {
+            moveLeft = false;
+            moveRight = false;
+        } else {
+            super.updateWalkingDirection();
+        }
+
     }
 
     @Override
