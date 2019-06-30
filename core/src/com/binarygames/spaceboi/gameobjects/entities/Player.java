@@ -8,15 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.binarygames.spaceboi.Assets;
+import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.GrenadeLauncher;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Shotgun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.GlassCannon;
 import com.binarygames.spaceboi.gameobjects.pickups.WeaponAttachments.WeaponAttachment;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
-import com.binarygames.spaceboi.animation.AnimationHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,7 +213,7 @@ public class Player extends EntityDynamic {
         //Setting recoil of player
         recoil.scl(weapon.getRecoil());
 
-        if (isChained && (Math.abs(toPlanet.angle(recoil)) < MAX_RECOIL_ANGLE || weapon instanceof Machinegun )) {
+        if (isChained && (Math.abs(toPlanet.angle(recoil)) < MAX_RECOIL_ANGLE || weapon instanceof Machinegun)) {
             shouldApplyRecoil = false;
         } else if (isChained) {
             storedRecoil = recoil.cpy();
@@ -316,7 +317,7 @@ public class Player extends EntityDynamic {
         // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
         if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished())) {
             // Nothing happens
-        // Don't chain the player if they are holding the jump button
+            // Don't chain the player if they are holding the jump button
         } else if (moveUp) {
             // Nothing happens
         } else {
@@ -339,6 +340,13 @@ public class Player extends EntityDynamic {
     @Override
     public void reduceHealth(int amount) {
         if (!god) {
+            for (WeaponAttachment attachment : getWeapon().getAttachments()) {
+                if (attachment instanceof GlassCannon) {
+                    amount *= GlassCannon.damageTakenFactor;
+                    break;
+                }
+            }
+
             health -= amount;
             gameWorld.getParticleHandler().addEffect(ParticleHandler.EffectType.BLOOD,
                     this.getBody().getPosition().x * PPM, this.getBody().getPosition().y * PPM);
