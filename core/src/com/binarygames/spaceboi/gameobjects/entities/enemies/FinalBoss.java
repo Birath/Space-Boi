@@ -8,7 +8,6 @@ import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
-import com.binarygames.spaceboi.screens.VictoryScreen;
 
 public class FinalBoss extends Enemy implements MeleeEnemy {
     // Cannon values
@@ -27,30 +26,31 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private static final int CHARGE_DAMANGE = 100;
 
     //Animation
-    private static final int BOSS_WIDTH = 577; //From the size of the spritesheet
-    private static final int BOSS_HEIGHT = 1400;
+    private static final int BOSS_WIDTH = 305; //From the size of the spritesheet
+    private static final int BOSS_HEIGHT = 647;
 
     private AnimationHandler walkAnimationHandler;
-    private static final int WALK_FRAME_COLUMNS = 7;
-    private static final int WALK_FRAME_ROWS = 2;
-    private static final float runFrameDuration = 0.05f;
+    private static final int WALK_FRAME_COLUMNS = 1;
+    private static final int WALK_FRAME_ROWS = 13;
+    private static final float runFrameDuration = 0.2f;
 
     private AnimationHandler chargeAnimationHandler;
-    private static final int CHARGE_FRAME_COLUMNS = 2;
-    private static final int CHARGE_FRAME_ROWS = 1;
-    private static final float chargeFrameDuration = 0.05f;
+    private static final int CHARGE_FRAME_COLUMNS = 1;
+    private static final int CHARGE_FRAME_ROWS = 12;
+    private static final float chargeFrameDuration = 0.04f;
 
     private AnimationHandler prepchargeAnimationHandler;
-    private static final int PREPCHARGE_FRAME_COLUMNS = 12;
-    private static final int PREPCHARGE_FRAME_ROWS = 1;
+    private static final int PREPCHARGE_FRAME_COLUMNS = 1;
+    private static final int PREPCHARGE_FRAME_ROWS = 12;
     private static final float prepchargeFrameDuration = 0.5f;
     private float channelAnimationTime = PREPCHARGE_FRAME_COLUMNS * PREPCHARGE_FRAME_ROWS * prepchargeFrameDuration;  // Time to play channel/chargeprep animation
 
     private AnimationHandler shootAnimationHandler;
-    private static final int SHOOT_FRAME_COLUMNS = 6;
-    private static final int SHOOT_FRAME_ROWS = 1;
-    private static final float shootFrameDuration = 0.5f;
+    private static final int SHOOT_FRAME_COLUMNS = 1;
+    private static final int SHOOT_FRAME_ROWS = 12;
+    private static final float shootFrameDuration = 0.25f;
     private float shootAnimationTime = SHOOT_FRAME_COLUMNS * SHOOT_FRAME_ROWS * shootFrameDuration;  // Time to play shoot animation
+    private float bulletFiredAnimationTime = 9 * shootFrameDuration; // actual shot happends at the 9nth frame
 
 
     // Clocks
@@ -59,10 +59,13 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private float timeSinceChargeStart = 0;
     private float timeSinceShootStarted = 0;
     private float timeSinceLastShot = 0;
+
+    //
     private float stunTime = 0;
     private float angle;
     private Cannon cannon;
     private boolean stunned;
+    private int deAggroDist = 20000; //Basically never de-aggros
 
     private enum BossState {
         CHANNELING, CHARGING, SHOOTING, WALKING
@@ -73,8 +76,8 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     public FinalBoss(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FINAL_BOSS, EnemyType.FINAL_BOSS.getWidth(), EnemyType.FINAL_BOSS.getHeight());
         this.cannon = new Cannon(gameWorld, this);
-        sprite.rotate90(false);
         loadAnimations();
+        this.setDeAggroDistance(deAggroDist);
     }
 
     @Override
@@ -103,7 +106,6 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        super.render(batch, camera);
         switch (bossState) {
             case CHANNELING:
                 animationHandler = prepchargeAnimationHandler;
@@ -118,9 +120,12 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
                 animationHandler = shootAnimationHandler;
                 break;
         }
+        if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
+            animationHandler.setFlipped(!animationHandler.isFlipped());
+        }
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - BOSS_WIDTH / 2,
                 body.getPosition().y * PPM - BOSS_HEIGHT / 2, BOSS_WIDTH / 2, BOSS_HEIGHT / 2,
-                BOSS_WIDTH, BOSS_HEIGHT, 1, 1, targetAngle + 90);
+                BOSS_WIDTH, BOSS_HEIGHT, 0.4f, 0.4f, targetAngle + 90);
     }
 
 
@@ -262,8 +267,10 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         if (timeSinceShootStarted > shootAnimationTime){
             bossState = BossState.WALKING;
             timeSinceShootStarted = 0;
-            shoot(cannon);
             timeSinceLastShot = 0;
+        }
+        else if (timeSinceShootStarted > bulletFiredAnimationTime){
+            shoot(cannon);
         }
     }
 

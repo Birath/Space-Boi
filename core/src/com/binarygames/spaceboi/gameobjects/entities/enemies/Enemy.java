@@ -289,4 +289,7 @@ public abstract class Enemy extends EntityDynamic {
             }
         }
     }
+    public void setDeAggroDistance(int deAggroDist){
+        this.deAggroDistance = deAggroDist;
+    }
 }
