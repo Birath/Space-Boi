@@ -120,7 +120,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         }
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - BOSS_WIDTH / 2,
                 body.getPosition().y * PPM - BOSS_HEIGHT / 2, BOSS_WIDTH / 2, BOSS_HEIGHT / 2,
-                BOSS_WIDTH, BOSS_HEIGHT, 1, 1, body.getAngle() + 90);
+                BOSS_WIDTH, BOSS_HEIGHT, 1, 1, targetAngle + 90);
     }
 
 
