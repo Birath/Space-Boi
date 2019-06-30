@@ -26,7 +26,17 @@ public class Bullet extends EntityDynamic {
 
     public Bullet(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, mass, radius);
+        createBullet(gameWorld, speed, removeDelay, damage, shooter, weapon);
+    }
 
+
+    protected Bullet(GameWorld gameWorld, float x, float y, String path, float mass, float width, float height, Vector2 speed, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
+        super(gameWorld, x, y, path, mass, width, height);
+        createBullet(gameWorld, speed, removeDelay, damage, shooter, weapon);
+
+    }
+
+    private void createBullet(GameWorld gameWorld, Vector2 speed, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         this.getBody().setLinearVelocity(speed);
 
         this.bioDamage = weapon.getBioDamage();
@@ -40,7 +50,7 @@ public class Bullet extends EntityDynamic {
         this.weapon = weapon;
         this.removeDelay = removeDelay;
 
-        getSprite().setOrigin(width / 2, height / 2);
+        getSprite().setOriginCenter();
 
         gameWorld.addDynamicEntity(this);
     }

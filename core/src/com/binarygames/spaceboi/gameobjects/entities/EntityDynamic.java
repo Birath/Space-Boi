@@ -48,18 +48,29 @@ public abstract class EntityDynamic extends BaseDynamicBody {
         createEntityDynamic(gameWorld, path, radius);
     }
 
+    protected EntityDynamic(GameWorld gameWorld, float x, float y, String path, float mass, float width, float height) {
+        super(gameWorld, x, y, mass, width, height);
+        this.health = 0;
+        this.moveSpeed = 0;
+        this.jumpHeight = 0;
+        createRectangleEntityDynamic(gameWorld, path, width, height);
+    }
+
     protected EntityDynamic (GameWorld gameWorld, float x, float y, String path, float mass, float width, float height, int health, int moveSpeed, int jumpHeight) {
         super(gameWorld, x, y, mass, width, height);
         this.health = this.maxHealth = health;
         this.moveSpeed = moveSpeed;
         this.jumpHeight = jumpHeight;
+        createRectangleEntityDynamic(gameWorld, path, width, height);
+    }
+
+    private void createRectangleEntityDynamic(GameWorld gameWorld, String path, float width, float height) {
         Texture texture = gameWorld.getGame().getAssetManager().get(path, Texture.class);
         texture.setFilter(TextureFilter.MipMapLinearNearest, TextureFilter.Nearest);
         this.sprite = new Sprite(texture);
         sprite.setOrigin(width / 2, height / 2);
         sprite.setSize(width, height);
         body.setUserData(this);
-
     }
 
     private void createEntityDynamic(GameWorld gameWorld, String path, float radius) {

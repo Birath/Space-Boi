@@ -51,8 +51,8 @@ public class SettingsScreen extends BaseScreen {
         VideoSettingsTab videoSettingsTab = new VideoSettingsTab(game, this);
         videoSettingsTab.hide();
 
-        ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
-        controlSettingsTab.hide();
+        //ControlSettingsTab controlSettingsTab = new ControlSettingsTab(game, this);
+        //controlSettingsTab.hide();
 
 
         final TextButton audioButton = new TextButton("Audio", uiSkin);
@@ -71,13 +71,13 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
-        final TextButton controlsButton = new TextButton("Controls", uiSkin);
+        /*final TextButton controlsButton = new TextButton("Controls", uiSkin);
         controlsButton.addListener(new ChangeListener() {
             @Override
             public void changed(final ChangeEvent event, final Actor actor) {
                 setCurrentTab(controlSettingsTab);
             }
-        });
+        });*/
 
         final TextButton backButton = new TextButton("Back", uiSkin);
         backButton.addListener(new ChangeListener() {
@@ -103,7 +103,7 @@ public class SettingsScreen extends BaseScreen {
         Table tabButtons = new Table();
         tabButtons.add(audioButton).expand().left();
         tabButtons.add(videoButton).center().expand();
-        tabButtons.add(controlsButton).right().expand();
+        //tabButtons.add(controlsButton).right().expand();
         setCurrentTab(audioSettingsTab);
 
         table.add(title).align(Align.center).colspan(3).growY();
