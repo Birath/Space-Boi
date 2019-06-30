@@ -58,7 +58,7 @@ public class EntityContactListener implements ContactListener {
             Player player = (Player) fixtureB.getBody().getUserData();
             if (!bullet.getShooter().equals(player)) {
                 player.reduceHealth(bullet.getDamage());
-                bullet.setHasHit(true); //Remove bullets only if they dont hit yourself
+                bullet.setHasHit(true); //Remove bullets only if they don't hit yourself
             }
         } else if (fixtureA.getBody().getUserData() instanceof Player &&
                 fixtureB.getBody().getUserData() instanceof Bullet) {
