@@ -12,7 +12,7 @@ public class Recoil extends WeaponAttachment {
 
     private boolean isEquipped;
 
-    private float recoilFactor = 1.5f;
+    private float recoilFactor = 2f;
 
     public Recoil(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
         super(gameWorld, x, y, path, mass, radius);
