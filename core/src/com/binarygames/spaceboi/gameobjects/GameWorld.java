@@ -90,7 +90,7 @@ public class GameWorld {
         Player player = new Player(this, worldGenerator.generatePlayerX(),
             worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
-        addDynamicEntity(new FlyingShip(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.FLYINGSHIP));
+        //addDynamicEntity(new FlyingShip(this, worldGenerator.generatePlayerX() + 150, worldGenerator.generatePlayerY(), Assets.FLYINGSHIP));
         //addDynamicEntity(new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER));
 
         addDynamicEntity(player);
