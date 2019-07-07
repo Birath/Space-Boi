@@ -26,12 +26,12 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private static final int CHARGE_DAMANGE = 100;
 
     //Animation
-    private static final int BOSS_WIDTH = 305; //From the size of the spritesheet
-    private static final int BOSS_HEIGHT = 647;
+    private static final int BOSS_WIDTH = 500; //From the size of the spritesheet
+    private static final int BOSS_HEIGHT = 700;
 
     private AnimationHandler walkAnimationHandler;
     private static final int WALK_FRAME_COLUMNS = 1;
-    private static final int WALK_FRAME_ROWS = 13;
+    private static final int WALK_FRAME_ROWS = 17;
     private static final float runFrameDuration = 0.2f;
 
     private AnimationHandler chargeAnimationHandler;
@@ -41,16 +41,16 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
 
     private AnimationHandler prepchargeAnimationHandler;
     private static final int PREPCHARGE_FRAME_COLUMNS = 1;
-    private static final int PREPCHARGE_FRAME_ROWS = 12;
-    private static final float prepchargeFrameDuration = 0.5f;
+    private static final int PREPCHARGE_FRAME_ROWS = 17;
+    private static final float prepchargeFrameDuration = 0.3f;
     private float channelAnimationTime = PREPCHARGE_FRAME_COLUMNS * PREPCHARGE_FRAME_ROWS * prepchargeFrameDuration;  // Time to play channel/chargeprep animation
 
     private AnimationHandler shootAnimationHandler;
     private static final int SHOOT_FRAME_COLUMNS = 1;
-    private static final int SHOOT_FRAME_ROWS = 12;
+    private static final int SHOOT_FRAME_ROWS = 10;
     private static final float shootFrameDuration = 0.25f;
     private float shootAnimationTime = SHOOT_FRAME_COLUMNS * SHOOT_FRAME_ROWS * shootFrameDuration;  // Time to play shoot animation
-    private float bulletFiredAnimationTime = 9 * shootFrameDuration; // actual shot happends at the 9nth frame
+    private float bulletFiredAnimationTime = 8 * shootFrameDuration; // actual shot goes off on the 8th frame
 
 
     // Clocks

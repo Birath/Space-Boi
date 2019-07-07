@@ -27,6 +27,7 @@ public class Assets {
 
     // Images
     public static final String MENU_BACKGROUND_IMAGE = "menu/space_boi_menu_placeholder.jpg";
+    public static final String WIN_BACKGROUND = "menu/win_screen/win_background.png";
 
     // Audio
 
@@ -60,6 +61,7 @@ public class Assets {
     public static final String RICOCHET4 = "game/entities/enemies/flying_ship/ricochet4.wav"; // https://freesound.org/people/aust_paul/sounds/30932/
     public static final String WEAPON_MISSILE = "game/entities/enemies/flying_ship/missile.png";
     public static final String FLYINGSHIP = "game/entities/enemies/flying_ship/flyingship.png";
+    public static final String FLYINGSHIP_CANNON = "game/entities/enemies/flying_ship/flyingship_cannon.png";
 
     // Pirate
     public static final String PIRATE_ATTACK1 = "game/entities/enemies/pirate/attack/Filthy_landlubber.wav";
@@ -191,6 +193,8 @@ public class Assets {
 
         assetManager.load(MENU_BACKGROUND_IMAGE, Texture.class);
 
+        assetManager.load(WIN_BACKGROUND, Texture.class);
+
         assetManager.load(MENU_UI_SKIN, Skin.class);
 
         assetManager.load(HEALTHBAR_SKIN, Skin.class);
@@ -235,6 +239,7 @@ public class Assets {
         assetManager.load(RICOCHET3, Sound.class);
         assetManager.load(RICOCHET4, Sound.class);
         assetManager.load(WEAPON_MISSILE, Texture.class, textureParameter);
+        assetManager.load(FLYINGSHIP_CANNON, Texture.class, textureParameter);
         assetManager.load(FLYINGSHIP, Texture.class, textureParameter);
 
         // Pirate
