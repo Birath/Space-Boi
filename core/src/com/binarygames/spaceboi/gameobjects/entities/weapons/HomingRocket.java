@@ -35,7 +35,7 @@ public class HomingRocket extends Bullet {
 
         float angle = MathUtils
                 .atan2(getBody().getPosition().y - gameWorld.getPlayer().getBody().getPosition().y, getBody().getPosition().x - gameWorld.getPlayer().getBody().getPosition().x);
-        this.getBody().setTransform(this.getBody().getPosition(), angle + 90);
+        this.getBody().setTransform(this.getBody().getPosition(), angle + MathUtils.PI / 2);
         toPlayer.setLength2(1).scl(this.getBody().getLinearVelocity().len());
         this.getBody().setLinearVelocity(toPlayer);
     }

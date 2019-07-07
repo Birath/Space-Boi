@@ -1,5 +1,11 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -17,6 +23,8 @@ public class FlyingShip extends Enemy {
     private int shotgunDamage = 15;
     private int shotgunMagsize = 1;
 
+    private Sprite shotgunSprite;
+
     public FlyingShip(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
         this.entityState = ENTITY_STATE.JUMPING;
@@ -25,10 +33,22 @@ public class FlyingShip extends Enemy {
         shotgun.setDamage(shotgunDamage);
         shotgun.setMagSize(shotgunMagsize);
 
+        shotgunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MISSILE, Texture.class));
+        shotgunSprite.rotate90(false);
+        shotgunSprite.setOriginCenter();
+        shotgunSprite.setPosition(x, y - 10);
+        shotgunSprite.setSize(10, 20);
+
         damagedSounds.add(Assets.RICOCHET1);
         damagedSounds.add(Assets.RICOCHET2);
         damagedSounds.add(Assets.RICOCHET3);
         damagedSounds.add(Assets.RICOCHET4);
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        super.render(batch, camera);
+        aimShotgun(batch);
     }
 
     @Override
@@ -140,5 +160,14 @@ public class FlyingShip extends Enemy {
             body.getPosition().y * PPM + perpen.y);
 
         weapon.shoot(shootFrom, perpen);
+    }
+
+    private void aimShotgun(SpriteBatch batch) {
+        float angle = MathUtils
+                .atan2(getBody().getPosition().y - gameWorld.getPlayer().getBody().getPosition().y, getBody().getPosition().x - gameWorld.getPlayer().getBody().getPosition().x);
+        // float angle2 = gameWorld.getPlayer().getBody().getPosition().angle(getBody().getPosition());
+        // Gdx.app.log("FlyingShip", "Angles : " + angle * MathUtils.radiansToDegrees + ", " + angle2);
+        shotgunSprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, (body.getPosition().y - 10)  * PPM - sprite.getHeight() / 2);
+        shotgunSprite.draw(batch);
     }
 }

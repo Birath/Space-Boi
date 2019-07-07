@@ -18,6 +18,7 @@ import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.*;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Enemy;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.FinalBoss;
+import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 import com.binarygames.spaceboi.gameobjects.pickups.HealthPickup;
 import com.binarygames.spaceboi.gameobjects.utils.JointInfo;
@@ -89,11 +90,11 @@ public class GameWorld {
         Player player = new Player(this, worldGenerator.generatePlayerX(),
             worldGenerator.generatePlayerY(), Assets.PLAYER, 500, 10);
 
-        //addDynamicEntity(new FlyingShip(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.FLYINGSHIP));
-        //this.finalBoss = new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER);
+        addDynamicEntity(new FlyingShip(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.FLYINGSHIP));
+        //addDynamicEntity(new FinalBoss(this, worldGenerator.generatePlayerX() + 100, worldGenerator.generatePlayerY(), Assets.PLAYER));
 
         addDynamicEntity(player);
-        //addDynamicEntity(finalBoss);
+
         this.player = player;
         xp_handler = new XPHandler(player);
         background = new Background(game, player, camera);
