@@ -297,4 +297,8 @@ public abstract class Enemy extends EntityDynamic {
         return MathUtils
                     .atan2(point.y - gameWorld.getPlayer().getBody().getPosition().y, point.x - gameWorld.getPlayer().getBody().getPosition().x);
     }
+
+    public void setDeAggroDistance(int deAggroDist){
+        this.deAggroDistance = deAggroDist;
+    }
 }

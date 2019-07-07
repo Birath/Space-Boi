@@ -125,47 +125,18 @@ public class GameScreen implements Screen {
                 gameUI.act(delta);
 
                 // set camera rotation
-                if (interpolateRotation) {
-                    if (currentInterpolateCount == interpolateCount) {
-                        interpolateRotation = false;
-                        /*
-                        System.out.println("TOINTERPOLATE: " + angleToInterpolate);
-                        System.out.println("GOALANGLE: " + angleToInterpolate + lastAngle);
-                        System.out.println("CAMANGLE: " + getCameraRotation());
-                        System.out.println("CURRENTANGLE: " + player.getPlayerAngle());
-                        lastAngle = player.getPlayerAngle();
-                        */
-                    } else {
-                        camera.rotate(angleToInterpolate / interpolateCount);
-                        Gdx.app.log("GameScreen", "Current camera angle: " + getCameraRotation());
-                        Gdx.app.log("GameScreen", "Target angle:  " + player.getPlayerAngle());
-                        currentInterpolateCount++;
-                    }
+                float rotationAmount = getCameraRotation() - player.getPlayerAngle() + 90;
+                if (!debugRendererIsEnabled) {
+                    camera.rotate(rotationAmount);
+                }
+                if (Math.abs(rotationAmount) >= whenToInterpolate) {
+                    currentInterpolateCount = 0;
+                    lastAngle = player.getPlayerAngle();
                 } else {
-
-                    float rotationAmount = getCameraRotation() - player.getPlayerAngle() + 90;
-                    if (!debugRendererIsEnabled) {
-                        camera.rotate(rotationAmount);
-                    }
-
-                    if (Math.abs(rotationAmount) >= whenToInterpolate) {
-                        //angleToInterpolate = (Math.abs(player.getPlayerAngle() - getCameraRotation()) + 180);
-                        //camera.rotate((Math.abs(player.getPlayerAngle() - getCameraRotation()) + 180));
-                        //angleToInterpolate = angleDiff;
-                        currentInterpolateCount = 0;
-                        //interpolateRotation = true;
-                        lastAngle = player.getPlayerAngle();
-                        //cameraRotator.startRotation(rotationAmount, 0.5f);
-                    } else {
-                        lastAngle = player.getPlayerAngle();
-                    }
+                    lastAngle = player.getPlayerAngle();
                 }
 
-        /* float angleDiff = lastAngle - player.getPlayerAngle();
-        lastAngle = player.getPlayerAngle();
-        camera.rotate(angleDiff); */
                 camera.position.lerp(new Vector3(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0), CAMERA_LERP_ACCELERATION * delta);
-                //camera.position.set(new Vector3(player.getBody().getPosition().x * PPM, player.getBody().getPosition().y * PPM, 0));
                 camera.update();
 
                 game.getBatch().setProjectionMatrix(camera.combined);
@@ -298,9 +269,8 @@ public class GameScreen implements Screen {
         inventoryUI.dispose();
     }
 
-    public float getCameraRotation() {
-        float camAngle = -(float) Math.atan2(camera.up.x, camera.up.y) * MathUtils.radiansToDegrees + 180;
-        return camAngle;
+    private float getCameraRotation() {
+        return -(float) Math.atan2(camera.up.x, camera.up.y) * MathUtils.radiansToDegrees + 180;
     }
 
     private float angleDifference(float angle1, float angle2) {
