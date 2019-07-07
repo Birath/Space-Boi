@@ -8,12 +8,16 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 
 public class HomingRocketLauncher extends Weapon {
+
+    public static final int ROCKET_HEIGHT = 16;
+    public static final int ROCKET_WIDTH = 8;
+
     public HomingRocketLauncher(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
 
         this.bulletMass = 10;
         this.bulletRadius = 6f;
-        this.bulletSpeed = 0.8f;
+        this.bulletSpeed = 30f;
         this.path = Assets.PLAYER;
         this.bulletPath = Assets.WEAPON_MISSILE;
         this.recoil = 0;
@@ -32,9 +36,9 @@ public class HomingRocketLauncher extends Weapon {
     @Override
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
-            shootDirection.scl(bulletSpeed);
+            shootDirection.setLength(bulletSpeed);
 
-            new HomingRocket(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
+            new HomingRocket(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, ROCKET_WIDTH, ROCKET_HEIGHT, removeBulletDelay, damage, shooter, this);
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
             weaponMaths();

@@ -26,6 +26,7 @@ public class VideoSettingsTab extends SettingsTab {
         Skin uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
 
         final CheckBox fullscreenCheckBox = new CheckBox(null, uiSkin);
+        fullscreenCheckBox.pad(32);
         fullscreenCheckBox.setChecked(game.getPreferences().isFullscreenEnabled());
         fullscreenCheckBox.addListener(new ChangeListener() {
             @Override
@@ -47,7 +48,7 @@ public class VideoSettingsTab extends SettingsTab {
         final Label fullscreenLabel = new Label("Fullscreen", uiSkin);
 
         table.add(fullscreenLabel).left();
-        table.add(fullscreenCheckBox).right();
+        table.add(fullscreenCheckBox).center();
     }
 
 }

@@ -1,5 +1,10 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -11,11 +16,14 @@ import java.lang.reflect.InvocationTargetException;
 
 public class FlyingShip extends Enemy {
 
+    private static final float SHOTGUN_OFFSET = 35;
     private static final float MIN_ANGLE = 0.5f;
     private Shotgun shotgun;
     private int bulletSpeed = 1;
     private int shotgunDamage = 15;
     private int shotgunMagsize = 1;
+
+    private Sprite shotgunSprite;
 
     public FlyingShip(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.FLYING_SHIP);
@@ -25,10 +33,21 @@ public class FlyingShip extends Enemy {
         shotgun.setDamage(shotgunDamage);
         shotgun.setMagSize(shotgunMagsize);
 
+        shotgunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MISSILE, Texture.class));
+        shotgunSprite.setSize(10, 20);
+        shotgunSprite.setOriginCenter();
+        shotgunSprite.rotate90(false);
+
         damagedSounds.add(Assets.RICOCHET1);
         damagedSounds.add(Assets.RICOCHET2);
         damagedSounds.add(Assets.RICOCHET3);
         damagedSounds.add(Assets.RICOCHET4);
+    }
+
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+        aimShotgun(batch);
+        super.render(batch, camera);
     }
 
     @Override
@@ -123,8 +142,8 @@ public class FlyingShip extends Enemy {
 
     private void ShootShotgun() {
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + shootDirection.x,
-            body.getPosition().y * PPM + shootDirection.y);
+        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM,body.getPosition().y * PPM);
+        shootFrom.add(toPlanet.cpy().nor().scl(SHOTGUN_OFFSET));
 
         shotgun.shoot(shootFrom, shootDirection);
     }
@@ -141,4 +160,15 @@ public class FlyingShip extends Enemy {
 
         weapon.shoot(shootFrom, perpen);
     }
+
+    private void aimShotgun(SpriteBatch batch) {
+        Vector2 spritePosition = new Vector2(body.getPosition().x * PPM - shotgunSprite.getWidth() / 2, (body.getPosition().y)  * PPM - shotgunSprite.getHeight() / 2);
+        spritePosition.add(toPlanet.cpy().nor().scl(SHOTGUN_OFFSET));
+        // Gets the sprites position in physics units and gets the angle from it to the player
+        float angle = getAngleToPlayer(body.getPosition().cpy().add(toPlanet.cpy().nor().scl(SHOTGUN_OFFSET / PPM)));
+        shotgunSprite.setPosition(spritePosition.x, spritePosition.y);
+        shotgunSprite.setRotation(angle * MathUtils.radiansToDegrees);
+        shotgunSprite.draw(batch);
+    }
+
 }

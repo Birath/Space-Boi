@@ -88,7 +88,6 @@ public class LoadingScreen extends BaseScreen {
         stage.draw();
 
         game.getBatch().begin();
-        game.debugFont.draw(game.getBatch(), "LOADING_SCREEN", 5, 20);
         game.getBatch().end();
     }
 }

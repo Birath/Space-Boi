@@ -214,7 +214,7 @@ public abstract class Enemy extends EntityDynamic {
 
     protected boolean toJump() {
         float angle = toPlanet.angle(toPlayer);
-        return (Math.abs(angle) > 150);
+        return (Math.abs(angle) > 160);
     }
 
     protected void jump() {
@@ -288,5 +288,17 @@ public abstract class Enemy extends EntityDynamic {
                 //Apply slow particle
             }
         }
+    }
+
+    /**
+     * @return The angle in radians to the player from the vector *point*
+     */
+    protected float getAngleToPlayer(Vector2 point) {
+        return MathUtils
+                    .atan2(point.y - gameWorld.getPlayer().getBody().getPosition().y, point.x - gameWorld.getPlayer().getBody().getPosition().x);
+    }
+
+    public void setDeAggroDistance(int deAggroDist){
+        this.deAggroDistance = deAggroDist;
     }
 }

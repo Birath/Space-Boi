@@ -81,6 +81,10 @@ public abstract class BaseBody {
         return mass;
     }
 
+
+    /**
+     * @return The body's physics radius
+     */
     public float getRad() {
         return rad;
     }
