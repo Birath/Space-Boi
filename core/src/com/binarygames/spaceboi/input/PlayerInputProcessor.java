@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 import com.binarygames.spaceboi.screens.GameScreen;
+import com.binarygames.spaceboi.util.Console;
 
 public class PlayerInputProcessor implements InputProcessor {
 
@@ -96,7 +97,7 @@ public class PlayerInputProcessor implements InputProcessor {
             return true;
         }
 
-        if (character == '§' && gameScreen.getConsole().isConsoleEnabled()) {
+        if (character == '§' && Console.isConsoleEnabled()) {
             gameScreen.getConsole().show();
         }
         if (Character.toLowerCase(character) == 'r') {
