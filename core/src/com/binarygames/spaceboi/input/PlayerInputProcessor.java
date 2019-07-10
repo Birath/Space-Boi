@@ -96,7 +96,7 @@ public class PlayerInputProcessor implements InputProcessor {
             return true;
         }
 
-        if (character == '§') {
+        if (character == '§' && gameScreen.getConsole().isConsoleEnabled()) {
             gameScreen.getConsole().show();
         }
         if (Character.toLowerCase(character) == 'r') {
