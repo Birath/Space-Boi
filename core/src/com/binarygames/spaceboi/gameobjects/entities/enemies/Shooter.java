@@ -1,6 +1,5 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -20,12 +19,11 @@ public class Shooter extends Enemy {
     private Machinegun machinegun;
     private static final int RUN_FRAME_COLUMNS = 1;
     private static final int RUN_FRAME_ROWS = 12;
-    private static final float runFrameDuration = 0.05f;
+    private static final float runFrameDuration = 0.04f;
     private static final int SHOOTER_WIDTH = 213; //From the size of the spritesheet
     private static final int SHOOTER_HEIGHT = 393;
 
-    private static final float MAXIMUM_SHOOTING_DISTANCE = 500;
-    private static final float TARGET_SHOOTING_DISTANCE = 300;
+    private static final float TARGET_SHOOTING_DISTANCE = 8;
 
     public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
@@ -59,16 +57,18 @@ public class Shooter extends Enemy {
         if (shouldShoot() && distanceToPlayer() < 450) {
             shoot(machinegun);
         }
-        moveAlongPlanet();
         animationHandler.updateAnimation(delta);
     }
 
     @Override
     protected void updateAttacking(float delta) {
         if (shouldShoot()) {
-            shoot(machinegun);
+            //shoot(machinegun);
             if (distanceToPlayer() > TARGET_SHOOTING_DISTANCE) {
                 moveAlongPlanetSlowly();
+                animationHandler.updateAnimation(delta / 2);
+            } else {
+                body.setLinearVelocity(0, 0);
             }
         } else {
             moveAlongPlanet();
@@ -91,20 +91,10 @@ public class Shooter extends Enemy {
     }
 
     private boolean shouldShoot() {
-        RayCastCallback callback = new RayCastCallback() {
-                    @Override
-                    public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                        if (fixture.getUserData() instanceof Planet) {
-                            Gdx.app.log("Shooter", "Planet between player and shooter");
-                            return 0;
-                        }
-                        return 1;
-                    }
-                };
-                gameWorld.getWorld().rayCast(callback ,getBody().getPosition(), player.getBody().getPosition());
+        ShotCallback scb = new ShotCallback();
+        gameWorld.getWorld().rayCast(scb, getBody().getPosition(), player.getBody().getPosition());
 
-        // TODO CHECK USING RAYCASTING
-        return (distanceToPlayer() < MAXIMUM_SHOOTING_DISTANCE);
+        return !scb.hasHit;
     }
 
     private void moveAlongPlanetSlowly() {
@@ -135,5 +125,19 @@ public class Shooter extends Enemy {
                 body.getPosition().y * PPM + perpen.y);
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         shootWeapon.shoot(shootFrom, shootDirection);
+    }
+
+    private class ShotCallback implements RayCastCallback {
+
+        private boolean hasHit;
+
+        @Override
+        public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+            if (fixture.getBody().getUserData() instanceof Planet) {
+                hasHit = true;
+                return 0;
+            }
+            return 1;
+        }
     }
 }
