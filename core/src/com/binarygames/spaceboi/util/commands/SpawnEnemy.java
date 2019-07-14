@@ -19,13 +19,13 @@ public class SpawnEnemy implements Command {
         position.scl(PPM);
         switch (args[0].toUpperCase()) {
             case "CHASER":
-                Chaser chaser = new Chaser(console.getGameWorld(), position.x, position.y, Assets.DOG);
+                Chaser chaser = new Chaser(console.getGameWorld(), position.x + 10, position.y + 10, Assets.DOG);
                 console.getGameWorld().addDynamicEntity(chaser);
 
                 console.echo("chaser");
                 break;
             case "SHOOTER":
-                Shooter shooter = new Shooter(console.getGameWorld(), position.x, position.y, Assets.PIRATE);
+                Shooter shooter = new Shooter(console.getGameWorld(), position.x + 10, position.y + 10, Assets.PIRATE);
                 console.getGameWorld().addDynamicEntity(shooter);
 
                 console.echo("shooter");
@@ -37,7 +37,7 @@ public class SpawnEnemy implements Command {
                 console.echo("flying ship");
                 break;
             case "FINALBOSS":
-                FinalBoss finalBoss = new FinalBoss(console.getGameWorld(), position.x, position.y, Assets.PLAYER);
+                FinalBoss finalBoss = new FinalBoss(console.getGameWorld(), position.x + 10, position.y + 10, Assets.PLAYER);
                 console.getGameWorld().addDynamicEntity(finalBoss);
 
                 console.echo("finalboss");

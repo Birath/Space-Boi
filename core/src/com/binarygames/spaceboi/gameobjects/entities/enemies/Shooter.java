@@ -1,11 +1,15 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
@@ -84,11 +88,36 @@ public class Shooter extends Enemy {
     }
 
     private boolean shouldShootWithNormalGun() {
+
+        RayCastCallback callback = new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                if (fixture.getUserData() instanceof Planet) {
+                    Gdx.app.log("Shooter", "Planet between player and shooter");
+                    return 0;
+                }
+                return 1;
+            }
+        };
+        gameWorld.getWorld().rayCast(callback ,getBody().getPosition(), player.getBody().getPosition());
+
         float angle = Math.abs(toPlanet.angle(toPlayer));
         return 80 < angle;
     }
 
     private boolean shouldShootWithNonGravityGun() {
+        RayCastCallback callback = new RayCastCallback() {
+               @Override
+               public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                   if (fixture.getBody().getUserData() instanceof Planet) {
+                       Gdx.app.log("Shooter", "Planet between player and shooter");
+                       return 0;
+                   }
+                   return 1;
+               }
+           };
+           gameWorld.getWorld().rayCast(callback ,getBody().getPosition(), player.getBody().getPosition());
+
         return 60 < Math.abs(toPlanet.angle(toPlayer));
     }
 
