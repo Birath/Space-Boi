@@ -190,6 +190,7 @@ public abstract class Enemy extends EntityDynamic {
             moveLeft = true;
         }
     }
+
     private void rotateToPlanet(float delta) {
         Vector2 relativeVector = getClosestPlanet().getBody().getPosition().sub(getBody().getPosition());
         float angleToPlanet = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
@@ -254,7 +255,7 @@ public abstract class Enemy extends EntityDynamic {
         sprite.setRotation(targetAngle);
         if (moveLeft && !sprite.isFlipX()) {
             sprite.flip(true, false);
-        } else  if (moveRight && sprite.isFlipX()){
+        } else if (moveRight && sprite.isFlipX()) {
             sprite.flip(true, false);
         }
         //healthBar.setBounds(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
@@ -291,14 +292,21 @@ public abstract class Enemy extends EntityDynamic {
     }
 
     /**
+     * @return Distance from enemy to player
+     */
+    public float distanceToPlayer() {
+        return body.getPosition().dst(player.getBody().getPosition());
+    }
+
+    /**
      * @return The angle in radians to the player from the vector *point*
      */
     protected float getAngleToPlayer(Vector2 point) {
         return MathUtils
-                    .atan2(point.y - gameWorld.getPlayer().getBody().getPosition().y, point.x - gameWorld.getPlayer().getBody().getPosition().x);
+                .atan2(point.y - gameWorld.getPlayer().getBody().getPosition().y, point.x - gameWorld.getPlayer().getBody().getPosition().x);
     }
 
-    public void setDeAggroDistance(int deAggroDist){
+    public void setDeAggroDistance(int deAggroDist) {
         this.deAggroDistance = deAggroDist;
     }
 }
