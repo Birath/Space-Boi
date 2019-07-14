@@ -20,7 +20,7 @@ public class Shooter extends Enemy {
     private Machinegun machinegun;
     private static final int RUN_FRAME_COLUMNS = 1;
     private static final int RUN_FRAME_ROWS = 12;
-    private static final float runFrameDuration = 0.05f;
+    private static final float runFrameDuration = 0.07f;
     private static final int SHOOTER_WIDTH = 213; //From the size of the spritesheet
     private static final int SHOOTER_HEIGHT = 393;
 
@@ -83,7 +83,7 @@ public class Shooter extends Enemy {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        if (moveLeft && animationHandler.isFlipped() || moveRight && !animationHandler.isFlipped()) {
+    if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
             animationHandler.setFlipped(!animationHandler.isFlipped());
         }
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - SHOOTER_WIDTH / 2, body.getPosition().y * PPM - SHOOTER_HEIGHT / 2, SHOOTER_WIDTH / 2, SHOOTER_HEIGHT / 2, SHOOTER_WIDTH, SHOOTER_HEIGHT, 0.15f, 0.15f, targetAngle + 90);
