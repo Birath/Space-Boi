@@ -91,6 +91,11 @@ public class Player extends EntityDynamic {
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
 
+        for (Weapon weapon:
+             weaponList) {
+            weapon.setBulletPath(Assets.PLAYER_BULLET);
+        }
+
         inventory = new ArrayList<>();
 
         animationHandler = new AnimationHandler(gameWorld, WALK_FRAME_COLUMNS, WALK_FRAME_ROWS, walkFrameDuration, Assets.PLAYER_WALK_ANIMATION);
