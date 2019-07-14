@@ -302,8 +302,12 @@ public abstract class Enemy extends EntityDynamic {
      * @return The angle in radians to the player from the vector *point*
      */
     protected float getAngleToPlayer(Vector2 point) {
-        return MathUtils
-                .atan2(point.y - gameWorld.getPlayer().getBody().getPosition().y, point.x - gameWorld.getPlayer().getBody().getPosition().x);
+        Vector2 playerPos =  gameWorld.getPlayer().getBody().getPosition().cpy();
+        return MathUtils.atan2(
+                point.y - playerPos.y,
+                point.x - playerPos.x
+        );
+
     }
 
     public void setDeAggroDistance(int deAggroDist) {

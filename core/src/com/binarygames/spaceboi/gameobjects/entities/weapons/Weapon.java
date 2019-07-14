@@ -26,6 +26,7 @@ public abstract class Weapon {
     protected Sprite sprite;
     protected String path;
     protected String bulletPath;
+
     protected float radius;
     protected float rotation;
 
@@ -305,5 +306,8 @@ public abstract class Weapon {
 
     public void setSlow(int slow) {
         this.slow = slow;
+    }
+    public void setBulletPath(String bulletPath) {
+        this.bulletPath = bulletPath;
     }
 }
