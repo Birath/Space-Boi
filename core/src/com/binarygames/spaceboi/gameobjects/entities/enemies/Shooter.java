@@ -48,12 +48,6 @@ public class Shooter extends Enemy {
 
     }
 
-    @Override
-    public void render(SpriteBatch batch, OrthographicCamera camera) {
-        aim(batch);
-        super.render(batch, camera);
-    }
-
     private void aim(SpriteBatch batch) {
         Vector2 spritePosition = new Vector2(body.getPosition().x * PPM - machinGunSprite.getWidth() / 2, (body.getPosition().y)  * PPM - machinGunSprite.getHeight() / 2);
         // Gets the sprites position in physics units and gets the angle from it to the player
@@ -119,6 +113,8 @@ public class Shooter extends Enemy {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
+        aim(batch);
+        //super.render(batch, camera);
     if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
             animationHandler.setFlipped(!animationHandler.isFlipped());
         }
@@ -171,8 +167,7 @@ public class Shooter extends Enemy {
                 body.getPosition().y * PPM + perpen.y);
         Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
         shootWeapon.shoot(shootFrom, shootDirection);
-            body.getPosition().y * PPM + perpen.y);
-
+        /*
         Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
         if  (machinGunSprite.isFlipY()) {
             muzzle.scl(1, -1);
@@ -190,5 +185,6 @@ public class Shooter extends Enemy {
         } else {
             shootWeapon.shoot(shootFrom, perpen);
         }
+        */
     }
 }
