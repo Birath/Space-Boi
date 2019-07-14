@@ -1,9 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,7 +44,7 @@ public class Shooter extends Enemy {
     }
 
     private void aim(SpriteBatch batch) {
-        Vector2 spritePosition = new Vector2(body.getPosition().x * PPM - machinGunSprite.getWidth() / 2, (body.getPosition().y)  * PPM - machinGunSprite.getHeight() / 2);
+        Vector2 spritePosition = new Vector2(body.getPosition().x * PPM - machinGunSprite.getWidth() / 2, (body.getPosition().y) * PPM - machinGunSprite.getHeight() / 2);
         // Gets the sprites position in physics units and gets the angle from it to the player
         float angle = getAngleToPlayer(body.getPosition());
         machinGunSprite.setPosition(spritePosition.x, spritePosition.y);
@@ -58,8 +55,6 @@ public class Shooter extends Enemy {
             machinGunSprite.flip(false, true);
         }
         machinGunSprite.draw(batch);
-        machinegun = new Machinegun(gameWorld, this);
-        animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
     }
 
     @Override
@@ -115,7 +110,7 @@ public class Shooter extends Enemy {
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         aim(batch);
         //super.render(batch, camera);
-    if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
+        if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
             animationHandler.setFlipped(!animationHandler.isFlipped());
         }
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - SHOOTER_WIDTH / 2, body.getPosition().y * PPM - SHOOTER_HEIGHT / 2, SHOOTER_WIDTH / 2, SHOOTER_HEIGHT / 2, SHOOTER_WIDTH, SHOOTER_HEIGHT, 0.15f, 0.15f, targetAngle + 90);
