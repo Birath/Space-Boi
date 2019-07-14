@@ -102,6 +102,7 @@ public class Console {
         commands.put("fillinventory", new FillInventory());
         commands.put("wingame", new WinGame());
         commands.put("losegame", new LoseGame());
+        commands.put("spawnenemy", new SpawnEnemy());
     }
 
     public void update(float delta) {

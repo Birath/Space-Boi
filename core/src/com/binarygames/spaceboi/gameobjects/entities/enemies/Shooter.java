@@ -13,7 +13,7 @@ public class Shooter extends Enemy {
     public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
 
-        this.machinegun = new Machinegun(gameWorld, this);
+        machinegun = new Machinegun(gameWorld, this);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Shooter extends Enemy {
     @Override
     protected void updateAttacking(float delta) {
         if (shouldShootWithNormalGun()) {
-            shoot(machinegun);
+            shoot(weapon); // shoot(machinegun);
         } else if (shouldShootWithNonGravityGun()) {
             shoot(weapon);
         } else {
