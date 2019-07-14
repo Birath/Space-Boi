@@ -96,7 +96,7 @@ public class EntityContactListener implements ContactListener {
                 fixtureB.getBody().getUserData() instanceof Enemy) {
             Bullet bullet = (Bullet) fixtureA.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureB.getBody().getUserData();
-            if (!bullet.getShooter().equals(enemy)) {
+            if (bullet.getShooter().equals(gameWorld.getPlayer())) {  //only take damage if the shooter is the player
                 enemy.receiveWeaponEffects(bullet);
                 bullet.applyLifeSteal();
                 bullet.setHasHit(true);
@@ -105,7 +105,7 @@ public class EntityContactListener implements ContactListener {
                 fixtureB.getBody().getUserData() instanceof Bullet) {
             Bullet bullet = (Bullet) fixtureB.getBody().getUserData();
             Enemy enemy = (Enemy) fixtureA.getBody().getUserData();
-            if (!bullet.getShooter().equals(enemy)) {
+            if (bullet.getShooter().equals(gameWorld.getPlayer())) {
                 enemy.receiveWeaponEffects(bullet);
                 bullet.applyLifeSteal();
                 bullet.setHasHit(true);

@@ -8,6 +8,9 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 public class GravityFreeMachineGun extends Machinegun {
     public GravityFreeMachineGun(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
+
+        setBulletSpeed(4); // Default: 5
+        setTimeBetweenShots(0.2f); // Default: 0.12f
     }
 
     @Override

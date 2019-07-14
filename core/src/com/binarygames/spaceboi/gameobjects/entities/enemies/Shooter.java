@@ -2,13 +2,20 @@ package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.binarygames.spaceboi.Assets;
+import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
 
@@ -19,11 +26,21 @@ public class Shooter extends Enemy {
 
     private Machinegun machinegun;
     private Sprite machinGunSprite;
+    private static final int RUN_FRAME_COLUMNS = 1;
+    private static final int RUN_FRAME_ROWS = 12;
+    private static final float runFrameDuration = 0.07f;
+    private static final int SHOOTER_WIDTH = 213; //From the size of the spritesheet
+    private static final int SHOOTER_HEIGHT = 393;
+
+    private static final float MAXIMUM_SHOOTING_DISTANCE = 500;
+    private static final float TARGET_SHOOTING_DISTANCE = 300;
 
     public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
 
         this.machinegun = new Machinegun(gameWorld, this);
+        animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
+
         machinGunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MACHINEGUN, Texture.class));
         machinGunSprite.setSize(machinGunSprite.getWidth() * 0.1f, machinGunSprite.getHeight() * 0.1f);
         machinGunSprite.setOriginCenter();
@@ -49,6 +66,8 @@ public class Shooter extends Enemy {
             machinGunSprite.flip(false, true);
         }
         machinGunSprite.draw(batch);
+        machinegun = new Machinegun(gameWorld, this);
+        animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
     }
 
     @Override
@@ -73,36 +92,65 @@ public class Shooter extends Enemy {
 
     @Override
     protected void updateHunting(float delta) {
-        if (toJump()) {
-            jump();
-        } else {
-            moveAlongPlanet();
+        if (shouldShoot() && distanceToPlayer() < 450) {
+            shoot(machinegun);
         }
+        moveAlongPlanet();
+        animationHandler.updateAnimation(delta);
     }
 
     @Override
     protected void updateAttacking(float delta) {
-        if (shouldShootWithNormalGun()) {
+        if (shouldShoot()) {
             shoot(machinegun);
-        } else if (shouldShootWithNonGravityGun()) {
-            shoot(weapon);
+            if (distanceToPlayer() > TARGET_SHOOTING_DISTANCE) {
+                moveAlongPlanetSlowly();
+            }
         } else {
             moveAlongPlanet();
+            animationHandler.updateAnimation(delta);
         }
     }
 
     @Override
     protected void updateJumping(float delta) {
-        //Do nothing
+        updateHunting(delta);
     }
 
-    private boolean shouldShootWithNormalGun() {
-        float angle = Math.abs(toPlanet.angle(toPlayer));
-        return 80 < angle;
+    @Override
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
+    if (moveLeft && !animationHandler.isFlipped() || moveRight && animationHandler.isFlipped()) {
+            animationHandler.setFlipped(!animationHandler.isFlipped());
+        }
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - SHOOTER_WIDTH / 2, body.getPosition().y * PPM - SHOOTER_HEIGHT / 2, SHOOTER_WIDTH / 2, SHOOTER_HEIGHT / 2, SHOOTER_WIDTH, SHOOTER_HEIGHT, 0.15f, 0.15f, targetAngle + 90);
+        //Scale is set based on in-game look
     }
 
-    private boolean shouldShootWithNonGravityGun() {
-        return 60 < Math.abs(toPlanet.angle(toPlayer));
+    private boolean shouldShoot() {
+        RayCastCallback callback = new RayCastCallback() {
+                    @Override
+                    public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                        if (fixture.getUserData() instanceof Planet) {
+                            Gdx.app.log("Shooter", "Planet between player and shooter");
+                            return 0;
+                        }
+                        return 1;
+                    }
+                };
+                gameWorld.getWorld().rayCast(callback ,getBody().getPosition(), player.getBody().getPosition());
+
+        // TODO CHECK USING RAYCASTING
+        return (distanceToPlayer() < MAXIMUM_SHOOTING_DISTANCE);
+    }
+
+    private void moveAlongPlanetSlowly() {
+        if (moveRight) {
+            body.setLinearVelocity(perpen.cpy().scl(0.5f));
+        } else if (moveLeft) {
+            body.setLinearVelocity(perpen.cpy().scl(-0.5f));
+        } else {
+            standStill();
+        }
     }
 
     private void shoot(Weapon shootWeapon) {
@@ -120,6 +168,9 @@ public class Shooter extends Enemy {
         }
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
+                body.getPosition().y * PPM + perpen.y);
+        Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
+        shootWeapon.shoot(shootFrom, shootDirection);
             body.getPosition().y * PPM + perpen.y);
 
         Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
