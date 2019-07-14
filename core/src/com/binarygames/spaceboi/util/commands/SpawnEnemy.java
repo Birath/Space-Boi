@@ -8,13 +8,15 @@ import com.binarygames.spaceboi.gameobjects.entities.enemies.FlyingShip;
 import com.binarygames.spaceboi.gameobjects.entities.enemies.Shooter;
 import com.binarygames.spaceboi.util.Console;
 
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
+
 public class SpawnEnemy implements Command {
 
     @Override
     public void run(Console console, String[] args) {
 
         Vector2 position = console.getGameWorld().getPlayer().getBody().getPosition();
-        position.
+        position.scl(PPM);
         switch (args[0].toUpperCase()) {
             case "CHASER":
                 Chaser chaser = new Chaser(console.getGameWorld(), position.x, position.y, Assets.DOG);
@@ -29,7 +31,7 @@ public class SpawnEnemy implements Command {
                 console.echo("shooter");
                 break;
             case "FLYINGSHIP":
-                FlyingShip flyingship = new FlyingShip(console.getGameWorld(), position.x, position.y, Assets.FLYINGSHIP);
+                FlyingShip flyingship = new FlyingShip(console.getGameWorld(), position.x + 150, position.y, Assets.FLYINGSHIP);
                 console.getGameWorld().addDynamicEntity(flyingship);
 
                 console.echo("flying ship");
