@@ -36,7 +36,7 @@ public class FlyingShip extends Enemy {
         shotgunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.FLYINGSHIP_CANNON, Texture.class));
         shotgunSprite.setSize(10, 20);
         shotgunSprite.setOriginCenter();
-        shotgunSprite.rotate90(false);
+        //shotgunSprite.rotate90(true);
 
         damagedSounds.add(Assets.RICOCHET1);
         damagedSounds.add(Assets.RICOCHET2);
@@ -167,7 +167,7 @@ public class FlyingShip extends Enemy {
         // Gets the sprites position in physics units and gets the angle from it to the player
         float angle = getAngleToPlayer(body.getPosition().cpy().add(toPlanet.cpy().nor().scl(SHOTGUN_OFFSET / PPM)));
         shotgunSprite.setPosition(spritePosition.x, spritePosition.y);
-        shotgunSprite.setRotation(angle * MathUtils.radiansToDegrees);
+        shotgunSprite.setRotation(angle * MathUtils.radiansToDegrees - 90);
         shotgunSprite.draw(batch);
     }
 
