@@ -22,6 +22,8 @@ public class Console {
     private GameScreen gameScreen;
     private GameWorld gameWorld;
 
+    private final static boolean CONSOLE_ENABLED = true;
+
     private boolean isVisible = false;
 
     private InputMultiplexer consoleMultiplexer;
@@ -215,5 +217,9 @@ public class Console {
 
     public void runCommand(String command, String[] args) {
         commands.get(command).run(this, args);
+    }
+
+    public static boolean isConsoleEnabled() {
+        return CONSOLE_ENABLED;
     }
 }

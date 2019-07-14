@@ -20,7 +20,7 @@ public class VictoryScreen extends BaseScreen {
         stage.clear();
 
         // Menu background
-        Image backgroundImage = new Image(game.getAssetManager().get(Assets.MENU_BACKGROUND_IMAGE, Texture.class)); //Update acessed image to new one
+        Image backgroundImage = new Image(game.getAssetManager().get(Assets.WIN_BACKGROUND, Texture.class));
         backgroundImage.setOrigin(backgroundImage.getWidth() / 2, backgroundImage.getHeight() / 2);
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(backgroundImage);
@@ -30,7 +30,7 @@ public class VictoryScreen extends BaseScreen {
         stage.addActor(table);
 
         Label infoLabel = new Label("You won!", getTitleStyle());
-        Label xpLabel = new Label("Final XP: " + Integer.toString(playerXP), getTitleStyle());  //TODO WIP
+        Label xpLabel = new Label("Final XP: " + Integer.toString(playerXP), getTitleStyle());
 
         TextButton restartButton = new TextButton("Restart", getUiSkin());
         restartButton.addListener(new ChangeListener() {

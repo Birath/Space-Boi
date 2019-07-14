@@ -33,7 +33,7 @@ public class FlyingShip extends Enemy {
         shotgun.setDamage(shotgunDamage);
         shotgun.setMagSize(shotgunMagsize);
 
-        shotgunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MISSILE, Texture.class));
+        shotgunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.FLYINGSHIP_CANNON, Texture.class));
         shotgunSprite.setSize(10, 20);
         shotgunSprite.setOriginCenter();
         shotgunSprite.rotate90(false);
