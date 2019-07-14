@@ -20,10 +20,13 @@ public class Shooter extends Enemy {
     private static final int SHOOTER_WIDTH = 213; //From the size of the spritesheet
     private static final int SHOOTER_HEIGHT = 393;
 
+    private static final float MAXIMUM_SHOOTING_DISTANCE = 500;
+    private static final float TARGET_SHOOTING_DISTANCE = 300;
+
     public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
 
-        this.machinegun = new Machinegun(gameWorld, this);
+        machinegun = new Machinegun(gameWorld, this);
         animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
     }
 
@@ -49,20 +52,20 @@ public class Shooter extends Enemy {
 
     @Override
     protected void updateHunting(float delta) {
-        if (toJump()) {
-            jump();
-        } else {
-            moveAlongPlanet();
-            animationHandler.updateAnimation(delta);
+        if (shouldShoot() && distanceToPlayer() < 450) {
+            shoot(machinegun);
         }
+        moveAlongPlanet();
+        animationHandler.updateAnimation(delta);
     }
 
     @Override
     protected void updateAttacking(float delta) {
-        if (shouldShootWithNormalGun()) {
-            shoot(weapon); // shoot(machinegun);
-        } else if (shouldShootWithNonGravityGun()) {
-            shoot(weapon);
+        if (shouldShoot()) {
+            shoot(machinegun);
+            if (distanceToPlayer() > TARGET_SHOOTING_DISTANCE) {
+                moveAlongPlanetSlowly();
+            }
         } else {
             moveAlongPlanet();
             animationHandler.updateAnimation(delta);
@@ -71,25 +74,31 @@ public class Shooter extends Enemy {
 
     @Override
     protected void updateJumping(float delta) {
-        //Do nothing
+        updateHunting(delta);
     }
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-    if (moveLeft && animationHandler.isFlipped() || moveRight && !animationHandler.isFlipped()) {
+        if (moveLeft && animationHandler.isFlipped() || moveRight && !animationHandler.isFlipped()) {
             animationHandler.setFlipped(!animationHandler.isFlipped());
         }
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - SHOOTER_WIDTH / 2, body.getPosition().y * PPM - SHOOTER_HEIGHT / 2, SHOOTER_WIDTH / 2, SHOOTER_HEIGHT / 2, SHOOTER_WIDTH, SHOOTER_HEIGHT, 0.15f, 0.15f, targetAngle + 90);
         //Scale is set based on in-game look
     }
 
-    private boolean shouldShootWithNormalGun() {
-        float angle = Math.abs(toPlanet.angle(toPlayer));
-        return 80 < angle;
+    private boolean shouldShoot() {
+        // TODO CHECK USING RAYCASTING
+        return (distanceToPlayer() < MAXIMUM_SHOOTING_DISTANCE);
     }
 
-    private boolean shouldShootWithNonGravityGun() {
-        return 60 < Math.abs(toPlanet.angle(toPlayer));
+    private void moveAlongPlanetSlowly() {
+        if (moveRight) {
+            body.setLinearVelocity(perpen.cpy().scl(0.5f));
+        } else if (moveLeft) {
+            body.setLinearVelocity(perpen.cpy().scl(-0.5f));
+        } else {
+            standStill();
+        }
     }
 
     private void shoot(Weapon shootWeapon) {
@@ -107,12 +116,8 @@ public class Shooter extends Enemy {
         }
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
-            body.getPosition().y * PPM + perpen.y);
-        if (shootWeapon.getClass().getName().equals(Machinegun.class.getName())) {
-            Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-            shootWeapon.shoot(shootFrom, shootDirection);
-        } else {
-            shootWeapon.shoot(shootFrom, perpen);
-        }
+                body.getPosition().y * PPM + perpen.y);
+        Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
+        shootWeapon.shoot(shootFrom, shootDirection);
     }
 }
