@@ -91,7 +91,7 @@ public class Shooter extends Enemy {
     @Override
     protected void updateAttacking(float delta) {
         if (shouldShoot()) {
-            shoot(machinegun); // TODO Kolla med Kettu och Albin om denna ska vara här
+            shoot(machinegun);
             if (distanceToPlayer() > TARGET_SHOOTING_DISTANCE) {
                 moveAlongPlanetSlowly();
                 animationHandler.updateAnimation(delta / 2);
