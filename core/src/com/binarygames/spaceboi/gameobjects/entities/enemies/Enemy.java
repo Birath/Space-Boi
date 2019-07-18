@@ -173,7 +173,7 @@ public abstract class Enemy extends EntityDynamic {
 
     protected void updateToPlayer() {
         player = gameWorld.getPlayer();
-        toPlayer = player.getBody().getPosition().sub(this.getBody().getPosition()); //From enemy to player
+        toPlayer = player.getBody().getPosition().cpy().sub(this.getBody().getPosition()); //From enemy to player
     }
 
     protected void updateWalkingDirection() {

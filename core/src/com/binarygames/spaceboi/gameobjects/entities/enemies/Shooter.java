@@ -1,10 +1,12 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
@@ -14,11 +16,12 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+import com.binarygames.spaceboi.gameobjects.utils.DebugDrawer;
 
 public class Shooter extends Enemy {
 
     private static final float WEAPON_WIDTH = 3;
-    private static final float WEAPON_HEIGHT = 14;
+    private static final float WEAPON_HEIGHT = 7;
 
     private Machinegun machinegun;
     private Sprite machinGunSprite;
@@ -28,7 +31,7 @@ public class Shooter extends Enemy {
     private static final int SHOOTER_WIDTH = 213; //From the size of the spritesheet
     private static final int SHOOTER_HEIGHT = 393;
 
-    private static final float TARGET_SHOOTING_DISTANCE = 8;
+    private static final float TARGET_SHOOTING_DISTANCE = 10;
 
     public Shooter(GameWorld gameWorld, float x, float y, String path) {
         super(gameWorld, x, y, path, EnemyType.SHOOTER);
@@ -49,9 +52,9 @@ public class Shooter extends Enemy {
         float angle = getAngleToPlayer(body.getPosition());
         machinGunSprite.setPosition(spritePosition.x, spritePosition.y);
         machinGunSprite.setRotation(angle * MathUtils.radiansToDegrees);
-        if (!sprite.isFlipX() && !machinGunSprite.isFlipY()) {
+        if (moveRight && !machinGunSprite.isFlipY()) {
             machinGunSprite.flip(false, true);
-        } else if (sprite.isFlipX() && machinGunSprite.isFlipY()) {
+        } else if (moveLeft && machinGunSprite.isFlipY()) {
             machinGunSprite.flip(false, true);
         }
         machinGunSprite.draw(batch);
@@ -88,7 +91,7 @@ public class Shooter extends Enemy {
     @Override
     protected void updateAttacking(float delta) {
         if (shouldShoot()) {
-            //shoot(machinegun);
+            shoot(machinegun); // TODO Kolla med Kettu och Albin om denna ska vara här
             if (distanceToPlayer() > TARGET_SHOOTING_DISTANCE) {
                 moveAlongPlanetSlowly();
                 animationHandler.updateAnimation(delta / 2);
@@ -150,27 +153,15 @@ public class Shooter extends Enemy {
 
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
                 body.getPosition().y * PPM + perpen.y);
-        Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-        shootWeapon.shoot(shootFrom, shootDirection);
-        /*
         Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
         if  (machinGunSprite.isFlipY()) {
-            muzzle.scl(1, -1);
+            muzzle.scl(-1, 1);
         }
-        //Gdx.app.log("Shooter", "Angle: " + getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees);
-        //Gdx.app.log("Shooter", "Angle: " + getAngleToPlayer(new Vector2(0, 0)) * MathUtils.radiansToDegrees);
         muzzle.rotate(getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees + 90);
-        //getAngleToPlayer(new Vector2(0, 0));
-        //player.getBody().getPosition();
         shootFrom.add(muzzle);
 
-        if (shootWeapon.getClass().getName().equals(Machinegun.class.getName())) {
-            Vector2 shootDirection = new Vector2(toPlayer.x, toPlayer.y).setLength2(1).scl(rad * PPM);
-            shootWeapon.shoot(shootFrom, shootDirection);
-        } else {
-            shootWeapon.shoot(shootFrom, perpen);
-        }
-        */
+        Vector2 shootDirection = new Vector2(toPlayer).setLength2(1).scl(rad * PPM);
+        shootWeapon.shoot(shootFrom, shootDirection);
     }
 
     private class ShotCallback implements RayCastCallback {
