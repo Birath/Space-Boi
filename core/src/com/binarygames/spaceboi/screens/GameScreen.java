@@ -38,7 +38,6 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
-    private Viewport viewport;
     private World world;
 
     private GameUI gameUI;

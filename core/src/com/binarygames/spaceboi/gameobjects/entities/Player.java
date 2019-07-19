@@ -32,14 +32,14 @@ public class Player extends EntityDynamic {
     private static final float MAX_SPEED = 6000;
 
     //Animation - walking
-    private static final int WALK_FRAME_COLUMNS = 4;
-    private static final int WALK_FRAME_ROWS = 15;
-    private static final float walkFrameDuration = 0.01f;
+    private static final int RUNNING_FRAME_COLUMNS = 4;
+    private static final int RUNNING_FRAME_ROWS = 6;
+    private static final float runningFrameDuration = 0.04f;
 
     private static final int MAX_RECOIL_ANGLE = 40;
 
-    public int spriteWidth = 500;
-    public int spriteHeight = 500;
+    public int spriteWidth = 480;
+    public int spriteHeight = 800;
 
     private boolean spriteIsFlipped;
 
@@ -98,7 +98,7 @@ public class Player extends EntityDynamic {
 
         inventory = new ArrayList<>();
 
-        animationHandler = new AnimationHandler(gameWorld, WALK_FRAME_COLUMNS, WALK_FRAME_ROWS, walkFrameDuration, Assets.PLAYER_WALK_ANIMATION);
+        animationHandler = new AnimationHandler(gameWorld, RUNNING_FRAME_COLUMNS, RUNNING_FRAME_ROWS, runningFrameDuration, Assets.PLAYER_RUNNING_ANIMATION);
 
         walkingSound = gameWorld.getGame().getAssetManager().get(Assets.PLAYER_FOOTSTEP, Sound.class);
     }
@@ -192,21 +192,22 @@ public class Player extends EntityDynamic {
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
         getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
-        weapon.render(batch, camera, this);
         getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
         getSprite().setRotation(playerAngle + 90);
         //getSprite().draw(batch); TODO remove temp for testing
 
-        if (spriteIsFlipped) {
+        if (!spriteIsFlipped) {
             animationHandler.getCurrentFrame().flip(true, false);
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 2, spriteWidth / 2, spriteHeight / 2, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 6, spriteWidth / 2, spriteHeight / 6, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
             animationHandler.getCurrentFrame().flip(true, false);
-        } else {
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 2, spriteWidth / 2, spriteHeight / 2, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+} else {
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 6, spriteWidth / 2, spriteHeight / 6, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
         }
-    }
+        weapon.render(batch, camera, this);
+        }
 
-    @Override
+
+@Override
     public void onRemove() {
         gameWorld.endGame();
     }

@@ -154,8 +154,23 @@ public abstract class Weapon {
         weaponPosition.setLength2(1);
         weaponPosition.scl(-(player.getRad() * PPM));
 
-        sprite.setPosition(player.getBody().getPosition().x * PPM - sprite.getWidth() / 2 + weaponPosition.x,
-                player.getBody().getPosition().y * PPM - sprite.getHeight() / 2 + weaponPosition.y);
+        //sprite.setPosition(player.getBody().getPosition().x * PPM - sprite.getWidth() / 2 + weaponPosition.x,
+        //        player.getBody().getPosition().y * PPM - sprite.getHeight() / 2 + weaponPosition.y);
+
+
+        // New shit to get the origin and position correct
+        int offset = 25;
+        double angle =((player.getPlayerAngle() * Math.PI) / 180) - .1;
+        int width_offset = (int) Math.round(Math.cos(angle) * offset);
+        int height_offset = (int) Math.round(Math.sin(angle) * offset);
+
+        sprite.setOrigin(sprite.getWidth() / 5,  (int) Math.round(sprite.getHeight() / 1.5));
+
+        sprite.setPosition(player.getBody().getPosition().x * PPM - (sprite.getWidth() / 5) - width_offset,
+                player.getBody().getPosition().y * PPM - ((int) Math.round(sprite.getHeight() / 1.5)) - height_offset);
+
+
+
         Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
         float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
         this.rotation = angleToMouse;
