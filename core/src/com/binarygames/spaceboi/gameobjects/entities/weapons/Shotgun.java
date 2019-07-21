@@ -11,7 +11,6 @@ import com.binarygames.spaceboi.gameobjects.entities.Player;
 
 public class Shotgun extends Weapon {
 
-    public static final float SPRITE_SCALING = 0.1f;
     private static final int WEAPON_WIDTH = 15;
     private static final int WEAPON_HEIGHT = 5;
 
@@ -36,7 +35,8 @@ public class Shotgun extends Weapon {
 
         //Sprite setup
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        sprite.setSize(sprite.getWidth() * SPRITE_SCALING, sprite.getHeight() * SPRITE_SCALING);
+        float scale = 0.1f;
+        sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         sprite.setOriginCenter();
     }
 

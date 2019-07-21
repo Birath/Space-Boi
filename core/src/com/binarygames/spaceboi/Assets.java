@@ -115,12 +115,12 @@ public class Assets {
     public static final String WEAPON_SHOTGUN_PUMP = "game/entities/weapons/shotgun/pump.mp3"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_SHOT_PUMP = "game/entities/weapons/shotgun/shot_pump.wav"; // Free Firearms library
     public static final String WEAPON_SHOTGUN_RELOAD = "game/entities/weapons/shotgun/reload.wav"; // https://freesound.org/people/lensflare8642/sounds/145209/
-    public static final String WEAPON_SHOTGUN = "game/entities/weapons/shotgun/shotgun.png"; //https://pixabay.com/en/shotgun-gun-rifle-weapon-hunter-48282/
+    public static final String WEAPON_SHOTGUN = "game/entities/weapons/shotgun/shotgun_w_arms.png"; //https://pixabay.com/en/shotgun-gun-rifle-weapon-hunter-48282/
     // public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/Ratatata.mp3";
     public static final String WEAPON_MACHINEGUN_SHOT = "game/entities/weapons/machinegun/shot.wav";
     public static final String WEAPON_MACHINEGUN_RELOAD = "game/entities/weapons/machinegun/reload.wav"; // https://freesound.org/people/davdud101/sounds/145475/
     public static final String WEAPON_MACHINEGUN = "game/entities/weapons/machinegun/ak-47.png"; // https://vector.me/browse/282635/ak47_assault_rifle
-    public static final String WEAPON_MACHINEGUN_ARMS = "game/entities/weapons/machinegun/ak47_w_arms.png";
+    public static final String WEAPON_MACHINEGUN_ARMS = "game/entities/weapons/machinegun/ak-47_w_arms.png";
 
     public static final String WEAPON_BULLET = "game/entities/weapons/enemy_bullet.png";
     public static final String PLAYER_BULLET = "game/entities/weapons/player_bullet.png";
@@ -129,7 +129,7 @@ public class Assets {
     public static final String WEAPON_GRENADELAUNCHER_SHOT = "game/entities/weapons/grenadelauncher/shot.mp3"; // https://freesound.org/people/LeMudCrab/sounds/163458/
     public static final String WEAPON_GRENADELAUNCHER_RELOAD = "game/entities/weapons/grenadelauncher/reload.wav"; // https://freesound.org/people/JacquelineKohrs150067/sounds/326677/
     public static final String WEAPON_GRENADE = "game/entities/weapons/grenadelauncher/grenade.png";
-    public static final String WEAPON_GRENADELAUNCHER = "game/entities/weapons/grenadelauncher/grenade_launcher.png";
+    public static final String WEAPON_GRENADELAUNCHER = "game/entities/weapons/grenadelauncher/grenade_launcher_w_arms.png";
 
     /*
         Environment

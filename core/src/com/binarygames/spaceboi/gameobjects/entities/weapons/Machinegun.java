@@ -40,7 +40,8 @@ public class Machinegun extends Weapon {
         this.name = "Machine gun";
 
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        sprite.setSize(sprite.getWidth() * 0.1f, sprite.getHeight() * 0.1f);
+        float scale = 0.1f;
+        sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         sprite.setOriginCenter();
         shot = gameWorld.getGame().getAssetManager().get(Assets.WEAPON_MACHINEGUN_SHOT, Sound.class);
     }
