@@ -8,7 +8,6 @@ import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 public class Grenade extends Bullet {
 
     private static final int SHRAPNEL_AMOUNT = 90;
-    private static final String SHRAPNEL_PATH = Assets.WEAPON_BULLET;
     private static final int SHRAPNEL_SPEED = 35;
     private static final float SHRAPNEL_MASS = 10;
     private static final float SHRAPNEL_RADIUS = 1;
@@ -17,9 +16,11 @@ public class Grenade extends Bullet {
     private Vector2 shrapnelDirection = new Vector2(2, 0);
 
     private float timeSinceShot;
+    private String shrapnelPath;
 
     public Grenade(GameWorld gameWorld, float x, float y, String path, Vector2 speed, float mass, float radius, int removeDelay, int damage, EntityDynamic shooter, Weapon weapon) {
         super(gameWorld, x, y, path, speed, mass, radius, removeDelay, damage, shooter, weapon);
+        shrapnelPath = path;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class Grenade extends Bullet {
         for (int i = 0; i + 1 <= SHRAPNEL_AMOUNT; i++) {
             Vector2 shrapnelDirectionAngle = shrapnelDirectionWithSpeed.cpy().rotate(angleDiff * i);
             new Bullet(gameWorld, getBody().getPosition().x * PPM + shrapnelDirectionAngle.x, getBody().getPosition().y * PPM + shrapnelDirectionAngle.y,
-                    SHRAPNEL_PATH, shrapnelDirectionAngle, SHRAPNEL_MASS, SHRAPNEL_RADIUS, SHRAPNEL_REMOVE_DELAY, SHRAPNEL_DAMAGE, getShooter(), getWeapon());
+                    shrapnelPath, shrapnelDirectionAngle, SHRAPNEL_MASS, SHRAPNEL_RADIUS, SHRAPNEL_REMOVE_DELAY, SHRAPNEL_DAMAGE, getShooter(), getWeapon());
         }
         gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_EXPLOSION);
     }

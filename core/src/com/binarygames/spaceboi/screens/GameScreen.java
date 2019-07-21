@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
@@ -127,6 +126,8 @@ public class GameScreen implements Screen {
                 float rotationAmount = getCameraRotation() - player.getPlayerAngle() + 90;
                 if (!debugRendererIsEnabled) {
                     camera.rotate(rotationAmount);
+                } else {
+                    camera.rotate(rotationAmount);
                 }
                 if (Math.abs(rotationAmount) >= whenToInterpolate) {
                     currentInterpolateCount = 0;
@@ -181,9 +182,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT |
                 (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        if (debugRendererIsEnabled) {
-            debugRenderer.render(world, camera.combined.scl(PPM));// TODO fix matching rotation on debug rendering
-        }
 
         game.getBatch().begin();
         if (!debugRendererIsEnabled) {
@@ -191,6 +189,10 @@ public class GameScreen implements Screen {
         }
         gameWorld.getParticleHandler().updateAndDrawEffects(game.getBatch(), delta);
         game.getBatch().end();
+
+        if (debugRendererIsEnabled) {
+            debugRenderer.render(world, camera.combined.scl(PPM));// TODO fix matching rotation on debug rendering
+        }
     }
 
     @Override
