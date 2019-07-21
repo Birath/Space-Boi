@@ -1,11 +1,9 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.effects.ParticleHandler;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 
@@ -110,15 +108,14 @@ public class Bullet extends EntityDynamic {
         return slow;
     }
 
-    public int getLifeSteal(){
+    public int getLifeSteal() {
         return lifeSteal;
     }
 
     public void applyLifeSteal() {
-        if(this.getShooter().getHealth() + this.getLifeSteal() > this.getShooter().getMaxHealth()){
+        if (this.getShooter().getHealth() + this.getLifeSteal() > this.getShooter().getMaxHealth()) {
             this.getShooter().setHealth(this.getShooter().getMaxHealth());
-        }
-        else{
+        } else {
             this.getShooter().setHealth(this.getShooter().getHealth() + this.getLifeSteal());
         }
     }

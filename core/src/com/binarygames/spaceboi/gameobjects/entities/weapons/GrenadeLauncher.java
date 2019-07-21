@@ -33,7 +33,7 @@ public class GrenadeLauncher extends Weapon {
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        float scale = Math.min(WIDTH /sprite.getWidth(), HEIGHT /sprite.getHeight());
+        float scale = Math.min(WIDTH / sprite.getWidth(), HEIGHT / sprite.getHeight());
         sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         sprite.setOriginCenter();
         //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
@@ -45,7 +45,7 @@ public class GrenadeLauncher extends Weapon {
             shootDirection.scl(bulletSpeed);
             if (this.shooter instanceof Player) {
                 Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
-                if  (sprite.isFlipY()) {
+                if (sprite.isFlipY()) {
                     muzzle.scl(1, -1);
                 }
                 muzzle.rotate(this.rotation);
