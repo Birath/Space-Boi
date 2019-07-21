@@ -191,9 +191,9 @@ public class Player extends EntityDynamic {
 
     @Override
     public void render(SpriteBatch batch, OrthographicCamera camera) {
-        getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
-        getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
-        getSprite().setRotation(playerAngle + 90);
+        //getSprite().setPosition(body.getPosition().x * PPM - getSprite().getWidth() / 2, body.getPosition().y * PPM - getSprite().getHeight() / 2);
+        //getSprite().setOrigin(getSprite().getWidth() / 2, getSprite().getHeight() / 2);
+        //getSprite().setRotation(playerAngle + 90);
         //getSprite().draw(batch); TODO remove temp for testing
 
         if (!spriteIsFlipped) {
@@ -238,9 +238,19 @@ public class Player extends EntityDynamic {
        */
 
         //Shooting the bullet
+
+        Vector2 muzzle = new Vector2(weapon.getSprite().getWidth(), weapon.getSprite().getHeight());
+        if  (sprite.isFlipY()) {
+            muzzle.scl(1, -1);
+        }
+        muzzle.rotate(weapon.getRotation());
+
         recoil.setLength2(1);
         recoil.scl(-(rad * PPM));
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
+        //Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
+        //Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
+        Vector2 shootFrom = new Vector2(weapon.getMuzzlePosition().x + recoil.x, weapon.getMuzzlePosition().y + recoil.y);
+
         weapon.shoot(shootFrom, recoil);
     }
 

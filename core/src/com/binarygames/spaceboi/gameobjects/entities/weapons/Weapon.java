@@ -170,7 +170,6 @@ public abstract class Weapon {
                 player.getBody().getPosition().y * PPM - ((int) Math.round(sprite.getHeight() / 1.5)) - height_offset);
 
 
-
         Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
         float angleToMouse = MathUtils.atan2(relativeVector.y, relativeVector.x) * MathUtils.radiansToDegrees;
         this.rotation = angleToMouse;
@@ -324,5 +323,20 @@ public abstract class Weapon {
     }
     public void setBulletPath(String bulletPath) {
         this.bulletPath = bulletPath;
+    }
+
+    public Vector2 getMuzzlePosition() {
+        //return new Vector2(sprite.getX() - MathUtils.cosDeg(rotation) * (sprite.getWidth() - sprite.getOriginX()),
+        //        sprite.getY() - MathUtils.sinDeg(rotation) * (sprite.getHeight() - sprite.getOriginY()));
+        return new Vector2(sprite.getX(),
+                sprite.getY());
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
     }
 }

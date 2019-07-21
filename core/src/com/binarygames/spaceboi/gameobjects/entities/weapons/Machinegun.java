@@ -22,7 +22,14 @@ public class Machinegun extends Weapon {
         this.bulletMass = 10;
         this.bulletRadius = 1.5f;
         this.bulletSpeed = 5;
-        this.path = Assets.WEAPON_MACHINEGUN;
+
+        if (this.shooter instanceof Player) {
+            this.path = Assets.WEAPON_MACHINEGUN_ARMS;
+        }
+        else {
+            this.path = Assets.WEAPON_MACHINEGUN;
+        }
+
         this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 1;
         this.removeBulletDelay = 0;
@@ -42,15 +49,7 @@ public class Machinegun extends Weapon {
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
             shootDirection.scl(bulletSpeed);
-            if (this.shooter instanceof Player) {
-                Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
-                if  (sprite.isFlipY()) {
-                    muzzle.scl(1, -1);
-                }
-                muzzle.rotate(this.rotation);
 
-                pos.add(muzzle);
-            }
             new Bullet(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
 
