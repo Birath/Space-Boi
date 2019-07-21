@@ -39,6 +39,12 @@ wwwtyro.github.io/procedural.js/space/
 
 
 Audio assets:
+- Cannon sounds by SamsterBirdies
+https://freesound.org/people/SamsterBirdies/sounds/467883/
+
+- Metallic clangs by soundmary
+https://freesound.org/people/soundmary/sounds/194996/
+
 - Ricochet sounds by aust_paul
 https://freesound.org/people/aust_paul/sounds/30932/
 
