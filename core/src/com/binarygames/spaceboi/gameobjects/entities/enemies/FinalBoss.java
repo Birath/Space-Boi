@@ -20,7 +20,7 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private static final float MINIMUM_TIME_SINCE_LAST_SHOT = 5f;
 
     // Charge values
-    private static final float MINIMUM_CHARGE_DISTANCE = 700;
+    private static final float MINIMUM_CHARGE_DISTANCE = 5000;
 
     private static final float CHARGE_ATTACK_COOLDOWN = 10.0f;
     private static final float MAXIMUM_CHARGE_TIME = 5.0f;
@@ -95,6 +95,11 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     @Override
     protected void getSounds() {
         attackSounds.add(Assets.END_BOSS1);
+
+        damagedSounds.add(Assets.RICOCHET1);
+        damagedSounds.add(Assets.RICOCHET2);
+        damagedSounds.add(Assets.RICOCHET3);
+        damagedSounds.add(Assets.RICOCHET4);
     }
 
     private void loadAnimations(){

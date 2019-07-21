@@ -91,10 +91,9 @@ public class Player extends EntityDynamic {
         weaponList.add(new GrenadeLauncher(gameWorld, this));
         this.weapon = weaponList.get(0);
 
-        for (Weapon weapon:
-             weaponList) {
-            weapon.setBulletPath(Assets.PLAYER_BULLET);
-        }
+        weaponList.get(0).setBulletPath(Assets.PLAYER_BULLET); //Shotgun
+        weaponList.get(1).setBulletPath(Assets.PLAYER_BULLET); //Machinegun
+        //Do not change grenadelauncher
 
         inventory = new ArrayList<>();
 
