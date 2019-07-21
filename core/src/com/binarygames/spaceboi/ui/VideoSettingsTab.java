@@ -47,8 +47,27 @@ public class VideoSettingsTab extends SettingsTab {
 
         final Label fullscreenLabel = new Label("Fullscreen", uiSkin);
 
+        final CheckBox vsyncCheckBox = new CheckBox(null, uiSkin);
+        vsyncCheckBox.pad(32);
+        vsyncCheckBox.setChecked(game.getPreferences().isVsyncEnabled());
+        vsyncCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getPreferences().setVsync(vsyncCheckBox.isChecked());
+                //Gdx.graphics.setVSync(game.getPreferences().isVsyncEnabled());
+                vsyncCheckBox.setChecked(game.getPreferences().isVsyncEnabled());
+            }
+        });
+
+        final Label vsyncLabel = new Label("VSync", uiSkin);
+
         table.add(fullscreenLabel).left();
         table.add(fullscreenCheckBox).center();
+
+        table.row().pad(10, 0, 10, 0);
+
+        //table.add(vsyncLabel).left();
+        //table.add(vsyncCheckBox).center();
     }
 
 }

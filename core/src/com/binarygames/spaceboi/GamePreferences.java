@@ -14,6 +14,7 @@ public final class GamePreferences {
     private static final String DEBUG_PREF_GRAVITY_ENABLED = "gravity.enabled";
 
     private static final String PREF_FULLSCREEN_ENABLED = "fullscreen.enabled";
+    private static final String PREF_VSYNC = "vsync.enabled";
 
     private static final String PREF_KEY_SHOOT = "key.shoot";
     private static final String PREF_KEY_SHOOT_IS_KEYBOARD = "key.shoot";
@@ -83,6 +84,15 @@ public final class GamePreferences {
 
     public void setFullscreenEnable(boolean fullscreenEnabled) {
         getPreferences().putBoolean(PREF_FULLSCREEN_ENABLED, fullscreenEnabled);
+        getPreferences().flush();
+    }
+
+    public boolean isVsyncEnabled() {
+        return getPreferences().getBoolean(PREF_VSYNC, false);
+    }
+
+    public void setVsync(boolean vsync) {
+        getPreferences().putBoolean(PREF_VSYNC, vsync);
         getPreferences().flush();
     }
 

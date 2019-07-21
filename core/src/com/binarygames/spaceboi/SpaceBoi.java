@@ -14,7 +14,6 @@ import com.binarygames.spaceboi.audio.MusicManager;
 import com.binarygames.spaceboi.audio.SoundManager;
 import com.binarygames.spaceboi.screens.Fonts;
 import com.binarygames.spaceboi.screens.New_StartupScreen;
-import com.binarygames.spaceboi.screens.StartupScreen;
 
 public class SpaceBoi extends Game {
 
@@ -58,6 +57,8 @@ public class SpaceBoi extends Game {
         if (preferences.isFullscreenEnabled() && !Gdx.graphics.setFullscreenMode(displayMode)) {
             // switching to full-screen mode failed
         }
+
+        //Gdx.graphics.setVSync(preferences.isVsyncEnabled());
 
         debugFont = new BitmapFont();
         loadDebugFont();
