@@ -13,7 +13,7 @@ public class Cannon extends Weapon {
         this.bulletMass = 25;
         this.bulletRadius = 10;
         this.bulletSpeed = 0.75f;
-        this.path = Assets.PLAYER;
+        this.path = Assets.WEAPON_BULLET;
         this.recoil = 40;
         this.removeBulletDelay = 2;
         this.timeBetweenShots = 0f;
@@ -33,7 +33,7 @@ public class Cannon extends Weapon {
             shootDirection.scl(bulletSpeed);
             new Bullet(gameWorld, pos.x, pos.y, path, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();
-            gameWorld.getGame().getSoundManager().play(Assets.WEAPON_GRENADELAUNCHER_SHOT);
+            gameWorld.getGame().getSoundManager().play(Assets.END_BOSS_SHOOT_SOUND);
 
        }
     }

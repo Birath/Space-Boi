@@ -20,6 +20,8 @@ import com.binarygames.spaceboi.gameobjects.utils.DebugDrawer;
 
 public class Shooter extends Enemy {
 
+    private int weapon_damage = 3;
+
     private static final float WEAPON_WIDTH = 3;
     private static final float WEAPON_HEIGHT = 7;
 
@@ -44,6 +46,7 @@ public class Shooter extends Enemy {
         machinGunSprite.setOriginCenter();
         machinGunSprite.flip(true, false);
 
+        this.machinegun.setDamage(weapon_damage);
     }
 
     private void aim(SpriteBatch batch) {

@@ -83,7 +83,7 @@ public class MiniMap {
 
         for (final Planet planet : gameWorld.getPlanets()) {
             //planetMarker.scale(planet.getRadius()/planetMarker.getHeight());
-            Gdx.app.log("Planetcoords", String.valueOf(planet.getBody().getPosition().x*PPM) + ", " + String.valueOf(planet.getBody().getPosition().y*PPM));
+            //Gdx.app.log("Planetcoords", String.valueOf(planet.getBody().getPosition().x*PPM) + ", " + String.valueOf(planet.getBody().getPosition().y*PPM));
             planetMarker.setSize(20, 20);
             //planetMarker.setOrigin(planet.getBody().getPosition().x * PPM + center_of_texture, planet.getBody().getPosition().y * PPM + center_of_texture);
             //planetMarker.setPosition(planet.getBody().getPosition().x * PPM + center_of_texture, planet.getBody().getPosition().y * PPM + center_of_texture);

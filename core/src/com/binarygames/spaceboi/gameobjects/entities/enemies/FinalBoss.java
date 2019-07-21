@@ -1,5 +1,7 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -8,6 +10,9 @@ import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Cannon;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FinalBoss extends Enemy implements MeleeEnemy {
     // Cannon values
@@ -52,6 +57,10 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     private float shootAnimationTime = SHOOT_FRAME_COLUMNS * SHOOT_FRAME_ROWS * shootFrameDuration;  // Time to play shoot animation
     private float bulletFiredAnimationTime = 8 * shootFrameDuration; // actual shot goes off on the 8th frame
 
+    //Sounds
+    private boolean isWalking;
+    private long walkingSoundID;
+    private Sound walkingSound;
 
     // Clocks
     private float timeSinceLastCharge = 0;
@@ -78,11 +87,14 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
         this.cannon = new Cannon(gameWorld, this);
         loadAnimations();
         this.setDeAggroDistance(deAggroDist);
+        walkingSound = gameWorld.getGame().getAssetManager().get(Assets.END_BOSS_CLANK, Sound.class);
+
+
     }
 
     @Override
     protected void getSounds() {
-
+        attackSounds.add(Assets.END_BOSS1);
     }
 
     private void loadAnimations(){
@@ -142,6 +154,10 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
     @Override
     protected void updateAttacking(float delta) {
         updateTimers(delta);
+        if(!isWalking){
+            walkingSoundID = walkingSound.loop(gameWorld.getGame().getPreferences().getSoundVolume());
+            isWalking = true;
+        }
 
         if (stunned) {
             // Play stun animation...
@@ -175,6 +191,8 @@ public class FinalBoss extends Enemy implements MeleeEnemy {
 
     @Override
     public void onRemove() {
+        isWalking = false;
+        walkingSound.stop(walkingSoundID);
         super.onRemove();
         gameWorld.winGame();
     }

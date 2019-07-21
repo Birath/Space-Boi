@@ -58,6 +58,7 @@ public abstract class Enemy extends EntityDynamic {
 
     public Enemy(GameWorld gameWorld, float x, float y, String path, EnemyType enemyType, float width, float height) {
         super(gameWorld, x, y, path, enemyType.getMass(), width, height, enemyType.getHealth(), enemyType.getMoveSpeed(), enemyType.getJumpHeight());
+        getSounds();
         createEnemy(gameWorld, enemyType);
     }
 

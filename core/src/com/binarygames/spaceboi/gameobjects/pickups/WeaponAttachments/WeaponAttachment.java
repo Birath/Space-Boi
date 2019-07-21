@@ -39,7 +39,7 @@ public abstract class WeaponAttachment extends Pickup {
         Class<? extends WeaponAttachment> attachmentClass = WeaponAttachment.WEAPON_ATTACHMENTS.get(random.nextInt(WeaponAttachment.WEAPON_ATTACHMENTS.size()));
         String asset;
         try {
-            Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
+            //Gdx.app.log("WeaponAttachment", "Name:" + attachmentClass.getSimpleName());
             asset = WeaponAttachmentAsset.valueOf(attachmentClass.getSimpleName()).getAsset();
         } catch (IllegalArgumentException e) {
             Gdx.app.error("RandomAttachment", "Error when spawing random attachment", e);
