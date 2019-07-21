@@ -33,7 +33,8 @@ public class GrenadeLauncher extends Weapon {
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
-        float scale = Math.min(WIDTH / sprite.getWidth(), HEIGHT / sprite.getHeight());
+        //float scale = Math.min(WIDTH /sprite.getWidth(), HEIGHT /sprite.getHeight());
+        float scale = 0.1f;
         sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         sprite.setOriginCenter();
         //sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
