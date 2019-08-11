@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,9 +9,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
+import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -39,37 +42,29 @@ public class Shooter extends Enemy {
         animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
 
         machinGunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.SHOOTER_WEAPON, Texture.class));
-        machinGunSprite.setSize(machinGunSprite.getWidth() * 0.15f, machinGunSprite.getHeight() * 0.15f );
+        machinGunSprite.setSize(machinGunSprite.getWidth() * 0.15f, machinGunSprite.getHeight() * 0.15f);
 
         machinGunSprite.setOrigin(machinGunSprite.getWidth() / 10, machinGunSprite.getHeight() / 2);
-        machinGunSprite.setFlip(false, true);
+        machinGunSprite.flip(false, true);
 
         this.machinegun.setDamage(weapon_damage);
     }
 
     private void aim(SpriteBatch batch) {
-        Vector2 spritePosition = new Vector2(body.getPosition().x * PPM, body.getPosition().y * PPM);
-        float shooterRotation = MathUtils.atan2(toPlanet.y, toPlayer.x);
-        spritePosition.add(new Vector2(machinGunSprite.getOriginX(), machinGunSprite.getOriginY()));
-        int offset = 25;
-        int width_offset = (int) Math.round(Math.cos(shooterRotation) * offset);
-        int height_offset = (int) Math.round(Math.sin(shooterRotation) * offset);
+        Vector2 armOffset = body.getLocalCenter()
+                .cpy()
+                .add(0, 1);
 
-        //sprite.setOrigin(sprite.getWidth() / 5,  (int) Math.round(sprite.getHeight() / 1.5));
-
-        machinGunSprite.setPosition(getBody().getPosition().x * PPM - (sprite.getWidth() / 10) - width_offset,
-                getBody().getPosition().y * PPM - ((int) Math.round(sprite.getHeight() / 2)) - height_offset);
-        /*
-        */
-        // Gets the sprites position in physics units and gets the angle from it to the player
+        machinGunSprite.setPosition(
+                body.getWorldPoint(armOffset).x * PPM - machinGunSprite.getOriginX(),
+                body.getWorldPoint(armOffset).y * PPM - machinGunSprite.getOriginY()
+        );
 
         float angle = getAngleToPlayer(body.getPosition());
-        //machinGunSprite.setPosition(spritePosition.x, spritePosition.y);
-        //machinGunSprite.setOriginBasedPosition(-3, 10);
         machinGunSprite.setRotation(angle * MathUtils.radiansToDegrees + 180);
-        if (moveRight && !machinGunSprite.isFlipY()) {
+        if (moveLeft && !machinGunSprite.isFlipY()) {
             machinGunSprite.flip(false, true);
-        } else if (moveLeft && machinGunSprite.isFlipY()) {
+        } else if (moveRight && machinGunSprite.isFlipY()) {
             machinGunSprite.flip(false, true);
         }
         machinGunSprite.draw(batch);
