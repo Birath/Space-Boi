@@ -47,6 +47,7 @@ public class Shooter extends Enemy {
         machinGunSprite.flip(true, false);
 
         this.machinegun.setDamage(weapon_damage);
+        this.machinegun.setRecoil(0);
     }
 
     private void aim(SpriteBatch batch) {
@@ -134,7 +135,7 @@ public class Shooter extends Enemy {
         if (moveRight) {
             body.setLinearVelocity(perpen.cpy().scl(0.5f));
         } else if (moveLeft) {
-            body.setLinearVelocity(perpen.cpy().scl(-0.5f));
+            body.setLinearVelocity(perpen.x/2, perpen.y/2); //Science cannot explain why there isnt a minus sign before perpen vectors
         } else {
             standStill();
         }
