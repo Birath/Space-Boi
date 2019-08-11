@@ -150,7 +150,7 @@ public class Shooter extends Enemy {
         body.setLinearVelocity(recoil);
 
         perpen = new Vector2(-toPlanet.y, toPlanet.x);
-        perpen.setLength2(1).scl(rad * PPM);
+        perpen.setLength2(1).scl(rad/3 * PPM); //divide rad by three to make bullets spawn closer to gun - hacky
         if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
