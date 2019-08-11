@@ -48,6 +48,7 @@ public class Shooter extends Enemy {
         machinGunSprite.flip(false, true);
 
         this.machinegun.setDamage(weapon_damage);
+        this.machinegun.setRecoil(0);
     }
 
     private void aim(SpriteBatch batch) {
@@ -141,7 +142,7 @@ public class Shooter extends Enemy {
         if (moveRight) {
             body.setLinearVelocity(perpen.cpy().scl(0.5f));
         } else if (moveLeft) {
-            body.setLinearVelocity(perpen.cpy().scl(-0.5f));
+            body.setLinearVelocity(perpen.x/2, perpen.y/2); //Science cannot explain why there isnt a minus sign before perpen vectors
         } else {
             standStill();
         }
@@ -156,7 +157,7 @@ public class Shooter extends Enemy {
         body.setLinearVelocity(recoil);
 
         perpen = new Vector2(-toPlanet.y, toPlanet.x);
-        perpen.setLength2(1).scl(rad * PPM);
+        perpen.setLength2(1).scl(rad/3 * PPM); //divide rad by three to make bullets spawn closer to gun - hacky
         if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
