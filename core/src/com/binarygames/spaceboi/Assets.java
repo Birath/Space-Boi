@@ -75,6 +75,7 @@ public class Assets {
     public static final String PIRATE_DEATH = "game/entities/enemies/pirate/death/Parleyyy.wav";
     public static final String PIRATE = "game/entities/enemies/pirate/pirate.png";
     public static final String PIRATE_WALK_ANIMATION = "game/entities/enemies/pirate/shooter_running.png";
+    public static final String SHOOTER_WEAPON = "game/entities/enemies/pirate/shooter_arms.png";
 
     // End boss
     public static final String END_BOSS1 = "game/entities/enemies/end_boss/Bring_me_his_corpse.wav";
@@ -257,6 +258,7 @@ public class Assets {
         assetManager.load(PIRATE_DEATH, Sound.class);
         assetManager.load(PIRATE, Texture.class, textureParameter);
         assetManager.load(PIRATE_WALK_ANIMATION, Texture.class, textureParameter);
+        assetManager.load(SHOOTER_WEAPON, Texture.class, textureParameter);
 
         //End boss
         assetManager.load(END_BOSS1, Sound.class);
