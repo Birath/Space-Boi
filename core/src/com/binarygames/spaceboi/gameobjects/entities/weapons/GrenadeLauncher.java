@@ -31,7 +31,7 @@ public class GrenadeLauncher extends Weapon {
         this.damage = 1;
         this.name = "Grenade launcher";
         this.length = 7;
-        this.offset = 10;
+        this.offset = 15;
 
         this.radius = 5;
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));

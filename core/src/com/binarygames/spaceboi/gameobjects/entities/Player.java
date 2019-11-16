@@ -239,7 +239,7 @@ public class Player extends EntityDynamic {
         Vector2 scaledRecoil = recoil.cpy().scl(-weapon.length);
 
         if (!weapon.getSprite().isFlipY()) {
-            scaledRecoil.add(toPlanet.nor().cpy().scl(-weapon.offset));
+            scaledRecoil.add(toPlanet.nor().cpy().scl(-weapon.offset + 5));
         } else {
             scaledRecoil.add(toPlanet.nor().cpy().scl(-weapon.offset));
         }

@@ -34,7 +34,7 @@ public class Shotgun extends Weapon {
         this.name = "Shotgun";
 
         this.length = 15;
-        this.offset = 10;
+        this.offset = 15;
 
 
         //Sprite setup
