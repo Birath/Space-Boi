@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
 
         //UI
         gameUI = new GameUI(game, player, gameWorld.getXp_handler());
-        miniMap = new MiniMap(game.getBatch(), gameWorld);
+        //miniMap = new MiniMap(game.getBatch(), gameWorld);
         //gameUI.debugMinimap(miniMap.getMinimap());
 
         console = new Console(game, this, gameWorld);
