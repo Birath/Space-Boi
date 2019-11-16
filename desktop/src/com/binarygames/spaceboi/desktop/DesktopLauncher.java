@@ -14,8 +14,8 @@ public class DesktopLauncher {
         config.height = 720;
         config.samples = 4;
         config.vSyncEnabled = false;
-        config.foregroundFPS = 0;
-        config.backgroundFPS = 0;
+        config.foregroundFPS = 250;
+        config.backgroundFPS = 250;
         config.title = "SPACE-NORTHERNERS REVENGE";
 
         new LwjglApplication(new SpaceBoi(), config);
