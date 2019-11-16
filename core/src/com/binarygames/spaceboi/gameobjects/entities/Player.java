@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.JointEdge;
@@ -37,6 +38,8 @@ public class Player extends EntityDynamic {
     private static final float runningFrameDuration = 0.04f;
 
     private static final int MAX_RECOIL_ANGLE = 40;
+    private static final int PLAYER_HEIGHT = 30;
+    private static final int PLAYER_WIDTH = 10;
 
     public int spriteWidth = 480;
     public int spriteHeight = 800;
@@ -81,7 +84,7 @@ public class Player extends EntityDynamic {
     private boolean inAtmosphere;
 
     public Player(GameWorld gameWorld, float x, float y, String path, float mass, float radius) {
-        super(gameWorld, x, y, path, mass, radius, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
+        super(gameWorld, x, y, path, mass, PLAYER_WIDTH, PLAYER_HEIGHT, START_HEALTH, MOVE_SPEED, JUMP_HEIGHT);
         body.setUserData(this);
         this.gameWorld = gameWorld;
 
@@ -180,6 +183,7 @@ public class Player extends EntityDynamic {
         if (mouseHeld && weapon.canShoot()) {
             Shoot();
         }
+        body.setTransform(body.getPosition(), playerAngle * MathUtils.degreesToRadians + MathUtils.PI / 2);
     }
 
     private void removeJoints() {
@@ -197,10 +201,10 @@ public class Player extends EntityDynamic {
 
         if (!spriteIsFlipped) {
             animationHandler.getCurrentFrame().flip(true, false);
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 6, spriteWidth / 2, spriteHeight / 6, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 4, spriteWidth / 2, spriteHeight / 4, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
             animationHandler.getCurrentFrame().flip(true, false);
-        } else {
-            batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 6, spriteWidth / 2, spriteHeight / 6, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
+} else {
+        batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 4, spriteWidth / 2, spriteHeight / 4, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
         }
         weapon.render(batch, camera, this);
     }
@@ -230,27 +234,19 @@ public class Player extends EntityDynamic {
             storedRecoil = recoil.cpy();
             shouldApplyRecoil = true;
         }
-        /*
-            Vector2 newVelocity = body.getLinearVelocity();
-            newVelocity.add(recoil);
-            body.setLinearVelocity(newVelocity);
-       */
-
-        //Shooting the bullet
-
-        Vector2 muzzle = new Vector2(weapon.getSprite().getWidth(), weapon.getSprite().getHeight());
-        if (sprite.isFlipY()) {
-            muzzle.scl(1, -1);
-        }
-        muzzle.rotate(weapon.getRotation());
 
         recoil.setLength2(1);
-        recoil.scl(-(rad * PPM));
-        //Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-        //Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + recoil.x, body.getPosition().y * PPM + recoil.y);
-        Vector2 shootFrom = new Vector2(weapon.getMuzzlePosition().x + recoil.x, weapon.getMuzzlePosition().y + recoil.y);
+        Vector2 scaledRecoil = recoil.cpy().scl(-weapon.length);
 
-        weapon.shoot(shootFrom, recoil);
+        if (!weapon.getSprite().isFlipY()) {
+            scaledRecoil.add(toPlanet.nor().cpy().scl(-weapon.offset + 5));
+        } else {
+            scaledRecoil.add(toPlanet.nor().cpy().scl(-weapon.offset));
+        }
+
+        Vector2 shootFrom =  body.getPosition().cpy().scl(PPM).add(scaledRecoil);
+        recoil.scl(-(1.5f*PPM));
+        weapon.shoot(shootFrom, recoil.sub(toPlanet.nor().cpy().scl(-weapon.offset / PPM)));
     }
 
     private void updateWeapons(float delta) {

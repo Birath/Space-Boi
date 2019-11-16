@@ -32,7 +32,7 @@ public class MainMenuScreen extends BaseScreen {
         table.setFillParent(true);
 
         // Game title
-        final Label title = new Label("SpaceBoi", getTitleStyle());
+        final Label title = new Label("SPACE-NORTHERNERS REVENGE", getTitleStyle());
 
 
         // Play Button

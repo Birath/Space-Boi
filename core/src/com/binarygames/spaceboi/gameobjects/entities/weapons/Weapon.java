@@ -61,6 +61,9 @@ public abstract class Weapon {
     private int lifeSteal = 0;
     private int slow = 0;
 
+    public float length;
+    public float offset;
+
     String name;
 
     public Weapon(GameWorld gameWorld, EntityDynamic shooter) {
@@ -159,15 +162,17 @@ public abstract class Weapon {
 
 
         // New shit to get the origin and position correct
-        int offset = 25;
+        int offset = 20;
         double angle =((player.getPlayerAngle() * Math.PI) / 180) - .1;
         int width_offset = (int) Math.round(Math.cos(angle) * offset);
         int height_offset = (int) Math.round(Math.sin(angle) * offset);
 
         sprite.setOrigin(sprite.getWidth() / 5,  (int) Math.round(sprite.getHeight() / 1.5));
 
-        sprite.setPosition(player.getBody().getPosition().x * PPM - (sprite.getWidth() / 5) - width_offset,
-                player.getBody().getPosition().y * PPM - ((int) Math.round(sprite.getHeight() / 1.5)) - height_offset);
+        sprite.setPosition(
+            player.getBody().getPosition().x * PPM - (sprite.getWidth() / 5) - width_offset,
+            player.getBody().getPosition().y * PPM - ((int) Math.round(sprite.getHeight() / 1.5)) - height_offset
+        );
 
 
         Vector2 relativeVector = player.getMouseCoords().cpy().sub(sprite.getX(), sprite.getY());
