@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -140,7 +141,7 @@ public class Shooter extends Enemy {
         if (moveRight) {
             body.setLinearVelocity(perpen.cpy().scl(0.5f));
         } else if (moveLeft) {
-            body.setLinearVelocity(perpen.x/2, perpen.y/2); //Science cannot explain why there isnt a minus sign before perpen vectors
+            body.setLinearVelocity(perpen.x / 2, perpen.y / 2); //Science cannot explain why there isnt a minus sign before perpen vectors
         } else {
             standStill();
         }
@@ -155,7 +156,7 @@ public class Shooter extends Enemy {
         body.setLinearVelocity(recoil);
 
         perpen = new Vector2(-toPlanet.y, toPlanet.x);
-        perpen.setLength2(1).scl(rad/3 * PPM); //divide rad by three to make bullets spawn closer to gun - hacky
+        perpen.setLength2(1).scl(rad / 3 * PPM); //divide rad by three to make bullets spawn closer to gun - hacky
         if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
@@ -169,7 +170,7 @@ public class Shooter extends Enemy {
         muzzle.rotate(getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees + 90);
         shootFrom.add(muzzle);
         */
-        Vector2 muzzleX = body.getLocalCenter().cpy().add(1.5f ,0);
+        Vector2 muzzleX = body.getLocalCenter().cpy().add(1.5f, 0);
 
         Vector2 muzzleY = body.getLocalCenter()
                 .cpy()

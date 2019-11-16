@@ -144,8 +144,6 @@ public class Assets {
     public static final String ATTACHMENT_PICK_2 = "game/enviroment/attachmentpickup2.wav"; // https://freesound.org/people/Dpoggioli/sounds/213607/
     public static final String WORLD_BACKGROUND = "game/enviroment/world_background2.png"; // http://wwwtyro.github.io/procedural.js/space/
 
-    // TODO
-
     /*
         Particles
      */
@@ -330,8 +328,6 @@ public class Assets {
         assetManager.load(ATTACHMENT_PICK_2, Sound.class);
         assetManager.load(WORLD_BACKGROUND, Texture.class);
 
-        // TODO
-
         /*
             Particles
          */
@@ -343,14 +339,14 @@ public class Assets {
         /*
             UI
          */
-        assetManager.load(UI_ASSAULT_RIFLE ,Texture.class, textureParameter);
-        assetManager.load(UI_ASSAULT_RIFLE_AMMO ,Texture.class, textureParameter);
-        assetManager.load(UI_GRENADE_LAUNCHER ,Texture.class, textureParameter);
-        assetManager.load(UI_GRENADE_LAUNCHER_AMMO ,Texture.class, textureParameter);
-        assetManager.load(UI_HEALTH_BAR ,Texture.class, textureParameter);
-        assetManager.load(UI_OXYGEN_BAR ,Texture.class, textureParameter);
-        assetManager.load(UI_SHOTGUN ,Texture.class, textureParameter);
-        assetManager.load(UI_SHOTGUN_AMMO ,Texture.class, textureParameter);
+        assetManager.load(UI_ASSAULT_RIFLE, Texture.class, textureParameter);
+        assetManager.load(UI_ASSAULT_RIFLE_AMMO, Texture.class, textureParameter);
+        assetManager.load(UI_GRENADE_LAUNCHER, Texture.class, textureParameter);
+        assetManager.load(UI_GRENADE_LAUNCHER_AMMO, Texture.class, textureParameter);
+        assetManager.load(UI_HEALTH_BAR, Texture.class, textureParameter);
+        assetManager.load(UI_OXYGEN_BAR, Texture.class, textureParameter);
+        assetManager.load(UI_SHOTGUN, Texture.class, textureParameter);
+        assetManager.load(UI_SHOTGUN_AMMO, Texture.class, textureParameter);
 
         assetManager.load(UI_EMPTY_ATTACHMENT, Texture.class, textureParameter);
 
