@@ -161,22 +161,6 @@ public class Shooter extends Enemy {
             perpen.rotate(180);
         }
 
-        Vector2 muzzleX = body.getLocalCenter().cpy().add(1.5f ,0);
-
-        Vector2 muzzleY = body.getLocalCenter()
-                .cpy()
-                .add(0, 1f);
-
-        if (animationHandler.isFlipped()) {
-            muzzleY.scl(1, -1);
-        } else {
-            muzzleY.scl(1, 1);
-        }
-        float angle = getAngleToPlayer(body.getWorldPoint(muzzleY));
-        //Gdx.app.log("Shooter", "Angle " + angle);
-
-        muzzleX.rotate(angle);
-
         recoil.setLength2(1);
         Vector2 muzzle = toPlayer.cpy().nor().scl(15);
         muzzle.add(toPlanet.cpy().nor().scl(-10));
