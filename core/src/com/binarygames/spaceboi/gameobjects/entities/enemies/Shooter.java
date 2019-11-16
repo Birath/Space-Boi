@@ -184,7 +184,7 @@ public class Shooter extends Enemy {
             muzzleY.scl(1, 1);
         }
         float angle = getAngleToPlayer(body.getWorldPoint(muzzleY));
-        Gdx.app.log("Shooter", "Angle " + angle);
+        //Gdx.app.log("Shooter", "Angle " + angle);
 
         muzzleX.rotate(angle);
 

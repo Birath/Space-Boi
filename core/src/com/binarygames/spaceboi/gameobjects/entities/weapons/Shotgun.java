@@ -33,6 +33,10 @@ public class Shotgun extends Weapon {
         this.damage = 10;
         this.name = "Shotgun";
 
+        this.length = 15;
+        this.offset = 10;
+
+
         //Sprite setup
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
         float scale = 0.1f;

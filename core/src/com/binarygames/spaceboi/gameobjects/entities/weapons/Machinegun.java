@@ -1,5 +1,6 @@
 package com.binarygames.spaceboi.gameobjects.entities.weapons;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,9 +10,11 @@ import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Player;
 
+import static com.binarygames.spaceboi.gameobjects.bodies.BaseBody.PPM;
+
 public class Machinegun extends Weapon {
 
-    private static final float WEAPON_WIDTH = 14;
+    private static final float WEAPON_WIDTH = 15;
     private static final float WEAPON_HEIGHT = 3;
     private Sound shot;
     private long shotID = 0;
@@ -38,6 +41,8 @@ public class Machinegun extends Weapon {
         this.reloadTime = 2;
         this.damage = 4;
         this.name = "Machine gun";
+        this.length = 20;
+        this.offset = 23;
 
         this.sprite = new Sprite(aGameWorld.getGame().getAssetManager().get(path, Texture.class));
         float scale = 0.1f;
@@ -56,15 +61,6 @@ public class Machinegun extends Weapon {
 
             gameWorld.getGame().getSoundManager().play(Assets.WEAPON_MACHINEGUN_SHOT);
         }
-
-        /*
-        if (canShoot() && gameWorld.getGame().getPreferences().isSoundEnabled()) {
-            if (shotID != 0) {
-                shot.stop(shotID);
-            }
-            shotID = shot.play(gameWorld.getGame().getPreferences().getSoundVolume());
-        }
-        */
     }
 
     @Override
