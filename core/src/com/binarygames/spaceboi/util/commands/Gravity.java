@@ -31,6 +31,6 @@ public class Gravity implements Command {
 
     @Override
     public String getUsage() {
-        return "god [1/0]";
+        return "gravity [1/0]";
     }
 }

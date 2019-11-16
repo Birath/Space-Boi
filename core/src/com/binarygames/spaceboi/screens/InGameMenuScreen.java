@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -16,11 +15,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
-import com.binarygames.spaceboi.gameobjects.GameWorld;
 import com.binarygames.spaceboi.ui.BlurUtils;
 
 
-public class InGameMenuScreen{
+public class InGameMenuScreen {
 
     private SpaceBoi game;
 
@@ -40,7 +38,7 @@ public class InGameMenuScreen{
 
     private Skin uiSkin;
 
-    public InGameMenuScreen(GameScreen gameScreen, SpaceBoi game) {
+    InGameMenuScreen(GameScreen gameScreen, SpaceBoi game) {
         this.game = game;
         this.gameScreen = gameScreen;
 
@@ -49,12 +47,11 @@ public class InGameMenuScreen{
         stage = new Stage(viewport);
 
         uiSkin = game.getAssetManager().get(Assets.MENU_UI_SKIN, Skin.class);
-        BitmapFont labelFont = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
-        uiSkin.get("default", Label.LabelStyle.class).font = labelFont;
+        uiSkin.get("default", Label.LabelStyle.class).font = game.getAssetManager().get(Assets.LABEL_FONT, BitmapFont.class);
         //stage.setDebugAll(true);
     }
 
-    public void createBlurredBackground() {
+    void createBlurredBackground() {
         byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight(), true);
         // this loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
         for (int i = 4; i < pixels.length; i += 4) {
@@ -129,15 +126,17 @@ public class InGameMenuScreen{
 
     public void dispose() {
         stage.dispose();
-        if (frameTex != null) { frameTex.dispose(); }
+        if (frameTex != null) {
+            frameTex.dispose();
+        }
     }
 
-    public void reset(){
+    void reset() {
         stage.clear();
         frameTex.dispose();
     }
 
-    public void resize(int width, int height) {
+    void resize(int width, int height) {
         imageTable.setSize(width, height);
         image.setSize(width, height);
         resumeButton.addAction(Actions.removeActor());
