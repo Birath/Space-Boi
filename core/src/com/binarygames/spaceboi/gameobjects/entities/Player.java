@@ -234,19 +234,6 @@ public class Player extends EntityDynamic {
             storedRecoil = recoil.cpy();
             shouldApplyRecoil = true;
         }
-        /*
-            Vector2 newVelocity = body.getLinearVelocity();
-            newVelocity.add(recoil);
-            body.setLinearVelocity(newVelocity);
-       */
-
-        //Shooting the bullet
-
-        Vector2 muzzle = new Vector2(weapon.getSprite().getWidth(), weapon.getSprite().getHeight());
-        if (sprite.isFlipY()) {
-            muzzle.scl(1, -1);
-        }
-        muzzle.rotate(weapon.getRotation());
 
         recoil.setLength2(1);
         Vector2 scaledRecoil = recoil.cpy().scl(-weapon.length);

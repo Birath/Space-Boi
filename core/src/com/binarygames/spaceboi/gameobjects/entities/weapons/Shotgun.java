@@ -22,7 +22,7 @@ public class Shotgun extends Weapon {
 
         this.bulletMass = 10;
         this.bulletRadius = 1.5f;
-        this.bulletSpeed = 5;
+        this.bulletSpeed = 45;
         this.path = Assets.WEAPON_SHOTGUN;
         this.bulletPath = Assets.WEAPON_BULLET;
         this.recoil = 20;
@@ -47,7 +47,7 @@ public class Shotgun extends Weapon {
     @Override
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
-            shootDirection.scl(bulletSpeed);
+            shootDirection.nor().scl(bulletSpeed);
             if (this.shooter instanceof Player) {
                 Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
                 if  (sprite.isFlipY()) {

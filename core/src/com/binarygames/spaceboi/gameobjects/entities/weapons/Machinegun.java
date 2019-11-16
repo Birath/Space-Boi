@@ -24,7 +24,7 @@ public class Machinegun extends Weapon {
 
         this.bulletMass = 10;
         this.bulletRadius = 1.5f;
-        this.bulletSpeed = 5;
+        this.bulletSpeed = 50;
 
         if (this.shooter instanceof Player) {
             this.path = Assets.WEAPON_MACHINEGUN_ARMS;
@@ -54,7 +54,7 @@ public class Machinegun extends Weapon {
     @Override
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
-            shootDirection.scl(bulletSpeed);
+            shootDirection.nor().scl(bulletSpeed);
 
             new Bullet(gameWorld, pos.x, pos.y, bulletPath, shootDirection, bulletMass, bulletRadius, removeBulletDelay, damage, shooter, this);
             weaponMaths();

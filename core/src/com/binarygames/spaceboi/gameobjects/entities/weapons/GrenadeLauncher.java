@@ -18,9 +18,9 @@ public class GrenadeLauncher extends Weapon {
     public GrenadeLauncher(GameWorld aGameWorld, EntityDynamic shooter) {
         super(aGameWorld, shooter);
 
-        this.bulletMass = 40;
+        this.bulletMass = 100;
         this.bulletRadius = 4f;
-        this.bulletSpeed = 3;
+        this.bulletSpeed = 35;
         this.path = Assets.WEAPON_GRENADELAUNCHER;
         this.bulletPath = Assets.WEAPON_GRENADE;
         this.recoil = 15;
@@ -45,7 +45,7 @@ public class GrenadeLauncher extends Weapon {
     @Override
     public void shoot(Vector2 pos, Vector2 shootDirection) {
         if (canShoot()) {
-            shootDirection.scl(bulletSpeed);
+            shootDirection.nor().scl(bulletSpeed);
             if (this.shooter instanceof Player) {
                 Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT);
                 if (sprite.isFlipY()) {

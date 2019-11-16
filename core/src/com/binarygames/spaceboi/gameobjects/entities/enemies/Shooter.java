@@ -160,16 +160,7 @@ public class Shooter extends Enemy {
         if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
-        /*
-        Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
-                body.getPosition().y * PPM + perpen.y);
-        Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
-        if  (machinegunSprite.isFlipY()) {
-            muzzle.scl(-1, 1);
-        }
-        muzzle.rotate(getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees + 90);
-        shootFrom.add(muzzle);
-        */
+
         Vector2 muzzleX = body.getLocalCenter().cpy().add(1.5f ,0);
 
         Vector2 muzzleY = body.getLocalCenter()
@@ -186,8 +177,14 @@ public class Shooter extends Enemy {
 
         muzzleX.rotate(angle);
 
+        recoil.setLength2(1);
+        Vector2 muzzle = toPlayer.cpy().nor().scl(15);
+        muzzle.add(toPlanet.cpy().nor().scl(-10));
+
+        Vector2 shootFrom = body.getPosition().cpy().scl(PPM).add(muzzle);
+
         Vector2 shootDirection = new Vector2(toPlayer).nor();
-        shootWeapon.shoot(body.getWorldPoint(new Vector2(muzzleX.x, muzzleY.y)).scl(PPM), shootDirection);
+        shootWeapon.shoot(shootFrom, shootDirection);
     }
 
     private static class ShotCallback implements RayCastCallback {
