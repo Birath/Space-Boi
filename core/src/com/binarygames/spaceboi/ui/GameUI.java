@@ -27,7 +27,7 @@ import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
 
-    public static final int MAX_WIDTH = 3840;
+    private static final int MAX_WIDTH = 3840;
     private Stage stage;
 
     private LabelStyle labelStyle;
@@ -41,10 +41,9 @@ public class GameUI {
     private Image healthImage;
     private Image oxygenImage;
 
-    private int healthBarWidth;
-    private int healthBarHeight;
-    private int oxygenBarWidth;
-    private int oxygenBarHeight;
+    private int healthBarWidth, healthBarHeight, oxygenBarWidth, oxygenBarHeight;
+
+    private float ui_scale;
 
     private Label health_status;
 
@@ -82,9 +81,10 @@ public class GameUI {
 
         stage.setDebugAll(false);
 
-        scaling_factor = (stage.getWidth() / MAX_WIDTH);
+        ui_scale = .75F; // Change UI scale with this parameter
+
+        scaling_factor = (stage.getWidth() / MAX_WIDTH) * ui_scale;
         Gdx.app.log("debug scaling", String.valueOf(scaling_factor));
-        int health = 5;
 
         // Oxygen icon
         texture = game.getAssetManager().get(Assets.UI_OXYGEN_BAR, Texture.class);
@@ -110,7 +110,6 @@ public class GameUI {
 
         // Health bar
         healthBar = new ProgressBar(0, player.getMaxHealth(), 1, false, healthBarStyle);
-        healthBar.setValue(health);
         healthBar.setOrigin(healthImage.getOriginX(), healthImage.getOriginY());
         healthBar.setBounds(healthImage.getX() + (healthImage.getWidth() - healthBarWidth) / 2, healthImage.getY() + (healthImage.getHeight() - healthBarHeight) / 2, healthBarWidth, healthBarHeight); // Todo
 
@@ -246,10 +245,6 @@ public class GameUI {
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
 
-        //weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
-        //weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
-        //weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
-
         // Compass stuff
 
         // some filters for scaling
@@ -273,13 +268,18 @@ public class GameUI {
         );
         stage.addActor(arrow);
 
-        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
+
+        int padding = 50;
+        weaponStats1 = new WeaponStats(stage, (int)(0 + scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(0).getMagSize(),
                 game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class),
                 game.getAssetManager().get(Assets.UI_SHOTGUN_AMMO, Texture.class), scaling_factor);
-        weaponStats2 = new WeaponStats(stage, stage.getWidth() * 13 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(1).getMagSize(),
+        weaponStats2 = new WeaponStats(stage, weaponStats1.getRightPositionX() + (int)(scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(1).getMagSize(),
                 game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE, Texture.class),
                 game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE_AMMO, Texture.class), scaling_factor);
-        weaponStats3 = new WeaponStats(stage, stage.getWidth() * 25 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(2).getMagSize(),
+        weaponStats3 = new WeaponStats(stage, weaponStats2.getRightPositionX() + (int)(scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(2).getMagSize(),
                 game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER, Texture.class),
                 game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class), scaling_factor);
     }
@@ -292,7 +292,7 @@ public class GameUI {
         updateWeaponStats(weaponStats2, 1, delta);
         updateWeaponStats(weaponStats3, 2, delta);
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
-        nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
+        nextLevel.setText(xpHandler.getCurrentXP() + " / " + xpHandler.getNextLevel());
 
         if ((xpBar.getValue() * (Gdx.graphics.getWidth() / xpBar.getMaxValue())) < nextLevel.getWidth()) {
             nextLevel.setPosition(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0);
@@ -412,7 +412,7 @@ public class GameUI {
         else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime() /
                 player.getWeaponList().get(weaponIndex).getReloadTime()) * 100);
 
-        weaponStats.act(delta, player.getWeaponList().get(weaponIndex).getCurrentMag());
+        weaponStats.act(player.getWeaponList().get(weaponIndex).getCurrentMag());
     }
 
     public void dispose() {

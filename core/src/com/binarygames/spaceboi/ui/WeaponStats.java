@@ -23,22 +23,29 @@ public class WeaponStats {
 
     private Texture ammoIconTex;
 
-    private int ammo;
+    private int x, y, ammo;
     private Table table;
 
-    public WeaponStats(Stage stage, float x, float y, int ammo, Texture weaponIconTex, Texture ammoIconTex, float scaling) {
+    private Image weaponIcon;
+
+    public WeaponStats(Stage stage, int x, int y, int ammo, Texture weaponIconTex, Texture ammoIconTex, float scaling) {
         this.stage = stage;
         this.ammo = ammo;
+        this.x = x;
+        this.y = y;
         this.table = new Table();
         this.ammoIconTex = ammoIconTex;
 
         weaponSlotStyle = new ProgressBar.ProgressBarStyle();
 
-        Image weaponIcon = new Image(weaponIconTex);
+        weaponIcon = new Image(weaponIconTex);
         weaponIcon.setScaling(Scaling.fill);
         weaponIcon.setWidth(weaponIconTex.getWidth() * scaling);
         weaponIcon.setHeight(weaponIconTex.getHeight() * scaling);
-        weaponIcon.setPosition(x, y);
+
+        this.y = (int) (y - weaponIcon.getHeight());
+
+        weaponIcon.setPosition(this.x, this.y);
         weaponIcon.setOrigin(Align.center);
 
         int weaponReloadWidth = (int) (weaponIcon.getWidth() - (25 * scaling));
@@ -48,7 +55,7 @@ public class WeaponStats {
 
         weaponSlot = new ProgressBar(0, 100, 0.1f, false, weaponSlotStyle);
         weaponSlot.setValue(100);
-        weaponSlot.setBounds(x + (weaponIcon.getWidth() - weaponReloadWidth) / 2, y + (weaponIcon.getHeight() - weaponReloadHeight) / 2, weaponReloadWidth, weaponReloadHeight);
+        weaponSlot.setBounds(this.x + (weaponIcon.getWidth() - weaponReloadWidth) / 2, this.y + (weaponIcon.getHeight() - weaponReloadHeight) / 2, weaponReloadWidth, weaponReloadHeight);
 
         //table.setFillParent(true);
         table.setHeight(weaponIcon.getHeight() / 5);
@@ -64,7 +71,6 @@ public class WeaponStats {
     }
 
     private void loadWeaponSlotStyle(int width, int height) {
-        //TODO add input pixmap, the weapon image
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0);
         pixmap.fill();
@@ -87,7 +93,7 @@ public class WeaponStats {
         weaponSlotStyle.knobBefore = drawable;
     }
 
-    public void act(float delta, int currentAmmo) {
+    public void act(int currentAmmo) {
         if (currentAmmo < table.getCells().size) {
             table.removeActor(table.getCells().get(currentAmmo).getActor());
             table.getCells().removeIndex(currentAmmo);
@@ -110,5 +116,9 @@ public class WeaponStats {
 
     public ProgressBar getWeaponSlot() {
         return weaponSlot;
+    }
+
+    public int getRightPositionX() {
+        return (int) (this.x + weaponIcon.getWidth());
     }
 }
