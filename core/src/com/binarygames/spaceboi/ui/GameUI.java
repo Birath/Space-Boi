@@ -115,9 +115,9 @@ public class GameUI {
 
         // Health indicator
         health_status = new Label(player.getHealth() + " / " + player.getMaxHealth(), labelStyle);
-        health_status.setPosition(healthImage.getX() + healthImage.getWidth() / 2 - health_status.getWidth() / 3,
+        health_status.setPosition(healthImage.getX() + healthImage.getWidth() / 2 - health_status.getWidth() / 5,
                 healthImage.getY() + healthImage.getHeight() / 2 - health_status.getHeight() / 2);
-        health_status.setScale(0.8f);
+        health_status.setFontScale(scaling_factor * 1.5F);
         health_status.setVisible(false);
 
         healthImage.addListener(new ClickListener() {
@@ -165,8 +165,8 @@ public class GameUI {
         oxygen_group.setTransform(true);
         oxygen_group.setRotation(90);
         oxygen_group.setPosition(oxygenImage.getX() + oxygenImage.getWidth() / 2 + oxygen_status.getHeight() / 2,
-                oxygenImage.getY() + oxygenImage.getHeight() / 2 - 3 * oxygen_status.getWidth() / 4);
-        oxygen_status.setScale(0.8f);
+                oxygenImage.getY() + (oxygenImage.getHeight() / 2) - oxygen_status.getWidth() / 4);
+        oxygen_status.setFontScale(scaling_factor * 1.5F);
         oxygen_group.setVisible(false);
 
         oxygenImage.addListener(new ClickListener() {
@@ -203,15 +203,17 @@ public class GameUI {
 
         // XP bar
         currentLevel = new Label(String.valueOf(xpHandler.getLevel()), labelStyle);
-        nextLevel = new Label(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()), labelStyle);
-        currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
-        //nextLevel.setFontScale(0.6f);
+        nextLevel = new Label(xpHandler.getCurrentXP() + " / " + xpHandler.getNextLevel(), labelStyle);
+        //currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
+        currentLevel.setFontScale(2 * scaling_factor);
+        currentLevel.setAlignment(Align.bottomLeft);
+        nextLevel.setFontScale(1.2F * scaling_factor);
         nextLevel.setVisible(false);
 
         xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
         xpBar.setValue(0);
         xpBar.setBounds(0 + currentLevel.getWidth(), 0, Gdx.graphics.getWidth() - currentLevel.getWidth(), Gdx.graphics.getHeight() / 50);
-        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth() / 2, nextLevel.getHeight(), nextLevel.getWidth(), xpBar.getHeight());
+        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth() / 2, 0, nextLevel.getWidth(), xpBar.getHeight());
 
         xpBar.addListener(new ClickListener() {
             @Override
@@ -323,7 +325,7 @@ public class GameUI {
 
         // Label style
         labelStyle = new LabelStyle();
-        labelStyle.font = fonts.getLabelFont();
+        labelStyle.font = fonts.getLabelFont(48);
 
         // Progress bar styles
         Pixmap pixmap = new Pixmap(oxygenBarWidth, oxygenBarHeight, Pixmap.Format.RGBA8888);
