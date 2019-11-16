@@ -49,6 +49,7 @@ public class Shooter extends Enemy {
 
         this.machinegun.setDamage(weapon_damage);
         this.machinegun.setRecoil(0);
+        this.machinegun.setBulletSpeed(50);
     }
 
     private void aim(SpriteBatch batch) {
@@ -161,7 +162,7 @@ public class Shooter extends Enemy {
         if (Math.abs(perpen.angle(toPlayer)) > 90) {
             perpen.rotate(180);
         }
-
+        /*
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
                 body.getPosition().y * PPM + perpen.y);
         Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
@@ -170,9 +171,25 @@ public class Shooter extends Enemy {
         }
         muzzle.rotate(getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees + 90);
         shootFrom.add(muzzle);
+        */
+        Vector2 muzzleX = body.getLocalCenter().cpy().add(1.5f ,0);
 
-        Vector2 shootDirection = new Vector2(toPlayer).setLength2(1).scl(rad * PPM);
-        shootWeapon.shoot(shootFrom, shootDirection);
+        Vector2 muzzleY = body.getLocalCenter()
+                .cpy()
+                .add(0, 1f);
+
+        if (animationHandler.isFlipped()) {
+            muzzleY.scl(1, -1);
+        } else {
+            muzzleY.scl(1, 1);
+        }
+        float angle = getAngleToPlayer(body.getWorldPoint(muzzleY));
+        Gdx.app.log("Shooter", "Angle " + angle);
+
+        muzzleX.rotate(angle);
+
+        Vector2 shootDirection = new Vector2(toPlayer).nor();
+        shootWeapon.shoot(body.getWorldPoint(new Vector2(muzzleX.x, muzzleY.y)).scl(PPM), shootDirection);
     }
 
     private class ShotCallback implements RayCastCallback {

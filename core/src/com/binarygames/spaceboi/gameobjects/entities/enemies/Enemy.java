@@ -300,7 +300,7 @@ public abstract class Enemy extends EntityDynamic {
     }
 
     /**
-     * @return The angle in radians to the player from the vector *point*
+     * @return The angle in radians to the player given a position
      */
     protected float getAngleToPlayer(Vector2 point) {
         Vector2 playerPos =  gameWorld.getPlayer().getBody().getPosition().cpy();
