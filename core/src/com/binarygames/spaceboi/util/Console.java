@@ -22,7 +22,7 @@ public class Console {
     private GameScreen gameScreen;
     private GameWorld gameWorld;
 
-    private final static boolean CONSOLE_ENABLED = true;
+    private final static boolean CONSOLE_ENABLED = false;
 
     private boolean isVisible = false;
 
