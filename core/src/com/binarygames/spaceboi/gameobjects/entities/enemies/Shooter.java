@@ -9,11 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.animation.AnimationHandler;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
-import com.binarygames.spaceboi.gameobjects.entities.EntityDynamic;
 import com.binarygames.spaceboi.gameobjects.entities.Planet;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Machinegun;
 import com.binarygames.spaceboi.gameobjects.entities.weapons.Weapon;
@@ -26,7 +24,7 @@ public class Shooter extends Enemy {
     private static final float WEAPON_HEIGHT = 7;
 
     private Machinegun machinegun;
-    private Sprite machinGunSprite;
+    private Sprite machinegunSprite;
     private static final int RUN_FRAME_COLUMNS = 1;
     private static final int RUN_FRAME_ROWS = 12;
     private static final float runFrameDuration = 0.04f;
@@ -41,11 +39,11 @@ public class Shooter extends Enemy {
         this.machinegun = new Machinegun(gameWorld, this);
         animationHandler = new AnimationHandler(gameWorld, RUN_FRAME_COLUMNS, RUN_FRAME_ROWS, runFrameDuration, Assets.PIRATE_WALK_ANIMATION);
 
-        machinGunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.SHOOTER_WEAPON, Texture.class));
-        machinGunSprite.setSize(machinGunSprite.getWidth() * 0.15f, machinGunSprite.getHeight() * 0.15f);
+        machinegunSprite = new Sprite(gameWorld.getGame().getAssetManager().get(Assets.SHOOTER_WEAPON, Texture.class));
+        machinegunSprite.setSize(machinegunSprite.getWidth() * 0.15f, machinegunSprite.getHeight() * 0.15f);
 
-        machinGunSprite.setOrigin(machinGunSprite.getWidth() / 10, machinGunSprite.getHeight() / 2);
-        machinGunSprite.flip(false, true);
+        machinegunSprite.setOrigin(machinegunSprite.getWidth() / 10, machinegunSprite.getHeight() / 2);
+        machinegunSprite.flip(false, true);
 
         this.machinegun.setDamage(weapon_damage);
         this.machinegun.setRecoil(0);
@@ -57,19 +55,19 @@ public class Shooter extends Enemy {
                 .cpy()
                 .add(0, 1);
 
-        machinGunSprite.setPosition(
-                body.getWorldPoint(armOffset).x * PPM - machinGunSprite.getOriginX(),
-                body.getWorldPoint(armOffset).y * PPM - machinGunSprite.getOriginY()
+        machinegunSprite.setPosition(
+                body.getWorldPoint(armOffset).x * PPM - machinegunSprite.getOriginX(),
+                body.getWorldPoint(armOffset).y * PPM - machinegunSprite.getOriginY()
         );
 
         float angle = getAngleToPlayer(body.getPosition());
-        machinGunSprite.setRotation(angle * MathUtils.radiansToDegrees + 180);
-        if (moveLeft && !machinGunSprite.isFlipY()) {
-            machinGunSprite.flip(false, true);
-        } else if (moveRight && machinGunSprite.isFlipY()) {
-            machinGunSprite.flip(false, true);
+        machinegunSprite.setRotation(angle * MathUtils.radiansToDegrees + 180);
+        if (moveLeft && !machinegunSprite.isFlipY()) {
+            machinegunSprite.flip(false, true);
+        } else if (moveRight && machinegunSprite.isFlipY()) {
+            machinegunSprite.flip(false, true);
         }
-        machinGunSprite.draw(batch);
+        machinegunSprite.draw(batch);
     }
 
     @Override
@@ -166,7 +164,7 @@ public class Shooter extends Enemy {
         Vector2 shootFrom = new Vector2(body.getPosition().x * PPM + perpen.x,
                 body.getPosition().y * PPM + perpen.y);
         Vector2 muzzle = new Vector2(WEAPON_WIDTH, WEAPON_HEIGHT).scl(1, 1);
-        if  (machinGunSprite.isFlipY()) {
+        if  (machinegunSprite.isFlipY()) {
             muzzle.scl(-1, 1);
         }
         muzzle.rotate(getAngleToPlayer(body.getPosition()) * MathUtils.radiansToDegrees + 90);
@@ -192,7 +190,7 @@ public class Shooter extends Enemy {
         shootWeapon.shoot(body.getWorldPoint(new Vector2(muzzleX.x, muzzleY.y)).scl(PPM), shootDirection);
     }
 
-    private class ShotCallback implements RayCastCallback {
+    private static class ShotCallback implements RayCastCallback {
 
         private boolean hasHit;
 

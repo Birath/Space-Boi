@@ -11,15 +11,17 @@ public class XPHandler {
     private int nextLevel = 100;
     private int x = 0;
 
-    public XPHandler(Player player){
+    public XPHandler(Player player) {
         this.player = player;
 
     }
-    private void levelUp(){
+
+    private void levelUp() {
         player.increaseMaxHealth(healthOnLevelUp);
         level += 1;
     }
-    public void increaseXP(int xp){
+
+    public void increaseXP(int xp) {
         currentXP += xp;
         while (currentXP >= nextLevel) {
             currentXP -= nextLevel;
@@ -27,17 +29,25 @@ public class XPHandler {
             levelUp();
         }
     }
-    private void calcNextLevel(){
-        x += 1;
-        nextLevel = 100 + (int) Math.exp(x/2) + 3*x;
+
+    public void setXP(int xp) {
+        currentXP = xp;
     }
-    public int getLevel(){
+
+    private void calcNextLevel() {
+        x += 1;
+        nextLevel = 100 + (int) Math.exp(x / 2) + 3 * x;
+    }
+
+    public int getLevel() {
         return level;
     }
-    public int getCurrentXP(){
+
+    public int getCurrentXP() {
         return currentXP;
     }
-    public int getNextLevel(){
+
+    public int getNextLevel() {
         return nextLevel;
     }
 }

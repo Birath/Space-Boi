@@ -105,6 +105,7 @@ public class Console {
         commands.put("wingame", new WinGame());
         commands.put("losegame", new LoseGame());
         commands.put("spawnenemy", new SpawnEnemy());
+        commands.put("setxp", new SetXp());
     }
 
     public void update(float delta) {

@@ -1,14 +1,12 @@
 package com.binarygames.spaceboi.animation;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.binarygames.spaceboi.Assets;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.binarygames.spaceboi.gameobjects.GameWorld;
 
 public class AnimationHandler {
+
     private Texture textureAtlas;
     private Animation animation;
 
@@ -20,10 +18,10 @@ public class AnimationHandler {
     private boolean flipped = true;
 
     private GameWorld gameWorld;
-    int frameColumns;
-    int frameRows;
+    private int frameColumns;
+    private int frameRows;
 
-    String path;
+    private String path;
 
     public AnimationHandler(GameWorld gameWorld, int frameColumns, int frameRows, float frameDuration, String path){
         // A class that handles animation
@@ -42,7 +40,7 @@ public class AnimationHandler {
                 animationFrames[Index++] = textureTemp[i][j];
             }
         }
-        animation = new Animation(frameDuration, animationFrames);
+        animation = new Animation<>(frameDuration, animationFrames);
         currentFrame = (TextureRegion) animation.getKeyFrame(animationTime, true);
 
     }
@@ -53,7 +51,7 @@ public class AnimationHandler {
     }
 
     public void updateAnimation(float delta) {
-        //Uppdates the animation if the passed in time delta makes the animationtime long enough
+        //Uppdates the animation if the passed in time delta makes the animationTime long enough
         animationTime += delta;
         currentFrame = (TextureRegion) animation.getKeyFrame(animationTime, true);
         if (flipped && !currentFrame.isFlipX() || !flipped && currentFrame.isFlipX()) {

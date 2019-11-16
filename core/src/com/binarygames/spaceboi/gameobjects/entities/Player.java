@@ -207,10 +207,10 @@ public class Player extends EntityDynamic {
         batch.draw(animationHandler.getCurrentFrame(), body.getPosition().x * PPM - spriteWidth / 2, body.getPosition().y * PPM - spriteHeight / 4, spriteWidth / 2, spriteHeight / 4, spriteWidth, spriteHeight, 0.08f, 0.08f, playerAngle + 90);
         }
         weapon.render(batch, camera, this);
-        }
+    }
 
 
-@Override
+    @Override
     public void onRemove() {
         gameWorld.endGame();
     }
@@ -234,6 +234,20 @@ public class Player extends EntityDynamic {
             storedRecoil = recoil.cpy();
             shouldApplyRecoil = true;
         }
+        /*
+            Vector2 newVelocity = body.getLinearVelocity();
+            newVelocity.add(recoil);
+            body.setLinearVelocity(newVelocity);
+       */
+
+        //Shooting the bullet
+
+        Vector2 muzzle = new Vector2(weapon.getSprite().getWidth(), weapon.getSprite().getHeight());
+        if (sprite.isFlipY()) {
+            muzzle.scl(1, -1);
+        }
+        muzzle.rotate(weapon.getRotation());
+
         recoil.setLength2(1);
         Vector2 scaledRecoil = recoil.cpy().scl(-weapon.length);
 
@@ -312,7 +326,7 @@ public class Player extends EntityDynamic {
     }
 
     public float getPlayerAngle() {
-        return playerAngle; // TODO fix magic number
+        return playerAngle;
     }
 
     public void setPlayerAngle(float angle) {
@@ -324,7 +338,7 @@ public class Player extends EntityDynamic {
     @Override
     public void hitPlanet(Planet planet) {
         super.hitPlanet(planet);
-        // If the player is shooting, not reloading and the weapon is not on cooldown or using a machin
+        // If the player is shooting, not reloading and the weapon is not on cooldown or using a machine
         if (mouseHeld && !weapon.isReloading() && (weapon.isTimeBetweenShotsIsFinished())) {
             // Nothing happens
             // Don't chain the player if they are holding the jump button
@@ -394,7 +408,7 @@ public class Player extends EntityDynamic {
         return weaponList;
     }
 
-    public void reloadWeapon() {
+    private void reloadWeapon() {
         if (toReload) {
             weapon.reload();
             toReload = false;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.binarygames.spaceboi.Assets;
 import com.binarygames.spaceboi.SpaceBoi;
 
@@ -25,9 +26,10 @@ public class LoadingScreen extends BaseScreen {
     }
 
     private void update(float delta) {
-        progressLabel.setText(((double) Math.round((game.getAssetManager().getProgress() * 100) * 1d) / 1d) + "%");
+        progressLabel.setText("Loading...\n" + Math.round((game.getAssetManager().getProgress() * 100)) + "%");
 
         if (game.getAssetManager().update()) {
+            progressLabel.setVisible(false);
             playButton.setVisible(true);
         }
 
@@ -50,7 +52,8 @@ public class LoadingScreen extends BaseScreen {
         Table table = new Table();
         table.setFillParent(true);
         // Loading label
-        progressLabel = new Label("Loading stuff: 0%", getTitleStyle());
+        progressLabel = new Label("Loading...\n 0%", getTitleStyle());
+        progressLabel.setAlignment(Align.center);
         table.add(new Container<>(progressLabel)).expandY().center().padTop(Value.percentHeight(PADDING_PERCENT, table));
 
         // Play button

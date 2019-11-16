@@ -27,7 +27,7 @@ import com.binarygames.spaceboi.screens.Fonts;
 
 public class GameUI {
 
-    public static final int MAX_WIDTH = 3840;
+    private static final int MAX_WIDTH = 3840;
     private Stage stage;
 
     private LabelStyle labelStyle;
@@ -41,10 +41,9 @@ public class GameUI {
     private Image healthImage;
     private Image oxygenImage;
 
-    private int healthBarWidth;
-    private int healthBarHeight;
-    private int oxygenBarWidth;
-    private int oxygenBarHeight;
+    private int healthBarWidth, healthBarHeight, oxygenBarWidth, oxygenBarHeight;
+
+    private float ui_scale;
 
     private Label health_status;
 
@@ -82,9 +81,10 @@ public class GameUI {
 
         stage.setDebugAll(false);
 
-        scaling_factor = (stage.getWidth() / MAX_WIDTH);
+        ui_scale = .75F; // Change UI scale with this parameter
+
+        scaling_factor = (stage.getWidth() / MAX_WIDTH) * ui_scale;
         Gdx.app.log("debug scaling", String.valueOf(scaling_factor));
-        int health = 5;
 
         // Oxygen icon
         texture = game.getAssetManager().get(Assets.UI_OXYGEN_BAR, Texture.class);
@@ -110,15 +110,14 @@ public class GameUI {
 
         // Health bar
         healthBar = new ProgressBar(0, player.getMaxHealth(), 1, false, healthBarStyle);
-        healthBar.setValue(health);
         healthBar.setOrigin(healthImage.getOriginX(), healthImage.getOriginY());
         healthBar.setBounds(healthImage.getX() + (healthImage.getWidth() - healthBarWidth) / 2, healthImage.getY() + (healthImage.getHeight() - healthBarHeight) / 2, healthBarWidth, healthBarHeight); // Todo
 
         // Health indicator
         health_status = new Label(player.getHealth() + " / " + player.getMaxHealth(), labelStyle);
-        health_status.setPosition(healthImage.getX() + healthImage.getWidth() / 2 - health_status.getWidth() / 3,
+        health_status.setPosition(healthImage.getX() + healthImage.getWidth() / 2 - health_status.getWidth() / 5,
                 healthImage.getY() + healthImage.getHeight() / 2 - health_status.getHeight() / 2);
-        health_status.setScale(0.8f);
+        health_status.setFontScale(scaling_factor * 1.5F);
         health_status.setVisible(false);
 
         healthImage.addListener(new ClickListener() {
@@ -166,8 +165,8 @@ public class GameUI {
         oxygen_group.setTransform(true);
         oxygen_group.setRotation(90);
         oxygen_group.setPosition(oxygenImage.getX() + oxygenImage.getWidth() / 2 + oxygen_status.getHeight() / 2,
-                oxygenImage.getY() + oxygenImage.getHeight() / 2 - 3 * oxygen_status.getWidth() / 4);
-        oxygen_status.setScale(0.8f);
+                oxygenImage.getY() + (oxygenImage.getHeight() / 2) - oxygen_status.getWidth() / 4);
+        oxygen_status.setFontScale(scaling_factor * 1.5F);
         oxygen_group.setVisible(false);
 
         oxygenImage.addListener(new ClickListener() {
@@ -204,15 +203,17 @@ public class GameUI {
 
         // XP bar
         currentLevel = new Label(String.valueOf(xpHandler.getLevel()), labelStyle);
-        nextLevel = new Label(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()), labelStyle);
-        currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
-        nextLevel.setFontScale(0.6f);
+        nextLevel = new Label(xpHandler.getCurrentXP() + " / " + xpHandler.getNextLevel(), labelStyle);
+        //currentLevel.setBounds(0, 0, currentLevel.getWidth(), currentLevel.getHeight());
+        currentLevel.setFontScale(2 * scaling_factor);
+        currentLevel.setAlignment(Align.bottomLeft);
+        nextLevel.setFontScale(1.2F * scaling_factor);
         nextLevel.setVisible(false);
 
         xpBar = new ProgressBar(0, 100, 0.1f, false, xpBarStyle);
         xpBar.setValue(0);
         xpBar.setBounds(0 + currentLevel.getWidth(), 0, Gdx.graphics.getWidth() - currentLevel.getWidth(), Gdx.graphics.getHeight() / 50);
-        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0, nextLevel.getWidth(), xpBar.getHeight());
+        nextLevel.setBounds(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth() / 2, 0, nextLevel.getWidth(), xpBar.getHeight());
 
         xpBar.addListener(new ClickListener() {
             @Override
@@ -246,10 +247,6 @@ public class GameUI {
         stage.addActor(currentLevel);
         stage.addActor(nextLevel);
 
-        //weaponStats1 = new WeaponStats(stage, stage.getWidth() / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(0).getMagSize());
-        //weaponStats2 = new WeaponStats(stage, stage.getWidth() * 3 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(1).getMagSize());
-        //weaponStats3 = new WeaponStats(stage, stage.getWidth() * 5 / 20, stage.getHeight() * 9 / 10, player.getWeaponList().get(2).getMagSize());
-
         // Compass stuff
 
         // some filters for scaling
@@ -273,13 +270,18 @@ public class GameUI {
         );
         stage.addActor(arrow);
 
-        weaponStats1 = new WeaponStats(stage, stage.getWidth() / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(0).getMagSize(),
+
+        int padding = 50;
+        weaponStats1 = new WeaponStats(stage, (int)(0 + scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(0).getMagSize(),
                 game.getAssetManager().get(Assets.UI_SHOTGUN, Texture.class),
                 game.getAssetManager().get(Assets.UI_SHOTGUN_AMMO, Texture.class), scaling_factor);
-        weaponStats2 = new WeaponStats(stage, stage.getWidth() * 13 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(1).getMagSize(),
+        weaponStats2 = new WeaponStats(stage, weaponStats1.getRightPositionX() + (int)(scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(1).getMagSize(),
                 game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE, Texture.class),
                 game.getAssetManager().get(Assets.UI_ASSAULT_RIFLE_AMMO, Texture.class), scaling_factor);
-        weaponStats3 = new WeaponStats(stage, stage.getWidth() * 25 / 100, stage.getHeight() * 8 / 10, player.getWeaponList().get(2).getMagSize(),
+        weaponStats3 = new WeaponStats(stage, weaponStats2.getRightPositionX() + (int)(scaling_factor * padding), (int)(stage.getHeight() - scaling_factor * padding),
+                player.getWeaponList().get(2).getMagSize(),
                 game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER, Texture.class),
                 game.getAssetManager().get(Assets.UI_GRENADE_LAUNCHER_AMMO, Texture.class), scaling_factor);
     }
@@ -292,13 +294,15 @@ public class GameUI {
         updateWeaponStats(weaponStats2, 1, delta);
         updateWeaponStats(weaponStats3, 2, delta);
         currentLevel.setText(String.valueOf(xpHandler.getLevel()));
-        nextLevel.setText(String.valueOf(xpHandler.getCurrentXP()) + " / " + String.valueOf(xpHandler.getNextLevel()));
+        nextLevel.setText(xpHandler.getCurrentXP() + " / " + xpHandler.getNextLevel());
 
+        /*
         if ((xpBar.getValue() * (Gdx.graphics.getWidth() / xpBar.getMaxValue())) < nextLevel.getWidth()) {
             nextLevel.setPosition(Gdx.graphics.getWidth() / 2 - nextLevel.getWidth(), 0);
         } else {
             nextLevel.setPosition(((Gdx.graphics.getWidth() / xpBar.getMaxValue()) * xpBar.getValue()) / 2, 0);
         }
+         */
 
         xpBar.setRange(0, xpHandler.getNextLevel());
         xpBar.setValue(xpHandler.getCurrentXP());
@@ -321,7 +325,7 @@ public class GameUI {
 
         // Label style
         labelStyle = new LabelStyle();
-        labelStyle.font = fonts.getLabelFont();
+        labelStyle.font = fonts.getLabelFont(48);
 
         // Progress bar styles
         Pixmap pixmap = new Pixmap(oxygenBarWidth, oxygenBarHeight, Pixmap.Format.RGBA8888);
@@ -412,7 +416,7 @@ public class GameUI {
         else weaponStats.getWeaponSlot().setValue((player.getWeaponList().get(weaponIndex).getCurrentReloadTime() /
                 player.getWeaponList().get(weaponIndex).getReloadTime()) * 100);
 
-        weaponStats.act(delta, player.getWeaponList().get(weaponIndex).getCurrentMag());
+        weaponStats.act(player.getWeaponList().get(weaponIndex).getCurrentMag());
     }
 
     public void dispose() {

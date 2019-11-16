@@ -64,6 +64,23 @@ public class Fonts {
         return labelFont;
     }
 
+    public BitmapFont getLabelFont(int size) {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        // Label font
+        BitmapFont font;
+        parameter.size = size;
+        parameter.color = Color.WHITE;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 2;
+
+        font = generator.generateFont(parameter);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        return font;
+    }
+
     public BitmapFont getTitleFont() {
         return titleFont;
     }

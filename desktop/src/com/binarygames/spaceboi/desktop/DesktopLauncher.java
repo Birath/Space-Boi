@@ -16,7 +16,7 @@ public class DesktopLauncher {
         config.vSyncEnabled = false;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;
-        config.title = "SpaceBoi";
+        config.title = "SPACE-NORTHERNERS REVENGE";
 
         new LwjglApplication(new SpaceBoi(), config);
     }
